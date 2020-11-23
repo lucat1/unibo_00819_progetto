@@ -1,14 +1,8 @@
-#include "draw.hpp"
 #include <iostream>
-#include <ncurses.h>
+using namespace std;
 
 int main() {
-  init();
-  std::string str = "I am centered";
-  centerw(str.c_str());
-  refresh();
-  getchar();
-  quit();
+  cout << "Hello World!" << endl;
 
   return 0;
 }
