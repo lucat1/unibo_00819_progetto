@@ -14,32 +14,36 @@ CXXFLAGS = $(DEP_FLAGS) -Wall -Werror
 LDFLAGS = -lstdc++ -lcurses
 
 # Things to build
-CPP_FILES := $(wildcard $(SRC_DIR)/*.cpp)
+CPP_FILES := $(wildcard $(SRC_DIR)/**/*.cpp) $(wildcard $(SRC_DIR)/*.cpp) 
 OBJ_FILES := $(CPP_FILES:$(SRC_DIR)/%.cpp=$(INT_DIR)/%.o)
 DEP_FILES := $(CPP_FILES:$(SRC_DIR)/%.cpp=$(INT_DIR)/%.d)
+OBJ_FOLDERS := build/engine build/game build/world build/data
 
 .PHONY: all clean run
 
 all: $(TARGET)
 
+test:
+	@echo $(CPP_FILES)
+
 run: all
 	./$(TARGET)
 
-$(OBJ_FILES): $(INT_DIR)/%.o: $(SRC_DIR)/%.cpp $(INT_DIR)/%.d | $(INT_DIR)
-	@$(CXX) $(CXXFLAGS) -c -o $@ $<
+$(OBJ_FILES): $(INT_DIR)/%.o: $(SRC_DIR)/%.cpp $(INT_DIR)/%.d | $(OBJ_FOLDERS)
 	@echo "CC\t$<"
+	@$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 $(TARGET): $(OBJ_FILES)
-	@$(CXX) $(LDFLAGS) -o $@ $^
 	@echo "LD\t$<"
+	@$(CXX) $(LDFLAGS) -o $@ $^
 
 $(DEP_FILES): $(INT_DIR)/%.d: ;
 
-$(INT_DIR):
-	@mkdir -p $@
+$(OBJ_FOLDERS):
 	@echo "MKDIR\t$@"
+	@mkdir -p $@
 
 clean:
-	rm -rf $(INT_DIR) $(TMP_DIR) $(TARGET)
+	rm -rf $(OBJ_FOLDERS) $(TMP_DIR) $(TARGET)
 
 -include $(DEP_FILES)
