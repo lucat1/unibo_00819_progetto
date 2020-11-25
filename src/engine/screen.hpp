@@ -11,6 +11,7 @@ namespace Engine {
 class Screen : public Box {
 public:
   bool open();
+  bool recenter();
   void close();
 
 private:

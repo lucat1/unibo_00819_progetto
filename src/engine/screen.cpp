@@ -23,10 +23,6 @@ bool Engine::Screen::measure() {
   return false;
 }
 
-// TODO: Handle keyboard, resize and other events
-// discuss implementation details and draw a line between
-// the engine and the game logic
-
 bool Engine::Screen::open() {
   terminal = initscr(); // terminal should be equal to stdscr
   if (terminal == NULL)
@@ -47,6 +43,16 @@ bool Engine::Screen::open() {
                   terminal_offset_cols);
   box(window, '+', '-');
   wrefresh(window);
+  return false;
+}
+
+bool Engine::Screen::recenter() {
+  if (measure())
+    return true;
+
+  mvwin(window, terminal_offset_lines, terminal_offset_cols);
+  wrefresh(window);
+
   return false;
 }
 
