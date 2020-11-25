@@ -2,20 +2,18 @@
 #include <iostream>
 #include <ncurses.h>
 using namespace std;
-using namespace Engine;
 
-// screen wraps the whole ncurses screen in a box
-// of SCREEN_WIDTHxSCREEN_HEIGHT that is centered on the
-// screen and repositioned properly on resizes
+// screen wraps the whole ncurses screen in a box of SCREEN_WIDTHxSCREEN_HEIGHT
+// that is centered on the screen and repositioned properly on resizes
 //
 // Furthermore the screen class keeps track of the terminal dimentions
-// to center boxes as we see fit. We do also call helper functions like
-// `raw` and `keypad` to properly get all the keystrokes the user presses.
+// to center boxes as we see fit and also calls helper functions like
+// `raw`, `keypad` and `noecho` to properly get the user input.
 
-bool Screen::measure() {
+bool Engine::Screen::measure() {
   getmaxyx(terminal, terminal_lines, terminal_cols);
 
-  // check that the terminal is big enaugh to fit the game
+  // check that the terminal is big enough to fit the game
   if (terminal_cols < SCREEN_COLS || terminal_lines < SCREEN_LINES)
     return true;
 
@@ -29,7 +27,7 @@ bool Screen::measure() {
 // discuss implementation details and draw a line between
 // the engine and the game logic
 
-bool Screen::open() {
+bool Engine::Screen::open() {
   terminal = initscr(); // terminal should be equal to stdscr
   if (terminal == NULL)
     return true;
@@ -52,4 +50,4 @@ bool Screen::open() {
   return false;
 }
 
-void Screen::close() { endwin(); }
+void Engine::Screen::close() { endwin(); }
