@@ -23,11 +23,8 @@ OBJ_FOLDERS := build/engine build/game build/world build/data
 
 all: $(TARGET)
 
-test:
-	@echo $(CPP_FILES)
-
 run: all
-	./$(TARGET)
+	@./$(TARGET)
 
 $(OBJ_FILES): $(INT_DIR)/%.o: $(SRC_DIR)/%.cpp $(INT_DIR)/%.d | $(OBJ_FOLDERS)
 	@echo "CC\t$<"
