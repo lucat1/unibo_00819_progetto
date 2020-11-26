@@ -34,7 +34,9 @@ bool Engine::Screen::open() {
   noecho(); // prevents user-inputted charters to be displayed on the screen
   raw();    // with raw we intercept all keystrokes and prevent ^C from quitting
             // the game
-  keypad(terminal, true); // TODO: document second argument from man pages
+  keypad(
+      terminal,
+      false); // the second argument is set to `false` to caputre RESIZE events
 
   if (measure())
     return true;
@@ -49,6 +51,10 @@ bool Engine::Screen::open() {
 bool Engine::Screen::recenter() {
   if (measure())
     return true;
+
+  // clear the previous screen
+  clear();
+  refresh();
 
   mvwin(window, terminal_offset_lines, terminal_offset_cols);
   wrefresh(window);
