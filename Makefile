@@ -41,6 +41,6 @@ $(OBJ_FOLDERS):
 	@mkdir -p $@
 
 clean:
-	rm -rf $(OBJ_FOLDERS) $(TMP_DIR) $(TARGET)
+	rm -rf build $(TMP_DIR) $(TARGET)
 
 -include $(DEP_FILES)
