@@ -4,8 +4,7 @@ TEST_DIR = build/test
 TARGET  = game
 
 CXX = g++
-## -MMD creates dependency list, but ignores system includes
-## -MF specifies where to create the dependency file name
+## -MMD creates dependency list, but ignores system includes ## -MF specifies where to create the dependency file name
 ## -MP creates phony targets for headers (deals with deleted headers after
 ##  obj file has been compiled)
 ## -MT specifies the dependency target (path qualified obj file name)
@@ -14,7 +13,8 @@ CXXFLAGS = $(DEP_FLAGS) -Wall -Werror
 LDFLAGS = -lstdc++ -lcurses
 
 # Things to build
-ALL_FILES := $(wildcard $(SRC_DIR)/**/*.cpp) $(wildcard $(SRC_DIR)/*.cpp) CPP_FILES := $(filter-out %.test.cpp, $(ALL_FILES))
+ALL_FILES := $(wildcard $(SRC_DIR)/**/*.cpp) $(wildcard $(SRC_DIR)/*.cpp)
+CPP_FILES := $(filter-out %.test.cpp, $(ALL_FILES))
 TEST_FILES := $(filter %.test.cpp, $(ALL_FILES))
 
 ALL_OBJ_FILES := $(ALL_FILES:$(SRC_DIR)/%.cpp=$(INT_DIR)/%.o)
@@ -26,19 +26,10 @@ TEST_TARGETS := $(TEST_OBJ_FILES:$(INT_DIR)/%.o=$(TEST_DIR)/%)
 
 SUB_FOLDERS := engine game world data
 OBJ_FOLDERS := $(addprefix build/, $(SUB_FOLDERS)) $(addprefix build/test/, $(SUB_FOLDERS))
-
 .PHONY: clean format run
+
 all: $(TARGET)
 test: $(TEST_TARGETS)
-
-clean:
-	rm -rf build $(TARGET)
-
-format:
-	clang-format -i $(ALL_FILES)
-
-run: all
-	@./$(TARGET)
 
 $(TEST_TARGETS): $(TEST_DIR)/%: $(INT_DIR)/%.o | $(ALL_OBJ_FILES)
 	@echo "LD\t$<"
@@ -62,3 +53,12 @@ $(OBJ_FOLDERS):
 	@mkdir -p $@
 
 -include $(DEP_FILES)
+
+clean:
+	rm -rf build $(TARGET)
+
+format:
+	clang-format -i $(ALL_FILES)
+
+run: all
+	@./$(TARGET)
