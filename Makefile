@@ -13,7 +13,7 @@ CXXFLAGS = $(DEP_FLAGS) -Wall -Werror
 LDFLAGS = -lstdc++ -lcurses
 
 # Things to build
-ALL_FILES := $(wildcard $(SRC_DIR)/**/*.cpp) $(wildcard $(SRC_DIR)/*.cpp)
+ALL_FILES := $(wildcard $(SRC_DIR)/**/**/*.cpp) $(wildcard $(SRC_DIR)/**/*.cpp) $(wildcard $(SRC_DIR)/*.cpp)
 CPP_FILES := $(filter-out %.test.cpp, $(ALL_FILES))
 TEST_FILES := $(filter %.test.cpp, $(ALL_FILES))
 
@@ -24,7 +24,7 @@ TEST_OBJ_FILES := $(TEST_FILES:$(SRC_DIR)/%.cpp=$(INT_DIR)/%.o)
 DEP_FILES := $(ALL_FILES:$(SRC_DIR)/%.cpp=$(INT_DIR)/%.d)
 TEST_TARGETS := $(TEST_OBJ_FILES:$(INT_DIR)/%.o=$(TEST_DIR)/%)
 
-SUB_FOLDERS := engine game world data
+SUB_FOLDERS := engine game world data engine/ui
 OBJ_FOLDERS := $(addprefix build/, $(SUB_FOLDERS)) $(addprefix build/test/, $(SUB_FOLDERS))
 .PHONY: clean format run
 

@@ -1,4 +1,4 @@
-#include "engine/screen.hpp"
+#include "engine/ui/screen.hpp"
 #include <curses.h>
 #include <iostream>
 using namespace std;

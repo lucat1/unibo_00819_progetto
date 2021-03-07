@@ -43,7 +43,7 @@ bool Engine::Screen::open() {
 
   window = newwin(SCREEN_LINES, SCREEN_COLS, terminal_offset_lines,
                   terminal_offset_cols);
-  box(window, '+', '-');
+  box(window, ACS_VLINE, ACS_HLINE);
   wrefresh(window);
   return false;
 }
