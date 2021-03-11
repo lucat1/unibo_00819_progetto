@@ -20,20 +20,21 @@ TEST_FILES := $(filter %.test.cpp, $(ALL_FILES))
 ALL_OBJ_FILES := $(ALL_FILES:$(SRC_DIR)/%.cpp=$(INT_DIR)/%.o)
 CPP_OBJ_FILES := $(CPP_FILES:$(SRC_DIR)/%.cpp=$(INT_DIR)/%.o)
 TEST_OBJ_FILES := $(TEST_FILES:$(SRC_DIR)/%.cpp=$(INT_DIR)/%.o)
+AUX_OBJ_FILES := $(filter-out build/main.o, $(CPP_OBJ_FILES))
 
 DEP_FILES := $(ALL_FILES:$(SRC_DIR)/%.cpp=$(INT_DIR)/%.d)
 TEST_TARGETS := $(TEST_OBJ_FILES:$(INT_DIR)/%.o=$(TEST_DIR)/%)
 
 SUB_FOLDERS := $(filter-out src, $(patsubst src/%,%, $(shell find src -type d)))
 OBJ_FOLDERS := $(addprefix build/, $(SUB_FOLDERS)) $(addprefix build/test/, $(SUB_FOLDERS))
-.PHONY: clean format run
+.PHONY: clean format run test $(TEST_TARGETS)
 
 all: $(TARGET)
 test: $(TEST_TARGETS)
 
 $(TEST_TARGETS): $(TEST_DIR)/%: $(INT_DIR)/%.o | $(ALL_OBJ_FILES)
 	@echo "LD\t$<"
-	@$(CXX) $(LDFLAGS) -o $@ $(filter-out, $(TARGET), $(CPP_OBJ_FILES)) $^ 
+	@$(CXX) $(LDFLAGS) -o $@ $(AUX_OBJ_FILES) $^ 
 	@echo "RUN\t$@"
 	@$@
 	@echo "SUCCESS\t$@"

@@ -7,12 +7,14 @@
 #define SCREEN_LINES 25
 
 namespace Engine {
+namespace UI {
 
 class Screen : public Box {
 public:
   bool open();
   bool recenter();
   void close();
+  Screen();
 
 private:
   WINDOW *terminal;
@@ -21,6 +23,7 @@ private:
   bool measure();
 };
 
+} // namespace UI
 } // namespace Engine
 
-#endif
+#endif // SCREEN_HPP

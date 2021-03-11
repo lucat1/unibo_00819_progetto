@@ -8,7 +8,7 @@ using namespace std;
 // the engine and the game logic
 
 int main() {
-  Engine::Screen screen;
+  Engine::UI::Screen screen;
 
   if (screen.open()) {
     cout << "Error while opening screen" << endl;

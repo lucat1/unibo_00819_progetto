@@ -10,7 +10,9 @@ using namespace std;
 // to center boxes as we see fit and also calls helper functions like
 // `raw`, `keypad` and `noecho` to properly get the user input.
 
-bool Engine::Screen::measure() {
+Engine::UI::Screen::Screen() : Box(SCREEN_COLS, SCREEN_LINES) {}
+
+bool Engine::UI::Screen::measure() {
   getmaxyx(terminal, terminal_lines, terminal_cols);
 
   // check that the terminal is big enough to fit the game
@@ -23,7 +25,7 @@ bool Engine::Screen::measure() {
   return false;
 }
 
-bool Engine::Screen::open() {
+bool Engine::UI::Screen::open() {
   terminal = initscr(); // terminal should be equal to stdscr
   if (terminal == NULL)
     return true;
@@ -48,7 +50,7 @@ bool Engine::Screen::open() {
   return false;
 }
 
-bool Engine::Screen::recenter() {
+bool Engine::UI::Screen::recenter() {
   if (measure())
     return true;
 
@@ -62,4 +64,4 @@ bool Engine::Screen::recenter() {
   return false;
 }
 
-void Engine::Screen::close() { endwin(); }
+void Engine::UI::Screen::close() { endwin(); }
