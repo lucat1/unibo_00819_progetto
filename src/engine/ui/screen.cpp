@@ -2,6 +2,7 @@
 #include <iostream>
 #include <ncurses.h>
 using namespace std;
+using namespace Engine::UI;
 
 // screen wraps the whole ncurses screen in a box of SCREEN_WIDTHxSCREEN_HEIGHT
 // that is centered on the screen and repositioned properly on resizes
@@ -10,24 +11,24 @@ using namespace std;
 // to center boxes as we see fit and also calls helper functions like
 // `raw`, `keypad` and `noecho` to properly get the user input.
 
-Engine::UI::Screen::Screen() : Box(SCREEN_COLS, SCREEN_LINES) {}
+Screen::Screen() : Box(SCREEN_COLS, SCREEN_LINES) {}
 
-bool Engine::UI::Screen::measure() {
-  getmaxyx(terminal, terminal_lines, terminal_cols);
+bool Screen::can_fit() {
+  getmaxyx(window, terminal_lines, terminal_cols);
 
   // check that the terminal is big enough to fit the game
   if (terminal_cols < SCREEN_COLS || terminal_lines < SCREEN_LINES)
     return true;
 
-  terminal_offset_cols = (terminal_cols - SCREEN_COLS) / 2;
-  terminal_offset_lines = (terminal_lines - SCREEN_LINES) / 2;
+  x = (terminal_cols - SCREEN_COLS) / 2;
+  y = (terminal_lines - SCREEN_LINES) / 2;
 
   return false;
 }
 
-bool Engine::UI::Screen::open() {
-  terminal = initscr(); // terminal should be equal to stdscr
-  if (terminal == NULL)
+bool Screen::open() {
+  window = initscr(); // terminal should be equal to stdscr
+  if (window == NULL)
     return true;
 
   clear();   // clear the screen and
@@ -37,31 +38,30 @@ bool Engine::UI::Screen::open() {
   raw();    // with raw we intercept all keystrokes and prevent ^C from quitting
             // the game
   keypad(
-      terminal,
+      window,
       false); // the second argument is set to `false` to caputre RESIZE events
 
-  if (measure())
+  if (can_fit())
     return true;
 
-  window = newwin(SCREEN_LINES, SCREEN_COLS, terminal_offset_lines,
-                  terminal_offset_cols);
+  window = newwin(SCREEN_LINES + 2, SCREEN_COLS + 2, y, x);
   box(window, ACS_VLINE, ACS_HLINE);
   wrefresh(window);
   return false;
 }
 
-bool Engine::UI::Screen::recenter() {
-  if (measure())
+bool Screen::recenter() {
+  if (can_fit())
     return true;
 
   // clear the previous screen
   clear();
   refresh();
 
-  mvwin(window, terminal_offset_lines, terminal_offset_cols);
+  mvwin(window, x, y);
   wrefresh(window);
 
   return false;
 }
 
-void Engine::UI::Screen::close() { endwin(); }
+void Screen::close() { endwin(); }

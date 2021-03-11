@@ -10,17 +10,17 @@ namespace Engine {
 namespace UI {
 
 class Screen : public Box {
+private:
+  // x, y are the offest from the screen (left, top) to start
+  // printing inside the game centered window (Box instance)
+  uint16_t x, y, terminal_cols, terminal_lines;
+  bool can_fit();
+
 public:
   bool open();
   bool recenter();
   void close();
   Screen();
-
-private:
-  WINDOW *terminal;
-  int terminal_cols, terminal_lines, terminal_offset_cols,
-      terminal_offset_lines;
-  bool measure();
 };
 
 } // namespace UI

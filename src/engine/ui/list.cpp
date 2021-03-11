@@ -1,6 +1,6 @@
 #include "list.hpp"
+using namespace Engine::UI;
 
-Engine::UI::List::List(uint8_t width, uint8_t height, wchar_t marker)
-    : Box(width, height) {
+List::List(uint8_t width, uint8_t height, wchar_t marker) : Box(width, height) {
   this->marker = marker;
 }
