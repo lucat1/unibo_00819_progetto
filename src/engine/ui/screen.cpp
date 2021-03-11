@@ -50,7 +50,7 @@ bool Screen::open() {
   return false;
 }
 
-bool Screen::recenter() {
+bool Screen::update() {
   if (can_fit())
     return true;
 

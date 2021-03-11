@@ -18,7 +18,7 @@ private:
 
 public:
   bool open();
-  bool recenter();
+  bool update();
   void close();
   Screen();
 };

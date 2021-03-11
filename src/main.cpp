@@ -18,7 +18,7 @@ int main() {
   int key;
   while ((key = getch()) != 'q') {
     if (key == KEY_RESIZE)
-      screen.recenter();
+      screen.update();
   };
 
   screen.close();
