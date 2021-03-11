@@ -15,7 +15,7 @@ public:
   uint16_t width, height;
   Box *children, *sibling, *parent;
 
-  Box(uint8_t width, uint8_t height);
+  Box(uint16_t width, uint16_t height);
   static Box *append(Box *box, float w, float h);
 
   void add_child(Box *box);

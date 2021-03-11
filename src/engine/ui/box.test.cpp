@@ -33,11 +33,19 @@ int main() {
     assert(child->sibling == nullptr);
   });
 
-  it("adds a child Box::append with the proper dimentions", {
+  it("Box::append adds a child with the proper dimentions", {
     Box *c = Box::append(box, 0.5f, 0.25f);
     assert(c->parent == box);
     assert(c->sibling == snd_child);
     assert(c->width == box->width * 0.5f);
     assert(c->height == box->height * 0.25f);
+  });
+
+  it("keeps the child size inside the parent", {
+    Box *c = new Box((uint16_t)10000, (uint16_t)10000);
+    box->add_child(c);
+    assert(c->parent == box);
+    assert(c->width == box->width);
+    assert(c->height == box->height);
   });
 }

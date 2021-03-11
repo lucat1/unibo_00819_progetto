@@ -9,7 +9,7 @@ using namespace Engine::UI;
 // rendering primitives such as the automatic display of its children in the
 // appropriate order
 
-Box::Box(uint8_t width, uint8_t height) {
+Box::Box(uint16_t width, uint16_t height) {
   this->width = width;
   this->height = height;
   this->children = nullptr;
@@ -28,7 +28,15 @@ Box *Box::append(Box *target, float w, float h) {
 
 // internal usage only!
 // used to add a new child to the list of children of this *box
+// NOTE to self: add_child makes the width and height of the child not exceed
+// the ones of the parent
 void Box::add_child(Box *new_box) {
+  if (new_box->width > this->width)
+    new_box->width = this->width;
+
+  if (new_box->height > this->height)
+    new_box->height = this->height;
+
   new_box->sibling = this->children;
   new_box->parent = this;
   this->children = new_box;
