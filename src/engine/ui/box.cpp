@@ -19,9 +19,9 @@ Engine::UI::Box::Box(uint8_t width, uint8_t height) {
 // Creates a new Box instance and adds it to the target Box's list of children.
 // The width and height of the new box can be defined relatively to the new
 // parent's dimentions with the w and h parameters
-Engine::UI::Box *Engine::UI::Box::append(Box target, float w, float h) {
-  Box *new_box = new Box(target.width * w, target.height * h);
-  target.add_child(new_box);
+Engine::UI::Box *Engine::UI::Box::append(Box *target, float w, float h) {
+  Box *new_box = new Box(target->width * w, target->height * h);
+  target->add_child(new_box);
   return new_box;
 }
 

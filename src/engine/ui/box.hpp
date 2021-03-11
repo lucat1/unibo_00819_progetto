@@ -13,7 +13,7 @@ public:
   Box *children, *sibling, *parent;
 
   Box(uint8_t width, uint8_t height);
-  Box *append(Box box, float w, float h);
+  static Box *append(Box *box, float w, float h);
 
   void add_child(Box *box);
   void show();
