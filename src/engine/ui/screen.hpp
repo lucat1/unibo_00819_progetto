@@ -17,10 +17,11 @@ private:
   bool can_fit();
 
 public:
+  Screen();
+
   bool open();
   bool update();
   void close();
-  Screen();
 };
 
 } // namespace UI

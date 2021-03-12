@@ -7,12 +7,13 @@ namespace Engine {
 namespace UI {
 
 class List : public Box {
-protected:
+private:
   wchar_t marker;
 
 public:
-  static List append(Box box);
   List(uint8_t width, uint8_t height, wchar_t marker);
+
+  static List append(Box box);
 };
 
 } // namespace UI
