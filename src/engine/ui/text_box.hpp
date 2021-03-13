@@ -12,6 +12,7 @@ namespace UI {
 class TextBox : public Box {
 private:
   const wchar_t *content;
+  vector<wchar_t *> lines;
 
 public:
   TextBox(uint8_t width, uint8_t height, const wchar_t *content);

@@ -27,7 +27,7 @@ Box *Box::append(Box *target, float w, float h) {
 
 // internal usage only!
 // used to add a new child to the list of children of this *box
-// NOTE to self: add_child makes the width and height of the child not exceed
+// NOTE(to self): add_child makes the width and height of the child not exceed
 // the ones of the parent
 void Box::add_child(Box *new_box) {
   if (new_box->width > this->width)
@@ -41,13 +41,23 @@ void Box::add_child(Box *new_box) {
   this->children = new_box;
 }
 
+int Box::chlen() {
+  int count = 0;
+  Box *iter = this->children;
+  while (iter != nullptr) {
+    iter = iter->sibling;
+    count = count + 1;
+  }
+  return count;
+}
+
 // by default VirtBox is just a container, so we just render its children
 // for simplicity we assume children stack one under the other.
 // it's more than enough for the menus we'll have to implement
 void Box::show(WINDOW *window, uint16_t x, uint16_t y) {
   Box *iter = this->children;
   uint8_t next_y = y, max_y = y + height;
-  while (iter != NULL) {
+  while (iter != nullptr) {
     // don't render items outside of this Box
     // TODO: scrollbars (?)
     if (next_y + iter->height > max_y)

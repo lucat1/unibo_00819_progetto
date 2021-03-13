@@ -5,9 +5,15 @@
 #include <vector>
 using namespace Engine::UI;
 
+// TextBox straigh up ignores the height value as it is defined by its width and
+// content length.
+// NOTE(tip): you can wrap a TextBox in a Box with an aribtrary height if you
+// for some reason wanna fill some amount of height
 TextBox::TextBox(uint8_t width, uint8_t height, const wchar_t *content)
     : Box(width, height) {
   this->content = content;
+  this->lines = split_content();
+  this->height = (uint16_t)this->lines.size();
 }
 
 wchar_t *emptystr(size_t len) {
@@ -59,6 +65,11 @@ vector<wchar_t *> TextBox::split_content() {
 
 // Creates a new TextBox instance and adds it to the target Box's list of
 // children.
+// NOTE: TextBox straigh up ignores the height value as it is defined by its
+// width and content length.
+//
+// NOTE(tip): you can wrap a TextBox in a Box with an aribtrary height if you
+// for some reason wanna fill some amount of height
 TextBox *TextBox::append(Box *target, float w, float h,
                          const wchar_t *content) {
   TextBox *new_box =
@@ -68,7 +79,6 @@ TextBox *TextBox::append(Box *target, float w, float h,
 }
 
 void TextBox::show(WINDOW *window, uint16_t x, uint16_t y) {
-  vector<wchar_t *> lines = split_content();
   for (vector<wchar_t *>::size_type i = 0; i < lines.size(); i++) {
     wchar_t *line = lines.at(i);
     mvwaddwstr(window, y + i, x, line);

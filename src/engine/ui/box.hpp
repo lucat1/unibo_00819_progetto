@@ -18,6 +18,7 @@ public:
   virtual void show(WINDOW *window, uint16_t x, uint16_t y);
   static Box *append(Box *box, float w, float h);
   void add_child(Box *box);
+  int chlen(); // children length
 };
 
 } // namespace UI
