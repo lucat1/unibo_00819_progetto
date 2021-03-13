@@ -1,4 +1,5 @@
 #include "engine/ui/list.hpp"
+#include "engine/ui/pad_box.hpp"
 #include "engine/ui/screen.hpp"
 #include "engine/ui/text_box.hpp"
 #include <curses.h>
@@ -11,7 +12,13 @@ using namespace std;
 
 int main() {
   Engine::UI::Screen *screen = new Engine::UI::Screen();
-  Engine::UI::List *list = Engine::UI::List::append(screen, 1, 1, L'*');
+  Engine::UI::PadBox *pbox =
+      Engine::UI::PadBox::append(screen, 1, 1,
+                                 {{Engine::UI::PADDING_LEFT, 4},
+                                  {Engine::UI::PADDING_RIGHT, 4},
+                                  {Engine::UI::PADDING_TOP, 2},
+                                  {Engine::UI::PADDING_BOTTOM, 2}});
+  Engine::UI::List *list = Engine::UI::List::append(pbox, 1, 1);
   Engine::UI::TextBox::append(
       list, 1, 1,
       L"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do "

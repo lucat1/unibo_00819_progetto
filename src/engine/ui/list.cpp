@@ -14,7 +14,6 @@ List *List::append(Box *target, float w, float h, const wchar_t marker) {
   return list;
 }
 
-// TODO: shomehow reuse Box::show and also think about scrollbars
 void List::show(WINDOW *window, uint16_t x, uint16_t y) {
   Box *iter = this->first_child;
   uint8_t next_y = y, max_y = y + height;
