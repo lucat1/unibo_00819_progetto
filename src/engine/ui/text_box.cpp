@@ -63,8 +63,7 @@ vector<wchar_t *> TextBox::split_content() {
   return lines;
 }
 
-// Creates a new TextBox instance and adds it to the target Box's list of
-// children.
+// Creates a new TextBox instance and adds it to the target Box's children.
 // NOTE: TextBox straigh up ignores the height value as it is defined by its
 // width and content length.
 //

@@ -11,14 +11,13 @@ class Box {
 
 public:
   uint16_t width, height;
-  Box *children, *sibling, *parent;
+  Box *first_child, *last_child, *sibling, *parent;
 
   Box(uint16_t width, uint16_t height);
 
   virtual void show(WINDOW *window, uint16_t x, uint16_t y);
   static Box *append(Box *box, float w, float h);
   void add_child(Box *box);
-  int chlen(); // children length
 };
 
 } // namespace UI

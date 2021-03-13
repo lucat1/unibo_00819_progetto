@@ -6,8 +6,7 @@ List::List(uint8_t width, uint8_t height, const wchar_t marker)
   this->marker = marker;
 }
 
-// Creates a new List instance and adds it to the target Box's list of
-// children.
+// Creates a new List instance and adds it to the target Box's children.
 List *List::append(Box *target, float w, float h, const wchar_t marker) {
   // - 2 for the marker and a space
   List *list = new List((target->width * w) - 2, target->height * h, marker);
@@ -17,7 +16,7 @@ List *List::append(Box *target, float w, float h, const wchar_t marker) {
 
 // TODO: shomehow reuse Box::show and also think about scrollbars
 void List::show(WINDOW *window, uint16_t x, uint16_t y) {
-  Box *iter = this->children;
+  Box *iter = this->first_child;
   uint8_t next_y = y, max_y = y + height;
   while (iter != NULL) {
     // don't render items outside of this Box
