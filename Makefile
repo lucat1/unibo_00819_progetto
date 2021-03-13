@@ -8,7 +8,7 @@ CXX = g++
 ## -MP creates phony targets for headers (deals with deleted headers after
 ##  obj file has been compiled)
 ## -MT specifies the dependency target (path qualified obj file name)
-DEP_FLAGS = -MT $@ -MMD -MP -MF $(@:.o=.d)
+DEP_FLAGS = -std=c++11 -D_XOPEN_SOURCE_EXTENDED -MT $@ -MMD -MP -MF $(@:.o=.d)
 CXXFLAGS = $(DEP_FLAGS) -Wall -Werror
 LDFLAGS = -lstdc++ -lcurses
 
