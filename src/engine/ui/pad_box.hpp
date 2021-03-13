@@ -24,8 +24,6 @@ public:
   PadBox(uint8_t width, uint8_t height, map<enum PAD, uint16_t> pads = {});
 
   void show(WINDOW *window, uint16_t x, uint16_t y);
-  static PadBox *append(Box *box, float w, float h,
-                        map<enum PAD, uint16_t> pads = {});
 };
 
 } // namespace UI

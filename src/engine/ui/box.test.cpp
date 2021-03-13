@@ -1,4 +1,5 @@
 #include "../../util/test.hpp"
+#include "append.hpp"
 #include "box.hpp"
 #include "text_box.hpp"
 #include <assert.h>
@@ -39,7 +40,7 @@ int main() {
   });
 
   it("Box::append adds a child (with the proper dimentions)", {
-    Box *c = Box::append(box, 0.5f, 0.25f);
+    Box *c = append<Box>(box, 0.5f, 0.25f);
     assert(c->parent == box);
     assert(snd_child->sibling == c);
     assert(box->last_child == c);
@@ -62,10 +63,9 @@ int main() {
     assert(size.s[1] == 0);
   });
 
-  TextBox *tb1 = TextBox::append(box1, 1, 1, L"this is a test text");
+  TextBox *tb1 =
+      append<TextBox, const wchar_t *>(box1, 1, 1, L"this is a test text");
   it("reports the corret size when it has children", {
-    cout << box1->max_width << endl;
-    cout << tb1->max_width << endl;
     bsize size = box1->size();
     assert(size.s[0] > 0);
     assert(size.s[1] == 1);

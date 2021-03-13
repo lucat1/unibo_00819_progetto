@@ -15,7 +15,7 @@ private:
   vector<wchar_t *> lines;
 
 public:
-  TextBox(uint8_t width, uint8_t height, const wchar_t *content);
+  TextBox(uint16_t width, uint16_t height, const wchar_t *content);
 
   vector<wchar_t *> split_content();
   bsize_t size();

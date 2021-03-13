@@ -1,5 +1,4 @@
 #include "box.hpp"
-#include <iostream> // TODO: remove
 #include <ncurses.h>
 #include <unistd.h>
 using namespace Engine::UI;
@@ -65,7 +64,6 @@ bsize_t Box::size() {
     bsize_t size = iter->size();
     width += size.s[0];
     height += size.s[1];
-    std::cout << size.s[0] << size.s[1] << std::endl;
 
     iter = iter->sibling;
   }

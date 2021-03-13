@@ -1,27 +1,19 @@
 #include "text_box.hpp"
-#include <algorithm>
 #include <cstring>
 #include <cwchar>
 #include <iostream>
-#include <iostream> // TODO: remove
 #include <vector>
-using namespace std;
 using namespace Engine::UI;
 
 // TextBox straigh up ignores the height value as it is defined by its width and
 // content length.
 // NOTE(tip): you can wrap a TextBox in a Box with an aribtrary height if you
 // for some reason wanna fill some amount of height
-TextBox::TextBox(uint8_t max_width, uint8_t max_height, const wchar_t *content)
+TextBox::TextBox(uint16_t max_width, uint16_t max_height,
+                 const wchar_t *content)
     : Box(max_width, max_height) {
   this->content = content;
-  std::cout << max_width << std::endl;
-  std::cout << this->max_width << std::endl;
-  std::cout << max_height << std::endl;
-  std::cout << this->max_height << std::endl;
   this->lines = split_content();
-  std::cout << this->max_width << std::endl;
-  std::cout << this->max_height << std::endl;
 }
 
 wchar_t *emptystr(size_t len) {
@@ -82,6 +74,5 @@ void TextBox::show(WINDOW *window, uint16_t x, uint16_t y) {
 
 bsize_t TextBox::size() {
   uint16_t height = (uint16_t)lines.size();
-  std::cout << max_width << " " << height << std::endl;
   return bsize_t{{max_width, height}};
 }
