@@ -39,3 +39,12 @@ void PadBox::show(WINDOW *window, uint16_t x, uint16_t y) {
     iter = iter->sibling;
   }
 }
+
+// compute the size of its children (Box::size) and then sum the spacers defined
+// in pads
+bsize PadBox::size() {
+  bsize_t psize = Box::size();
+  uint16_t width = psize.s[0] + pl + pr;
+  uint16_t height = psize.s[1] + pt + pb;
+  return {{width, height}};
+}

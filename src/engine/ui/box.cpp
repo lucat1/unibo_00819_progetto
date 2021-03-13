@@ -1,6 +1,8 @@
 #include "box.hpp"
+#include <algorithm>
 #include <ncurses.h>
 #include <unistd.h>
+using namespace std;
 using namespace Engine::UI;
 
 // Engine::UI::Box has nothing to do with ncurses's box function
@@ -46,13 +48,14 @@ void Box::show(WINDOW *window, uint16_t x, uint16_t y) {
   Box *iter = this->first_child;
   uint8_t next_y = y, max_y = y + max_height;
   while (iter != nullptr) {
+    bsize isize = iter->size();
     // don't render items outside of this Box
     // TODO: scrollbars (?)
-    if (next_y + iter->max_height > max_y)
+    if (next_y + isize.s[1] > max_y)
       break;
 
     iter->show(window, x, next_y);
-    next_y = next_y + iter->max_height;
+    next_y = next_y + isize.s[1];
     iter = iter->sibling;
   }
 }
@@ -62,7 +65,7 @@ bsize_t Box::size() {
   uint16_t width = 0, height = 0;
   while (iter != nullptr) {
     bsize_t size = iter->size();
-    width += size.s[0];
+    width = max(width, size.s[0]);
     height += size.s[1];
 
     iter = iter->sibling;
