@@ -1,3 +1,4 @@
+#include "engine/ui/append.hpp"
 #include "engine/ui/list.hpp"
 #include "engine/ui/pad_box.hpp"
 #include "engine/ui/screen.hpp"
@@ -5,21 +6,22 @@
 #include <curses.h>
 #include <iostream>
 using namespace std;
+using namespace Engine::UI;
 
 // TODO: Handle keyboard, resize and other events
 // discuss implementation details and draw a line between
 // the engine and the game logic
 
 int main() {
-  Engine::UI::Screen *screen = new Engine::UI::Screen();
-  Engine::UI::PadBox *pbox =
-      Engine::UI::PadBox::append(screen, 1, 1,
-                                 {{Engine::UI::PADDING_LEFT, 4},
-                                  {Engine::UI::PADDING_RIGHT, 4},
-                                  {Engine::UI::PADDING_TOP, 2},
-                                  {Engine::UI::PADDING_BOTTOM, 2}});
-  Engine::UI::List *list = Engine::UI::List::append(pbox, 1, 1);
-  Engine::UI::TextBox::append(
+  Screen *screen = new Screen();
+  PadBox *pbox = append<PadBox, map<enum PAD, uint16_t>>(
+      screen, 1, 1,
+      {{Engine::UI::PADDING_LEFT, 4},
+       {Engine::UI::PADDING_RIGHT, 4},
+       {Engine::UI::PADDING_TOP, 2},
+       {Engine::UI::PADDING_BOTTOM, 2}});
+  List *list = append<List, const wchar_t>(pbox, 1, 1, L'*');
+  append<TextBox, const wchar_t *>(
       list, 1, 1,
       L"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do "
       L"eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad "
@@ -28,13 +30,14 @@ int main() {
       L"reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla "
       L"pariatur. Excepteur sint occaecat cupidatat non proident, sunt in "
       L"culpa qui officia deserunt mollit anim id est laborum.");
-  Engine::UI::TextBox::append(
+  append<TextBox, const wchar_t *>(
       list, 1, 1,
       L"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do "
       L"eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad "
       L"minim veniam, quis nostrud exercitation ullamco laboris nisi ut ");
-  Engine::UI::TextBox::append(list, 1, 1, L"Premere q per uscire");
-  Engine::UI::TextBox::append(list, 1, 1, L"PS: il latino fa altamente cagare");
+  append<TextBox, const wchar_t *>(list, 1, 1, L"Premere q per uscire");
+  append<TextBox, const wchar_t *>(list, 1, 1,
+                                   L"PS: il latino fa altamente cagare");
 
   if (screen->open()) {
     cout << "Error while opening screen" << endl;

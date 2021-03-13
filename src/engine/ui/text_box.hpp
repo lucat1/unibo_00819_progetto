@@ -18,8 +18,8 @@ public:
   TextBox(uint8_t width, uint8_t height, const wchar_t *content);
 
   vector<wchar_t *> split_content();
+  bsize_t size();
   void show(WINDOW *window, uint16_t x, uint16_t y);
-  static TextBox *append(Box *box, float w, float h, const wchar_t *content);
 };
 
 } // namespace UI
