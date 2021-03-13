@@ -8,7 +8,6 @@ using namespace Engine::UI;
 // (be it a List, a Button, a Checkbox) extends the box class, which provides
 // rendering primitives such as the automatic display of its children in the
 // appropriate order
-
 Box::Box(uint16_t width, uint16_t height) {
   this->width = width;
   this->height = height;
@@ -40,22 +39,4 @@ void Box::add_child(Box *new_box) {
   new_box->sibling = this->children;
   new_box->parent = this;
   this->children = new_box;
-}
-
-// by default Box is just a container, so we just render its children
-// for simplicity we assume children stack one under the other.
-// it's more than enough for the menus we'll have to implement
-void Box::show(uint16_t x, uint16_t y) {
-  Box *iter = this->children;
-  uint8_t next_y = y, max_y = y + height;
-  while (iter != NULL) {
-    // don't render items outside of this Box
-    // TODO: sliders (?)
-    if (next_y + iter->height > max_y)
-      break;
-
-    iter->show(x, next_y);
-    next_y = next_y + iter->height;
-    iter = iter->sibling;
-  }
 }

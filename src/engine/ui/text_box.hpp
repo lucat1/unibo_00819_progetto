@@ -2,6 +2,7 @@
 #define TEXT_BOX_HPP
 
 #include "box.hpp"
+#include <ncurses.h>
 #include <vector>
 using namespace std;
 
@@ -10,16 +11,14 @@ namespace UI {
 
 class TextBox : public Box {
 private:
-  wchar_t *content;
-  vector<wchar_t *> split_content();
+  const wchar_t *content;
 
 public:
-  TextBox(uint8_t width, uint8_t height, wchar_t *content);
+  TextBox(uint8_t width, uint8_t height, const wchar_t *content);
 
-  // FIXME: devo davvero ridefinirlo volpe?
-  // cpp is a joke
-  void show(uint16_t x, uint16_t y);
-  static TextBox append(Box box);
+  vector<wchar_t *> split_content();
+  void show(WINDOW *window, uint16_t x, uint16_t y);
+  static TextBox *append(Box *box, float w, float h, const wchar_t *content);
 };
 
 } // namespace UI

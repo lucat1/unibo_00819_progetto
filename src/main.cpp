@@ -1,4 +1,5 @@
 #include "engine/ui/screen.hpp"
+#include "engine/ui/text_box.hpp"
 #include <curses.h>
 #include <iostream>
 using namespace std;
@@ -8,9 +9,18 @@ using namespace std;
 // the engine and the game logic
 
 int main() {
-  Engine::UI::Screen screen;
+  Engine::UI::Screen *screen = new Engine::UI::Screen();
+  Engine::UI::TextBox::append(
+      screen, 1, 1,
+      L"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do "
+      L"eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad "
+      L"minim veniam, quis nostrud exercitation ullamco laboris nisi ut "
+      L"aliquip ex ea commodo consequat. Duis aute irure dolor in "
+      L"reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla "
+      L"pariatur. Excepteur sint occaecat cupidatat non proident, sunt in "
+      L"culpa qui officia deserunt mollit anim id est laborum.");
 
-  if (screen.open()) {
+  if (screen->open()) {
     cout << "Error while opening screen" << endl;
     return 1;
   }
@@ -18,9 +28,9 @@ int main() {
   int key;
   while ((key = getch()) != 'q') {
     if (key == KEY_RESIZE)
-      screen.update();
+      screen->update();
   };
 
-  screen.close();
+  screen->close();
   return 0;
 }
