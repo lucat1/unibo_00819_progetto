@@ -8,9 +8,18 @@ CXX = g++
 ## -MP creates phony targets for headers (deals with deleted headers after
 ##  obj file has been compiled)
 ## -MT specifies the dependency target (path qualified obj file name)
-DEP_FLAGS = -std=c++11 -D_XOPEN_SOURCE_EXTENDED -MT $@ -MMD -MP -MF $(@:.o=.d)
+DEP_FLAGS = -std=c++11 -MT $@ -MMD -MP -MF $(@:.o=.d)
 CXXFLAGS = $(DEP_FLAGS) -Wall -Werror
 LDFLAGS = -lstdc++ -lcurses -lncurses
+# conditional linker flags based on OS (Linux, Darwin = MacOS)
+UNAME := $(shell uname)
+ifeq ($(UNAME), Linux)
+LDFLAGS +=  -lncursesw
+endif
+ifeq ($(UNAME), Darwin)
+DEP_FLAGS += -D_XOPEN_SOURCE_EXTENDED
+endif
+
 
 # Things to build
 ALL_FILES := $(wildcard $(SRC_DIR)/**/**/*.cpp) $(wildcard $(SRC_DIR)/**/*.cpp) $(wildcard $(SRC_DIR)/*.cpp)
