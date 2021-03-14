@@ -21,7 +21,8 @@ private:
   uint16_t pl = 0, pr = 0, pt = 0, pb = 0;
 
 public:
-  PadBox(uint8_t width, uint8_t height, map<enum PAD, uint16_t> pads = {});
+  PadBox(uint16_t max_width, uint16_t max_height,
+         map<enum PAD, uint16_t> pads = {});
 
   void show(WINDOW *window, uint16_t x, uint16_t y);
   bsize_t size();

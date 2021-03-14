@@ -2,7 +2,7 @@
 #include <stdarg.h>
 using namespace Engine::UI;
 
-PadBox::PadBox(uint8_t max_width, uint8_t max_height,
+PadBox::PadBox(uint16_t max_width, uint16_t max_height,
                map<enum PAD, uint16_t> pads)
     : Box(max_width, max_height) {
   this->pads = pads;
@@ -31,7 +31,7 @@ PadBox::PadBox(uint8_t max_width, uint8_t max_height,
 
 void PadBox::show(WINDOW *window, uint16_t x, uint16_t y) {
   Box *iter = this->first_child;
-  uint8_t next_y = y, max_y = pt + y + max_height;
+  uint16_t next_y = y, max_y = pt + y + max_height;
   while (iter != NULL) {
     // don't render items outside of this Box
     // TODO: scrollbars (?)

@@ -3,14 +3,14 @@ using namespace Engine::UI;
 
 #define LIST_PADDING 2
 
-List::List(uint8_t max_width, uint8_t max_height, const wchar_t marker)
+List::List(uint16_t max_width, uint16_t max_height, const wchar_t marker)
     : Box(max_width, max_height) {
   this->marker = marker;
 }
 
 void List::show(WINDOW *window, uint16_t x, uint16_t y) {
   Box *iter = this->first_child;
-  uint8_t next_y = y, max_y = y + max_height;
+  uint16_t next_y = y, max_y = y + max_height;
   while (iter != NULL) {
     bsize isize = iter->size();
     // don't render items outside of this Box

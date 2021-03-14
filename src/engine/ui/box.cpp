@@ -46,7 +46,7 @@ void Box::add_child(Box *new_box) {
 // it's more than enough for the menus we'll have to implement
 void Box::show(WINDOW *window, uint16_t x, uint16_t y) {
   Box *iter = this->first_child;
-  uint8_t next_y = y, max_y = y + max_height;
+  uint16_t next_y = y, max_y = y + max_height;
   while (iter != nullptr) {
     bsize isize = iter->size();
     // don't render items outside of this Box
