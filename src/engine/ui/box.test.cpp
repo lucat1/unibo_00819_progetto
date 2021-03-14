@@ -58,20 +58,20 @@ int main() {
 
   Box *box1 = new Box(10000, 10000);
   it("reports the corret size when empty", {
-    bsize size = box1->size();
-    assert(size.s[0] == 0);
-    assert(size.s[1] == 0);
+    Pair<uint16_t, uint16_t> size = box1->size();
+    assert(size.first == 0);
+    assert(size.second == 0);
   });
 
   TextBox *tb1 =
       append<TextBox, const wchar_t *>(box1, 1, 1, L"this is a test text");
   it("reports the corret size when it has children", {
-    bsize size = box1->size();
-    assert(size.s[0] > 0);
-    assert(size.s[1] == 1);
+    Pair<uint16_t, uint16_t> size = box1->size();
+    assert(size.first > 0);
+    assert(size.second == 1);
 
-    bsize tsize = tb1->size();
-    assert(tsize.s[0] == size.s[0]);
-    assert(tsize.s[0] == size.s[0]);
+    Pair<uint16_t, uint16_t> tsize = tb1->size();
+    assert(tsize.first == size.first);
+    assert(tsize.first == size.first);
   });
 }

@@ -14,7 +14,7 @@ public:
   List(uint16_t max_width, uint16_t max_height, const wchar_t marker = L'*');
 
   void show(WINDOW *window, uint16_t x, uint16_t y);
-  bsize_t size();
+  Pair<uint16_t, uint16_t> size();
 };
 
 } // namespace UI

@@ -1,5 +1,5 @@
-SRC_DIR = src
-INT_DIR = build
+SRC_DIR  = src
+INT_DIR  = build
 TEST_DIR = build/test
 TARGET  = alma
 
@@ -19,7 +19,6 @@ endif
 ifeq ($(UNAME), Darwin)
 DEP_FLAGS += -D_XOPEN_SOURCE_EXTENDED
 endif
-
 
 # Things to build
 ALL_FILES := $(wildcard $(SRC_DIR)/**/**/*.cpp) $(wildcard $(SRC_DIR)/**/*.cpp) $(wildcard $(SRC_DIR)/*.cpp)

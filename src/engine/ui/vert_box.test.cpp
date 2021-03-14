@@ -16,9 +16,9 @@ int main() {
   append<PadBox, map<enum PAD, uint16_t>>(
       box, 1, 1, {{PADDING_LEFT, 2}, {PADDING_RIGHT, 2}});
   it("places elements vertically with appropriate dimentions", {
-    bsize_t box_size = box->size();
-    bsize_t tb_size = tb->size();
-    assert(box_size.s[0] == tb_size.s[0] + 4); // + 4 for the PadBox
-    assert(box_size.s[1] == tb_size.s[1]);
+    Pair<uint16_t, uint16_t> box_size = box->size();
+    Pair<uint16_t, uint16_t> tb_size = tb->size();
+    assert(box_size.first == tb_size.first + 4); // + 4 for the PadBox
+    assert(box_size.second == tb_size.second);
   });
 }
