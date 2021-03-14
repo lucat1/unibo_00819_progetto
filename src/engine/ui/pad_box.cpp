@@ -6,17 +6,22 @@ PadBox::PadBox(uint8_t max_width, uint8_t max_height,
                map<enum PAD, uint16_t> pads)
     : Box(max_width, max_height) {
   this->pads = pads;
+  pl = pr = pt = pb = 0;
   for (map<enum PAD, uint16_t>::iterator it = pads.begin(); it != pads.end();
        it++) {
     switch (it->first) {
     case PADDING_LEFT:
       pl = it->second;
+      break;
     case PADDING_RIGHT:
       pr = it->second;
+      break;
     case PADDING_TOP:
       pt = it->second;
+      break;
     case PADDING_BOTTOM:
       pb = it->second;
+      break;
     }
   }
 
