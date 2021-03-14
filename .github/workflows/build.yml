@@ -17,15 +17,11 @@ jobs:
     - uses: actions/checkout@v2
 
     - name: ncurses on linux
-      if: startsWith(matrix.config.os, 'ubuntu')
+      if: startsWith(matrix.platform, 'ubuntu-latest')
       run: sudo apt-get install libncurses5-dev libncursesw5-dev -y
 
-    # - name: ncurses on macos 
-    #   if: startsWith(matrix.config.os, 'macos')
-    #   run: brew install ...
-
-    - name: make-clean-all
+    - name: 'make clean all'
       run: make clean all
 
-    - name: make-clean-test
+    - name: 'make clean test'
       run: make clean test
