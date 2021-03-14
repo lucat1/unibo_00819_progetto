@@ -8,9 +8,9 @@ CXX = g++
 ## -MP creates phony targets for headers (deals with deleted headers after
 ##  obj file has been compiled)
 ## -MT specifies the dependency target (path qualified obj file name)
-DEP_FLAGS = -MT $@ -MMD -MP -MF $(@:.o=.d)
+DEP_FLAGS = -std=c++11 -D_XOPEN_SOURCE_EXTENDED -MT $@ -MMD -MP -MF $(@:.o=.d)
 CXXFLAGS = $(DEP_FLAGS) -Wall -Werror
-LDFLAGS = -lstdc++ -lcurses -lncurses
+LDFLAGS = -lstdc++ -lcurses -lncurses -lncursesw
 
 # Things to build
 ALL_FILES := $(wildcard $(SRC_DIR)/**/**/*.cpp) $(wildcard $(SRC_DIR)/**/*.cpp) $(wildcard $(SRC_DIR)/*.cpp)
@@ -34,7 +34,7 @@ test: $(TEST_TARGETS)
 
 $(TEST_TARGETS): $(TEST_DIR)/%: $(INT_DIR)/%.o | $(ALL_OBJ_FILES)
 	@echo "LD\t$<"
-	@$(CXX) $(LDFLAGS) -o $@ $(AUX_OBJ_FILES) $^ 
+	@$(CXX) $^ $(AUX_OBJ_FILES) $(LDFLAGS) -o $@
 	@echo "RUN\t$@"
 	@$@
 	@echo "SUCCESS\t$@"
@@ -44,8 +44,8 @@ $(ALL_OBJ_FILES): $(INT_DIR)/%.o: $(SRC_DIR)/%.cpp $(INT_DIR)/%.d | $(OBJ_FOLDER
 	@$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 $(TARGET): $(CPP_OBJ_FILES)
-	@echo "LD\t$<"
-	@$(CXX) $(LDFLAGS) -o $@ $^
+	@echo "LD\t$@"
+	@$(CXX) $^ $(LDFLAGS) -o $@
 
 $(DEP_FILES): $(INT_DIR)/%.d: ;
 

@@ -46,6 +46,7 @@ bool Screen::open() {
 
   window = newwin(SCREEN_LINES + 2, SCREEN_COLS + 2, y, x);
   box(window, ACS_VLINE, ACS_HLINE);
+  show(window, 1, 1);
   wrefresh(window);
   return false;
 }

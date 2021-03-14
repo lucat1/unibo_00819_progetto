@@ -2,24 +2,26 @@
 #define BOX_HPP
 
 #include <ncurses.h>
-#include <unistd.h>
+#include <stdint.h>
 
 namespace Engine {
 namespace UI {
 
+typedef struct bsize {
+  uint16_t s[2]; // {x, y}
+} bsize_t;
+
 class Box {
-protected:
-  WINDOW *window;
 
 public:
-  uint16_t width, height;
-  Box *children, *sibling, *parent;
+  uint16_t max_width, max_height;
+  Box *first_child, *last_child, *sibling, *parent;
 
-  Box(uint16_t width, uint16_t height);
-  static Box *append(Box *box, float w, float h);
+  Box(uint16_t max_width, uint16_t max_height);
 
+  virtual void show(WINDOW *window, uint16_t x, uint16_t y);
+  virtual bsize_t size();
   void add_child(Box *box);
-  void show(uint16_t x, uint16_t y);
 };
 
 } // namespace UI

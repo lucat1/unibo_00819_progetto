@@ -2,15 +2,24 @@
 #define TEXT_BOX_HPP
 
 #include "box.hpp"
+#include <ncurses.h>
+#include <vector>
+using namespace std;
 
 namespace Engine {
 namespace UI {
 
 class TextBox : public Box {
+private:
+  const wchar_t *content;
+  vector<wchar_t *> lines;
+
 public:
-  wchar_t *content;
-  static TextBox append(Box box);
-  TextBox(uint8_t width, uint8_t height, wchar_t *content);
+  TextBox(uint16_t max_width, uint16_t max_height, const wchar_t *content);
+
+  vector<wchar_t *> split_content();
+  bsize_t size();
+  void show(WINDOW *window, uint16_t x, uint16_t y);
 };
 
 } // namespace UI
