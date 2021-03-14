@@ -1,4 +1,4 @@
-# unibo_00819_progetto
+# Progetto
 
 ## Building, Running and Testing
 
