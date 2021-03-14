@@ -1,4 +1,4 @@
-# Progetto
+# Alma
 
 ## Building, Running and Testing
 

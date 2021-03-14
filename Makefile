@@ -1,7 +1,7 @@
 SRC_DIR  = src
 INT_DIR  = build
 TEST_DIR = build/test
-TARGET   = game
+TARGET  = alma
 
 CXX = g++
 ## -MMD creates dependency list, but ignores system includes ## -MF specifies where to create the dependency file name
