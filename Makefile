@@ -1,7 +1,7 @@
-SRC_DIR = src
-INT_DIR = build
+SRC_DIR  = src
+INT_DIR  = build
 TEST_DIR = build/test
-TARGET  = game
+TARGET   = game
 
 CXX = g++
 ## -MMD creates dependency list, but ignores system includes ## -MF specifies where to create the dependency file name
@@ -19,7 +19,6 @@ endif
 ifeq ($(UNAME), Darwin)
 DEP_FLAGS += -D_XOPEN_SOURCE_EXTENDED
 endif
-
 
 # Things to build
 ALL_FILES := $(wildcard $(SRC_DIR)/**/**/*.cpp) $(wildcard $(SRC_DIR)/**/*.cpp) $(wildcard $(SRC_DIR)/*.cpp)

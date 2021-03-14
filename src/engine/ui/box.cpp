@@ -1,9 +1,11 @@
 #include "box.hpp"
+#include "../../nostd/pair.hpp"
 #include <algorithm>
 #include <ncurses.h>
 #include <unistd.h>
 using namespace std;
 using namespace Engine::UI;
+using namespace Nostd;
 
 // Engine::UI::Box has nothing to do with ncurses's box function
 // We use Box as a UI primitive to build interfaces. For example each block
@@ -48,28 +50,28 @@ void Box::show(WINDOW *window, uint16_t x, uint16_t y) {
   Box *iter = this->first_child;
   uint16_t next_y = y, max_y = y + max_height;
   while (iter != nullptr) {
-    bsize isize = iter->size();
+    Pair<uint16_t, uint16_t> isize = iter->size();
     // don't render items outside of this Box
     // TODO: scrollbars (?)
-    if (next_y + isize.s[1] > max_y)
+    if (next_y + isize.second > max_y)
       break;
 
     iter->show(window, x, next_y);
-    next_y = next_y + isize.s[1];
+    next_y = next_y + isize.second;
     iter = iter->sibling;
   }
 }
 
-bsize_t Box::size() {
+Pair<uint16_t, uint16_t> Box::size() {
   Box *iter = this->first_child;
   uint16_t width = 0, height = 0;
   while (iter != nullptr) {
-    bsize_t size = iter->size();
-    width = max(width, size.s[0]);
-    height += size.s[1];
+    Pair<uint16_t, uint16_t> size = iter->size();
+    width = max(width, size.first);
+    height += size.second;
 
     iter = iter->sibling;
   }
 
-  return bsize_t{{width, height}};
+  return {width, height};
 }

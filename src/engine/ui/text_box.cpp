@@ -72,7 +72,7 @@ void TextBox::show(WINDOW *window, uint16_t x, uint16_t y) {
   lines.clear();
 }
 
-bsize_t TextBox::size() {
+Pair<uint16_t, uint16_t> TextBox::size() {
   uint16_t height = (uint16_t)lines.size();
-  return bsize_t{{max_width, height}};
+  return {max_width, height};
 }
