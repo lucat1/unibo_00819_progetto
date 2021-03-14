@@ -10,7 +10,7 @@ CXX = g++
 ## -MT specifies the dependency target (path qualified obj file name)
 DEP_FLAGS = -std=c++11 -D_XOPEN_SOURCE_EXTENDED -MT $@ -MMD -MP -MF $(@:.o=.d)
 CXXFLAGS = $(DEP_FLAGS) -Wall -Werror
-LDFLAGS = -lstdc++ -lcurses -lncurses -lncursesw
+LDFLAGS = -lstdc++ -lcurses -lncurses
 
 # Things to build
 ALL_FILES := $(wildcard $(SRC_DIR)/**/**/*.cpp) $(wildcard $(SRC_DIR)/**/*.cpp) $(wildcard $(SRC_DIR)/*.cpp)
