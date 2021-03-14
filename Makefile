@@ -34,7 +34,7 @@ test: $(TEST_TARGETS)
 
 $(TEST_TARGETS): $(TEST_DIR)/%: $(INT_DIR)/%.o | $(ALL_OBJ_FILES)
 	@echo "LD\t$<"
-	@$(CXX) $(LDFLAGS) -o $@ $(AUX_OBJ_FILES) $^ 
+	@$(CXX) $^ $(AUX_OBJ_FILES) $(LDFLAGS) -o $@
 	@echo "RUN\t$@"
 	@$@
 	@echo "SUCCESS\t$@"
@@ -45,7 +45,7 @@ $(ALL_OBJ_FILES): $(INT_DIR)/%.o: $(SRC_DIR)/%.cpp $(INT_DIR)/%.d | $(OBJ_FOLDER
 
 $(TARGET): $(CPP_OBJ_FILES)
 	@echo "LD\t$@"
-	@$(CXX) $(LDFLAGS) -o $@ $^
+	@$(CXX) $^ $(LDFLAGS) -o $@
 
 $(DEP_FILES): $(INT_DIR)/%.d: ;
 
