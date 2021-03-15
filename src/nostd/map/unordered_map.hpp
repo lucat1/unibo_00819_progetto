@@ -4,22 +4,71 @@
 #include "map.hpp"
 #include <vector>
 #include <algorithm>
+#include <exception>
+#include <iostream>
 
 namespace Nostd
 {
-    template<class K, class V>
+    template<typename K, typename V>
     class UnorderedMap : public Map<K,V> {
         private:
             std::vector<std::pair<K,V>> data;
         
         public:
 
-            UnorderedMap();
+            UnorderedMap(){
+                data = std::vector<std::pair<K, V>>();
+            }
 
-            void add(K key, V value) override;
-            void remove(K key) override;
+            void add(K key, V value) override
+            {
+                for(auto &x : data){
+                    if(x.first == key){
+                        x.second = value;
+                        return;
+                    }
+                }
+                data.push_back({key, value});
+            }
 
-            V operator[](K key) override;
+            void remove(K key) override
+            {
+                for(int i = 0; i < this->data.size(); i++)
+                    if(data[i].first == key){
+                        data.erase(this->data.begin() + i);
+                        return;
+                    }
+            }
+
+            bool empty() override
+            {
+                return this->data.empty();
+            }
+
+            bool contains(K key) override
+            {
+                // todo: waiting for nostd::vector implentation
+                for (auto &x : this->data)
+                    if (key == x.first)
+                        return true;
+                return false;
+            }
+
+            std::vector<V> get_values() override
+            {
+                std::vector<V> res;
+                for (auto &x : this->data)
+                    res.push_back(x.second);
+                return res;
+            }
+
+            V operator[](K key) override
+            {
+                for(auto &x : this->data)
+                    if(x.first == key)
+                        return x.second;
+                throw std::invalid_argument("UnorderedMap: No value found for that key");
+            }
     };
 
 } // namespace Nostd
