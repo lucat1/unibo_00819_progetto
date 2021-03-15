@@ -20,10 +20,11 @@ int main() {
                            {Box::PADDING_BOTTOM, 2}});
   List *list = append<List, const wchar_t>(pbox, 1, 1);
   for (int i = 0; i < 21; i++) {
-    Box *vbox = append<Box>(list, 1, 1, {{Box::DIRECTION, 1}});
+    Box *line = append<Box>(list, 1, 1, {{Box::Props::DIRECTION, 1}});
     wstring str = L"Text on the left " + to_wstring(i);
-    append<TextBox, const wchar_t *>(vbox, .7, 1, {}, str.c_str());
-    append<TextBox, const wchar_t *>(vbox, .3, 1, {}, L"Text on the right");
+    append<TextBox, const wchar_t *>(line, .5, 1, {}, str.c_str());
+    append<TextBox, const wchar_t *>(line, .5, 1, {{Box::Props::FLOAT, 1}},
+                                     L"Text on the right");
   }
 
   if (screen->open()) {

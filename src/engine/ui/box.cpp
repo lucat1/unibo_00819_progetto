@@ -1,6 +1,7 @@
 #include "box.hpp"
 #include "../../nostd/pair.hpp"
 #include <algorithm>
+#include <iostream>
 #include <ncurses.h>
 #include <unistd.h>
 using namespace std;
@@ -19,6 +20,13 @@ Engine::UI::Box::Box(uint16_t max_width, uint16_t max_height,
   map<enum Engine::UI::Box::Props, uint16_t>::iterator it;
   for (it = props.begin(); it != props.end(); it++) {
     switch (it->first) {
+    case DIRECTION:
+      dv = it->second > 0 ? true : false;
+      break;
+    case FLOAT:
+      fr = it->second > 0 ? true : false;
+      break;
+
     case PADDING_LEFT:
       pl = it->second;
       break;
@@ -31,16 +39,11 @@ Engine::UI::Box::Box(uint16_t max_width, uint16_t max_height,
     case PADDING_BOTTOM:
       pb = it->second;
       break;
-
-    case DIRECTION:
-      dv = it->second == 1 ? true : false;
-      break;
-
-    case FLOAT:
-      fr = it->second == 1 ? true : false;
-      break;
     }
   }
+
+  this->max_child_width = max_width - pl - pr;
+  this->max_child_height = max_width - pt - pb;
 }
 
 // internal usage only!
@@ -48,12 +51,8 @@ Engine::UI::Box::Box(uint16_t max_width, uint16_t max_height,
 // NOTE(to self): add_child makes the width and height of the child not exceed
 // the ones of the parent
 void Engine::UI::Box::add_child(Box *new_box) {
-  if (new_box->max_width > max_width)
-    new_box->max_width = max_width;
-
-  if (new_box->max_height > max_height)
-    new_box->max_height = max_height;
-
+  new_box->max_width = min(new_box->max_width, max_child_width);
+  new_box->max_height = min(new_box->max_height, max_child_height);
   if (last_child != nullptr)
     last_child->sibling = new_box;
 
@@ -81,16 +80,17 @@ void Engine::UI::Box::show(WINDOW *window, uint16_t x, uint16_t y) {
   // horizontally (dv = 0) on the left (fr = 0)
   uint16_t rel_x = pl, rel_y = pt;
   if (fr)
-    rel_x = max_width - pr;
+    rel_x = max_child_width - pr;
 
   // iterate over all the children and display then in the approrpriate position
   Box *it = first_child;
-  while (it != nullptr) {
+  while (it != nullptr && rel_x < max_child_width && rel_y < max_child_height) {
     // Pair<width, height>
     Pair<uint16_t, uint16_t> child_size = it->size();
-    it->show(window, rel_x, rel_y);
+    it->show(window, x + rel_x + (fr ? child_size.first : 0), y + rel_y);
 
-    rel_x = rel_x + ((fr && dv) ? -child_size.first : child_size.first);
+    // TODO: fr
+    rel_x = rel_x + (dv ? child_size.first : 0);
     if (!dv)
       rel_y += child_size.second;
     it = it->sibling;

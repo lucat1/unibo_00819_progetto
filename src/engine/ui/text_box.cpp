@@ -1,8 +1,4 @@
 #include "text_box.hpp"
-#include <cstring>
-#include <cwchar>
-#include <iostream>
-#include <vector>
 
 // TextBox straigh up ignores the height value as it is defined by its width and
 // content length.
@@ -66,10 +62,9 @@ vector<wchar_t *> Engine::UI::TextBox::split_content() {
 void Engine::UI::TextBox::show(WINDOW *window, uint16_t x, uint16_t y) {
   for (vector<wchar_t *>::size_type i = 0; i < lines.size(); i++) {
     wchar_t *line = lines.at(i);
-    mvwaddwstr(window, y + i, x, line);
+    mvwaddwstr(window, y + i, fr ? x + wcslen(line) : x, line);
     delete line;
   }
-  lines.clear();
 }
 
 Pair<uint16_t, uint16_t> Engine::UI::TextBox::size() {

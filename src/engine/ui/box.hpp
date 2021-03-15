@@ -12,7 +12,7 @@ namespace Engine {
 namespace UI {
 
 class Box {
-private:
+protected:
   // padding(left|right|top|bottom)
   uint16_t pl = 0, pr = 0, pt = 0, pb = 0;
   // direction vertical, float right
@@ -30,7 +30,7 @@ public:
     PADDING_BOTTOM,
   };
 
-  uint16_t max_width, max_height;
+  uint16_t max_width, max_height, max_child_width, max_child_height;
   Box *first_child = nullptr, *last_child = nullptr, *sibling = nullptr,
       *parent = nullptr;
 
