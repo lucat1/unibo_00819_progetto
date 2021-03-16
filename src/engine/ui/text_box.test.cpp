@@ -7,7 +7,7 @@ using namespace Engine::UI;
 int main() {
   it("splits lines into NULL-terminated strings", {
     TextBox *text_box =
-        new TextBox(15, 10,
+        new TextBox(15, 10, {},
                     L"this is a super super super super super long test string "
                     L"which is also a test string");
     vector<wchar_t *> lines = text_box->split_content();
@@ -20,7 +20,7 @@ int main() {
   });
 
   it("splits a line into a width of 5 properly", {
-    TextBox *text_box = new TextBox(5, 10, L"this is a test string");
+    TextBox *text_box = new TextBox(5, 10, {}, L"this is a test string");
     vector<wchar_t *> lines = text_box->split_content();
     assert(wcscmp(lines.at(0), L"this ") == 0);
     assert(wcscmp(lines.at(1), L"is a ") == 0);

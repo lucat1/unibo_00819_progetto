@@ -44,16 +44,16 @@ int main() {
     assert(c->parent == box);
     assert(snd_child->sibling == c);
     assert(box->last_child == c);
-    assert(c->max_width == (uint16_t)box->max_width * 0.5f);
-    assert(c->max_height == box->max_height * 0.25f);
+    assert(c->max_width == (uint16_t)box->max_child_width * 0.5f);
+    assert(c->max_height == box->max_child_height * 0.25f);
   });
 
   it("keeps the child size inside the parent", {
     Box *c = new Box((uint16_t)10000, (uint16_t)10000);
     box->add_child(c);
     assert(c->parent == box);
-    assert(c->max_width == box->max_width);
-    assert(c->max_height == box->max_height);
+    assert(c->max_width == box->max_child_width);
+    assert(c->max_height == box->max_child_height);
   });
 
   Box *box1 = new Box(10000, 10000);
@@ -64,7 +64,7 @@ int main() {
   });
 
   TextBox *tb1 =
-      append<TextBox, const wchar_t *>(box1, 1, 1, L"this is a test text");
+      append<TextBox, const wchar_t *>(box1, 1, 1, {}, L"this is a test text");
   it("reports the corret size when it has children", {
     Pair<uint16_t, uint16_t> size = box1->size();
     assert(size.first > 0);

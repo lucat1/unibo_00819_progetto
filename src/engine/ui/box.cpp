@@ -104,7 +104,7 @@ Pair<uint16_t, uint16_t> Engine::UI::Box::size() {
   while (it != nullptr) {
     // Pair<width, height>
     Pair<uint16_t, uint16_t> child_size = it->size();
-    width = fr ? max_width : width + child_size.second;
+    width = fr ? max_width : width + child_size.first;
     height = dv ? max(height, child_size.second) : height + child_size.second;
 
     it = it->sibling;
