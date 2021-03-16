@@ -1,8 +1,11 @@
 #include "vector.hpp"
+
 #include <stdexcept>
 
 Nostd::Vector::Vector() {
-  Vector(0);
+  sz = 0;
+  cap = 1;
+  v = new int[cap];
 }
 
 Nostd::Vector::Vector(size_t size) {
@@ -13,6 +16,7 @@ Nostd::Vector::Vector(size_t size) {
     cap = size * 1.5;
   v = new int[cap];
 }
+
 void Nostd::Vector::push_back(int ele) {
   if (sz == cap)
     resize(sz);
@@ -22,6 +26,7 @@ void Nostd::Vector::push_back(int ele) {
 void Nostd::Vector::clear() {
   resize(0);
 }
+
 void Nostd::Vector::resize(size_t n) {
   sz = n;
   if (n == 0)
