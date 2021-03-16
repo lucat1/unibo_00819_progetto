@@ -15,7 +15,10 @@ private:
   vector<wchar_t *> lines;
 
 public:
-  TextBox(uint16_t max_width, uint16_t max_height, const wchar_t *content);
+  static constexpr const wchar_t *append_default_value = L"";
+  TextBox(uint16_t max_width, uint16_t max_height,
+          map<enum Box::Props, uint16_t> props = {},
+          const wchar_t *content = L"");
 
   vector<wchar_t *> split_content();
   Pair<uint16_t, uint16_t> size();

@@ -2,7 +2,6 @@
 #include <iostream>
 #include <ncurses.h>
 using namespace std;
-using namespace Engine::UI;
 
 // screen wraps the whole ncurses screen in a box of SCREEN_WIDTHxSCREEN_HEIGHT
 // that is centered on the screen and repositioned properly on resizes
@@ -11,9 +10,9 @@ using namespace Engine::UI;
 // to center boxes as we see fit and also calls helper functions like
 // `raw`, `keypad` and `noecho` to properly get the user input.
 
-Screen::Screen() : Box(SCREEN_COLS, SCREEN_LINES) {}
+Engine::UI::Screen::Screen() : Box(SCREEN_COLS, SCREEN_LINES) {}
 
-bool Screen::can_fit() {
+bool Engine::UI::Screen::can_fit() {
   getmaxyx(window, terminal_lines, terminal_cols);
 
   // check that the terminal is big enough to fit the game
@@ -26,7 +25,7 @@ bool Screen::can_fit() {
   return false;
 }
 
-bool Screen::open() {
+bool Engine::UI::Screen::open() {
   window = initscr(); // terminal should be equal to stdscr
   if (window == NULL)
     return true;
@@ -37,6 +36,7 @@ bool Screen::open() {
   noecho(); // prevents user-inputted charters to be displayed on the screen
   raw();    // with raw we intercept all keystrokes and prevent ^C from quitting
             // the game
+  curs_set(0); // hide the cursor by default
   keypad(
       window,
       false); // the second argument is set to `false` to caputre RESIZE events
@@ -51,7 +51,7 @@ bool Screen::open() {
   return false;
 }
 
-bool Screen::update() {
+bool Engine::UI::Screen::update() {
   if (can_fit())
     return true;
 
@@ -65,4 +65,4 @@ bool Screen::update() {
   return false;
 }
 
-void Screen::close() { endwin(); }
+void Engine::UI::Screen::close() { endwin(); }

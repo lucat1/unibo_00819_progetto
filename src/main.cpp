@@ -1,9 +1,7 @@
 #include "engine/ui/append.hpp"
 #include "engine/ui/list.hpp"
-#include "engine/ui/pad_box.hpp"
 #include "engine/ui/screen.hpp"
 #include "engine/ui/text_box.hpp"
-#include "engine/ui/vert_box.hpp"
 #include <curses.h>
 #include <iostream>
 using namespace std;
@@ -15,18 +13,18 @@ using namespace Engine::UI;
 
 int main() {
   Screen *screen = new Screen();
-  PadBox *pbox = append<PadBox, map<enum PAD, uint16_t>>(
-      screen, 1, 1,
-      {{Engine::UI::PADDING_LEFT, 4},
-       {Engine::UI::PADDING_RIGHT, 4},
-       {Engine::UI::PADDING_TOP, 2},
-       {Engine::UI::PADDING_BOTTOM, 2}});
-  List *list = append<List, const wchar_t>(pbox, 1, 1, L'*');
+  Box *pbox = append<Box>(screen, 1, 1,
+                          {{Box::PADDING_LEFT, 4},
+                           {Box::PADDING_RIGHT, 4},
+                           {Box::PADDING_TOP, 2},
+                           {Box::PADDING_BOTTOM, 2}});
+  List *list = append<List, const wchar_t>(pbox, 1, 1);
   for (int i = 0; i < 21; i++) {
-    VertBox *vbox = append<VertBox>(list, 1, 1);
+    Box *line = append<Box>(list, 1, 1, {{Box::Props::DIRECTION, 1}});
     wstring str = L"Text on the left " + to_wstring(i);
-    append<TextBox, const wchar_t *>(vbox, .7, 1, str.c_str());
-    append<TextBox, const wchar_t *>(vbox, .3, 1, L"Text on the right");
+    append<TextBox, const wchar_t *>(line, .5, 1, {}, str.c_str());
+    append<TextBox, const wchar_t *>(line, .5, 1, {{Box::Props::FLOAT, 1}},
+                                     L"Text on the right");
   }
 
   if (screen->open()) {
