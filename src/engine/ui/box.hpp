@@ -1,7 +1,7 @@
 #ifndef BOX_HPP
 #define BOX_HPP
 
-#include "../../nostd/pair.hpp"
+#include "../../nostd/pair/pair.hpp"
 #include <map>
 #include <ncurses.h>
 #include <stdint.h>

@@ -1,5 +1,5 @@
 #include "box.hpp"
-#include "../../nostd/pair.hpp"
+#include "../../nostd/pair/pair.hpp"
 #include <algorithm>
 #include <iostream>
 #include <ncurses.h>
