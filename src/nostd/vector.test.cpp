@@ -3,7 +3,7 @@
 using namespace Nostd;
 
 int main() {
-  Vector vec;
+  Vector<int> vec;
   vec.push_back(3);
   vec.push_back(8);
   vec.push_back(9);
