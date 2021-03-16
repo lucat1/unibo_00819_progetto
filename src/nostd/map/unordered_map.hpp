@@ -81,5 +81,4 @@ namespace Nostd
     };
 
 } // namespace Nostd
-
 #endif

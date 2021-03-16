@@ -9,6 +9,7 @@ int main()
     ma.add(2, 3);
     ma.add(4, 5);
     //cout << ma[4];
+    ma.remove(2);
     for (auto &p : ma.get_values())
     {
         cout << p << endl;
