@@ -110,5 +110,5 @@ Pair<uint16_t, uint16_t> Engine::UI::Box::size() {
     it = it->sibling;
   }
 
-  return {width, height};
+  return Pair<uint16_t, uint16_t>(width + pl + pr, height + pt + pb);
 }

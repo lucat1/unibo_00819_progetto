@@ -74,4 +74,44 @@ int main() {
     assert(tsize.first == size.first);
     assert(tsize.first == size.first);
   });
+
+  it("properly adds left padding", {
+    Box *b = new Box(10, 10, {{Box::Props::PADDING_LEFT, 2}});
+    Pair<uint16_t, uint16_t> size = b->size();
+    assert(size.first == 2);
+    assert(size.second == 0);
+  });
+
+  it("properly adds right padding", {
+    Box *b = new Box(10, 10, {{Box::Props::PADDING_RIGHT, 2}});
+    Pair<uint16_t, uint16_t> size = b->size();
+    assert(size.first == 2);
+    assert(size.second == 0);
+  });
+
+  it("properly adds top padding", {
+    Box *b = new Box(10, 10, {{Box::Props::PADDING_TOP, 2}});
+    Pair<uint16_t, uint16_t> size = b->size();
+    assert(size.first == 0);
+    assert(size.second == 2);
+  });
+
+  it("properly adds bottom padding", {
+    Box *b = new Box(10, 10, {{Box::Props::PADDING_BOTTOM, 2}});
+    Pair<uint16_t, uint16_t> size = b->size();
+    assert(size.first == 0);
+    assert(size.second == 2);
+  });
+
+  Box *vbox = new Box(50, 4);
+  TextBox *tb = append<TextBox, const wchar_t *>(vbox, 1, 1, {},
+                                                 L"this is a test string");
+  append<Box>(vbox, 1, 1,
+              {{Box::Props::PADDING_LEFT, 2}, {Box::Props::PADDING_RIGHT, 2}});
+  it("places elements vertically with appropriate dimentions", {
+    Pair<uint16_t, uint16_t> box_size = vbox->size();
+    Pair<uint16_t, uint16_t> tb_size = tb->size();
+    assert(box_size.first == tb_size.first + 4); // + 4 for the PadBox
+    assert(box_size.second == tb_size.second);
+  });
 }
