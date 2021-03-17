@@ -1,12 +1,12 @@
 /*
   University of Bologna
-  First cicly degree in Computer Science
+  First cicle degree in Computer Science
   00819 - Programmazione
 
   Stefano Volpe #969766
   03/17/2021
 
-  allocator.hpp: user interface of Nostd::Allocator and its helper functions.
+  allocator.hpp: user interface of Nostd::Allocator.
 */
 
 #ifndef NOSTD_ALLOCATOR_HPP
@@ -48,8 +48,8 @@ public:
   // std::Allocator uses a struct instead (arcaism)
   template <class U> using other = Allocator<U>;
 
-  Allocator() noexcept;
-  Allocator(const Allocator &) noexcept;
+  Allocator() noexcept = default;
+  Allocator(const Allocator &) noexcept = default;
   template <class U> Allocator(const Allocator<U> &) noexcept;
   ~Allocator() noexcept;
 

@@ -6,12 +6,13 @@
   Stefano Volpe #969766
   03/16/2021
 
-  matrix.hpp: user interface of Nostd::Matrix and its helper functions/classes.
+  matrix.hpp: user interface of Nostd::Matrix and its helper functions.
 */
 
 #ifndef NOSTD_MATRIX_HPP
 #define NOSTD_MATRIX_HPP
 
+#include <iterator>
 #include <ostream>
 #include <utility>
 #include <vector>
@@ -28,10 +29,19 @@ namespace Nostd {
   converted to T.
   Finally, basic arithmetic operators are provided.
 */
-template <class T> class Matrix {
+template <class T, class Alloc = allocator<T>> class Matrix {
 public:
+  using value_type = T;
+  using allocator_type = Alloc;
+  using reference = value_type &;
+  using const_reference = const value_type &;
+  using pointer = value_type *;
+  using const_pointer = const value_type *;
   using iterator = typename std::vector<T>::iterator;
   using const_iterator = typename std::vector<T>::const_iterator;
+  using reverse_iterator = std::reverse_iterator<iterator>;
+  using const_reverse_iterator = std::reverse_iterator<const_iterator>;
+  using size_type = size_t;
 
   Matrix() = delete;
   Matrix(Matrix &&) = default;
