@@ -6,21 +6,11 @@
 namespace Nostd {
 
 template <typename V> class Vector {
-private:
+public:
   V *v;
   size_t sz, cap;
 
-public:
-  // Constructs an empty container, with no elements.
-  Vector() {
-    sz = 0;
-    cap = 1;
-    v = new V[cap];
-  }
-
-  // it is constructor that creates a vector with size elements and size * 1.5
-  // capacity
-  explicit Vector(size_t size) {
+  void init_v(size_t size) {
     sz = size;
     if (size == 0)
       cap = 1;
@@ -29,6 +19,20 @@ public:
     else
       cap = size * 1.5;
     v = new V[cap];
+  }
+
+public:
+  // Constructs an empty container, with no elements.
+  Vector() { init_v(0); }
+
+  explicit Vector(size_t size) { init_v(size); }
+
+  // it is constructor that creates a vector with size elements and size * 1.5
+  // capacity copying size times the ele value into the vector
+  explicit Vector(size_t size, V ele) {
+    init_v(size);
+    for (size_t i = 0; i < sz; i++)
+      v[i] = ele;
   }
 
   // Adds a new elements at the end of the vector
@@ -47,6 +51,8 @@ public:
       throw std::invalid_argument("index out of bounds");
     return v[i];
   }
+
+  V &operator[](size_t i) { return at(i); }
 
   // Removes from the vector either a single (or renge of) element
   size_t erase(size_t i) {
@@ -76,7 +82,7 @@ public:
     V *newv = new V[cap];
     for (size_t i = 0; i < n; i++)
       newv[i] = v[i];
-    delete v;
+    delete[] v;
     v = newv;
   }
 
