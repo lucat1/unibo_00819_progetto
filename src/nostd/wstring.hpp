@@ -45,18 +45,20 @@ public:
     v[len] = '\0';
   }
 
-  WString &operator=(const wchar_t *str) {
-    resize(wcslen(
-        str)); // we call it always as we could have some cases where shrinking
-               // may be applied and therefore memory will be freed
-    for (size_t i = 0; i < wcslen(str); i++)
-      v[i] = str[i];
+  WString &operator=(const wchar_t c) {
+    resize(2);
+    v[0] = c;
+    v[1] = '\0';
     return *this;
   }
-  WString operator=(const wchar_t c) {
-    if (cap < 1)
-      resize(1);
-    v[0] = '\0';
+
+  WString &operator=(const wchar_t *str) {
+    // we call it always as we could have some cases where shrinking
+    // may be applied and therefore memory will be freed
+    resize(wcslen(str) + 1);
+
+    for (size_t i = 0; i <= wcslen(str); i++) // = to copy the '\0' char
+      v[i] = str[i];
     return *this;
   }
 

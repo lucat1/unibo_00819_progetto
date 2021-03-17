@@ -53,4 +53,26 @@ int main() {
     assert(ws.size() == 3);
     assert(ws.length() == 2);
   });
+
+  it("length matches wcslen", {
+    WString ws(
+        L"dadsadsadsadsaadasdad"); // TODO: proper constructor with assignment
+    assert(ws.length() == wcslen(ws.c_str()));
+  });
+
+  it("properly assigns to a char", {
+    WString ws;
+    ws = L'*';
+    assert(ws[0] == L'*');
+    assert(ws.length() == 1);
+    assert(ws.size() == 2);
+  });
+
+  it("properly assigns to a c string", {
+    WString ws;
+    const wchar_t *str = L"test string";
+    ws = str;
+    assert(wcscmp(ws.c_str(), str) == 0);
+    assert(ws.length() == wcslen(str));
+  });
 }
