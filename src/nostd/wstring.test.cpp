@@ -20,7 +20,6 @@ int main() {
     assert(ws2.size() == ws1.size());
     assert(ws2.length() == ws1.length());
   });
-
   it("initializes a WString from a WString substring", {
     WString ws(L"test test"); // TODO: proper constructor with assignment
     WString tws(ws, 2, 7);
@@ -74,5 +73,40 @@ int main() {
     ws = str;
     assert(wcscmp(ws.c_str(), str) == 0);
     assert(ws.length() == wcslen(str));
+  });
+
+  it("resizes the string according to spec", {
+    WString ws(L"test"); // TODO: proper constructor with assignment
+    ws.resize(2);
+    assert(ws.length() == 2);
+    assert(ws.size() == 3);
+    assert(ws[2] == '\0');
+  });
+
+  it("clears the string according to spec", {
+    WString ws(L"test string"); // TODO: proper constructor with assignment
+    ws.clear();
+    assert(ws.length() == 0);
+    assert(ws.size() == 1);
+    assert(ws[0] == '\0');
+  });
+
+  it("correctly reports when the string is empty", {
+    WString ws;
+    assert(ws.empty());
+  });
+
+  it("allows access & mods to the back char", {
+    WString ws(L"test string"); // TODO: proper constructor with assignment
+    assert(ws.back() == L't');
+    ws.back() = L'T';
+    assert(ws.back() == L'T');
+  });
+
+  it("allows access & mods to the front char", {
+    WString ws(L"test string"); // TODO: proper constructor with assignment
+    assert(ws.front() == L'g');
+    ws.front() = L'G';
+    assert(ws.front() == L'G');
   });
 }

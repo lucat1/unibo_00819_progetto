@@ -2,10 +2,15 @@
 #define WSTRING_HPP
 
 #include "vector.hpp"
+#include <stdexcept>
 #include <wchar.h>
 
 namespace Nostd {
 
+// WString implements a growable array of wchar_t chars that make up a string.
+// Differences from std::wstring:
+// - size() returns length() + 1 (as it's the size of the underlying vector)
+//   +1 is for the '\0' null char
 class WString : public Vector<wchar_t> {
 public:
   // when used for substrings meants "'til the end"
@@ -46,7 +51,7 @@ public:
   }
 
   WString &operator=(const wchar_t c) {
-    resize(2);
+    Vector::resize(2);
     v[0] = c;
     v[1] = '\0';
     return *this;
@@ -55,15 +60,48 @@ public:
   WString &operator=(const wchar_t *str) {
     // we call it always as we could have some cases where shrinking
     // may be applied and therefore memory will be freed
-    resize(wcslen(str) + 1);
+    Vector::resize(wcslen(str) + 1);
 
     for (size_t i = 0; i <= wcslen(str); i++) // = to copy the '\0' char
       v[i] = str[i];
     return *this;
   }
 
+  // checks whether the WString is empty
+  bool empty() { return sz <= 1 || (sz == 1 && v[0] == '\0'); }
+
   wchar_t *c_str() { return v; }
   size_t length() { return sz - 1; }
+  size_t max_size() { return SIZE_MAX; }
+
+  // we override the Vector::resize to resize to a n+1 size and keep space for
+  // the '\0' char
+  void resize(size_t n) {
+    Vector::resize(n + 1);
+    v[n] = '\0';
+  }
+
+  // we override the Vector::celar to resize to size 1 and keep space for the
+  // '\0' char
+  void clear() {
+    Vector::resize(1);
+    v[0] = '\0';
+  }
+
+  wchar_t &back() {
+    if (empty())
+      throw std::invalid_argument("called WString::back on an empty string");
+    return v[0];
+  }
+
+  wchar_t &front() {
+    if (empty())
+      throw std::invalid_argument("called WString::front on an empty string");
+    return v[sz - 2];
+  }
+
+  // TODO: modifiers
+  // TODO: operations
 };
 
 } // namespace Nostd
