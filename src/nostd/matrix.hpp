@@ -13,42 +13,63 @@
 #define NOSTD_MATRIX_HPP
 
 #include <ostream>
-#include <type_traits>
-#include <valarray>
+#include <utility>
 #include <vector>
 
 namespace Nostd {
 
-template <class T> class Matrix;
-template <class T> class SubMatrix;
-
+/*
+  A general purpose class considering an N-dimensional matrix as a handler to
+  its cells. To construct a new Matrix from scratch, you can specify its
+  extents with {}: it can later be accessed through C-style subscripting (e.g.
+  m[2][3]) or using intervals (m[{{2,3}, {1,1}]). All of these methods return
+  a new handler of type Matrix pointing to a subset of the cells of the
+  original data structure. A Matrix with a single cell of type T is implicitly
+  converted to T.
+  Finally, basic arithmetic operators are provided.
+*/
 template <class T> class Matrix {
 public:
-  using value_type = T;
   using iterator = typename std::vector<T>::iterator;
   using const_iterator = typename std::vector<T>::const_iterator;
 
-  Matrix() = default;
+  Matrix() = delete;
   Matrix(Matrix &&) = default;
   Matrix &operator=(Matrix &&) = default;
-  Matrix(const Matrix &) = default;
-  Matrix &operator=(const Matrix &) = default;
+  Matrix(const Matrix &);
+  Matrix &operator=(const Matrix &);
   ~Matrix() = default;
 
-  Matrix(std::initializer_list<size_t>);
-  Matrix &operator=(std::initializer_list<size_t>);
+  Matrix(std::initializer_list<size_t> extents);
+  Matrix(std::initializer_list<size_t> extents, const T &value);
+  Matrix &operator=(std::initializer_list<size_t> extents);
 
+  // Retrieve data/references
   size_t order() const noexcept;
   size_t extent(size_t n) const noexcept;
   size_t size() const noexcept;
   T *data() noexcept;
   const T *data() const noexcept;
+  const Matrix &operator[](size_t) const;
+  Matrix &operator[](size_t);
+  const Matrix &
+  operator[](std::initializer_list<std::pair<size_t, size_t>>) const;
+  Matrix &operator[](std::initializer_list<std::pair<size_t, size_t>>);
+  operator T &();
+  operator const T &() const;
+
+  // Basic arithmetic
+  Matrix &operator=(const T &);
+  bool operator==(const Matrix &) const;
+  bool operator!=(const Matrix &) const;
 
 private:
-  std::vector<size_t> extents;
-  std::vector<T> elems;
+  size_t start;
+  std::vector<size_t> extents, strides;
+  std::vector<T> *elems;
 };
 
+// Sends the string representation of a Matrix to a basic_ostream.
 template <class T, size_t N, class C>
 std::basic_ostream<C> &operator<<(std::basic_ostream<C> &, const Matrix<T> &);
 
