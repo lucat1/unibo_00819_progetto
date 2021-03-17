@@ -6,7 +6,7 @@
 namespace Nostd {
 
 template <typename V> class Vector {
-public:
+protected:
   V *v;
   size_t sz, cap;
 
