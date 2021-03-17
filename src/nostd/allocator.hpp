@@ -34,7 +34,7 @@ public:
 
 /*
   A class defining the default memory model to be used. It manages memory
-  allocations using "new" and deallocations using "delete".
+  allocation/deallocation and objects construction/destruction independently.
 */
 template <class T> class Allocator {
 public:
@@ -55,12 +55,13 @@ public:
 
   pointer address(reference) const noexcept;
   const_pointer address(const_reference) const noexcept;
-  // std::Allocator uses 0 ad default hint instead
+  // Hint is ignored; std::Allocator uses 0 ad default hint instead
   pointer allocate(size_type, Allocator<void>::const_pointer hint = nullptr);
+  // The size of the elements is ignored
   void deallocate(pointer, size_type);
   size_type max_size() const noexcept;
-  template <class U, class... Args> void construct(U *p, Args &&...args);
-  template <class U> void destroy(U *p);
+  template <class U, class... Args> void construct(U *, Args &&...);
+  template <class U> void destroy(U *);
 };
 
 } // namespace Nostd
