@@ -1,8 +1,8 @@
 #include "../util/test.hpp"
 #include "wstring.hpp"
 #include <assert.h>
+#include <cwchar>
 using namespace Nostd;
-
 int main() {
   it("creates an empty WString", {
     WString ws;
@@ -59,22 +59,6 @@ int main() {
     assert(ws.length() == wcslen(ws.c_str()));
   });
 
-  it("properly assigns to a char", {
-    WString ws;
-    ws = L'*';
-    assert(ws[0] == L'*');
-    assert(ws.length() == 1);
-    assert(ws.size() == 2);
-  });
-
-  it("properly assigns to a c string", {
-    WString ws;
-    const wchar_t *str = L"test string";
-    ws = str;
-    assert(wcscmp(ws.c_str(), str) == 0);
-    assert(ws.length() == wcslen(str));
-  });
-
   it("resizes the string according to spec", {
     WString ws(L"test"); // TODO: proper constructor with assignment
     ws.resize(2);
@@ -109,4 +93,56 @@ int main() {
     ws.front() = L'G';
     assert(ws.front() == L'G');
   });
+
+  it("correctly appends another WString", {
+    WString ws(L"test string"); // TODO: proper constructor with assignment
+    WString another_ws(L" test");
+    ws.append(another_ws);
+    wcout << ws.c_str() << endl;
+    assert(ws.length() == another_ws.length() + 11);
+    assert(wcscmp(ws.c_str(), L"test string test") == 0);
+    assert(ws[ws.size() - 1] == '\0');
+  });
+
+  it("correctly appends a wchar_t*", {
+    WString ws(L"test string"); // TODO: proper constructor with assignment
+    ws.append(L" test");
+    assert(ws.length() == 16);
+    assert(wcscmp(ws.c_str(), L"test string test") == 0);
+    assert(ws[ws.size() - 1] == '\0');
+  });
+
+  it("correctly pushes_back a wchar_t char", {
+    WString ws(L"test string"); // TODO: proper constructor with assignment
+    ws.push_back(L's');
+    assert(ws.length() == 12);
+    assert(wcscmp(ws.c_str(), L"test strings") == 0);
+    assert(ws[ws.size() - 1] == '\0');
+  });
+
+  it("properly assigns to a c string", {
+    WString ws;
+    const wchar_t *str = L"test string";
+    ws = str;
+    assert(wcscmp(ws.c_str(), str) == 0);
+    assert(ws.length() == wcslen(str));
+  });
+
+  it("properly assigns to a char", {
+    WString ws;
+    ws = L'*';
+    assert(ws[0] == L'*');
+    assert(ws.length() == 1);
+    assert(ws.size() == 2);
+  });
+
+  it("properly appens with the operator", {
+    WString ws;
+    WString c_str(L"a");
+    ws += c_str;
+    ws += L"b";
+    ws += L'c';
+    assert(wcscmp(ws.c_str(), L"abc") == 0);
+  });
+  // TODO: add tests
 }

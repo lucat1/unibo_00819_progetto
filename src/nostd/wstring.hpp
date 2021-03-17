@@ -10,7 +10,9 @@ namespace Nostd {
 // WString implements a growable array of wchar_t chars that make up a string.
 // Differences from std::wstring:
 // - size() returns length() + 1 (as it's the size of the underlying vector)
-//   +1 is for the '\0' null char
+// +1 is for the '\0' null char
+// - rimossi i meotdi assign(*) che combaciano con i costruttori. In caso di
+// necessita' possono essere implementati
 class WString : public Vector<wchar_t> {
 public:
   // when used for substrings meants "'til the end"
@@ -30,11 +32,12 @@ public:
       : Vector(len == npos ? str.size() - start : len - start + 1) {
     // we also check that we don't go out of the *str array as we
     // could loop infinitely when len = npos (read entire string)
-    for (size_t i = start; i < len || str[i] == '\0'; i++)
+    if (len == npos)
+      len = str.length();
+
+    for (size_t i = start; i < len || str[i] != '\0'; i++)
       v[i - start] = str[i];
-    if (len != npos) // make sure the last char is '\0' when we are not copying
-                     // the string from start to the end
-      v[len - start] = '\0';
+    v[len - start] = '\0';
   }
 
   // constructs a WString from a c-style string
@@ -50,21 +53,11 @@ public:
     v[len] = '\0';
   }
 
-  WString &operator=(const wchar_t c) {
-    Vector::resize(2);
-    v[0] = c;
-    v[1] = '\0';
-    return *this;
-  }
-
-  WString &operator=(const wchar_t *str) {
-    // we call it always as we could have some cases where shrinking
-    // may be applied and therefore memory will be freed
-    Vector::resize(wcslen(str) + 1);
-
-    for (size_t i = 0; i <= wcslen(str); i++) // = to copy the '\0' char
-      v[i] = str[i];
-    return *this;
+  // construct a WString from another _temporary_ WString copying its content
+  WString(WString &&str) : Vector(str.size()) {
+    delete[] v;
+    v = str.v;
+    str.v = nullptr;
   }
 
   // checks whether the WString is empty
@@ -100,8 +93,94 @@ public:
     return v[sz - 2];
   }
 
-  // TODO: modifiers
+  // appends another WString at the end of this instance (copying its contents)
+  WString &append(WString &str) { return insert(sz - 1, str); }
+
+  WString &append(const wchar_t *str) { return insert(sz - 1, str); }
+
+  void push_back(const wchar_t c) {
+    resize(sz); // increases the size by 1
+    v[sz - 2] = c;
+    v[sz - 1] = '\0';
+  }
+
+  WString &insert(size_t start, WString &str, size_t substart = 0,
+                  size_t subend = npos) {
+    WString substr = str.substr(substart, subend);
+    return insert(start, substr.c_str());
+  }
+
+  WString &insert(size_t start, const wchar_t *str, size_t len = npos) {
+    // deliberately not using Vector::resize as we'd do the copying twice, which
+    // is not smart at all. this method is therefore a modified copy of
+    // Vector::resize
+    if (len == npos)
+      len = wcslen(str);
+    sz += len;
+    calc_cap();
+    wchar_t *newv = new wchar_t[cap];
+
+    for (size_t i = 0; i < start; i++)
+      newv[i] = v[i];
+
+    for (size_t i = 0; i <= len; i++)
+      newv[start + i] = str[i];
+
+    for (size_t i = start + len; i < sz; i++)
+      newv[i] = v[i - len];
+
+    delete[] v;
+    v = newv;
+    return *this;
+  }
+
+  WString &insert(size_t start, const wchar_t c) {
+    wchar_t str[2] = {c, '\0'};
+    return insert(start, str);
+  }
+
+  WString substr(size_t start = 0, size_t len = npos) {
+    WString res(*this, start, len);
+    return res;
+  }
   // TODO: operations
+
+  WString &operator=(WString &str) {
+    Vector::resize(str.size());
+
+    for (size_t i = 0; i < str.size(); i++) // = to copy the '\0' char
+      v[i] = str[i];
+    return *this;
+  }
+
+  WString &operator=(const wchar_t *str) {
+    // we call it always as we could have some cases where shrinking
+    // may be applied and therefore memory will be freed
+    Vector::resize(wcslen(str) + 1);
+
+    for (size_t i = 0; i <= wcslen(str); i++) // = to copy the '\0' char
+      v[i] = str[i];
+    return *this;
+  }
+  WString &operator=(const wchar_t c) {
+    Vector::resize(2);
+    v[0] = c;
+    v[1] = '\0';
+    return *this;
+  }
+
+  WString &operator+=(WString &str) {
+    append(str);
+    return *this;
+  }
+  WString &operator+=(const wchar_t *str) {
+    append(str);
+    return *this;
+  }
+  WString &operator+=(const wchar_t c) {
+    push_back(c);
+    return *this;
+  }
 };
 
 } // namespace Nostd

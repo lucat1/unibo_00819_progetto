@@ -10,14 +10,18 @@ protected:
   V *v;
   size_t sz, cap;
 
-  void init_v(size_t size) {
-    sz = size;
-    if (size == 0)
+  void calc_cap() {
+    if (sz == 0)
       cap = 1;
-    else if (size == 1)
+    else if (sz == 1)
       cap = 2;
     else
-      cap = size * 1.5;
+      cap = sz * 1.5;
+  }
+
+  void init_v(size_t size) {
+    sz = size;
+    calc_cap();
     v = new V[cap];
   }
 
