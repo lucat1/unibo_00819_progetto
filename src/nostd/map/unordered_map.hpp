@@ -24,7 +24,7 @@ namespace Nostd
         void add(K key, V value) override
         {
             for (auto &x : data)
-            {
+            { 
                 if (x.first == key)
                 {
                     x.second = value;
@@ -49,6 +49,7 @@ namespace Nostd
             return this->data.empty();
         }
 
+        // Check if the map contains an element
         bool contains(K key) override
         {
             // todo: waiting for nostd::vector implementation
@@ -58,6 +59,7 @@ namespace Nostd
             return false;
         }
 
+        // Returns all the value in a Nostd::Vector<T>
         std::vector<V> get_values() override
         {
             std::vector<V> res;
@@ -66,11 +68,13 @@ namespace Nostd
             return res;
         }
 
+        // Returns all the key-values as a Nostd::Vector<Nostd::Pair<K,V>>
         std::vector<Nostd::Pair<K, V>> as_vector() override
         {
             return this->data;
         }
 
+        // Access a value from his key
         V operator[](K key) override
         {
             for (auto &x : this->data)
