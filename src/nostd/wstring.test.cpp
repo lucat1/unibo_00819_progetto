@@ -118,11 +118,29 @@ int main() {
     assert(ws[ws.size() - 1] == '\0');
   });
 
-  it("correctly pushes_back a wchar_t char", {
-    WString ws(L"test string"); // TODO: proper constructor with assignment
-    ws.push_back(L's');
-    assert(ws.length() == 12);
-    assert(wcscmp(ws.c_str(), L"test strings") == 0);
+  it("correctly inserts a WString at position", {
+    WString ws = L"te string";
+    WString ws1 = L"st";
+    ws.insert(2, ws1);
+    assert(ws.length() == 11);
+    assert(wcscmp(ws.c_str(), L"test string") == 0);
+    assert(ws[ws.size() - 1] == '\0');
+  });
+
+  it("correctly inserts a wchar_t* at position", {
+    WString ws = L"te string";
+    ws.insert(2, L"st");
+    assert(ws.length() == 11);
+    assert(wcscmp(ws.c_str(), L"test string") == 0);
+    assert(ws[ws.size() - 1] == '\0');
+  });
+
+  it("correctly inserts a wchar_t char at position", {
+    WString ws = L"te string";
+    ws.insert(2, L's');
+    ws.insert(3, L't');
+    assert(ws.length() == 11);
+    assert(wcscmp(ws.c_str(), L"test string") == 0);
     assert(ws[ws.size() - 1] == '\0');
   });
 

@@ -123,11 +123,11 @@ public:
     for (size_t i = 0; i < start; i++)
       newv[i] = v[i];
 
-    for (size_t i = 0; i <= len; i++)
+    for (size_t i = 0; i < len; i++)
       newv[start + i] = str[i];
 
-    for (size_t i = start + len; i < sz; i++)
-      newv[i] = v[i - len];
+    for (size_t i = start; i < sz - len - 1; i++)
+      newv[i + len] = v[i];
 
     delete[] v;
     v = newv;
