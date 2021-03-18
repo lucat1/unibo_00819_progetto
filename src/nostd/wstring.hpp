@@ -11,8 +11,10 @@ namespace Nostd {
 // Differences from std::wstring:
 // - size() returns length() + 1 (as it's the size of the underlying vector)
 // +1 is for the '\0' null char
-// - rimossi i meotdi assign(*) che combaciano con i costruttori. In caso di
-// necessita' possono essere implementati
+// - gone are also all assing(*) methods which match the ones available as
+// consturctors. We currently don't have a use-case for those
+// - the copy(*) method has been left out as we currently have no use for it
+// and furthermore can be easily matched by wcscpy(dest, wstring::c_str)
 class WString : public Vector<wchar_t> {
 public:
   // when used for substrings meants "'til the end"
@@ -66,6 +68,7 @@ public:
   bool empty() { return sz <= 1 || (sz == 1 && v[0] == '\0'); }
 
   wchar_t *c_str() { return v; }
+  wchar_t *data() { return v; }
   size_t length() { return sz - 1; }
   size_t max_size() { return SIZE_MAX; }
 
