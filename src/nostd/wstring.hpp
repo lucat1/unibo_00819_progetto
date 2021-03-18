@@ -29,15 +29,15 @@ public:
 
   // construct a WString from another WString from start to start+len
   WString(WString &str, size_t start, size_t len = npos)
-      : Vector(len == npos ? str.size() - start : len - start + 1) {
+      : Vector(len == npos ? str.size() - start : len+1) {
     // we also check that we don't go out of the *str array as we
     // could loop infinitely when len = npos (read entire string)
     if (len == npos)
       len = str.length();
 
-    for (size_t i = start; i < len || str[i] != '\0'; i++)
+    for (size_t i = start; i < start+len; i++)
       v[i - start] = str[i];
-    v[len - start] = '\0';
+    v[len] = '\0';
   }
 
   // constructs a WString from a c-style string

@@ -22,7 +22,7 @@ int main() {
   });
   it("initializes a WString from a WString substring", {
     WString ws = L"test test";
-    WString tws(ws, 2, 7);
+    WString tws(ws, 2, 5);
     assert(tws[0] == L's');
     assert(tws[1] == L't');
     assert(tws[2] == L' ');
@@ -120,10 +120,11 @@ int main() {
 
   it("correctly inserts a WString at position", {
     WString ws = L"te string";
-    WString ws1 = L"st";
-    ws.insert(2, ws1);
-    assert(ws.length() == 11);
-    assert(wcscmp(ws.c_str(), L"test string") == 0);
+    WString ws1 = L"test";
+    ws.insert(2, ws1,  2, 2);
+    ws.insert(11, ws1);
+    assert(ws.length() == 15);
+    assert(wcscmp(ws.c_str(), L"test stringtest") == 0);
     assert(ws[ws.size() - 1] == '\0');
   });
 
