@@ -13,7 +13,7 @@ int main() {
   });
 
   it("initializes a WString from a WString", {
-    WString ws1(L"test wstring"); // TODO: proper constructor with assignment
+    WString ws1 = L"test wstring";
     WString ws2 = ws1;
     for (size_t i = 0; i < ws2.size(); i++)
       assert(ws2[i] == ws1[i]);
@@ -21,7 +21,7 @@ int main() {
     assert(ws2.length() == ws1.length());
   });
   it("initializes a WString from a WString substring", {
-    WString ws(L"test test"); // TODO: proper constructor with assignment
+    WString ws = L"test test";
     WString tws(ws, 2, 7);
     assert(tws[0] == L's');
     assert(tws[1] == L't');
@@ -34,7 +34,7 @@ int main() {
   });
 
   it("initializes a WString from a wchar_t*", {
-    WString ws(L"test"); // TODO: proper constructor with assignment
+    WString ws = L"test";
     assert(ws[0] == L't');
     assert(ws[1] == L'e');
     assert(ws[2] == L's');
@@ -54,13 +54,12 @@ int main() {
   });
 
   it("length matches wcslen", {
-    WString ws(
-        L"dadsadsadsadsaadasdad"); // TODO: proper constructor with assignment
+    WString ws = L"dadsadsadsadsaadasdad";
     assert(ws.length() == wcslen(ws.c_str()));
   });
 
   it("resizes the string according to spec", {
-    WString ws(L"test"); // TODO: proper constructor with assignment
+    WString ws = L"test";
     ws.resize(2);
     assert(ws.length() == 2);
     assert(ws.size() == 3);
@@ -68,7 +67,7 @@ int main() {
   });
 
   it("clears the string according to spec", {
-    WString ws(L"test string"); // TODO: proper constructor with assignment
+    WString ws = L"test string";
     ws.clear();
     assert(ws.length() == 0);
     assert(ws.size() == 1);
@@ -81,21 +80,21 @@ int main() {
   });
 
   it("allows access & mods to the back char", {
-    WString ws(L"test string"); // TODO: proper constructor with assignment
+    WString ws = L"test string";
     assert(ws.back() == L't');
     ws.back() = L'T';
     assert(ws.back() == L'T');
   });
 
   it("allows access & mods to the front char", {
-    WString ws(L"test string"); // TODO: proper constructor with assignment
+    WString ws = L"test string";
     assert(ws.front() == L'g');
     ws.front() = L'G';
     assert(ws.front() == L'G');
   });
 
   it("correctly appends another WString", {
-    WString ws(L"test string"); // TODO: proper constructor with assignment
+    WString ws = L"test string";
     WString another_ws(L" test");
     ws.append(another_ws);
     assert(ws.length() == another_ws.length() + 11);
@@ -104,10 +103,18 @@ int main() {
   });
 
   it("correctly appends a wchar_t*", {
-    WString ws(L"test string"); // TODO: proper constructor with assignment
+    WString ws = L"test string";
     ws.append(L" test");
     assert(ws.length() == 16);
     assert(wcscmp(ws.c_str(), L"test string test") == 0);
+    assert(ws[ws.size() - 1] == '\0');
+  });
+
+  it("correctly pushes_back a wchar_t char", {
+    WString ws = L"test string";
+    ws.push_back(L's');
+    assert(ws.length() == 12);
+    assert(wcscmp(ws.c_str(), L"test strings") == 0);
     assert(ws[ws.size() - 1] == '\0');
   });
 
@@ -143,5 +150,4 @@ int main() {
     ws += L'c';
     assert(wcscmp(ws.c_str(), L"abc") == 0);
   });
-  // TODO: add tests
 }
