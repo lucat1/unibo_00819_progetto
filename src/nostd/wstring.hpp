@@ -5,6 +5,9 @@
 #include <stdexcept>
 #include <wchar.h>
 
+#include <iostream>
+using namespace std;
+
 namespace Nostd {
 
 // WString implements a growable array of wchar_t chars that make up a string.
@@ -18,19 +21,6 @@ namespace Nostd {
 // - comparisons of _two_ substrings are left out for simplicity, but can be
 // added fairly easily if deemed necessary
 class WString : public Vector<wchar_t> {
-protected:
-  // taken and modified from the c++ standard library
-  // https://cplusplus.com/reference/string/char_traits/compare/
-  static int internal_compare(const wchar_t *p, const wchar_t *q, size_t n) {
-    while (n--) {
-      if (*p != *q)
-        return *p < *q ? -1 : 1;
-      ++p;
-      ++q;
-    }
-    return 0;
-  }
-
 public:
   // when used for substrings meants "'til the end"
   static const size_t npos = -1;
@@ -153,26 +143,42 @@ public:
   int compare(size_t start, size_t len, WString &str) {
     return compare(start, len, str.c_str());
   }
-  int compare(const wchar_t *str) {
-    return internal_compare(str, this->v, wcslen(str));
-  }
+  int compare(const wchar_t *str) { return compare(0, wcslen(str), str); }
   int compare(size_t start, size_t len, const wchar_t *str, size_t n = npos) {
     if (start > len)
       throw std::out_of_range("invalid start position in compare call");
-    if (len < this->length())
-      return 1;
-    else if (this->length() < len)
-      len = this->length();
 
-    // in a C-style string, str+pos makes the string start at the pos char
-    return internal_compare(str + start, this->v, n == npos ? len - start : n);
+    // n = npos means compare to the end of this->v
+    if (n == npos)
+      n = length() - start;
+    return wcsncmp(v, str + start, n);
+  }
+
+  size_t find(WString &seq, size_t start = 0) {
+    return find(seq.c_str(), start, seq.length());
+  }
+  size_t find(const wchar_t *seq, size_t start = 0) {
+    return find(seq, start, wcslen(seq));
+  }
+  size_t find(const wchar_t *seq, size_t start, size_t n) {
+    if (n == 0)
+      return npos; // undefined behaviour, searching for an empty string
+
+    for (size_t i = start; i < length(); i++)
+      if (v[i] == seq[0] && wcsncmp(v + i, seq, n) == 0)
+        return i;
+
+    return npos;
+  }
+  size_t find(const wchar_t c, size_t start = 0) {
+    wchar_t str[2] = {c, '\0'};
+    return find(str, start);
   }
 
   WString substr(size_t start = 0, size_t len = npos) {
     WString res(*this, start, len);
     return res;
   }
-  // TODO: operations
 
   WString &operator=(WString &str) {
     Vector::resize(str.size());

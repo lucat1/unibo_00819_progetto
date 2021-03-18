@@ -159,6 +159,28 @@ int main() {
     assert(str.compare(1, 4, L" test", 2) == 0);
   });
 
+  it("finds the given WString sbustring", {
+    WString str = L"another test string";
+    WString to_be_found = L"ther";
+    size_t i = str.find(to_be_found);
+    assert(i != WString::npos);
+    assert(i == 3);
+  });
+
+  it("finds the given wchar_t* sbustring", {
+    WString str = L"another test string";
+    size_t i = str.find(L"test");
+    assert(i != WString::npos);
+    assert(i == 8);
+  });
+
+  it("finds the given wchar_t char", {
+    WString str = L"another test string";
+    size_t i = str.find(L't');
+    assert(i != WString::npos);
+    assert(i == 3);
+  });
+
   it("properly assigns to a c string", {
     WString ws;
     const wchar_t *str = L"test string";
