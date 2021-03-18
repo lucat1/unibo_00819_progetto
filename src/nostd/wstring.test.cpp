@@ -121,7 +121,7 @@ int main() {
   it("correctly inserts a WString at position", {
     WString ws = L"te string";
     WString ws1 = L"test";
-    ws.insert(2, ws1,  2, 2);
+    ws.insert(2, ws1, 2, 2);
     ws.insert(11, ws1);
     assert(ws.length() == 15);
     assert(wcscmp(ws.c_str(), L"test stringtest") == 0);
@@ -143,6 +143,20 @@ int main() {
     assert(ws.length() == 11);
     assert(wcscmp(ws.c_str(), L"test string") == 0);
     assert(ws[ws.size() - 1] == '\0');
+  });
+
+  it("reports the correct compairson results on WStrings", {
+    WString str = L"test";
+    WString str1 = L"test";
+    assert(str.compare(str1) == 0);
+    WString str2 = L"tes";
+    assert(str.compare(str2) == 1);
+  });
+
+  it("reports the correct compairson results on wchar_t*s", {
+    WString str = L"test";
+    assert(str.compare(L"test") == 0);
+    assert(str.compare(1, 4, L" test", 2) == 0);
   });
 
   it("properly assigns to a c string", {

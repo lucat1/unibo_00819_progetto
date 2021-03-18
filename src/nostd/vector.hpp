@@ -61,7 +61,7 @@ public:
   // Removes from the vector either a single (or renge of) element
   size_t erase(size_t i) {
     if (i >= sz)
-      throw std::invalid_argument("index out of bounds");
+      throw std::out_of_range("index out of bounds");
 
     for (size_t k = i; k < sz - 1; k++)
       v[k] = v[k + 1];
