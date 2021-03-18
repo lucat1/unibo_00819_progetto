@@ -33,11 +33,12 @@ public:
 
   // it is constructor that creates a vector with size elements and size * 1.5
   // capacity copying size times the ele value into the vector
-  explicit Vector(size_t size, V ele) {
+  Vector(size_t size, V ele) {
     init_v(size);
     for (size_t i = 0; i < sz; i++)
       v[i] = ele;
   }
+  ~Vector() { delete[] v; }
 
   // Adds a new elements at the end of the vector
   void push_back(V ele) {
