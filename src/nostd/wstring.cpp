@@ -192,10 +192,6 @@ Nostd::WString &Nostd::WString::operator+=(const wchar_t c) {
   return *this;
 }
 
-std::ostream &operator<<(std::ostream &os, const Nostd::WString &str) {
-  return os << str.c_str();
-}
-
 std::basic_ostream<wchar_t> &Nostd::operator<<(std::basic_ostream<wchar_t> &os,
                                                const Nostd::WString &str) {
   return os << str.c_str();
