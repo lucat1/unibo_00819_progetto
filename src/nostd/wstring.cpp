@@ -19,13 +19,10 @@ Nostd::WString::WString(WString &str, size_t start, size_t len)
   v[len] = '\0';
 }
 
-Nostd::WString::WString(const wchar_t *str) : Vector(wcslen(str) + 1) {
-  for (size_t i = 0; str[i] != '\0'; i++)
-    v[i] = str[i];
-}
+Nostd::WString::WString(const wchar_t *str) : WString(str, wcslen(str)) {}
 
 Nostd::WString::WString(const wchar_t *str, size_t len) : Vector(len + 1) {
-  for (size_t i = 0; i < len + 1; i++)
+  for (size_t i = 0; i < len; i++)
     v[i] = str[i];
   v[len] = '\0';
 }
@@ -100,7 +97,7 @@ Nostd::WString &Nostd::WString::insert(size_t start, const wchar_t *str,
   for (size_t i = 0; i < len; i++)
     newv[start + i] = str[i];
 
-  for (size_t i = start; i < sz - len - 1; i++)
+  for (size_t i = start; i < sz - len; i++)
     newv[i + len] = v[i];
 
   delete[] v;
@@ -159,21 +156,21 @@ Nostd::WString Nostd::WString::substr(size_t start, size_t len) {
 Nostd::WString &Nostd::WString::operator=(Nostd::WString &str) {
   Vector::resize(str.size());
 
-  for (size_t i = 0; i < str.size(); i++) // = to copy the '\0' char
+  for (size_t i = 0; i <= str.size(); i++)
     v[i] = str[i];
   return *this;
 }
 Nostd::WString &Nostd::WString::operator=(const wchar_t *str) {
   // we call it always as we could have some cases where shrinking
   // may be applied and therefore memory will be freed
-  Vector::resize(wcslen(str) + 1);
+  resize(wcslen(str));
 
   for (size_t i = 0; i <= wcslen(str); i++) // = to copy the '\0' char
     v[i] = str[i];
   return *this;
 }
 Nostd::WString &Nostd::WString::operator=(const wchar_t c) {
-  Vector::resize(2);
+  resize(1);
   v[0] = c;
   v[1] = '\0';
   return *this;

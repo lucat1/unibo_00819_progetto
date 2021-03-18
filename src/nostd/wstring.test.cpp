@@ -122,7 +122,8 @@ int main() {
     WString ws = L"te string";
     WString ws1 = L"test";
     ws.insert(2, ws1, 2, 2);
-    ws.insert(11, ws1);
+    ws.insert(ws.length(), ws1);
+    wcout << ws.c_str() << endl;
     assert(ws.length() == 15);
     assert(wcscmp(ws.c_str(), L"test stringtest") == 0);
     assert(ws[ws.size() - 1] == '\0');

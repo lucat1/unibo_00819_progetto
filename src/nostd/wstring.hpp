@@ -5,9 +5,6 @@
 #include <stdexcept>
 #include <wchar.h>
 
-#include <iostream>
-using namespace std;
-
 namespace Nostd {
 
 // WString implements a growable array of wchar_t chars that make up a string.
