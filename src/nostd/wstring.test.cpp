@@ -1,8 +1,8 @@
 #include "../util/test.hpp"
 #include "wstring.hpp"
 #include <assert.h>
-#include <cwchar>
 using namespace Nostd;
+
 int main() {
   it("creates an empty WString", {
     WString ws;
@@ -98,7 +98,6 @@ int main() {
     WString ws(L"test string"); // TODO: proper constructor with assignment
     WString another_ws(L" test");
     ws.append(another_ws);
-    wcout << ws.c_str() << endl;
     assert(ws.length() == another_ws.length() + 11);
     assert(wcscmp(ws.c_str(), L"test string test") == 0);
     assert(ws[ws.size() - 1] == '\0');
