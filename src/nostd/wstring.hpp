@@ -2,6 +2,7 @@
 #define WSTRING_HPP
 
 #include "vector.hpp"
+#include <iostream>
 #include <stdexcept>
 #include <wchar.h>
 
@@ -39,15 +40,15 @@ public:
   WString(WString &&str);
 
   // checks whether the WString is empty
-  bool empty();
+  bool empty() const;
   // returns the underlying wchar_t vector
-  wchar_t *c_str();
+  wchar_t *c_str() const;
   // returns the underlying wchar_t vector
-  wchar_t *data();
+  wchar_t *data() const;
   // returns the length of the stored string
-  size_t length();
+  size_t length() const;
   // returns the maximum length of a string imposed by hardware limitatinos
-  size_t max_size();
+  size_t max_size() const;
 
   // resizes the string and trims any exrta chars
   void resize(size_t n);
@@ -72,27 +73,28 @@ public:
   WString &insert(size_t start, const wchar_t c);
 
   // compares the two WStrings
-  int compare(WString &str);
+  int compare(WString &str) const;
   // compares the two WStrings with an offset and only up to a given length
-  int compare(size_t start, size_t len, WString &str);
+  int compare(size_t start, size_t len, WString &str) const;
   // compares this instance with a given string
-  int compare(const wchar_t *str);
+  int compare(const wchar_t *str) const;
   // compares this instance with a given string, starting from a start index and
   // only computing n checks
-  int compare(size_t start, size_t len, const wchar_t *str, size_t n = npos);
+  int compare(size_t start, size_t len, const wchar_t *str,
+              size_t n = npos) const;
   // looks for the given WString sequence starting from the given index and
   // returns the position of the subsequence if found, npos otherwhise
-  size_t find(WString &seq, size_t start = 0);
+  size_t find(WString &seq, size_t start = 0) const;
   // looks for the given wchar_t* sequence starting from the given index and
   // returns the position of the subsequence if found, npos otherwhise
-  size_t find(const wchar_t *seq, size_t start = 0);
+  size_t find(const wchar_t *seq, size_t start = 0) const;
   // looks for the given wchar_t* sequence starting from the given index and
   // returns the position of the subsequence if found, npos otherwhise. It also
   // makes sure to only check n chars from the starting position.
-  size_t find(const wchar_t *seq, size_t start, size_t n);
+  size_t find(const wchar_t *seq, size_t start, size_t n) const;
   // looks for the given wchar_t char starting from the given index and returns
   // the position of the first occourence if any, npos otherwhise.
-  size_t find(const wchar_t c, size_t start = 0);
+  size_t find(const wchar_t c, size_t start = 0) const;
   // returns a WString instance where the chars from start to start+len have
   // been copied over
   WString substr(size_t start = 0, size_t len = npos);
@@ -106,6 +108,9 @@ public:
   WString &operator+=(const wchar_t *str);
   WString &operator+=(const wchar_t c);
 };
+
+std::basic_ostream<wchar_t> &operator<<(std::basic_ostream<wchar_t> &os,
+                                        const WString &str);
 
 } // namespace Nostd
 

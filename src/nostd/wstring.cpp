@@ -35,11 +35,13 @@ Nostd::WString::WString(WString &&str) {
   str.v = nullptr;
 }
 
-bool Nostd::WString::empty() { return sz <= 1 || (sz == 1 && v[0] == '\0'); }
-wchar_t *Nostd::WString::c_str() { return v; }
-wchar_t *Nostd::WString::data() { return v; }
-size_t Nostd::WString::length() { return sz - 1; }
-size_t Nostd::WString::max_size() { return SIZE_MAX; }
+bool Nostd::WString::empty() const {
+  return sz <= 1 || (sz == 1 && v[0] == '\0');
+}
+wchar_t *Nostd::WString::c_str() const { return v; }
+wchar_t *Nostd::WString::data() const { return v; }
+size_t Nostd::WString::length() const { return sz - 1; }
+size_t Nostd::WString::max_size() const { return SIZE_MAX; }
 
 // we override the Vector::resize to resize to a n+1 size and keep space for
 // the '\0' char
@@ -109,17 +111,18 @@ Nostd::WString &Nostd::WString::insert(size_t start, const wchar_t c) {
   return insert(start, str);
 }
 
-int Nostd::WString::compare(Nostd::WString &str) {
+int Nostd::WString::compare(Nostd::WString &str) const {
   return compare(0, str.length(), str.c_str());
 }
-int Nostd::WString::compare(size_t start, size_t len, Nostd::WString &str) {
+int Nostd::WString::compare(size_t start, size_t len,
+                            Nostd::WString &str) const {
   return compare(start, len, str.c_str());
 }
-int Nostd::WString::compare(const wchar_t *str) {
+int Nostd::WString::compare(const wchar_t *str) const {
   return compare(0, wcslen(str), str);
 }
 int Nostd::WString::compare(size_t start, size_t len, const wchar_t *str,
-                            size_t n) {
+                            size_t n) const {
   if (start > len)
     throw std::out_of_range("invalid start position in compare call");
 
@@ -128,13 +131,13 @@ int Nostd::WString::compare(size_t start, size_t len, const wchar_t *str,
     n = length() - start;
   return wcsncmp(v, str + start, n);
 }
-size_t Nostd::WString::find(Nostd::WString &seq, size_t start) {
+size_t Nostd::WString::find(Nostd::WString &seq, size_t start) const {
   return find(seq.c_str(), start, seq.length());
 }
-size_t Nostd::WString::find(const wchar_t *seq, size_t start) {
+size_t Nostd::WString::find(const wchar_t *seq, size_t start) const {
   return find(seq, start, wcslen(seq));
 }
-size_t Nostd::WString::find(const wchar_t *seq, size_t start, size_t n) {
+size_t Nostd::WString::find(const wchar_t *seq, size_t start, size_t n) const {
   if (n == 0)
     return npos; // undefined behaviour, searching for an empty string
 
@@ -144,7 +147,7 @@ size_t Nostd::WString::find(const wchar_t *seq, size_t start, size_t n) {
 
   return npos;
 }
-size_t Nostd::WString::find(const wchar_t c, size_t start) {
+size_t Nostd::WString::find(const wchar_t c, size_t start) const {
   wchar_t str[2] = {c, '\0'};
   return find(str, start);
 }
@@ -187,4 +190,13 @@ Nostd::WString &Nostd::WString::operator+=(const wchar_t *str) {
 Nostd::WString &Nostd::WString::operator+=(const wchar_t c) {
   push_back(c);
   return *this;
+}
+
+std::ostream &operator<<(std::ostream &os, const Nostd::WString &str) {
+  return os << str.c_str();
+}
+
+std::basic_ostream<wchar_t> &Nostd::operator<<(std::basic_ostream<wchar_t> &os,
+                                               const Nostd::WString &str) {
+  return os << str.c_str();
 }

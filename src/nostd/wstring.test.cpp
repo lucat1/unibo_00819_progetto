@@ -206,4 +206,9 @@ int main() {
     ws += L'c';
     assert(wcscmp(ws.c_str(), L"abc") == 0);
   });
+
+  it("prints a string to stdout", {
+    WString str = L"test string";
+    std::wcout << str << endl;
+  });
 }
