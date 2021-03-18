@@ -54,7 +54,7 @@ public:
   }
 
   // construct a WString from another _temporary_ WString copying its content
-  WString(WString &&str) : Vector(str.size()) {
+  WString(WString &&str) {
     delete[] v;
     v = str.v;
     sz = str.sz;
