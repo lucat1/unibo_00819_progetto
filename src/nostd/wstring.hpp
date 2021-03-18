@@ -22,199 +22,92 @@ namespace Nostd {
 // added fairly easily if deemed necessary
 class WString : public Vector<wchar_t> {
 public:
-  // when used for substrings meants "'til the end"
+  // index used to mean two concepts:
+  // - run an operation to the end of the string (be it a copy, substring, etc)
+  // - no references of the searched substring were found (relative to the found
+  // method)
   static const size_t npos = -1;
 
   // constructs an empty WString
-  explicit WString() : Vector(1, '\0') {}
-
+  explicit WString();
   // construct a WString from another WString copying its content
-  WString(WString &str) : Vector(str.size()) {
-    for (size_t i = 0; i < str.size(); i++)
-      v[i] = str[i];
-  }
+  WString(WString &str);
   // construct a WString from another WString from start to start+len
-  WString(WString &str, size_t start, size_t len = npos)
-      : Vector(len == npos ? str.size() - start : len + 1) {
-    // we also check that we don't go out of the *str array as we
-    // could loop infinitely when len = npos (read entire string)
-    if (len == npos)
-      len = str.length();
-
-    for (size_t i = start; i < start + len; i++)
-      v[i - start] = str[i];
-    v[len] = '\0';
-  }
+  WString(WString &str, size_t start, size_t len = npos);
   // constructs a WString from a c-style string
-  WString(const wchar_t *str) : Vector(wcslen(str) + 1) {
-    for (size_t i = 0; str[i] != '\0'; i++)
-      v[i] = str[i];
-  }
+  WString(const wchar_t *str);
   // constructs a WString from a c-style string limiting its length
-  WString(const wchar_t *str, size_t len) : Vector(len + 1) {
-    for (size_t i = 0; i < len + 1; i++)
-      v[i] = str[i];
-    v[len] = '\0';
-  }
+  WString(const wchar_t *str, size_t len);
   // construct a WString from another _temporary_ WString copying its content
-  WString(WString &&str) {
-    delete[] v;
-    v = str.v;
-    sz = str.sz;
-    cap = str.cap;
-    str.v = nullptr;
-  }
+  WString(WString &&str);
 
   // checks whether the WString is empty
-  bool empty() { return sz <= 1 || (sz == 1 && v[0] == '\0'); }
+  bool empty();
+  // returns the underlying wchar_t vector
+  wchar_t *c_str();
+  // returns the underlying wchar_t vector
+  wchar_t *data();
+  // returns the length of the stored string
+  size_t length();
+  // returns the maximum length of a string imposed by hardware limitatinos
+  size_t max_size();
 
-  wchar_t *c_str() { return v; }
-  wchar_t *data() { return v; }
-  size_t length() { return sz - 1; }
-  size_t max_size() { return SIZE_MAX; }
-
-  // we override the Vector::resize to resize to a n+1 size and keep space for
-  // the '\0' char
-  void resize(size_t n) {
-    Vector::resize(n + 1);
-    v[n] = '\0';
-  }
-
-  // we override the Vector::celar to resize to size 1 and keep space for the
-  // '\0' char
-  void clear() {
-    Vector::resize(1);
-    v[0] = '\0';
-  }
-  wchar_t &back() {
-    if (empty())
-      throw std::out_of_range("called WString::back on an empty string");
-    return v[0];
-  }
-  wchar_t &front() {
-    if (empty())
-      throw std::out_of_range("called WString::front on an empty string");
-    return v[sz - 2];
-  }
-
+  // resizes the string and trims any exrta chars
+  void resize(size_t n);
+  // clears the string content
+  void clear();
+  // returns the last char in the string
+  wchar_t &back();
+  // returns the frist char in the string
+  wchar_t &front();
   // appends another WString at the end of this instance (copying its contents)
-  WString &append(WString &str) { return insert(sz - 1, str); }
-  WString &append(const wchar_t *str) { return insert(sz - 1, str); }
-  void push_back(const wchar_t c) {
-    resize(sz); // increases the size by 1
-    v[sz - 2] = c;
-    v[sz - 1] = '\0';
-  }
-
+  WString &append(WString &str);
+  // appends a copy of a wchar_t* at the end of this instance
+  WString &append(const wchar_t *str);
+  // postpends a charter to the string
+  void push_back(const wchar_t c);
+  // inserts a WString in between the current string instance, copying it
   WString &insert(size_t start, WString &str, size_t substart = 0,
-                  size_t subend = npos) {
-    WString substr = str.substr(substart, subend);
-    return insert(start, substr.c_str());
-  }
-  WString &insert(size_t start, const wchar_t *str, size_t len = npos) {
-    // deliberately not using Vector::resize as we'd do the copying twice, which
-    // is not smart at all. this method is therefore a modified copy of
-    // Vector::resize
-    if (len == npos)
-      len = wcslen(str);
-    sz += len;
-    calc_cap();
-    wchar_t *newv = new wchar_t[cap];
+                  size_t subend = npos);
+  // inserts the chars of a wchar_t* in between the current string
+  WString &insert(size_t start, const wchar_t *str, size_t len = npos);
+  // inserts the a wchar_t at the given position in the string
+  WString &insert(size_t start, const wchar_t c);
 
-    for (size_t i = 0; i < start; i++)
-      newv[i] = v[i];
+  // compares the two WStrings
+  int compare(WString &str);
+  // compares the two WStrings with an offset and only up to a given length
+  int compare(size_t start, size_t len, WString &str);
+  // compares this instance with a given string
+  int compare(const wchar_t *str);
+  // compares this instance with a given string, starting from a start index and
+  // only computing n checks
+  int compare(size_t start, size_t len, const wchar_t *str, size_t n = npos);
+  // looks for the given WString sequence starting from the given index and
+  // returns the position of the subsequence if found, npos otherwhise
+  size_t find(WString &seq, size_t start = 0);
+  // looks for the given wchar_t* sequence starting from the given index and
+  // returns the position of the subsequence if found, npos otherwhise
+  size_t find(const wchar_t *seq, size_t start = 0);
+  // looks for the given wchar_t* sequence starting from the given index and
+  // returns the position of the subsequence if found, npos otherwhise. It also
+  // makes sure to only check n chars from the starting position.
+  size_t find(const wchar_t *seq, size_t start, size_t n);
+  // looks for the given wchar_t char starting from the given index and returns
+  // the position of the first occourence if any, npos otherwhise.
+  size_t find(const wchar_t c, size_t start = 0);
+  // returns a WString instance where the chars from start to start+len have
+  // been copied over
+  WString substr(size_t start = 0, size_t len = npos);
 
-    for (size_t i = 0; i < len; i++)
-      newv[start + i] = str[i];
+  // various operators
 
-    for (size_t i = start; i < sz - len - 1; i++)
-      newv[i + len] = v[i];
-
-    delete[] v;
-    v = newv;
-    return *this;
-  }
-  WString &insert(size_t start, const wchar_t c) {
-    wchar_t str[2] = {c, '\0'};
-    return insert(start, str);
-  }
-
-  int compare(WString &str) { return compare(0, str.length(), str.c_str()); }
-  int compare(size_t start, size_t len, WString &str) {
-    return compare(start, len, str.c_str());
-  }
-  int compare(const wchar_t *str) { return compare(0, wcslen(str), str); }
-  int compare(size_t start, size_t len, const wchar_t *str, size_t n = npos) {
-    if (start > len)
-      throw std::out_of_range("invalid start position in compare call");
-
-    // n = npos means compare to the end of this->v
-    if (n == npos)
-      n = length() - start;
-    return wcsncmp(v, str + start, n);
-  }
-
-  size_t find(WString &seq, size_t start = 0) {
-    return find(seq.c_str(), start, seq.length());
-  }
-  size_t find(const wchar_t *seq, size_t start = 0) {
-    return find(seq, start, wcslen(seq));
-  }
-  size_t find(const wchar_t *seq, size_t start, size_t n) {
-    if (n == 0)
-      return npos; // undefined behaviour, searching for an empty string
-
-    for (size_t i = start; i < length(); i++)
-      if (v[i] == seq[0] && wcsncmp(v + i, seq, n) == 0)
-        return i;
-
-    return npos;
-  }
-  size_t find(const wchar_t c, size_t start = 0) {
-    wchar_t str[2] = {c, '\0'};
-    return find(str, start);
-  }
-
-  WString substr(size_t start = 0, size_t len = npos) {
-    WString res(*this, start, len);
-    return res;
-  }
-
-  WString &operator=(WString &str) {
-    Vector::resize(str.size());
-
-    for (size_t i = 0; i < str.size(); i++) // = to copy the '\0' char
-      v[i] = str[i];
-    return *this;
-  }
-  WString &operator=(const wchar_t *str) {
-    // we call it always as we could have some cases where shrinking
-    // may be applied and therefore memory will be freed
-    Vector::resize(wcslen(str) + 1);
-
-    for (size_t i = 0; i <= wcslen(str); i++) // = to copy the '\0' char
-      v[i] = str[i];
-    return *this;
-  }
-  WString &operator=(const wchar_t c) {
-    Vector::resize(2);
-    v[0] = c;
-    v[1] = '\0';
-    return *this;
-  }
-
-  WString &operator+=(WString &str) {
-    append(str);
-    return *this;
-  }
-  WString &operator+=(const wchar_t *str) {
-    append(str);
-    return *this;
-  }
-  WString &operator+=(const wchar_t c) {
-    push_back(c);
-    return *this;
-  }
+  WString &operator=(WString &str);
+  WString &operator=(const wchar_t *str);
+  WString &operator=(const wchar_t c);
+  WString &operator+=(WString &str);
+  WString &operator+=(const wchar_t *str);
+  WString &operator+=(const wchar_t c);
 };
 
 } // namespace Nostd
