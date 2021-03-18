@@ -57,6 +57,8 @@ public:
   WString(WString &&str) : Vector(str.size()) {
     delete[] v;
     v = str.v;
+    sz = str.sz;
+    cap = str.cap;
     str.v = nullptr;
   }
 
