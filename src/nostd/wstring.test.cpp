@@ -150,7 +150,7 @@ int main() {
     WString str1 = L"test";
     assert(str.compare(str1) == 0);
     WString str2 = L"tes";
-    assert(str.compare(str2) == 1);
+    assert(str.compare(str2) != 0);
   });
 
   it("reports the correct compairson results on wchar_t*s", {
