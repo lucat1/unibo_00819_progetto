@@ -199,8 +199,15 @@ std::basic_istream<wchar_t> &Nostd::operator>>(std::basic_istream<wchar_t> &is,
                                                Nostd::WString &str) {
   str.clear();
   wchar_t c;
-  while ((c = is.get()) != L' ') {
+  while ((c = is.get()) != L' ' && is.good())
     str.push_back(c);
-  };
+  return is;
+}
+std::basic_istream<wchar_t> &Nostd::getline(std::basic_istream<wchar_t> &is,
+                                            Nostd::WString &str) {
+  str.clear();
+  wchar_t c;
+  while ((c = is.get()) != L'\n' && is.good())
+    str.push_back(c);
   return is;
 }

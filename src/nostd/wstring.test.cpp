@@ -124,7 +124,6 @@ int main() {
     WString ws1 = L"test";
     ws.insert(2, ws1, 2, 2);
     ws.insert(ws.length(), ws1);
-    wcout << ws.c_str() << endl;
     assert(ws.length() == 15);
     assert(wcscmp(ws.c_str(), L"test stringtest") == 0);
     assert(ws[ws.size() - 1] == L'\0');
@@ -220,5 +219,19 @@ int main() {
     WString str;
     in >> str;
     assert(str.compare(L"first_word") == 0);
+  });
+
+  it("reads a line from input stream until \\n", {
+    std::wstringstream in(std::wstring(L"first_word second_word\n"));
+    WString str;
+    getline(in, str);
+    assert(str.compare(L"first_word second_word") == 0);
+  });
+
+  it("reads a line from input stream until EOF", {
+    std::wstringstream in(std::wstring(L"a long sentence"));
+    WString str;
+    Nostd::getline(in, str);
+    assert(str.compare(L"a long sentence") == 0);
   });
 }
