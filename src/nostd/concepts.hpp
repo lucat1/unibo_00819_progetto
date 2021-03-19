@@ -11,13 +11,17 @@
 */
 
 #ifndef NOSTD_CONCEPTS_HPP
-#define NOSTD_ALLOCATOR_HPP
+#define NOSTD_CONCEPTS_HPP
 
 namespace Nostd {
 
 template <class T> constexpr bool Has_equal();
 
 template <class T> constexpr bool Has_not_equal();
+
+template <class T> constexpr bool Has_right_shift();
+
+template <class T> constexpr bool Has_left_shift();
 
 template <class T> constexpr bool Boolean();
 
@@ -38,6 +42,12 @@ template <class T> constexpr bool Semiregular();
   comparable.
 */
 template <class T> constexpr bool Regular();
+
+/*
+  A type is said to be "streamable" when it is both input and output
+  streamable.
+*/
+template <class T> constexpr bool Streamable();
 
 } // namespace Nostd
 

@@ -15,6 +15,7 @@
 #include "allocator.hpp"
 
 #include <limits>
+#include <type_traits>
 
 template <class T>
 template <class U>
@@ -31,7 +32,9 @@ auto Nostd::Allocator<T>::address(const_reference x) const noexcept
   return &x;
 }
 
-template <class T> auto Nostd::Allocator<T>::allocate(size_type n) -> pointer {
+template <class T>
+auto Nostd::Allocator<T>::allocate(size_type n, Allocator<void>::const_pointer)
+    -> pointer {
   return ::operator new(n * sizeof(value_type));
 }
 
@@ -47,10 +50,13 @@ auto Nostd::Allocator<T>::max_size() const noexcept -> size_type {
 template <class T>
 template <class U, class... Args>
 void Nostd::Allocator<T>::construct(U *p, Args &&...args) {
+  static_assert(std::is_constructible<U>(args...),
+                "unconstructible type (with the given set of arguments)");
   ::new (p) U{args...};
 }
 
 template <class T> template <class U> void Nostd::Allocator<T>::destroy(U *p) {
+  static_assert(std::is_destructible<U>(), "undestructible type");
   p->~U();
 }
 

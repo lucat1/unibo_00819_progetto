@@ -18,6 +18,14 @@ namespace Nostd {
 template <class T> class Allocator;
 template <> class Allocator<void>;
 
+template <> class Allocator<void> {
+public:
+  typedef void *pointer;
+  typedef const void *const_pointer;
+  typedef void value_type;
+  template <class U> struct rebind { using other = Allocator<U>; };
+};
+
 /*
   A class defining the default memory model to be used. It manages memory
   allocation/deallocation and objects construction/destruction independently.
@@ -41,7 +49,8 @@ public:
 
   pointer address(reference) const noexcept;
   const_pointer address(const_reference) const noexcept;
-  pointer allocate(size_type); // the hint will be removed in C++20 anyway
+  // the hint is ignored
+  pointer allocate(size_type, Allocator<void>::const_pointer hint = 0);
   void deallocate(pointer, size_type); // the 2nd argument is ignored
   size_type max_size() const noexcept;
   template <class U, class... Args> void construct(U *, Args &&...);

@@ -27,6 +27,14 @@ template <class T> constexpr bool Nostd::Has_not_equal() {
   return Has_not_equal_trait<T>::value;
 }
 
+template <class T> constexpr bool Nostd::Has_right_shift() {
+  return Has_right_shift_trait<T>::value;
+}
+
+template <class T> constexpr bool Nostd::Has_left_shift() {
+  return Has_left_shift_trait<T>::value;
+}
+
 template <class T> constexpr bool Nostd::Boolean() {
   return std::is_convertible<T, bool>();
 }
@@ -44,21 +52,17 @@ template <class T> constexpr bool Nostd::Copyable() {
   return std::is_copy_constructible<T>() && std::is_copy_assignable<T>();
 }
 
-/*
-  A type is said to be "semiregular" when it is both default constructible and
-  copyable.
-*/
 template <class T> constexpr bool Nostd::Semiregular() {
   return std::is_destructible<T>() && std::is_default_constructible<T>() &&
          Movable<T>() && Copyable<T>();
 }
 
-/*
-  A type is said to be "regular" when it is both semiregular and equality
-  comparable.
-*/
 template <class T> constexpr bool Nostd::Regular() {
   return Semiregular<T>() && Equality_comparable<T>();
+}
+
+template <class T> constexpr bool Nostd::Streamable() {
+  return Has_right_shift<T>() && Has_left_shift<T>();
 }
 
 #endif
