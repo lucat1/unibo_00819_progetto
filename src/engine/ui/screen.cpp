@@ -11,56 +11,45 @@
 Engine::UI::Screen::Screen() : Box(SCREEN_COLS, SCREEN_LINES) {}
 
 bool Engine::UI::Screen::can_fit() {
-  getmaxyx(window, terminal_lines, terminal_cols);
+  getmaxyx(screen, terminal_lines, terminal_cols);
 
   // check that the terminal is big enough to fit the game
   if (terminal_cols < SCREEN_COLS || terminal_lines < SCREEN_LINES)
-    return true;
+    return false;
 
   x = (terminal_cols - SCREEN_COLS) / 2;
   y = (terminal_lines - SCREEN_LINES) / 2;
-
-  return false;
+  return true;
 }
 
 bool Engine::UI::Screen::open() {
-  window = initscr(); // terminal should be equal to stdscr
-  if (window == NULL)
-    return true;
+  screen = initscr();
+  if (screen == nullptr || !can_fit())
+    return false;
+
+  noecho();    // prevents user-inputted charters to be displayed on the screen
+  raw();       // intercept all keystrokes and prevent ^C from quitting the game
+  curs_set(0); // hide the cursor by default
+  keypad(screen, false); // keypad(.., false) is used to caputre RESIZE events
+
+  window = newwin(SCREEN_LINES + 2, SCREEN_COLS + 2, y, x);
+  update();
+  return true;
+}
+
+bool Engine::UI::Screen::update() {
+  if (!can_fit())
+    return false;
 
   clear();   // clear the screen and
   refresh(); // send the changes to the user so we can start drawing
 
-  noecho(); // prevents user-inputted charters to be displayed on the screen
-  raw();    // with raw we intercept all keystrokes and prevent ^C from quitting
-            // the game
-  curs_set(0); // hide the cursor by default
-  keypad(
-      window,
-      false); // the second argument is set to `false` to caputre RESIZE events
-
-  if (can_fit())
-    return true;
-
-  window = newwin(SCREEN_LINES + 2, SCREEN_COLS + 2, y, x);
+  mvwin(window, y, x);
   box(window, ACS_VLINE, ACS_HLINE);
   show(window, 1, 1);
   wrefresh(window);
-  return false;
-}
 
-bool Engine::UI::Screen::update() {
-  if (can_fit())
-    return true;
-
-  // clear the previous screen
-  clear();
-  refresh();
-
-  mvwin(window, x, y);
-  wrefresh(window);
-
-  return false;
+  return true;
 }
 
 void Engine::UI::Screen::close() { endwin(); }

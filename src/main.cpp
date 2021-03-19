@@ -11,6 +11,15 @@ using namespace Engine::UI;
 // discuss implementation details and draw a line between
 // the engine and the game logic
 
+void handle(Screen *screen, bool can_display) {
+  if (can_display)
+    return;
+
+  screen->close();
+  cout << "Error while opening screen" << endl;
+  exit(1);
+}
+
 int main() {
   Screen *screen = new Screen();
   Box *pbox = append<Box>(screen, 1, 1,
@@ -36,15 +45,13 @@ int main() {
       L"pariatur. Excepteur sint occaecat cupidatat non proident, sunt in "
       L"culpa qui officia deserunt mollit anim id est laborum.");
 
-  if (screen->open()) {
-    cout << "Error while opening screen" << endl;
-    return 1;
-  }
+  handle(screen, screen->open());
 
   int key;
   while ((key = getch()) != 'q') {
-    if (key == KEY_RESIZE)
-      screen->update();
+    if (key == KEY_RESIZE) {
+      handle(screen, screen->update());
+    }
   };
 
   screen->close();
