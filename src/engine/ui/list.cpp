@@ -8,11 +8,11 @@ Engine::UI::List::List(uint16_t max_width, uint16_t max_height,
                        const wchar_t marker)
     : Box(max_width, max_height, props) {
   // override props which are fixed for lists
-  this->max_child_width = this->max_child_width + pl;
   this->pl = 2;
   this->dv = false;
   this->fr = false;
   this->marker = marker;
+  this->max_child_width = max_width - pl;
 }
 
 void Engine::UI::List::show(WINDOW *window, uint16_t x, uint16_t y) {

@@ -1,7 +1,5 @@
 #include "screen.hpp"
-#include <iostream>
 #include <ncurses.h>
-using namespace std;
 
 // screen wraps the whole ncurses screen in a box of SCREEN_WIDTHxSCREEN_HEIGHT
 // that is centered on the screen and repositioned properly on resizes

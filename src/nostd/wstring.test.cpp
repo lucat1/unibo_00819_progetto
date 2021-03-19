@@ -80,18 +80,18 @@ int main() {
     assert(ws.empty());
   });
 
-  it("allows access & mods to the back char", {
-    WString ws = L"test string";
-    assert(ws.back() == L't');
-    ws.back() = L'T';
-    assert(ws.back() == L'T');
-  });
-
   it("allows access & mods to the front char", {
     WString ws = L"test string";
-    assert(ws.front() == L'g');
-    ws.front() = L'G';
-    assert(ws.front() == L'G');
+    assert(ws.front() == L't');
+    ws.front() = L'T';
+    assert(ws.front() == L'T');
+  });
+
+  it("allows access & mods to the back char", {
+    WString ws = L"test string";
+    assert(ws.back() == L'g');
+    ws.back() = L'G';
+    assert(ws.back() == L'G');
   });
 
   it("correctly appends another WString", {
@@ -180,6 +180,24 @@ int main() {
     size_t i = str.find(L't');
     assert(i != WString::npos);
     assert(i == 3);
+  });
+
+  it("returns the proper substring", {
+    WString str = L"test test";
+    str = str.substr(2, 5);
+    assert(str.compare(L"st te") == 0);
+  });
+
+  it("trims whitespace from the right side", {
+    WString str = L"test   \t \v  ";
+    str = str.ltrim();
+    assert(str.compare(L"test") == 0);
+  });
+
+  it("trims whitespace from the left side", {
+    WString str = L"  \t\v   test";
+    str = str.rtrim();
+    assert(str.compare(L"test") == 0);
   });
 
   it("properly assigns to a c string", {

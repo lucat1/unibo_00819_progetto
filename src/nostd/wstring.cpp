@@ -12,10 +12,10 @@ Nostd::WString::WString(WString &str, size_t start, size_t len)
   // we also check that we don't go out of the *str array as we
   // could loop infinitely when len = npos (read entire string)
   if (len == npos)
-    len = str.length();
+    len = str.length() - start;
 
-  for (size_t i = start; i < start + len; i++)
-    v[i - start] = str[i];
+  for (size_t i = 0; i < len; i++)
+    v[i] = str[start + i];
   v[len] = L'\0';
 }
 
@@ -57,14 +57,14 @@ void Nostd::WString::clear() {
   Vector::resize(1);
   v[0] = L'\0';
 }
-wchar_t &Nostd::WString::back() {
-  if (empty())
-    throw std::out_of_range("called WString::back on an empty string");
-  return v[0];
-}
 wchar_t &Nostd::WString::front() {
   if (empty())
     throw std::out_of_range("called WString::front on an empty string");
+  return v[0];
+}
+wchar_t &Nostd::WString::back() {
+  if (empty())
+    throw std::out_of_range("called WString::back on an empty string");
   return v[sz - 2];
 }
 
@@ -157,9 +157,35 @@ Nostd::WString Nostd::WString::substr(size_t start, size_t len) {
   WString res(*this, start, len);
   return res;
 }
+Nostd::WString Nostd::WString::rtrim() {
+  size_t i = length() - 1;
+  while (i >= 0 && Nostd::iswspace(v[i]))
+    i--;
+  if (i == length() - 1)
+    return *this;
+
+  return substr(0, i);
+}
+Nostd::WString Nostd::WString::ltrim() {
+  size_t i = 0;
+  while (i < length() && Nostd::iswspace(v[i]))
+    i++;
+  if (i == 0)
+    return *this;
+
+  return substr(i);
+}
 
 Nostd::WString &Nostd::WString::operator=(Nostd::WString &str) {
   return operator=(str.c_str());
+}
+Nostd::WString &Nostd::WString::operator=(Nostd::WString &&str) {
+  delete[] v;
+  v = str.v;
+  sz = str.sz;
+  cap = str.cap;
+  str.v = nullptr;
+  return *this;
 }
 Nostd::WString &Nostd::WString::operator=(const wchar_t *str) {
   // we shrink/grow the vector deliberately by hand as we don't care
