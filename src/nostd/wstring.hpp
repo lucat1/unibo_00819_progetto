@@ -111,6 +111,8 @@ public:
 
 std::basic_ostream<wchar_t> &operator<<(std::basic_ostream<wchar_t> &os,
                                         const WString &str);
+std::basic_istream<wchar_t> &operator>>(std::basic_istream<wchar_t> &os,
+                                        WString &str);
 
 } // namespace Nostd
 

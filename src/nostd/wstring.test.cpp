@@ -1,12 +1,13 @@
 #include "../util/test.hpp"
 #include "wstring.hpp"
 #include <assert.h>
+#include <sstream>
 using namespace Nostd;
 
 int main() {
   it("creates an empty WString", {
     WString ws;
-    assert(ws.c_str()[0] == '\0');
+    assert(ws.c_str()[0] == L'\0');
     assert(ws.capacity() == 2);
     assert(ws.size() == 1);
     assert(ws.length() == 0);
@@ -28,7 +29,7 @@ int main() {
     assert(tws[2] == L' ');
     assert(tws[3] == L't');
     assert(tws[4] == L'e');
-    assert(tws[5] == '\0');
+    assert(tws[5] == L'\0');
     assert(tws.size() == 6);
     assert(tws.length() == 5);
   });
@@ -39,7 +40,7 @@ int main() {
     assert(ws[1] == L'e');
     assert(ws[2] == L's');
     assert(ws[3] == L't');
-    assert(ws[4] == '\0');
+    assert(ws[4] == L'\0');
     assert(ws.size() == 5);
     assert(ws.length() == 4);
   });
@@ -48,7 +49,7 @@ int main() {
     WString ws(L"test", 2);
     assert(ws[0] == L't');
     assert(ws[1] == L'e');
-    assert(ws[2] == '\0');
+    assert(ws[2] == L'\0');
     assert(ws.size() == 3);
     assert(ws.length() == 2);
   });
@@ -63,7 +64,7 @@ int main() {
     ws.resize(2);
     assert(ws.length() == 2);
     assert(ws.size() == 3);
-    assert(ws[2] == '\0');
+    assert(ws[2] == L'\0');
   });
 
   it("clears the string according to spec", {
@@ -71,7 +72,7 @@ int main() {
     ws.clear();
     assert(ws.length() == 0);
     assert(ws.size() == 1);
-    assert(ws[0] == '\0');
+    assert(ws[0] == L'\0');
   });
 
   it("correctly reports when the string is empty", {
@@ -99,7 +100,7 @@ int main() {
     ws.append(another_ws);
     assert(ws.length() == another_ws.length() + 11);
     assert(wcscmp(ws.c_str(), L"test string test") == 0);
-    assert(ws[ws.size() - 1] == '\0');
+    assert(ws[ws.size() - 1] == L'\0');
   });
 
   it("correctly appends a wchar_t*", {
@@ -107,7 +108,7 @@ int main() {
     ws.append(L" test");
     assert(ws.length() == 16);
     assert(wcscmp(ws.c_str(), L"test string test") == 0);
-    assert(ws[ws.size() - 1] == '\0');
+    assert(ws[ws.size() - 1] == L'\0');
   });
 
   it("correctly pushes_back a wchar_t char", {
@@ -115,7 +116,7 @@ int main() {
     ws.push_back(L's');
     assert(ws.length() == 12);
     assert(wcscmp(ws.c_str(), L"test strings") == 0);
-    assert(ws[ws.size() - 1] == '\0');
+    assert(ws[ws.size() - 1] == L'\0');
   });
 
   it("correctly inserts a WString at position", {
@@ -126,7 +127,7 @@ int main() {
     wcout << ws.c_str() << endl;
     assert(ws.length() == 15);
     assert(wcscmp(ws.c_str(), L"test stringtest") == 0);
-    assert(ws[ws.size() - 1] == '\0');
+    assert(ws[ws.size() - 1] == L'\0');
   });
 
   it("correctly inserts a wchar_t* at position", {
@@ -134,7 +135,7 @@ int main() {
     ws.insert(2, L"st");
     assert(ws.length() == 11);
     assert(wcscmp(ws.c_str(), L"test string") == 0);
-    assert(ws[ws.size() - 1] == '\0');
+    assert(ws[ws.size() - 1] == L'\0');
   });
 
   it("correctly inserts a wchar_t char at position", {
@@ -143,7 +144,7 @@ int main() {
     ws.insert(3, L't');
     assert(ws.length() == 11);
     assert(wcscmp(ws.c_str(), L"test string") == 0);
-    assert(ws[ws.size() - 1] == '\0');
+    assert(ws[ws.size() - 1] == L'\0');
   });
 
   it("reports the correct compairson results on WStrings", {
@@ -207,8 +208,17 @@ int main() {
     assert(wcscmp(ws.c_str(), L"abc") == 0);
   });
 
-  it("prints a string to stdout", {
+  it("prints a string to output stream", {
     WString str = L"test string";
-    std::wcout << str << endl;
+    std::wstringstream out;
+    out << str;
+    assert(wcscmp(out.str().c_str(), str.c_str()) == 0);
+  });
+
+  it("reads a word from input stream", {
+    std::wstringstream in(std::wstring(L"first_word second_word"));
+    WString str;
+    in >> str;
+    assert(str.compare(L"first_word") == 0);
   });
 }
