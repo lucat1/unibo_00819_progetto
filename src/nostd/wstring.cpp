@@ -1,5 +1,12 @@
 #include "wstring.hpp"
 
+// implemented the definition found at:
+// https://en.cppreference.com/w/cpp/string/wide/iswspace
+bool Nostd::WString::iswspace(wchar_t c) {
+  return c == L' ' || c == L'\f' || c == L'\n' || c == L'\r' || c == L'\t' ||
+         c == L'\v';
+}
+
 Nostd::WString::WString() : Vector(1, L'\0') {}
 
 Nostd::WString::WString(WString &str) : Vector(str.size()) {
@@ -199,7 +206,7 @@ std::basic_istream<wchar_t> &Nostd::operator>>(std::basic_istream<wchar_t> &is,
                                                Nostd::WString &str) {
   str.clear();
   wchar_t c;
-  while ((c = is.get()) != L' ' && is.good())
+  while (Nostd::WString::iswspace(c = is.get()) && is.good())
     str.push_back(c);
   return is;
 }

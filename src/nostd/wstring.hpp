@@ -25,6 +25,7 @@ public:
   // - no references of the searched substring were found (relative to the found
   // method)
   static const size_t npos = -1;
+  static bool iswspace(wchar_t c);
 
   // constructs an empty WString
   explicit WString();
