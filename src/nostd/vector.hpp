@@ -53,7 +53,7 @@ public:
   // Returns a reference to the element at position i in the vector
   V &at(size_t i) {
     if (i >= sz)
-      throw std::invalid_argument("index out of bounds");
+      throw std::out_of_range("index out of bounds");
     return v[i];
   }
 

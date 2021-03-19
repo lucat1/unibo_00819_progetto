@@ -54,10 +54,10 @@ public:
   void resize(size_t n);
   // clears the string content
   void clear();
-  // returns the last char in the string
-  wchar_t &back();
   // returns the frist char in the string
   wchar_t &front();
+  // returns the last char in the string
+  wchar_t &back();
   // appends another WString at the end of this instance (copying its contents)
   WString &append(WString &str);
   // appends a copy of a wchar_t* at the end of this instance
@@ -98,10 +98,15 @@ public:
   // returns a WString instance where the chars from start to start+len have
   // been copied over
   WString substr(size_t start = 0, size_t len = npos);
+  // trims whitespace from the right
+  WString rtrim();
+  // trims whitespace from the left
+  WString ltrim();
 
   // various operators
 
   WString &operator=(WString &str);
+  WString &operator=(WString &&str);
   WString &operator=(const wchar_t *str);
   WString &operator=(const wchar_t c);
   WString &operator+=(WString &str);
@@ -110,6 +115,7 @@ public:
 };
 
 bool iswspace(wchar_t c);
+
 std::basic_ostream<wchar_t> &operator<<(std::basic_ostream<wchar_t> &os,
                                         const WString &str);
 std::basic_istream<wchar_t> &operator>>(std::basic_istream<wchar_t> &os,
