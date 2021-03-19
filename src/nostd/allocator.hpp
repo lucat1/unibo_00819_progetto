@@ -18,18 +18,12 @@ namespace Nostd {
 template <class T> class Allocator;
 template <> class Allocator<void>;
 
-/*
-  You can refer to Allocator<void> as long as you do not dereference its
-  pointers. For this specialization, std::Allocator uses "typedef" notation
-  instead.
-*/
 template <> class Allocator<void> {
 public:
-  using pointer = void *;
-  using const_pointer = const void *;
-  using value_type = void;
-  // std::Allocator uses a struct instead (arcaism)
-  template <class U> using other = Allocator<U>;
+  typedef void *pointer;
+  typedef const void *const_pointer;
+  typedef void value_type;
+  template <class U> struct rebind { using other = Allocator<U>; };
 };
 
 /*
@@ -55,10 +49,9 @@ public:
 
   pointer address(reference) const noexcept;
   const_pointer address(const_reference) const noexcept;
-  // Hint is ignored; std::Allocator uses 0 ad default hint instead
-  pointer allocate(size_type, Allocator<void>::const_pointer hint = nullptr);
-  // The size of the elements is ignored
-  void deallocate(pointer, size_type);
+  // the hint is ignored
+  pointer allocate(size_type, Allocator<void>::const_pointer hint = 0);
+  void deallocate(pointer, size_type); // the 2nd argument is ignored
   size_type max_size() const noexcept;
   template <class U, class... Args> void construct(U *, Args &&...);
   template <class U> void destroy(U *);

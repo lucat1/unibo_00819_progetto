@@ -1,6 +1,6 @@
 /*
   University of Bologna
-  First cicly degree in Computer Science
+  First cicle degree in Computer Science
   00819 - Programmazione
 
   Stefano Volpe #969766
@@ -17,6 +17,8 @@
 #include <utility>
 #include <vector>
 
+#include "allocator.hpp"
+
 namespace Nostd {
 
 /*
@@ -29,7 +31,7 @@ namespace Nostd {
   converted to T.
   Finally, basic arithmetic operators are provided.
 */
-template <class T, class Alloc = allocator<T>> class Matrix {
+template <class T, class Alloc = Allocator<T>> class Matrix {
 public:
   using value_type = T;
   using allocator_type = Alloc;
