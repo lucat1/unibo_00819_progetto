@@ -190,13 +190,13 @@ int main() {
 
   it("trims whitespace from the right side", {
     WString str = L"test   \t \v  ";
-    str = str.ltrim();
+    str = str.rtrim();
     assert(str.compare(L"test") == 0);
   });
 
   it("trims whitespace from the left side", {
     WString str = L"  \t\v   test";
-    str = str.rtrim();
+    str = str.ltrim();
     assert(str.compare(L"test") == 0);
   });
 
