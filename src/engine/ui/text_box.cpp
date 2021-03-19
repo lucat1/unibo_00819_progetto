@@ -63,7 +63,6 @@ void Engine::UI::TextBox::show(WINDOW *window, uint16_t x, uint16_t y) {
   for (vector<wchar_t *>::size_type i = 0; i < lines.size(); i++) {
     wchar_t *line = lines.at(i);
     mvwaddwstr(window, y + i, fr ? x + wcslen(line) : x, line);
-    delete line;
   }
 }
 
