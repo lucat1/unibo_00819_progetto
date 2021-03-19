@@ -25,7 +25,6 @@ public:
   // - no references of the searched substring were found (relative to the found
   // method)
   static const size_t npos = -1;
-  static bool iswspace(wchar_t c);
 
   // constructs an empty WString
   explicit WString();
@@ -110,6 +109,7 @@ public:
   WString &operator+=(const wchar_t c);
 };
 
+bool iswspace(wchar_t c);
 std::basic_ostream<wchar_t> &operator<<(std::basic_ostream<wchar_t> &os,
                                         const WString &str);
 std::basic_istream<wchar_t> &operator>>(std::basic_istream<wchar_t> &os,
