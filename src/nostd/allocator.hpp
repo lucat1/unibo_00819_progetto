@@ -19,20 +19,6 @@ template <class T> class Allocator;
 template <> class Allocator<void>;
 
 /*
-  You can refer to Allocator<void> as long as you do not dereference its
-  pointers. For this specialization, std::Allocator uses "typedef" notation
-  instead.
-*/
-template <> class Allocator<void> {
-public:
-  using pointer = void *;
-  using const_pointer = const void *;
-  using value_type = void;
-  // std::Allocator uses a struct instead (arcaism)
-  template <class U> using other = Allocator<U>;
-};
-
-/*
   A class defining the default memory model to be used. It manages memory
   allocation/deallocation and objects construction/destruction independently.
 */
@@ -55,10 +41,8 @@ public:
 
   pointer address(reference) const noexcept;
   const_pointer address(const_reference) const noexcept;
-  // Hint is ignored; std::Allocator uses 0 ad default hint instead
-  pointer allocate(size_type, Allocator<void>::const_pointer hint = nullptr);
-  // The size of the elements is ignored
-  void deallocate(pointer, size_type);
+  pointer allocate(size_type); // the hint will be removed in C++20 anyway
+  void deallocate(pointer, size_type); // the 2nd argument is ignored
   size_type max_size() const noexcept;
   template <class U, class... Args> void construct(U *, Args &&...);
   template <class U> void destroy(U *);

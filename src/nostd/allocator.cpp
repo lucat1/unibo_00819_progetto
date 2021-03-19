@@ -31,9 +31,7 @@ auto Nostd::Allocator<T>::address(const_reference x) const noexcept
   return &x;
 }
 
-template <class T>
-auto Nostd::Allocator<T>::allocate(size_type n, Allocator<void>::const_pointer)
-    -> pointer {
+template <class T> auto Nostd::Allocator<T>::allocate(size_type n) -> pointer {
   return ::operator new(n * sizeof(value_type));
 }
 
