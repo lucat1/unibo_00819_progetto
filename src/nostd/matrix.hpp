@@ -29,7 +29,8 @@ template <class T, class Alloc> class Matrix;
   can be used to access either a submatrix or a cell.
 */
 template <class T> class MatrixIterator {
-  // TODO: MatrixIterator user interface
+  static_assert(Regular<T>(), "Matrix's cell type is not regular");
+  // TODO: satisfy std::random_access_iterator_tag
 };
 
 /*
@@ -115,7 +116,8 @@ public:
   void swap(Matrix &x) noexcept;
 
 private:
-  size_t ord, *exts, *elems;
+  size_t ord, *exts;
+  T *elems;
 };
 
 // Two matrixes are said to be equal when they have same extents and elements.
