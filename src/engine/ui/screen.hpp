@@ -3,9 +3,6 @@
 
 #include "box.hpp"
 
-#define SCREEN_COLS 80
-#define SCREEN_LINES 25
-
 namespace Engine {
 namespace UI {
 
@@ -13,11 +10,13 @@ class Screen : public Box {
 private:
   // x, y are the offest from the screen (left, top) to start
   // printing inside the game centered window (Box instance)
-  WINDOW *window;
+  WINDOW *window, *screen;
   uint16_t x, y, terminal_cols, terminal_lines;
   bool can_fit();
 
 public:
+  static const uint16_t SCREEN_COLS = 80;
+  static const uint16_t SCREEN_LINES = 25;
   Screen();
 
   bool open();
