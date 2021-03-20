@@ -21,43 +21,78 @@
 
 namespace Nostd {
 
-template <class T> class MatrixIterator;
-template <class T, class Alloc> class Matrix;
-
-/*
-  A random access iterator able to point to any splice of a given Matrix. It
-  can be used to access either a submatrix or a cell.
-*/
-template <class T> class MatrixIterator {
-  static_assert(Regular<T>(), "Matrix's cell type is not regular");
-  // TODO: satisfy std::random_access_iterator_tag
-};
-
 /*
   A general purpose class considering an N-dimensional matrix as a handler to
   its cells. To construct a new Matrix from scratch, you can specify its
-  extents with {}: it can later be accessed through C-style subscripting (e.g.
-  m[2][3]). All of these methods return a MatrixIterator pointing to a subset
-  of the cells of the original data structure. A Matrix with a single cell ofù
-  type T is implicitly converted to T.
-  Finally, basic arithmetic operators are provided.
+  extents with {}.
 */
 template <class T, class Alloc = Allocator<T>> class Matrix {
   static_assert(Regular<T>(), "Matrix's cell type is not regular");
 
 public:
+  template <class U> class Iterator;
+
   using value_type = T;
   using allocator_type = Alloc;
   using reference = value_type &;
   using const_reference = const value_type &;
   using pointer = value_type *;
   using const_pointer = const value_type *;
-  using iterator = MatrixIterator<T>;
-  using const_iterator = MatrixIterator<const value_type>;
-  using reverse_iterator = std::reverse_iterator<MatrixIterator<value_type>>;
+  using iterator = Iterator<value_type>;
+  using const_iterator = Iterator<const value_type>;
+  using reverse_iterator = std::reverse_iterator<Iterator<value_type>>;
   using const_reverse_iterator = std::reverse_iterator<const value_type>;
   using size_type = size_t;
   using difference_type = ptrdiff_t;
+
+  /*
+    A random access iterator able to point to any splice of a given Matrix. It
+    can be used to access either a submatrix or a cell.
+  */
+  template <class U>
+  class Iterator : public std::iterator<std::random_access_iterator_tag, U> {
+    static_assert(Regular<U>(), "Matrix's cell type is not regular");
+
+  public:
+    Iterator() = default;
+    Iterator(Matrix *, size_t start, size_t size, size_t stride);
+    Iterator(const Iterator &) = default;
+    Iterator &operator=(const Iterator &) = default;
+    ~Iterator() = default;
+
+    Iterator &operator++();
+    Iterator operator++(int);
+    Iterator &operator--();
+    Iterator operator--(int);
+    Iterator operator+(difference_type) const;
+    Iterator operator-(difference_type) const;
+    Iterator operator-(Iterator) const;
+    Iterator &operator+=(difference_type);
+    Iterator &operator-=(difference_type);
+
+    bool operator==(const Iterator &) const noexcept;
+    bool operator!=(const Iterator &) const noexcept;
+    // the following operators throw a std::domain_error when trying to compare
+    // iterators pointing to submatrixes with different orders
+    bool operator<(const Iterator &) const;
+    bool operator>(const Iterator &) const;
+    bool operator<=(const Iterator &) const;
+    bool operator>=(const Iterator &) const;
+
+    U &operator*() const;
+    U *operator->() const;
+    // p[n] is *not* the same as *(p + n): it returns an iterator pointing to
+    // a submatrix of the one originally pointed. It throws std::out_of_range
+    // on invalid submatrix indexes and std::domain_error when used on an
+    // iterator pointing to a single cell.
+    Iterator operator[](difference_type) const;
+
+    operator U() const;
+
+  private:
+    Matrix *matrix = nullptr;
+    size_t strt, sz, strd;
+  };
 
   // extents are mandatory
   Matrix() = delete;
@@ -100,8 +135,8 @@ public:
   bool empty() const noexcept;
 
   // element access
-  iterator operator[](size_type);
-  const_iterator operator[](size_type) const;
+  iterator operator[](difference_type);
+  const_iterator operator[](difference_type) const;
   iterator at(size_type);
   const_iterator at(size_type) const;
   reference front();
