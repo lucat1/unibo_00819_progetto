@@ -22,5 +22,5 @@ $ make test
 
 ## Credits
 
-Made by Andreea Scrob, Luca Tagliavini, Mattia Girolimetto and Stefano Volpe
+Made by Mattia Girolimetto, Andreea Scrob, Luca Tagliavini, and Stefano Volpe.
 
