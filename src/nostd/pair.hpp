@@ -14,8 +14,9 @@ public:
   }
 
   bool operator==(Pair<A, B> cmp) {
-    return cmp->first == this->first && cmp->second == this->second;
+    return cmp.first == this->first && cmp.second == this->second;
   }
+  bool operator!=(Pair<A, B> cmp) { return !operator==(cmp); }
 };
 
 } // namespace Nostd
