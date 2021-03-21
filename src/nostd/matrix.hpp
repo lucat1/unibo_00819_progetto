@@ -15,6 +15,7 @@
 #include <cstddef>
 #include <iterator>
 #include <ostream>
+#include <valarray>
 
 #include "allocator.hpp"
 #include "concepts.hpp"
@@ -55,8 +56,7 @@ public:
 
   public:
     Iterator() = default;
-    Iterator(Matrix *, size_t start, size_t size, size_t stride,
-             size_t position);
+    Iterator(Matrix *, std::slice, size_t position, size_t order = 1);
     Iterator(const Iterator &) = default;
     Iterator &operator=(const Iterator &) = default;
     ~Iterator() = default;
@@ -93,8 +93,9 @@ public:
     operator U &() const;
 
   private:
-    Matrix *m = nullptr;
-    size_t strt, sz, strd, pstn;
+    Matrix *m{nullptr};
+    std::slice slc;
+    size_t pstn, ord, dim;
   };
 
   // extents are mandatory

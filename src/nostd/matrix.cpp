@@ -18,22 +18,28 @@
 
 template <class T, class Alloc>
 template <class U>
-Nostd::Matrix<T, Alloc>::Iterator<U>::Iterator(Matrix *matrix, size_t start,
-                                               size_t size, size_t stride,
-                                               size_t position)
-    : m{matrix}, strt{start}, sz{size}, strd{stride}, pstn{position} {
-  if (!m)
-    throw std::invalid_argument("null matrix pointer");
-  if (strt > m->size())
-    throw std::out_of_range("strt > m->size()");
-  if (!strd)
-    throw std::invalid_argument("null stride");
-  if (strt + sz * strd > m->size())
-    throw std::out_of_range("strt + sz * strd > m->size()");
-  if (pstn < strt)
-    throw std::out_of_range("pstn < strt");
-  if ((pstn - strt) % strd || (pstn - strt) / strd > size)
-    throw std::out_of_range("misaligned position");
+Nostd::Matrix<T, Alloc>::Iterator<U>::Iterator(Matrix *matrix, std::slice slice,
+                                               size_t position, size_t order)
+    : m{matrix}, slc{slice}, pstn{position}, ord{order} {
+  if (m) {
+    const size_t start{slc.start()}, matrix_size{m->size()};
+    if (start > matrix_size)
+      throw std::out_of_range("start > matrix_size");
+    const size_t slice_size{slc.size()}, stride{slc.stride()};
+    if (pstn < start)
+      throw std::out_of_range("pstn < start");
+    if ((pstn - start) % stride || (pstn - start) / stride > slice_size)
+      throw std::out_of_range("misaligned position");
+    const size_t matrix_order = m->order;
+    if (order > matrix_order)
+      throw std::out_of_range("order > matrix_order");
+    dim = 1;
+    for (size_t i{matrix_order - ord}; i < matrix_order; ++i)
+      dim *= m->extent(i);
+    if (slice_size && start + (slice_size - 1) * stride + dim > matrix_size)
+      throw std::out_of_range("slice_size && start + (slice_size - 1) * stride "
+                              "+ dim > matrix_size");
+  }
 }
 
 template <class T, class Alloc>
@@ -68,9 +74,10 @@ template <class T, class Alloc>
 template <class U>
 auto Nostd::Matrix<T, Alloc>::Iterator<U>::operator+(difference_type n) const
     -> Iterator {
-  if (-n * sz > pstn)
-    throw std::out_of_range("-n * sz > pstn");
-  return Iterator(m, strt, sz, strd, pstn + n * sz);
+  const size_t stride{slc.stride()};
+  if (-n * stride > pstn)
+    throw std::out_of_range("-n * stride > pstn");
+  return Iterator(m, slc, pstn + n * stride, ord);
 }
 
 template <class T, class Alloc>
@@ -84,9 +91,9 @@ template <class T, class Alloc>
 template <class U>
 auto Nostd::Matrix<T, Alloc>::Iterator<U>::operator-(Iterator p) const
     -> difference_type {
-  if (m != p.m || strt != p.strt || sz != p.sz || strd != p.strd)
+  if (m != p.m || slc != p.slc || ord != p.ord)
     throw std::invalid_argument("iterators working with different slices");
-  return (static_cast<int>(pstn) - static_cast<int>(pstn)) / strd;
+  return (static_cast<int>(pstn) - static_cast<int>(p.pstn)) / slc.stride();
 }
 
 template <class T, class Alloc>
@@ -109,8 +116,7 @@ template <class U>
 bool Nostd::Matrix<T, Alloc>::Iterator<U>::operator==(
     const Iterator &p) const noexcept {
   // every field is compared, so this is actually a memberwise comparison
-  return m == p.m && strt == p.strt && sz == p.sz && strd == p.strd &&
-         pstn == p.pstn;
+  return m == p.m && slc == p.slc && pstn == p.pstn && ord == p.ord;
 }
 
 template <class T, class Alloc>
@@ -147,7 +153,7 @@ bool Nostd::Matrix<T, Alloc>::Iterator<U>::operator>=(const Iterator &p) const {
 template <class T, class Alloc>
 template <class U>
 U &Nostd::Matrix<T, Alloc>::Iterator<U>::operator*() const {
-  if (pstn == strt + sz * strd)
+  if (pstn == slc.start() + slc.size() * slc.stride())
     throw std::out_of_range("can't dereference end of sequence");
   return m->at(pstn);
 }
@@ -155,7 +161,7 @@ U &Nostd::Matrix<T, Alloc>::Iterator<U>::operator*() const {
 template <class T, class Alloc>
 template <class U>
 U *Nostd::Matrix<T, Alloc>::Iterator<U>::operator->() const {
-  if (pstn == strt + sz * strd)
+  if (pstn == slc.start() + slc.size() * slc.stride())
     throw std::out_of_range("can't dereference end of sequence");
   return m;
 }
@@ -164,7 +170,20 @@ template <class T, class Alloc>
 template <class U>
 auto Nostd::Matrix<T, Alloc>::Iterator<U>::operator[](size_t n) const
     -> Iterator {
-  return *this; // TODO
+  if (!ord)
+    throw std::invalid_argument("using [] on a 0-order matrix");
+  const size_t size{m->extent(m->order() - ord)};
+  if (n >= size)
+    throw std::out_of_range("n >= size");
+  return Iterator(m,
+                  std::slice(slc.start() + n * slc.stride(), size, dim / size),
+                  slc.start(), ord - 1);
+}
+
+template <class T, class Alloc>
+template <class U>
+Nostd::Matrix<T, Alloc>::Iterator<U>::operator U &() const {
+  return **this;
 }
 
 #endif
