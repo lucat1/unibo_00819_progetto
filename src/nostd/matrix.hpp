@@ -55,7 +55,8 @@ public:
 
   public:
     Iterator() = default;
-    Iterator(Matrix *, size_t start, size_t size, size_t stride);
+    Iterator(Matrix *, size_t start, size_t size, size_t stride,
+             size_t position);
     Iterator(const Iterator &) = default;
     Iterator &operator=(const Iterator &) = default;
     ~Iterator() = default;
@@ -66,14 +67,16 @@ public:
     Iterator operator--(int);
     Iterator operator+(difference_type) const;
     Iterator operator-(difference_type) const;
-    Iterator operator-(Iterator) const;
+    difference_type operator-(Iterator) const;
     Iterator &operator+=(difference_type);
     Iterator &operator-=(difference_type);
 
     bool operator==(const Iterator &) const noexcept;
     bool operator!=(const Iterator &) const noexcept;
-    // the following operators throw a std::domain_error when trying to compare
-    // iterators pointing to submatrixes with different orders
+    // the following operators throw a std::domain_error when comparing
+    // submatrixes represented by different splices (for example, the ones
+    // which do not have the same order). The same goes when calculating the
+    // difference between two iterators.
     bool operator<(const Iterator &) const;
     bool operator>(const Iterator &) const;
     bool operator<=(const Iterator &) const;
@@ -85,13 +88,13 @@ public:
     // a submatrix of the one originally pointed. It throws std::out_of_range
     // on invalid submatrix indexes and std::domain_error when used on an
     // iterator pointing to a single cell.
-    Iterator operator[](difference_type) const;
+    Iterator operator[](size_t) const;
 
-    operator U() const;
+    operator U &() const;
 
   private:
-    Matrix *matrix = nullptr;
-    size_t strt, sz, strd;
+    Matrix *m = nullptr;
+    size_t strt, sz, strd, pstn;
   };
 
   // extents are mandatory
