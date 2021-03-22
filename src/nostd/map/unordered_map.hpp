@@ -1,88 +1,68 @@
 #ifndef UNORDEREDMAP_HPP
 #define UNORDEREDMAP_HPP
 
-#include "map.hpp"
 #include "../pair/pair.hpp"
-#include <vector>
+#include "map.hpp"
 #include <exception>
 #include <iostream>
+#include <vector>
 
-namespace Nostd
-{
-    template <typename K, typename V>
-    class UnorderedMap : public Map<K, V>
-    {
-    private:
-        std::vector<Nostd::Pair<K, V>> data;
+namespace Nostd {
+template <typename K, typename V> class UnorderedMap : public Map<K, V> {
+private:
+  std::vector<Nostd::Pair<K, V>> data;
 
-    public:
-        UnorderedMap()
-        {
-            data = std::vector<Nostd::Pair<K, V>>();
-        }
+public:
+  UnorderedMap() { data = std::vector<Nostd::Pair<K, V>>(); }
 
-        void add(K key, V value) override
-        {
-            for (auto &x : data)
-            { 
-                if (x.first == key)
-                {
-                    x.second = value;
-                    return;
-                }
-            }
-            data.push_back({key, value});
-        }
+  void add(K key, V value) override {
+    for (auto &x : data) {
+      if (x.first == key) {
+        x.second = value;
+        return;
+      }
+    }
+    data.push_back({key, value});
+  }
 
-        void remove(K key) override
-        {
-            for (size_t i = 0; i < this->data.size(); i++)
-                if (data[i].first == key)
-                {
-                    data.erase(this->data.begin() + i);
-                    return;
-                }
-        }
+  void remove(K key) override {
+    for (size_t i = 0; i < this->data.size(); i++)
+      if (data[i].first == key) {
+        data.erase(this->data.begin() + i);
+        return;
+      }
+  }
 
-        bool empty() override
-        {
-            return this->data.empty();
-        }
+  bool empty() override { return this->data.empty(); }
 
-        // Check if the map contains an element
-        bool contains(K key) override
-        {
-            // todo: waiting for nostd::vector implementation
-            for (auto &x : this->data)
-                if (key == x.first)
-                    return true;
-            return false;
-        }
+  // Check if the map contains an element
+  bool contains(K key) override {
+    // todo: waiting for nostd::vector implementation
+    for (auto &x : this->data)
+      if (key == x.first)
+        return true;
+    return false;
+  }
 
-        // Returns all the value in a Nostd::Vector<T>
-        std::vector<V> get_values() override
-        {
-            std::vector<V> res;
-            for (auto &x : this->data)
-                res.push_back(x.second);
-            return res;
-        }
+  // Returns all the value in a Nostd::Vector<T>
+  std::vector<V> get_values() override {
+    std::vector<V> res;
+    for (auto &x : this->data)
+      res.push_back(x.second);
+    return res;
+  }
 
-        // Returns all the key-values as a Nostd::Vector<Nostd::Pair<K,V>>
-        std::vector<Nostd::Pair<K, V>> as_vector() override
-        {
-            return this->data;
-        }
+  // Returns all the key-values as a Nostd::Vector<Nostd::Pair<K,V>>
+  std::vector<Nostd::Pair<K, V>> as_vector() override { return this->data; }
 
-        // Access a value from his key
-        V operator[](K key) override
-        {
-            for (auto &x : this->data)
-                if (x.first == key)
-                    return x.second;
-            throw std::invalid_argument("UnorderedMap: No value found for that key");
-        }
-    };
+  // Access a value from his key
+  V &operator[](K key) override {
+    for (auto &x : this->data)
+      if (x.first == key)
+        return x.second;
+    throw std::invalid_argument("UnorderedMap: No value found for that key");
+  }
+};
 
 } // namespace Nostd
 #endif
