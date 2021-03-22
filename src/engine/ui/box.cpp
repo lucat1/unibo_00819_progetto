@@ -85,7 +85,7 @@ void Engine::UI::Box::show(WINDOW *window, uint16_t x, uint16_t y) {
   while (it != nullptr && rel_x < max_child_width && rel_y < max_child_height) {
     // Pair<width, height>
     Pair<uint16_t, uint16_t> child_size = it->size();
-    it->show(window, x + rel_x + (fr ? child_size.first : 0), y + rel_y);
+    it->show(window, x + rel_x + (fr ? -child_size.first : 0), y + rel_y);
 
     // TODO: fr
     rel_x = rel_x + (dv ? child_size.first : 0);
