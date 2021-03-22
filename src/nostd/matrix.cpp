@@ -277,4 +277,13 @@ auto Nostd::Matrix<T, Alloc>::Matrix::operator=(const Matrix &m) -> Matrix & {
     exts = elems = nullptr;
 }
 
+template <class T, class Alloc> Nostd::Matrix<T, Alloc>::Matrix::~Matrix() {
+  using at = std::allocator_traits<allocator_type>;
+  at::deallocate(exts, ord);
+  pointer const end{elems + sz};
+  for (pointer p{elems}; p < end; ++p)
+    at::destroy(p);
+  at::deallocate(elems, sz);
+}
+
 #endif

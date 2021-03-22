@@ -117,7 +117,7 @@ public:
   Matrix(const Matrix &, const allocator_type &alloc);
   Matrix &operator=(const Matrix &);
 
-  ~Matrix() = default;
+  ~Matrix();
 
   // iterators
   iterator begin() noexcept;
