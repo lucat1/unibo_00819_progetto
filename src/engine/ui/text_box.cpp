@@ -1,69 +1,53 @@
 #include "text_box.hpp"
 
-// TextBox straigh up ignores the height value as it is defined by its width and
-// content length.
-// NOTE(tip): you can wrap a TextBox in a Box with an aribtrary height if you
-// for some reason wanna fill some amount of height
 Engine::UI::TextBox::TextBox(uint16_t max_width, uint16_t max_height,
                              map<enum Engine::UI::Box::Props, uint16_t> props,
                              const wchar_t *content)
     : Box(max_width, max_height, props) {
   this->content = content;
-  this->lines = split_content();
+  split_content();
+}
+Engine::UI::TextBox::TextBox(uint16_t max_width, uint16_t max_height,
+                             map<enum Engine::UI::Box::Props, uint16_t> props,
+                             Nostd::WString &&content)
+    : Box(max_width, max_height, props) {
+  this->content = content;
+  split_content();
 }
 
-wchar_t *emptystr(size_t len) {
-  wchar_t *res = new wchar_t[len];
-  for (size_t i = 0; i < len; i++)
-    res[i] = '\0';
-  return res;
-}
+// splits the content into various lines to fit into `max_width` and adds
+// '-' where necessary, when splitting a word
+void Engine::UI::TextBox::split_content() {
+  lines.clear();
+  size_t len = content.length();
+  while (len > max_width) {
+    size_t ll = len < max_width ? Nostd::WString::npos : max_width - 1;
 
-// split_content splits the content of the TextBox in various lines to fit the
-// given width
-vector<wchar_t *> Engine::UI::TextBox::split_content() {
-  vector<wchar_t *> lines;
-  vector<wchar_t *>::size_type line_i = 0;
-  size_t i = 0, line_len = 0;
-  lines.push_back(emptystr(max_width + 1)); // the initial line
-
-  while (content[i] != '\0') {
-    wchar_t *line = lines.at(line_i);
-    if (line_len < max_width) {
-      // we are within the given width so we can safely add the char to the
-      // current line
-      line[line_len] = content[i];
-      line_len++;
-    } else {
-      wchar_t *new_line = emptystr(max_width + 1);
-      wchar_t c = line[line_len - 1];
-      // add a - if we're splitting a word (NOT a whitespace)
-      // and copy the trimmed char into the new line
-      if (c != ' ') {
-        line[line_len - 1] = '-';
-        new_line[0] = c;
-        line_len = 1;
-      } else
-        line_len = 0;
-
-      if (content[i] != ' ' || line_len != 0)
-        new_line[line_len] = content[i];
-
-      lines.push_back(new_line);
-      line_len = wcslen(new_line);
-      line_i++;
+    Nostd::WString sub = content.substr(content.length() - len, ll + 1).ltrim();
+    if (!Nostd::iswspace(sub[ll]) && ll != Nostd::WString::npos) {
+      // when we have two ending chars that are not whitespace we consider this
+      // as a word and we add the - charter. Otherwhise we consider this the
+      // beginning of a new word and leave it for the next line.
+      if (!Nostd::iswspace(sub[ll - 1]))
+        sub.back() = L'-';
+      else {
+        ll--; // leave the new word in the next line
+        sub.back() = L' ';
+      }
     }
-    i = i + 1;
-  }
 
-  return lines;
+    lines.push_back(sub);
+    len -= ll;
+  }
+  lines.push_back(
+      content.substr(content.length() - len, Nostd::WString::npos).ltrim());
 }
 
 void Engine::UI::TextBox::show(WINDOW *window, uint16_t x, uint16_t y) {
-  for (vector<wchar_t *>::size_type i = 0; i < lines.size(); i++) {
-    wchar_t *line = lines.at(i);
-    mvwaddwstr(window, y + i, fr ? x + wcslen(line) : x, line);
-    delete line;
+  for (size_t i = 0; i < lines.size(); i++) {
+    Nostd::WString line = lines[i];
+    mvwaddwstr(window, y + i, fr ? x + (max_width - line.length()) : x,
+               line.c_str());
   }
 }
 

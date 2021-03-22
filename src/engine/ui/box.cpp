@@ -1,10 +1,8 @@
 #include "box.hpp"
 #include "../../nostd/pair/pair.hpp"
 #include <algorithm>
-#include <iostream>
 #include <ncurses.h>
 #include <unistd.h>
-using namespace std;
 using namespace Nostd;
 
 // Engine::UI::Box has nothing to do with ncurses's box function
