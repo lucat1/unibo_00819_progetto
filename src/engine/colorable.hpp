@@ -1,9 +1,9 @@
 #ifndef ENGINE_COLORABLE_HPP
 #define ENGINE_COLORABLE_HPP
 
+namespace Engine {
 // copied, edited with vim and by hand to compy with our naming convetion, from
 // https://jonasjacek.github.io/colors/
-namespace Engine {
 enum class Color : int {
   transparent = -1,
   black,
