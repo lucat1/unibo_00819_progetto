@@ -13,6 +13,7 @@
 #define NOSTD_MATRIX_HPP
 
 #include <cstddef>
+#include <initializer_list>
 #include <iterator>
 #include <ostream>
 #include <valarray>
@@ -107,9 +108,9 @@ public:
          const allocator_type &alloc = allocator_type());
 
   // move
-  Matrix(Matrix &&) = default;
-  Matrix(Matrix &&, const allocator_type &alloc);
-  Matrix &operator=(Matrix &&) = default;
+  Matrix(Matrix &&);
+  Matrix(Matrix &&, const allocator_type &);
+  Matrix &operator=(Matrix &&);
 
   // copy
   Matrix(const Matrix &);
@@ -155,8 +156,9 @@ public:
   void swap(Matrix &x) noexcept;
 
 private:
-  size_t ord, *exts;
-  T *elems;
+  allocator_type all;
+  size_t ord, *exts, sz;
+  pointer *elems;
 };
 
 // Two matrixes are said to be equal when they have same extents and elements.
