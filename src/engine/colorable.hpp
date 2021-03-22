@@ -267,6 +267,9 @@ enum class Color : int {
 static int color_to_int(Color c) { return static_cast<int>(c); }
 
 class Colorable {
+private:
+  Colorable();
+
 public:
   Color fg = Color::white, bg = Color::transparent;
 };
