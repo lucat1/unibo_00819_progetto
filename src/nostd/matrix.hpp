@@ -135,9 +135,10 @@ public:
 
   // capacity
   size_t order() const noexcept;
-  size_t extent(size_t n) const;
+  size_t extent(size_t) const;
   size_t size() const noexcept;
   bool empty() const noexcept;
+  allocator_type get_allocator() const noexcept;
 
   // element access
   iterator operator[](difference_type);

@@ -286,4 +286,32 @@ template <class T, class Alloc> Nostd::Matrix<T, Alloc>::Matrix::~Matrix() {
   at::deallocate(elems, sz);
 }
 
+template <class T, class Alloc>
+size_t Nostd::Matrix<T, Alloc>::Matrix::order() const noexcept {
+  return ord;
+}
+
+template <class T, class Alloc>
+size_t Nostd::Matrix<T, Alloc>::Matrix::extent(size_t n) const {
+  if (n >= ord)
+    throw std::out_of_range("n >= ord");
+  return exts[n];
+}
+
+template <class T, class Alloc>
+size_t Nostd::Matrix<T, Alloc>::Matrix::size() const noexcept {
+  return sz;
+}
+
+template <class T, class Alloc>
+bool Nostd::Matrix<T, Alloc>::Matrix::empty() const noexcept {
+  return !sz;
+}
+
+template <class T, class Alloc>
+auto Nostd::Matrix<T, Alloc>::Matrix::get_allocator() const noexcept
+    -> allocator_type {
+  return all;
+}
+
 #endif
