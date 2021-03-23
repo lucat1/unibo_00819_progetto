@@ -14,6 +14,7 @@
 
 #include "matrix.hpp"
 
+#include <iterator>
 #include <memory>
 #include <stdexcept>
 
@@ -284,6 +285,71 @@ template <class T, class Alloc> Nostd::Matrix<T, Alloc>::Matrix::~Matrix() {
   for (pointer p{elems}; p < end; ++p)
     at::destroy(p);
   at::deallocate(elems, sz);
+}
+
+template <class T, class Alloc>
+auto Nostd::Matrix<T, Alloc>::Matrix::begin() noexcept -> iterator {
+  return iterator(this, std::slice(0, sz, 1), 0, ord);
+}
+
+template <class T, class Alloc>
+auto Nostd::Matrix<T, Alloc>::Matrix::begin() const noexcept -> const_iterator {
+  return cbegin();
+}
+
+template <class T, class Alloc>
+auto Nostd::Matrix<T, Alloc>::Matrix::end() noexcept -> iterator {
+  return iterator(this, std::slice(0, sz, 1), sz, ord);
+}
+
+template <class T, class Alloc>
+auto Nostd::Matrix<T, Alloc>::Matrix::end() const noexcept -> const_iterator {
+  return cend();
+}
+
+template <class T, class Alloc>
+auto Nostd::Matrix<T, Alloc>::Matrix::rbegin() noexcept -> reverse_iterator {
+  return std::make_reverse_iterator<iterator>(begin());
+}
+
+template <class T, class Alloc>
+auto Nostd::Matrix<T, Alloc>::Matrix::rbegin() const noexcept
+    -> const_reverse_iterator {
+  return crbegin();
+}
+
+template <class T, class Alloc>
+auto Nostd::Matrix<T, Alloc>::Matrix::rend() noexcept -> reverse_iterator {
+  return std::make_reverse_iterator<iterator>(end());
+}
+
+template <class T, class Alloc>
+auto Nostd::Matrix<T, Alloc>::Matrix::rend() const noexcept
+    -> const_reverse_iterator {
+  return crend();
+}
+
+template <class T, class Alloc>
+auto Nostd::Matrix<T, Alloc>::Matrix::cbegin() const noexcept
+    -> const_iterator {
+  return const_iterator(this, std::slice(0, sz, 1), 0, ord);
+}
+
+template <class T, class Alloc>
+auto Nostd::Matrix<T, Alloc>::Matrix::cend() const noexcept -> const_iterator {
+  return const_iterator(this, std::slice(0, sz, 1), sz, ord);
+}
+
+template <class T, class Alloc>
+auto Nostd::Matrix<T, Alloc>::Matrix::crbegin() const noexcept
+    -> const_reverse_iterator {
+  return const_reverse_iterator(this, std::slice(0, sz, 1), 0, ord);
+}
+
+template <class T, class Alloc>
+auto Nostd::Matrix<T, Alloc>::Matrix::crend() const noexcept
+    -> const_reverse_iterator {
+  return const_reverse_iterator(this, std::slice(0, sz, 1), sz, ord);
 }
 
 template <class T, class Alloc>
