@@ -141,8 +141,8 @@ public:
   allocator_type get_allocator() const noexcept;
 
   // element access
-  iterator operator[](difference_type);
-  const_iterator operator[](difference_type) const;
+  iterator operator[](size_t);
+  const_iterator operator[](size_t) const;
   iterator at(size_type);
   const_iterator at(size_type) const;
   reference front();
