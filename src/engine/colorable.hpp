@@ -264,14 +264,20 @@ enum class Color : int {
   grey93,
 };
 
-static int color_to_int(Color c) { return static_cast<int>(c); }
+int color_to_int(Color c) noexcept;
 
+/*
+ Interface representing anything that can be printed on screen using both a
+ foreground and a background color.
+*/
 class Colorable {
-private:
-  Colorable();
+protected:
+  Colorable() = default;
 
 public:
-  Color fg = Color::white, bg = Color::transparent;
+  virtual Color foreground() const;
+  virtual Color background() const;
+  virtual ~Colorable() = default;
 };
 
 } // namespace Engine
