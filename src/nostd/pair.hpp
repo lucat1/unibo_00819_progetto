@@ -1,5 +1,5 @@
-#ifndef PAIR_HPP
-#define PAIR_HPP
+#ifndef NOSTD_PAIR_HPP
+#define NOSTD_PAIR_HPP
 
 namespace Nostd {
 
@@ -21,4 +21,4 @@ public:
 
 } // namespace Nostd
 
-#endif // PAIR_HPP
+#endif // NOSTD_PAIR_HPP

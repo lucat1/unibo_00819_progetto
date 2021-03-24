@@ -100,4 +100,4 @@ public:
 
 } // namespace Nostd
 
-#endif
+#endif // NOSTD_VECTOR_HPP

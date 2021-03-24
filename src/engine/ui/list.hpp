@@ -1,5 +1,5 @@
-#ifndef LIST_HPP
-#define LIST_HPP
+#ifndef ENGINE_UI_LIST_HPP
+#define ENGINE_UI_LIST_HPP
 
 #include "box.hpp"
 
@@ -23,4 +23,4 @@ public:
 } // namespace UI
 } // namespace Engine
 
-#endif // LIST_HPP
+#endif // ENGINE_UI_LIST_HPP

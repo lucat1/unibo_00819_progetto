@@ -1,5 +1,5 @@
-#ifndef APPEND_HPP
-#define APPEND_HPP
+#ifndef ENGINE_UI_APPEND_HPP
+#define ENGINE_UI_APPEND_HPP
 
 #include "box.hpp"
 #include <algorithm>
@@ -36,4 +36,4 @@ T *append(Box *target, float w, float h, map<Box::Props, uint16_t> props = {},
 } // namespace UI
 } // namespace Engine
 
-#endif // APPEND_HPP
+#endif // ENGINE_UI_APPEND_HPP
