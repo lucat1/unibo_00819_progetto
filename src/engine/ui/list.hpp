@@ -13,11 +13,11 @@ public:
   wchar_t marker;
 
   List(uint16_t max_width, uint16_t max_height,
-       map<enum Box::Props, uint16_t> props = {},
+       std::map<enum Box::Props, uint16_t> props = {},
        const wchar_t marker = append_default_value);
 
   void show(WINDOW *window, uint16_t x, uint16_t y);
-  Pair<uint16_t, uint16_t> size();
+  Nostd::Pair<uint16_t, uint16_t> size();
 };
 
 } // namespace UI

@@ -3,6 +3,7 @@
 #include "box.hpp"
 #include "text_box.hpp"
 #include <assert.h>
+using namespace Nostd;
 using namespace Engine::UI;
 
 int main() {
