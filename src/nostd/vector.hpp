@@ -5,9 +5,10 @@
 
 namespace Nostd {
 
-template <typename V> class Vector {
-protected:
-  V *v;
+template <typename V>
+class Vector {
+ protected:
+  V* v;
   size_t sz, cap;
 
   void calc_cap() {
@@ -25,7 +26,7 @@ protected:
     v = new V[cap];
   }
 
-public:
+ public:
   // Constructs an empty container, with no elements.
   Vector() { init_v(0); }
 
@@ -51,15 +52,15 @@ public:
   void clear() { resize(0); };
 
   // Returns a reference to the element at position i in the vector
-  V &at(size_t i) {
+  V& at(size_t i) {
     if (i >= sz)
       throw std::out_of_range("index out of bounds");
     return v[i];
   }
 
-  V &operator[](size_t i) { return at(i); }
+  V& operator[](size_t i) { return at(i); }
 
-  // Removes from the vector either a single (or renge of) element
+  // Removes from the vector either a single element
   size_t erase(size_t i) {
     if (i >= sz)
       throw std::out_of_range("index out of bounds");
@@ -84,7 +85,7 @@ public:
       cap = 2;
     else
       cap = n * 1.5;
-    V *newv = new V[cap];
+    V* newv = new V[cap];
     for (size_t i = 0; i < n; i++)
       newv[i] = v[i];
     delete[] v;
@@ -98,6 +99,6 @@ public:
   size_t capacity() { return cap; }
 };
 
-} // namespace Nostd
+}  // namespace Nostd
 
 #endif
