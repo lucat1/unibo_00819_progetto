@@ -48,6 +48,34 @@ class List {
       tail = x;
     }
   }
+
+  bool empty() { return sz == 0; }
+
+  size_t size() { return sz; }
+
+  V& front() { return head->val; }
+
+  V& back() { return tail->val; }
+
+  void push_front(V ele) {
+    item* x = new item;
+    x->val = ele;
+    x->next = head;
+    head = x;
+    if (tail == nullptr)
+      tail = x;
+  }
+
+  void push_back(V ele) {
+    item* x = new item;
+    x->val = ele;
+    x->next = nullptr;
+    if (tail == nullptr)
+      head = x;
+    else
+      tail->next = x;
+    tail = x;
+  }
 };
 }  // namespace Nostd
 
