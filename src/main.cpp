@@ -5,6 +5,7 @@
 #include <curses.h>
 #include <iostream>
 using namespace std;
+using namespace Engine;
 using namespace Engine::UI;
 
 // TODO: Handle keyboard, resize and other events
@@ -32,11 +33,17 @@ int main() {
     Box *line = append<Box>(list, 1, 1, {{Box::Props::DIRECTION, 1}});
     wstring str = L"Text on the left " + to_wstring(i);
     append<TextBox, const wchar_t *>(line, .5, 1, {}, str.c_str());
-    append<TextBox, const wchar_t *>(line, .5, 1, {{Box::Props::FLOAT, 1}},
-                                     L"Right Text");
+    append<TextBox, const wchar_t *>(
+        line, .5, 1,
+        {{Box::Props::FLOAT, 1},
+         {Box::Props::BACKGROUND, color_to_short(Color::green)}},
+        L"Right Text");
   }
   append<TextBox, const wchar_t *>(
-      list, 1, 1, {{Box::Props::DIRECTION, 1}},
+      list, 1, 1,
+      {{Box::Props::DIRECTION, 1},
+       {Box::Props::BACKGROUND, color_to_short(Color::red3)},
+       {Box::Props::FOREGROUND, color_to_short(Color::black)}},
       L"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do "
       L"eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad "
       L"minim veniam, quis nostrud exercitation ullamco laboris nisi ut "

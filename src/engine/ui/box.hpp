@@ -2,21 +2,27 @@
 #define BOX_HPP
 
 #include "../../nostd/pair.hpp"
+#include "../colorable.hpp"
 #include <map>
 #include <ncurses.h>
 #include <stdint.h>
-using namespace std;
-using namespace Nostd;
 
 namespace Engine {
 namespace UI {
 
-class Box {
+class Box : public Colorable {
 protected:
+  static size_t ncurses_pair_index;
+
   // padding(left|right|top|bottom)
   uint16_t pl = 0, pr = 0, pt = 0, pb = 0;
-  // direction vertical, float right
+  // direction vertical, float right, should we paint custom colors
   bool dv = false, fr = false;
+
+  // color values
+  bool color = false;
+  int prev_color_pair = -1;
+  Engine::Color fg = Colorable::foreground(), bg = Colorable::foreground();
 
 public:
   enum Props {
@@ -28,6 +34,9 @@ public:
     PADDING_RIGHT,
     PADDING_TOP,
     PADDING_BOTTOM,
+
+    FOREGROUND,
+    BACKGROUND,
   };
 
   uint16_t max_width, max_height, max_child_width, max_child_height;
@@ -35,11 +44,15 @@ public:
       *parent = nullptr;
 
   Box(uint16_t max_width, uint16_t max_height,
-      map<enum Box::Props, uint16_t> props = {});
+      std::map<enum Box::Props, uint16_t> props = {});
 
   virtual void show(WINDOW *window, uint16_t x, uint16_t y);
-  virtual Pair<uint16_t, uint16_t> size();
+  virtual Nostd::Pair<uint16_t, uint16_t> size();
   void add_child(Box *box);
+
+  Engine::Color foreground();
+  Engine::Color background();
+  int color_pair();
 };
 
 } // namespace UI

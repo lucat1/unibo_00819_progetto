@@ -27,6 +27,9 @@ bool Engine::UI::Screen::open() {
   if (screen == nullptr || !can_fit())
     return false;
 
+  if (start_color())
+    return false;
+
   noecho();    // prevents user-inputted charters to be displayed on the screen
   raw();       // intercept all keystrokes and prevent ^C from quitting the game
   curs_set(0); // hide the cursor by default

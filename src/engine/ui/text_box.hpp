@@ -19,14 +19,14 @@ public:
 
   static constexpr const wchar_t *append_default_value = L"";
   TextBox(uint16_t max_width, uint16_t max_height,
-          map<enum Box::Props, uint16_t> props = {},
+          std::map<enum Box::Props, uint16_t> props = {},
           Nostd::WString &&content = L"");
   TextBox(uint16_t max_width, uint16_t max_height,
-          map<enum Box::Props, uint16_t> props = {},
+          std::map<enum Box::Props, uint16_t> props = {},
           const wchar_t *content = L"");
 
   void split_content();
-  Pair<uint16_t, uint16_t> size();
+  Nostd::Pair<uint16_t, uint16_t> size();
   void show(WINDOW *window, uint16_t x, uint16_t y);
 };
 
