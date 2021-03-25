@@ -153,6 +153,10 @@ public:
   void swap(Matrix &) noexcept; // this will invalid pre-swap iterators
 
 private:
+  using at_elems = std::allocator_traits<allocator_type>;
+  using at_exts =
+      std::allocator_traits<typename allocator_type::template other<size_t>>;
+
   allocator_type all;
   size_t ord, *exts, sz;
   pointer *elems;
@@ -167,7 +171,5 @@ std::enable_if<Has_equal<T>(), bool> operator!=(const Matrix<T, Alloc> &,
                                                 const Matrix<T, Alloc> &);
 
 } // namespace Nostd
-
-#include "concepts.hpp"
 
 #endif

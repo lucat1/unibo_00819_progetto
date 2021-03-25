@@ -17,7 +17,8 @@ using namespace Nostd;
 using std::cout;
 
 int main() {
-  // TODO
+  Matrix<int> m({3, 4}, 1);
+  cout << "\t✓ ???\n";
 }
 
 #include "matrix.cpp"

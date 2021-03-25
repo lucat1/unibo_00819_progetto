@@ -14,6 +14,7 @@
 
 #include "matrix.hpp"
 
+#include "allocator.hpp"
 #include <algorithm>
 #include <iterator>
 #include <memory>
@@ -201,17 +202,16 @@ template <class T, class Alloc>
 Nostd::Matrix<T, Alloc>::Matrix(std::initializer_list<size_t> extents,
                                 const value_type &value,
                                 const allocator_type &alloc)
-    : all{alloc}, ord{extents.size()}, exts{all.allocate(extents.size())} {
+    : all{alloc}, ord{extents.size()}, exts{nullptr} {
   sz = extents.size() ? 1UL : 0UL;
   if (sz) {
-    using at = std::allocator_traits<allocator_type>;
-    exts = at::allocate(ord);
+    exts = at_exts::allocate(ord);
     size_t i{0};
     for (auto x : extents)
       sz *= (exts[i++] = x);
-    elems = at::allocate(sz);
+    elems = at_elems::allocate(sz);
     for (pointer p{elems + sz - 1}; p >= elems; --p)
-      at::construct(p, value);
+      at_elems::construct(p, value);
   }
 }
 
@@ -252,13 +252,12 @@ auto Nostd::Matrix<T, Alloc>::Matrix::operator=(Matrix &&m) -> Matrix & {
 
 template <class T, class Alloc>
 Nostd::Matrix<T, Alloc>::Matrix(const Matrix &m, const allocator_type &alloc)
-    : all{alloc}, ord{m.ord}, sz{m.sz} {
+    : all{alloc}, ord{m.ord}, sz{m.sz}, exts{nullptr}, elems{nullptr} {
   if (ord) {
-    using at = std::allocator_traits<allocator_type>;
-    exts = at::allocate(ord);
+    exts = at_exts::allocate(ord);
     for (size_t i{0}; i < ord; ++i)
       exts[i] = m.exts[i];
-    elems = at::allocate(sz);
+    elems = at_elems::allocate(sz);
     for (size_t i{0}; i < sz; ++i)
       elems[i] = m.elems[i];
   } else
@@ -275,11 +274,10 @@ auto Nostd::Matrix<T, Alloc>::Matrix::operator=(const Matrix &m) -> Matrix & {
   ord = m.ord;
   sz = m.sz;
   if (ord) {
-    using at = std::allocator_traits<allocator_type>;
-    exts = at::allocate(ord);
+    exts = at_exts::allocate(ord);
     for (size_t i{0}; i < ord; ++i)
       exts[i] = m.exts[i];
-    elems = at::allocate(sz);
+    elems = at_elems::allocate(sz);
     for (size_t i{0}; i < sz; ++i)
       elems[i] = m.elems[i];
   } else
@@ -287,12 +285,11 @@ auto Nostd::Matrix<T, Alloc>::Matrix::operator=(const Matrix &m) -> Matrix & {
 }
 
 template <class T, class Alloc> Nostd::Matrix<T, Alloc>::Matrix::~Matrix() {
-  using at = std::allocator_traits<allocator_type>;
-  at::deallocate(exts, ord);
+  at_exts::deallocate(exts, ord);
   pointer const end{elems + sz};
   for (pointer p{elems}; p < end; ++p)
-    at::destroy(p);
-  at::deallocate(elems, sz);
+    at_elems::destroy(p);
+  at_elems::deallocate(elems, sz);
 }
 
 // iterators
@@ -475,5 +472,7 @@ auto Nostd::operator!=(const Nostd::Matrix<T, Alloc> &m,
     -> std::enable_if<Has_equal<T>(), bool> {
   return !(m == n);
 }
+
+#include "allocator.cpp"
 
 #endif
