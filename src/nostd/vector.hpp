@@ -46,7 +46,7 @@ public:
   }
   ~Vector() { delete[] v; }
 
-  // Adds a new elements at the end of the vector
+  // Adds a new element at the end of the vector
   void push_back(V ele) {
     if (sz == cap)
       resize(sz);
@@ -65,7 +65,7 @@ public:
 
   V &operator[](size_t i) { return at(i); }
 
-  // Removes from the vector either a single element
+  // Removes a signle item from the vector
   size_t erase(size_t i) {
     if (i >= sz)
       throw std::out_of_range("index out of bounds");
@@ -81,7 +81,7 @@ public:
     return i;
   }
 
-  // Resize the container so that it contains n elements
+  // Resize the container so that it contain n elements
   void resize(size_t n) {
     sz = n;
     if (n == 0)
