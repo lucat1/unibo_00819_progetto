@@ -1,5 +1,5 @@
-#ifndef BOX_HPP
-#define BOX_HPP
+#ifndef ENGINE_UI_BOX_HPP
+#define ENGINE_UI_BOX_HPP
 
 #include "../../nostd/pair.hpp"
 #include "../colorable.hpp"
@@ -58,4 +58,4 @@ public:
 } // namespace UI
 } // namespace Engine
 
-#endif // BOX_HPP
+#endif // ENGINE_UI_BOX_HPP

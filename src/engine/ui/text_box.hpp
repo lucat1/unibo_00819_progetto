@@ -1,5 +1,5 @@
-#ifndef TEXT_BOX_HPP
-#define TEXT_BOX_HPP
+#ifndef ENGINE_UI_TEXT_BOX_HPP
+#define ENGINE_UI_TEXT_BOX_HPP
 
 #include "../../nostd/wstring.hpp"
 #include "box.hpp"
@@ -33,4 +33,4 @@ public:
 } // namespace UI
 } // namespace Engine
 
-#endif // TEXT_BOX_HPP
+#endif // ENGINE_UI_TEXT_BOX_HPP
