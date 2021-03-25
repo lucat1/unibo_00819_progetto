@@ -93,7 +93,8 @@ template <class T, class Alloc>
 template <class U>
 auto Nostd::Matrix<T, Alloc>::Iterator<U>::operator-(Iterator p) const
     -> difference_type {
-  if (m != p.m || slc != p.slc || ord != p.ord)
+  if (m != p.m || slc.start() != p.slc.start() || slc.size() != p.slc.size() ||
+      slc.stride() != p.slc.stride() || ord != p.ord)
     throw std::invalid_argument("iterators working with different slices");
   return (static_cast<int>(pstn) - static_cast<int>(p.pstn)) / slc.stride();
 }
@@ -118,7 +119,9 @@ template <class U>
 bool Nostd::Matrix<T, Alloc>::Iterator<U>::operator==(
     const Iterator &p) const noexcept {
   // every field is compared, so this is actually a memberwise comparison
-  return m == p.m && slc == p.slc && pstn == p.pstn && ord == p.ord;
+  return m == p.m && slc.start() == p.slc.start() &&
+         slc.size() == p.slc.size() && slc.stride() == p.slc.stride() &&
+         pstn == p.pstn && ord == p.ord;
 }
 
 template <class T, class Alloc>
@@ -309,7 +312,7 @@ auto Nostd::Matrix<T, Alloc>::Matrix::end() const noexcept -> const_iterator {
 
 template <class T, class Alloc>
 auto Nostd::Matrix<T, Alloc>::Matrix::rbegin() noexcept -> reverse_iterator {
-  return std::make_reverse_iterator<iterator>(begin());
+  return std::reverse_iterator<iterator>(begin());
 }
 
 template <class T, class Alloc>
@@ -320,7 +323,7 @@ auto Nostd::Matrix<T, Alloc>::Matrix::rbegin() const noexcept
 
 template <class T, class Alloc>
 auto Nostd::Matrix<T, Alloc>::Matrix::rend() noexcept -> reverse_iterator {
-  return std::make_reverse_iterator<iterator>(end());
+  return std::reverse_iterator<iterator>(end());
 }
 
 template <class T, class Alloc>
