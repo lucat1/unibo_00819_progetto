@@ -8,6 +8,7 @@ public:
   A first;
   B second;
 
+  Pair() = default;
   Pair(A first, B second) {
     this->first = first;
     this->second = second;
