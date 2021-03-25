@@ -76,9 +76,8 @@ template <class T> constexpr bool Nostd::Boolean() {
 }
 
 template <class T> constexpr bool Nostd::Equality_comparable() {
-  return Has_equal<T>(); //&& Boolean<class Equal_result<T>::type>()
-                         // && Has_not_equal<T>() && Boolean<class
-                         // Not_equal_result<T>::type>();
+  return Has_equal<T>() && Boolean<typename Equal_result<T>::type>() &&
+         Has_not_equal<T>() && Boolean<typename Not_equal_result<T>::type>();
 }
 
 template <class T> constexpr bool Nostd::Movable() {

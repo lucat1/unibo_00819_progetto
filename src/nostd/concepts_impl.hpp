@@ -36,11 +36,12 @@ private:
   static SubstitutionFailure check(...);
 
 public:
-  using type = decltype(check(std::declval<T>()));
+  using type = decltype(check(std::declval<T>(), std::declval<T>()));
 };
 
 template <class T>
-struct Has_equal_trait : SubstitutionSucceeded<class Equal_result<T>::type> {};
+struct Has_equal_trait : SubstitutionSucceeded<typename Equal_result<T>::type> {
+};
 
 template <class T> struct Not_equal_result {
 private:
@@ -49,12 +50,12 @@ private:
   static SubstitutionFailure check(...);
 
 public:
-  using type = decltype(check(std::declval<T>()));
+  using type = decltype(check(std::declval<T>(), std::declval<T>()));
 };
 
 template <class T>
 struct Has_not_equal_trait
-    : SubstitutionSucceeded<class Equal_result<T>::type> {};
+    : SubstitutionSucceeded<typename Equal_result<T>::type> {};
 
 template <class T> struct Right_shift_result {
 private:
@@ -63,12 +64,12 @@ private:
   static SubstitutionFailure check(...);
 
 public:
-  using type = decltype(check(std::declval<T>()));
+  using type = decltype(check(std::declval<T>(), std::declval<T>()));
 };
 
 template <class T>
 struct Has_right_shift_trait
-    : SubstitutionSucceeded<class Right_shift_result<T>::type> {};
+    : SubstitutionSucceeded<typename Right_shift_result<T>::type> {};
 
 template <class T> struct Left_shift_result {
 private:
@@ -77,12 +78,12 @@ private:
   static SubstitutionFailure check(...);
 
 public:
-  using type = decltype(check(std::declval<T>()));
+  using type = decltype(check(std::declval<T>(), std::declval<T>()));
 };
 
 template <class T>
 struct Has_left_shift_trait
-    : SubstitutionSucceeded<class Left_shift_result<T>::type> {};
+    : SubstitutionSucceeded<typename Left_shift_result<T>::type> {};
 
 } // namespace Nostd
 
