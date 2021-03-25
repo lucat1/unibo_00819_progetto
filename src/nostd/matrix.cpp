@@ -14,6 +14,7 @@
 
 #include "matrix.hpp"
 
+#include <algorithm>
 #include <iterator>
 #include <memory>
 #include <stdexcept>
@@ -214,6 +215,8 @@ Nostd::Matrix<T, Alloc>::Matrix(std::initializer_list<size_t> extents,
   }
 }
 
+// move
+
 template <class T, class Alloc>
 Nostd::Matrix<T, Alloc>::Matrix(Matrix &&m)
     : all{m.all}, ord{m.ord}, exts{m.exts}, elems{m.elems}, sz{m.sz} {
@@ -244,6 +247,8 @@ auto Nostd::Matrix<T, Alloc>::Matrix::operator=(Matrix &&m) -> Matrix & {
   m.exts = m.elems = nullptr;
   return *this;
 }
+
+// copy
 
 template <class T, class Alloc>
 Nostd::Matrix<T, Alloc>::Matrix(const Matrix &m, const allocator_type &alloc)
@@ -290,9 +295,11 @@ template <class T, class Alloc> Nostd::Matrix<T, Alloc>::Matrix::~Matrix() {
   at::deallocate(elems, sz);
 }
 
+// iterators
+
 template <class T, class Alloc>
 auto Nostd::Matrix<T, Alloc>::Matrix::begin() noexcept -> iterator {
-  return iterator(this, std::slice(0, sz, 1), 0, ord);
+  return iterator(this, std::slice(0, exts[0], sz / exts[0]), 0, ord);
 }
 
 template <class T, class Alloc>
@@ -302,7 +309,7 @@ auto Nostd::Matrix<T, Alloc>::Matrix::begin() const noexcept -> const_iterator {
 
 template <class T, class Alloc>
 auto Nostd::Matrix<T, Alloc>::Matrix::end() noexcept -> iterator {
-  return iterator(this, std::slice(0, sz, 1), sz, ord);
+  return iterator(this, std::slice(0, exts[0], sz / exts[0]), exts[0], ord);
 }
 
 template <class T, class Alloc>
@@ -335,25 +342,30 @@ auto Nostd::Matrix<T, Alloc>::Matrix::rend() const noexcept
 template <class T, class Alloc>
 auto Nostd::Matrix<T, Alloc>::Matrix::cbegin() const noexcept
     -> const_iterator {
-  return const_iterator(this, std::slice(0, sz, 1), 0, ord);
+  return const_iterator(this, std::slice(0, exts[0], sz / exts[0]), 0, ord);
 }
 
 template <class T, class Alloc>
 auto Nostd::Matrix<T, Alloc>::Matrix::cend() const noexcept -> const_iterator {
-  return const_iterator(this, std::slice(0, sz, 1), sz, ord);
+  return const_iterator(this, std::slice(0, exts[0], sz / exts[0]), exts[0],
+                        ord);
 }
 
 template <class T, class Alloc>
 auto Nostd::Matrix<T, Alloc>::Matrix::crbegin() const noexcept
     -> const_reverse_iterator {
-  return const_reverse_iterator(this, std::slice(0, sz, 1), 0, ord);
+  return const_reverse_iterator(this, std::slice(0, exts[0], sz / exts[0]), 0,
+                                ord);
 }
 
 template <class T, class Alloc>
 auto Nostd::Matrix<T, Alloc>::Matrix::crend() const noexcept
     -> const_reverse_iterator {
-  return const_reverse_iterator(this, std::slice(0, sz, 1), sz, ord);
+  return const_reverse_iterator(this, std::slice(0, exts[0], sz / exts[0]),
+                                exts[0], ord);
 }
+
+// capacity
 
 template <class T, class Alloc>
 size_t Nostd::Matrix<T, Alloc>::Matrix::order() const noexcept {
@@ -381,6 +393,87 @@ template <class T, class Alloc>
 auto Nostd::Matrix<T, Alloc>::Matrix::get_allocator() const noexcept
     -> allocator_type {
   return all;
+}
+
+// elements access
+
+template <class T, class Alloc>
+auto Nostd::Matrix<T, Alloc>::Matrix::operator[](size_t n) -> iterator {
+  return begin() + n;
+}
+
+template <class T, class Alloc>
+auto Nostd::Matrix<T, Alloc>::Matrix::operator[](size_t n) const
+    -> const_iterator {
+  return cbegin() + n;
+}
+
+template <class T, class Alloc>
+auto Nostd::Matrix<T, Alloc>::Matrix::at(size_t n) -> iterator {
+  if (!ord)
+    throw std::invalid_argument("!ord");
+  if (n > exts[0])
+    throw std::out_of_range("n > exts[0]");
+  return (*this)[n];
+}
+
+template <class T, class Alloc>
+auto Nostd::Matrix<T, Alloc>::Matrix::at(size_t n) const -> const_iterator {
+  if (!ord)
+    throw std::invalid_argument("!ord");
+  if (n > exts[0])
+    throw std::out_of_range("n > exts[0]");
+  return (*this)[n];
+}
+
+template <class T, class Alloc>
+auto Nostd::Matrix<T, Alloc>::Matrix::data() noexcept -> value_type * {
+  return elems;
+}
+
+template <class T, class Alloc>
+auto Nostd::Matrix<T, Alloc>::Matrix::data() const noexcept
+    -> const value_type * {
+  return elems;
+}
+
+// modifiers
+
+template <class T, class Alloc>
+void Nostd::Matrix<T, Alloc>::Matrix::fill(const value_type &value) {
+  for (size_t i{0}; i < sz; ++i)
+    elems[i] = value;
+}
+
+template <class T, class Alloc>
+void Nostd::Matrix<T, Alloc>::Matrix::swap(Matrix &x) noexcept {
+  std::swap(all, x.all);
+  std::swap(ord, x.ord);
+  std::swap(exts, x.exts);
+  std::swap(sz, x.sz);
+  std::swap(elems, x.elems);
+}
+
+template <class T, class Alloc>
+auto Nostd::operator==(const Nostd::Matrix<T, Alloc> &m,
+                       const Nostd::Matrix<T, Alloc> &n)
+    -> std::enable_if<Has_equal<T>(), bool> {
+  if (m.ord != n.ord)
+    return false;
+  for (size_t i{0}; i < m.ord; ++i)
+    if (m.exts[i] != n.exts[i])
+      return false;
+  for (size_t i{0}; i < m.sz; ++i)
+    if (m.elems[i] != n.elems[i])
+      return false;
+  return true;
+}
+
+template <class T, class Alloc>
+auto Nostd::operator!=(const Nostd::Matrix<T, Alloc> &m,
+                       const Nostd::Matrix<T, Alloc> &n)
+    -> std::enable_if<Has_equal<T>(), bool> {
+  return !(m == n);
 }
 
 #endif
