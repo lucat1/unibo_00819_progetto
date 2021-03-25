@@ -145,16 +145,12 @@ public:
   const_iterator operator[](size_t) const;
   iterator at(size_type);
   const_iterator at(size_type) const;
-  reference front();
-  const_reference front() const;
-  reference back();
-  const_reference back() const;
   value_type *data() noexcept;
   const value_type *data() const noexcept;
 
   // modifiers
   void fill(const value_type &);
-  void swap(Matrix &x) noexcept;
+  void swap(Matrix &) noexcept; // this will invalid pre-swap iterators
 
 private:
   allocator_type all;
@@ -169,11 +165,6 @@ std::enable_if<Has_equal<T>(), bool> operator==(const Matrix<T, Alloc> &,
 template <class T, class Alloc>
 std::enable_if<Has_equal<T>(), bool> operator!=(const Matrix<T, Alloc> &,
                                                 const Matrix<T, Alloc> &);
-
-// Sends the string representation of a Matrix to a basic_ostream.
-template <class T, class C>
-std::enable_if<Streamable<T>, std::basic_ostream<C>> &
-operator<<(std::basic_ostream<C> &, const Matrix<T> &);
 
 } // namespace Nostd
 
