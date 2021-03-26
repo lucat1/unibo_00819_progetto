@@ -12,8 +12,7 @@ Engine::Menu::Main::Main(WINDOW *window)
 Engine::UI::Box *Engine::Menu::Main::generate() {
   UI::Box *root = new UI::Box(width, height);
   UI::append<UI::TextBox, const wchar_t *>(
-      root, 1, 1,
-      L"Press any key to change my cloror. q will quit the application");
+      root, L"Press any key to change my cloror. q will quit the application");
 
   return root;
 }
