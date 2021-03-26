@@ -55,8 +55,10 @@ public:
 
   Engine::Color foreground();
   Engine::Color background();
-  void prop(Box::Property prop, uint16_t val);
-  void prop(Box::Property prop, Color color);
+  // sets a size property
+  void prop(Box::Property key, uint16_t val);
+  // sets a color property
+  void prop(Box::Property key, Color color);
   // returns the n-th child of this node, or null if an invalid index is
   // provided
   Box *child(size_t n);

@@ -2,6 +2,7 @@
 #include "../../nostd/pair.hpp"
 #include <algorithm>
 #include <exception>
+#include <stdexcept>
 
 // the documentation on `man new_pair` was extremely useful in understanding
 // ncurses' color and color_pair system. I suggest a read to understand what and
@@ -69,53 +70,48 @@ Engine::UI::Box::~Box() {
   }
 }
 
-void Engine::UI::Box::update(std::map<enum Box::Props, uint16_t> props) {
-  std::map<enum Engine::UI::Box::Props, uint16_t>::iterator it;
-  for (it = props.begin(); it != props.end(); it++) {
-    switch (it->first) {
-    case DIRECTION:
-      dv = it->second > 0 ? true : false;
-      break;
-    case FLOAT:
-      fr = it->second > 0 ? true : false;
-      break;
+Engine::Color Engine::UI::Box::foreground() { return short_to_color(fg); }
+Engine::Color Engine::UI::Box::background() { return short_to_color(bg); }
 
-    case PADDING_LEFT:
-      pl = it->second;
-      break;
-    case PADDING_RIGHT:
-      pr = it->second;
-      break;
-    case PADDING_TOP:
-      pt = it->second;
-      break;
-    case PADDING_BOTTOM:
-      pb = it->second;
-      break;
+void Engine::UI::Box::prop(Box::Property key, uint16_t value) {
+  switch (key) {
+  case DIRECTION:
+    dv = value > 0 ? true : false;
+    break;
+  case FLOAT:
+    fr = value > 0 ? true : false;
+    break;
 
-    case FOREGROUND:
-      color = true;
-      fg = short_to_color(it->second);
-      break;
-    case BACKGROUND:
-      color = true;
-      bg = short_to_color(it->second);
-      break;
-    }
+  case PADDING_LEFT:
+    pl = value;
+    break;
+  case PADDING_RIGHT:
+    pr = value;
+    break;
+  case PADDING_TOP:
+    pt = value;
+    break;
+  case PADDING_BOTTOM:
+    pb = value;
+    break;
+  default:
+    throw std::invalid_argument(
+        "canont assign a color property with a uint16_t value");
   }
 }
 
-void Engine::UI::Box::add_child(Box *new_box) {
-  new_box->max_width = std::min(new_box->max_width, max_child_width);
-  new_box->max_height = std::min(new_box->max_height, max_child_height);
-  if (last_child != nullptr)
-    last_child->sibling = new_box;
-
-  new_box->sibling = nullptr;
-  new_box->parent = this;
-  last_child = new_box;
-  if (first_child == nullptr)
-    first_child = new_box;
+void Engine::UI::Box::prop(Box::Property key, Color color) {
+  switch (key) {
+  case FOREGROUND:
+    fg = color_to_short(color);
+    break;
+  case BACKGROUND:
+    bg = color_to_short(color);
+    break;
+  default:
+    throw std::invalid_argument(
+        "canont assign a size property with a Color value");
+  }
 }
 
 Engine::UI::Box *Engine::UI::Box::child(size_t n) {
@@ -162,5 +158,15 @@ Nostd::Pair<uint16_t, uint16_t> Engine::UI::Box::size() {
   return {w, h};
 }
 
-Engine::Color Engine::UI::Box::foreground() { return fg; }
-Engine::Color Engine::UI::Box::background() { return bg; }
+void Engine::UI::Box::add_child(Box *new_box) {
+  new_box->max_width = std::min(new_box->max_width, max_child_width);
+  new_box->max_height = std::min(new_box->max_height, max_child_height);
+  if (last_child != nullptr)
+    last_child->sibling = new_box;
+
+  new_box->sibling = nullptr;
+  new_box->parent = this;
+  last_child = new_box;
+  if (first_child == nullptr)
+    first_child = new_box;
+}
