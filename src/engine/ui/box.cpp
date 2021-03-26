@@ -14,7 +14,12 @@ Engine::UI::Box::Box(uint16_t max_width, uint16_t max_height,
                      std::map<enum Engine::UI::Box::Props, uint16_t> props) {
   this->max_width = max_width;
   this->max_height = max_height;
+  update(props);
+  this->max_child_width = max_width - pl - pr;
+  this->max_child_height = max_width - pt - pb;
+}
 
+void Engine::UI::Box::update(std::map<enum Box::Props, uint16_t> props) {
   std::map<enum Engine::UI::Box::Props, uint16_t>::iterator it;
   for (it = props.begin(); it != props.end(); it++) {
     switch (it->first) {
@@ -48,9 +53,6 @@ Engine::UI::Box::Box(uint16_t max_width, uint16_t max_height,
       break;
     }
   }
-
-  this->max_child_width = max_width - pl - pr;
-  this->max_child_height = max_width - pt - pb;
 }
 
 // internal usage only!
@@ -68,6 +70,14 @@ void Engine::UI::Box::add_child(Box *new_box) {
   last_child = new_box;
   if (first_child == nullptr)
     first_child = new_box;
+}
+
+Engine::UI::Box *Engine::UI::Box::child(size_t n) {
+  Box *it = first_child;
+  while (it != nullptr && n--) {
+    it = it->sibling;
+  }
+  return it;
 }
 
 // Engine::UI::Box is merely a container, therefore we are only interested in
@@ -123,25 +133,18 @@ Pair<uint16_t, uint16_t> Engine::UI::Box::size() {
 
 Engine::Color Engine::UI::Box::foreground() { return fg; }
 Engine::Color Engine::UI::Box::background() { return bg; }
-// initializes or returns a memoized value for a ncurses color pair matching the
-// foreground and background values of this component
+// returns a value for the ncurses color pair matching the foreground and
+// background values of this component
 int Engine::UI::Box::color_pair() {
   if (!color)
     return 0;
 
-  if (prev_color_pair != -1)
-    return prev_color_pair;
-
   if (fg == Colorable::foreground() && bg == Colorable::foreground())
-    prev_color_pair = 0;
-  else if (bg == Colorable::background())
-    // if the background is set to transparent we don't need to create a pair
-    // and we can just use the color for the foreground
-    prev_color_pair = color_to_short(fg);
+    return 0;
   else {
-    init_pair(ncurses_pair_index++, color_to_short(fg), color_to_short(bg));
-    prev_color_pair = COLOR_PAIR(ncurses_pair_index - 1);
+    init_pair(
+        ncurses_pair_index++, color_to_short(fg),
+        color_to_short(bg == Colorable::background() ? Color::black : bg));
+    return COLOR_PAIR(ncurses_pair_index - 1);
   }
-
-  return prev_color_pair;
 }

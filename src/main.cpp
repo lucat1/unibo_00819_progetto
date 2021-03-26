@@ -2,6 +2,7 @@
 #include "engine/screen.hpp"
 #include <curses.h>
 #include <iostream>
+#include <unistd.h>
 using namespace std;
 using namespace Engine;
 
@@ -28,6 +29,7 @@ int main() {
       handle(screen, screen->reposition());
       break;
     };
+    screen->send_event(Drawable::Event::redraw);
   }
 
   delete screen;
