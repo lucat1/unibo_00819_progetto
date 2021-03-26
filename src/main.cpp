@@ -4,17 +4,12 @@
 #include <iostream>
 using namespace std;
 using namespace Engine;
-using namespace Engine::UI;
-
-// TODO: Handle keyboard, resize and other events
-// discuss implementation details and draw a line between
-// the engine and the game logic
 
 void handle(Screen *screen, bool can_display) {
   if (can_display)
     return;
 
-  screen->close();
+  delete screen;
   cout << "Error while opening screen" << endl;
   exit(1);
 }
