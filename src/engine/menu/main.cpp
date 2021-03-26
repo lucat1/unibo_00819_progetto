@@ -3,9 +3,6 @@
 #include "../ui/append.hpp"
 #include "../ui/text_box.hpp"
 
-#include <iostream>
-using namespace std;
-
 Engine::Menu::Main::Main(WINDOW *window)
     : Drawable(window, Screen::SCREEN_COLS, Screen ::SCREEN_LINES) {
   this->drawable_kind = Kind::menu;

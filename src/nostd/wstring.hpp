@@ -2,7 +2,6 @@
 #define NOSTD_WSTRING_HPP
 
 #include "vector.hpp"
-#include <iostream>
 #include <stdexcept>
 #include <wchar.h>
 
