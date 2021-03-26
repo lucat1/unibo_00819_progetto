@@ -14,8 +14,6 @@ namespace UI {
 // Box is a UI primitive extended by all other UI elements
 class Box : public Colorable {
 protected:
-  // child list values
-  Box *first_child = nullptr, *last_child = nullptr;
   // padding(left|right|top|bottom)
   uint16_t pl = 0, pr = 0, pt = 0, pb = 0;
   // direction vertical, float right, should we paint custom colors
@@ -47,8 +45,11 @@ public:
     BACKGROUND,
   };
 
+  // size values
   uint16_t max_width, max_height, max_child_width, max_child_height;
-  Box *sibling = nullptr, *parent = nullptr;
+  // child-parent-sibling relation values;
+  Box *first_child = nullptr, *last_child = nullptr, *sibling = nullptr,
+      *parent = nullptr;
 
   Box(uint16_t max_width, uint16_t max_height);
   ~Box();

@@ -59,56 +59,60 @@ int main() {
 
   Box *box1 = new Box(10000, 10000);
   it("reports the corret size when empty", {
-    Pair<uint16_t, uint16_t> size = box1->size();
+    auto size = box1->size();
     assert(size.first == 0);
     assert(size.second == 0);
   });
 
-  TextBox *tb1 =
-      append<TextBox, const wchar_t *>(box1, 1, 1, {}, L"this is a test text");
+  TextBox *tb1 = append<TextBox, const wchar_t *>(box1, L"this is a test text");
   it("reports the corret size when it has children", {
     Pair<uint16_t, uint16_t> size = box1->size();
     assert(size.first > 0);
     assert(size.second == 1);
 
-    Pair<uint16_t, uint16_t> tsize = tb1->size();
+    auto tsize = tb1->size();
     assert(tsize.first == size.first);
     assert(tsize.first == size.first);
   });
 
   it("properly adds left padding", {
-    Box *b = new Box(10, 10, {{Box::Props::PADDING_LEFT, 2}});
-    Pair<uint16_t, uint16_t> size = b->size();
+    Box *b = new Box(10, 10);
+    b->prop(Box::Property::PADDING_LEFT, 2);
+    auto size = b->size();
     assert(size.first == 2);
     assert(size.second == 0);
   });
 
   it("properly adds right padding", {
-    Box *b = new Box(10, 10, {{Box::Props::PADDING_RIGHT, 2}});
-    Pair<uint16_t, uint16_t> size = b->size();
+    Box *b = new Box(10, 10);
+    b->prop(Box::Property::PADDING_RIGHT, 2);
+    auto size = b->size();
     assert(size.first == 2);
     assert(size.second == 0);
   });
 
   it("properly adds top padding", {
-    Box *b = new Box(10, 10, {{Box::Props::PADDING_TOP, 2}});
-    Pair<uint16_t, uint16_t> size = b->size();
+    Box *b = new Box(10, 10);
+    b->prop(Box::Property::PADDING_TOP, 2);
+    auto size = b->size();
     assert(size.first == 0);
     assert(size.second == 2);
   });
 
   it("properly adds bottom padding", {
-    Box *b = new Box(10, 10, {{Box::Props::PADDING_BOTTOM, 2}});
-    Pair<uint16_t, uint16_t> size = b->size();
+    Box *b = new Box(10, 10);
+    b->prop(Box::Property::PADDING_BOTTOM, 2);
+    auto size = b->size();
     assert(size.first == 0);
     assert(size.second == 2);
   });
 
   Box *vbox = new Box(50, 4);
-  TextBox *tb = append<TextBox, const wchar_t *>(vbox, 1, 1, {},
-                                                 L"this is a test string");
-  append<Box>(vbox, 1, 1,
-              {{Box::Props::PADDING_LEFT, 2}, {Box::Props::PADDING_RIGHT, 2}});
+  TextBox *tb =
+      append<TextBox, const wchar_t *>(vbox, L"this is a test string");
+  Box *pbox = append<Box>(vbox);
+  pbox->prop(Box::Property::PADDING_LEFT, 2);
+  pbox->prop(Box::Property::PADDING_RIGHT, 2);
   it("places elements vertically with appropriate dimentions", {
     Pair<uint16_t, uint16_t> box_size = vbox->size();
     Pair<uint16_t, uint16_t> tb_size = tb->size();
