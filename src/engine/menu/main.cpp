@@ -15,7 +15,7 @@ Engine::Menu::Main::Main(WINDOW *window)
 Engine::UI::Box *Engine::Menu::Main::generate() {
   UI::Box *root = new UI::Box(width, height);
   UI::append<UI::TextBox, const wchar_t *>(
-      root, 1, 1, {},
+      root, 1, 1,
       L"Press any key to change my cloror. q will quit the application");
 
   return root;
@@ -23,8 +23,8 @@ Engine::UI::Box *Engine::Menu::Main::generate() {
 
 void Engine::Menu::Main::redraw() {
   UI::Box *tb = root->child(0);
-  short c = rand() % 256;
-  tb->update({{UI::Box::Props::FOREGROUND, c}});
+  Color c = short_to_color(rand() % 256);
+  tb->prop(UI::Box::Property::FOREGROUND, c);
   root->show(window, 1, 1);
   wrefresh(window);
 }
