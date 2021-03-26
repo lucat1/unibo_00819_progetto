@@ -152,24 +152,21 @@ public:
   void fill(const value_type &);
   void swap(Matrix &) noexcept; // this will invalid pre-swap iterators
 
+  // Two matrixes are said to be equal when they have same extents and elements.
+  std::enable_if<Has_equal<T>(), bool> operator==(const Matrix<T, Alloc> &);
+
+  std::enable_if<Has_equal<T>(), bool> operator!=(const Matrix<T, Alloc> &);
+
 private:
   using at_elems = std::allocator_traits<allocator_type>;
   using at_exts =
       std::allocator_traits<typename allocator_type::template other<size_t>>;
 
   allocator_type all_elems;
-  class at_exts::allocator_type all_exts;
+  typename at_exts::allocator_type all_exts;
   size_t ord, *exts, sz;
   pointer elems;
 };
-
-// Two matrixes are said to be equal when they have same extents and elements.
-template <class T, class Alloc>
-std::enable_if<Has_equal<T>(), bool> operator==(const Matrix<T, Alloc> &,
-                                                const Matrix<T, Alloc> &);
-template <class T, class Alloc>
-std::enable_if<Has_equal<T>(), bool> operator!=(const Matrix<T, Alloc> &,
-                                                const Matrix<T, Alloc> &);
 
 } // namespace Nostd
 
