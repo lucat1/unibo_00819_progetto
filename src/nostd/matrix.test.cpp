@@ -17,8 +17,8 @@ using namespace Nostd;
 using std::cout;
 
 int main() {
-  // Matrix<int> m1({3, 4}, 1), m2(m1);
-  // assert(m1 == m2);
+  Matrix<int> m1({3, 4}, 1), m2(m1);
+  assert(m1 == m2);
   cout << "\t✓ constructors\n";
 }
 
