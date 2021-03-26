@@ -263,8 +263,10 @@ Nostd::Matrix<T, Alloc>::Matrix(const Matrix &m, const allocator_type &alloc)
     elems = at_elems::allocate(all_elems, sz);
     for (size_t i{0}; i < sz; ++i)
       elems[i] = m.elems[i];
-  } else
-    exts = elems = nullptr;
+  } else {
+    exts = nullptr;
+    elems = nullptr;
+  }
 }
 
 template <class T, class Alloc>
@@ -284,8 +286,10 @@ auto Nostd::Matrix<T, Alloc>::Matrix::operator=(const Matrix &m) -> Matrix & {
     elems = at_elems::allocate(all_elems, sz);
     for (size_t i{0}; i < sz; ++i)
       elems[i] = m.elems[i];
-  } else
-    exts = elems = nullptr;
+  } else {
+    exts = nullptr;
+    elems = nullptr;
+  }
 }
 
 template <class T, class Alloc> Nostd::Matrix<T, Alloc>::Matrix::~Matrix() {
@@ -457,25 +461,23 @@ void Nostd::Matrix<T, Alloc>::Matrix::swap(Matrix &x) noexcept {
 }
 
 template <class T, class Alloc>
-auto Nostd::operator==(const Nostd::Matrix<T, Alloc> &m,
-                       const Nostd::Matrix<T, Alloc> &n)
+auto Nostd::Matrix<T, Alloc>::operator==(const Nostd::Matrix<T, Alloc> &m)
     -> std::enable_if<Has_equal<T>(), bool> {
-  if (m.ord != n.ord)
+  if (ord != m.ord)
     return false;
   for (size_t i{0}; i < m.ord; ++i)
-    if (m.exts[i] != n.exts[i])
+    if (exts[i] != m.exts[i])
       return false;
-  for (size_t i{0}; i < m.sz; ++i)
-    if (m.elems[i] != n.elems[i])
+  for (size_t i{0}; i < sz; ++i)
+    if (elems[i] != m.elems[i])
       return false;
   return true;
 }
 
 template <class T, class Alloc>
-auto Nostd::operator!=(const Nostd::Matrix<T, Alloc> &m,
-                       const Nostd::Matrix<T, Alloc> &n)
+auto Nostd::Matrix<T, Alloc>::operator!=(const Nostd::Matrix<T, Alloc> &m)
     -> std::enable_if<Has_equal<T>(), bool> {
-  return !(m == n);
+  return !(*this == m);
 }
 
 #include "allocator.cpp"
