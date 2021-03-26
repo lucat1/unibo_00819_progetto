@@ -1,4 +1,5 @@
 #include "wstring.hpp"
+#include <iostream>
 
 Nostd::WString::WString() : Vector(1, L'\0') {}
 
