@@ -1,9 +1,6 @@
 #include "box.hpp"
 #include "../../nostd/pair.hpp"
 #include <algorithm>
-#include <map>
-#include <ncurses.h>
-#include <unistd.h>
 using namespace Nostd;
 
 size_t Engine::UI::Box::ncurses_pair_index = 1;
