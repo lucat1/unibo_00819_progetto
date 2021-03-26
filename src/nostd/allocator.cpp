@@ -50,7 +50,7 @@ auto Nostd::Allocator<T>::max_size() const noexcept -> size_type {
 template <class T>
 template <class U, class... Args>
 void Nostd::Allocator<T>::construct(U *p, Args &&...args) {
-  static_assert(std::is_constructible<U>(args...),
+  static_assert(std::is_constructible<U, Args...>::value,
                 "unconstructible type (with the given set of arguments)");
   ::new (p) U{args...};
 }
