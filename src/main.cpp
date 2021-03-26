@@ -1,6 +1,6 @@
+#include "engine/screen.hpp"
 #include "engine/ui/append.hpp"
 #include "engine/ui/list.hpp"
-#include "engine/ui/screen.hpp"
 #include "engine/ui/text_box.hpp"
 #include <curses.h>
 #include <iostream>
@@ -23,46 +23,17 @@ void handle(Screen *screen, bool can_display) {
 
 int main() {
   Screen *screen = new Screen();
-  Box *pbox = append<Box>(screen, 1, 1,
-                          {{Box::PADDING_LEFT, 4},
-                           {Box::PADDING_RIGHT, 4},
-                           {Box::PADDING_TOP, 2},
-                           {Box::PADDING_BOTTOM, 2}});
-  List *list = append<List, const wchar_t>(pbox, 1, 1);
-  for (int i = 0; i < 10; i++) {
-    Box *line = append<Box>(list, 1, 1, {{Box::Props::DIRECTION, 1}});
-    wstring str = L"Text on the left " + to_wstring(i);
-    append<TextBox, const wchar_t *>(line, .5, 1, {}, str.c_str());
-    append<TextBox, const wchar_t *>(
-        line, .5, 1,
-        {{Box::Props::FLOAT, 1},
-         {Box::Props::BACKGROUND, color_to_short(Color::green)}},
-        L"Right Text");
-  }
-  append<TextBox, const wchar_t *>(
-      list, 1, 1,
-      {{Box::Props::DIRECTION, 1},
-       {Box::Props::BACKGROUND, color_to_short(Color::red3)},
-       {Box::Props::FOREGROUND, color_to_short(Color::black)}},
-      L"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do "
-      L"eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad "
-      L"minim veniam, quis nostrud exercitation ullamco laboris nisi ut "
-      L"aliquip ex ea commodo consequat. Duis aute irure dolor in "
-      L"reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla "
-      L"pariatur. Excepteur sint occaecat cupidatat non proident, sunt in "
-      L"culpa qui officia deserunt mollit anim id est laborum.");
-
   handle(screen, screen->open());
 
   int key;
   while ((key = getch()) != 'q') {
     switch (key) {
     case KEY_RESIZE:
-      screen->update();
+      screen->reposition();
       break;
     };
   }
 
-  screen->close();
+  delete screen;
   return 0;
 }

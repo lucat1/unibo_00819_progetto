@@ -6,8 +6,8 @@ Engine::Color Engine::short_to_color(short c) noexcept {
   return static_cast<Engine::Color>(c);
 }
 
-auto Engine::Colorable::foreground() const -> Color { return Color::white; }
+Engine::Color Engine::Colorable::foreground() const { return Color::white; }
 
-auto Engine::Colorable::background() const -> Color {
+Engine::Color Engine::Colorable::background() const {
   return Color::transparent;
 }
