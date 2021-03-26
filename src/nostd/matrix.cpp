@@ -15,6 +15,7 @@
 #include "matrix.hpp"
 
 #include "allocator.hpp"
+#include "concepts.hpp"
 #include <algorithm>
 #include <iterator>
 #include <memory>
@@ -254,7 +255,7 @@ auto Nostd::Matrix<T, Alloc>::Matrix::operator=(Matrix &&m) -> Matrix & {
 
 template <class T, class Alloc>
 Nostd::Matrix<T, Alloc>::Matrix(const Matrix &m, const allocator_type &alloc)
-    : all_elems{alloc}, all_exts{}, ord{m.ord}, sz{m.sz}, exts{nullptr},
+    : all_elems{alloc}, all_exts{}, ord{m.ord}, exts{nullptr}, sz{m.sz},
       elems{nullptr} {
   if (ord) {
     exts = at_exts::allocate(all_exts, ord);
@@ -461,8 +462,8 @@ void Nostd::Matrix<T, Alloc>::Matrix::swap(Matrix &x) noexcept {
 }
 
 template <class T, class Alloc>
-auto Nostd::Matrix<T, Alloc>::operator==(const Nostd::Matrix<T, Alloc> &m)
-    -> std::enable_if<Has_equal<T>(), bool> {
+auto Nostd::Matrix<T, Alloc>::operator==(const Nostd::Matrix<T, Alloc> &m) ->
+    typename std::enable_if<Has_equal<T>(), bool>::type {
   if (ord != m.ord)
     return false;
   for (size_t i{0}; i < m.ord; ++i)
@@ -475,8 +476,8 @@ auto Nostd::Matrix<T, Alloc>::operator==(const Nostd::Matrix<T, Alloc> &m)
 }
 
 template <class T, class Alloc>
-auto Nostd::Matrix<T, Alloc>::operator!=(const Nostd::Matrix<T, Alloc> &m)
-    -> std::enable_if<Has_equal<T>(), bool> {
+auto Nostd::Matrix<T, Alloc>::operator!=(const Nostd::Matrix<T, Alloc> &m) ->
+    typename std::enable_if<Has_equal<T>(), bool>::type {
   return !(*this == m);
 }
 

@@ -153,9 +153,11 @@ public:
   void swap(Matrix &) noexcept; // this will invalid pre-swap iterators
 
   // Two matrixes are said to be equal when they have same extents and elements.
-  std::enable_if<Has_equal<T>(), bool> operator==(const Matrix<T, Alloc> &);
+  typename std::enable_if<Has_equal<T>(), bool>::type
+  operator==(const Matrix<T, Alloc> &);
 
-  std::enable_if<Has_equal<T>(), bool> operator!=(const Matrix<T, Alloc> &);
+  typename std::enable_if<Has_equal<T>(), bool>::type
+  operator!=(const Matrix<T, Alloc> &);
 
 private:
   using at_elems = std::allocator_traits<allocator_type>;
