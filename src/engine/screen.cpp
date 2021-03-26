@@ -32,6 +32,8 @@ void Engine::Screen::send_event(Drawable::Event e) {
     content->handle_event(e);
 }
 
+WINDOW *Engine::Screen::get_container() { return container; }
+
 bool Engine::Screen::can_fit() {
   getmaxyx(stdscreen, terminal_lines, terminal_cols);
 
@@ -68,8 +70,7 @@ bool Engine::Screen::reposition() {
 
   mvwin(container, y, x);
   box(container, ACS_VLINE, ACS_HLINE);
-  // TODO: replace
-  /* show(container, 1, 1); */
+  send_event(Engine::Drawable::Event::redraw);
   wrefresh(container);
 
   return true;

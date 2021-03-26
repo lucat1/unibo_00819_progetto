@@ -10,10 +10,6 @@ namespace Engine {
 // drawable is capable of handling events sent to it which update the state of
 // its content and trigger a repaint on the ncurses' screen
 class Drawable {
-protected:
-  // the window the drawable can draw into
-  WINDOW *window;
-
 public:
   // two kinds of objects we can draw into the main container
   // - menu: a series of Engine::UI elements used to form a TUI menu to change
@@ -33,10 +29,17 @@ public:
     move_right,
   };
 
+protected:
+  // the ncurses screen to draw upon
+  WINDOW *window;
+  uint16_t width, height;
+  Kind drawable_kind = Kind::none;
+
+public:
   virtual Kind kind() const;
   virtual void handle_event(Event e);
 
-  Drawable(WINDOW *window);
+  Drawable(WINDOW *window, uint16_t width, uint16_t height);
   virtual ~Drawable() = default;
 };
 

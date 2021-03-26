@@ -46,6 +46,9 @@ public:
   // react accordingly
   void send_event(Drawable::Event e);
 
+  // returns the container ncurses window
+  WINDOW *get_container();
+
   // opens the terminal window and sets up the behaviour defined in the preable
   // of this class
   bool open();
