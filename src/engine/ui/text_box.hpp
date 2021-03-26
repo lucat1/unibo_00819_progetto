@@ -3,7 +3,6 @@
 
 #include "../../nostd/wstring.hpp"
 #include "box.hpp"
-#include <ncurses.h>
 
 namespace Engine {
 namespace UI {
@@ -19,10 +18,8 @@ public:
 
   static constexpr const wchar_t *append_default_value = L"";
   TextBox(uint16_t max_width, uint16_t max_height,
-          std::map<enum Box::Props, uint16_t> props = {},
           Nostd::WString &&content = L"");
   TextBox(uint16_t max_width, uint16_t max_height,
-          std::map<enum Box::Props, uint16_t> props = {},
           const wchar_t *content = L"");
 
   void split_content();

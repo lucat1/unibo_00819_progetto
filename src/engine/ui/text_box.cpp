@@ -1,18 +1,14 @@
 #include "text_box.hpp"
 
-Engine::UI::TextBox::TextBox(
-    uint16_t max_width, uint16_t max_height,
-    std::map<enum Engine::UI::Box::Props, uint16_t> props,
-    const wchar_t *content)
-    : Box(max_width, max_height, props) {
+Engine::UI::TextBox::TextBox(uint16_t max_width, uint16_t max_height,
+                             const wchar_t *content)
+    : Box(max_width, max_height) {
   this->content = content;
   split_content();
 }
-Engine::UI::TextBox::TextBox(
-    uint16_t max_width, uint16_t max_height,
-    std::map<enum Engine::UI::Box::Props, uint16_t> props,
-    Nostd::WString &&content)
-    : Box(max_width, max_height, props) {
+Engine::UI::TextBox::TextBox(uint16_t max_width, uint16_t max_height,
+                             Nostd::WString &&content)
+    : Box(max_width, max_height) {
   this->content = content;
   split_content();
 }
@@ -46,8 +42,7 @@ void Engine::UI::TextBox::split_content() {
 }
 
 void Engine::UI::TextBox::show(WINDOW *window, uint16_t x, uint16_t y) {
-  if (color)
-    wattron(window, color_pair());
+  start_color(window);
 
   for (size_t i = 0; i < lines.size(); i++) {
     Nostd::WString line = lines[i];
@@ -55,8 +50,7 @@ void Engine::UI::TextBox::show(WINDOW *window, uint16_t x, uint16_t y) {
                line.c_str());
   }
 
-  if (color)
-    wattroff(window, color_pair());
+  end_color(window);
 }
 
 Nostd::Pair<uint16_t, uint16_t> Engine::UI::TextBox::size() {

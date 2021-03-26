@@ -16,6 +16,7 @@ int Engine::UI::Box::color_pair() {
     return -1;
 
   int pair;
+  short bg = this->bg < 0 ? 0 : this->bg;
   // if we already have allocated a pair then we can just return it
   if ((pair = find_pair(fg, bg)) != -1)
     return pair;
@@ -23,13 +24,13 @@ int Engine::UI::Box::color_pair() {
   // oterwhise we allocate a new pair and add it to the vector of pairs for this
   // Box so later on when the box will be delted we'll also be albe to free any
   // excess color pairs
-  pair = alloc_pair(fg, bg == -1 ? color_to_short(Color::black) : bg);
+  pair = alloc_pair(fg, bg);
   if (pair == -1)
     // we got an allocation error, throw an exception
     throw std::bad_alloc();
 
   used_color_pairs.push_back(pair);
-  return pair;
+  return COLOR_PAIR(pair);
 }
 
 void Engine::UI::Box::start_color(WINDOW *window) {
@@ -123,6 +124,7 @@ Engine::UI::Box *Engine::UI::Box::child(size_t n) {
 }
 
 void Engine::UI::Box::show(WINDOW *window, uint16_t x, uint16_t y) {
+  /* start_color(window); */
   // values are given a defualt value supposing we are positioning items
   // horizontally (dv = 0) on the left (fr = 0)
   uint16_t rel_x = pl, rel_y = pt;
@@ -142,6 +144,7 @@ void Engine::UI::Box::show(WINDOW *window, uint16_t x, uint16_t y) {
       rel_y += child_size.second;
     it = it->sibling;
   }
+  /* end_color(window); */
 }
 
 Nostd::Pair<uint16_t, uint16_t> Engine::UI::Box::size() {
