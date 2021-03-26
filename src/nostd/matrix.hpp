@@ -157,9 +157,10 @@ private:
   using at_exts =
       std::allocator_traits<typename allocator_type::template other<size_t>>;
 
-  allocator_type all;
+  allocator_type all_elems;
+  class at_exts::allocator_type all_exts;
   size_t ord, *exts, sz;
-  pointer *elems;
+  pointer elems;
 };
 
 // Two matrixes are said to be equal when they have same extents and elements.

@@ -45,7 +45,7 @@ public:
   Allocator() noexcept = default;
   Allocator(const Allocator &) noexcept = default;
   template <class U> Allocator(const Allocator<U> &) noexcept;
-  ~Allocator() noexcept;
+  ~Allocator() = default;
 
   pointer address(reference) const noexcept;
   const_pointer address(const_reference) const noexcept;
