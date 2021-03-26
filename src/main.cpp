@@ -1,7 +1,5 @@
+#include "engine/menu/main.hpp"
 #include "engine/screen.hpp"
-#include "engine/ui/append.hpp"
-#include "engine/ui/list.hpp"
-#include "engine/ui/text_box.hpp"
 #include <curses.h>
 #include <iostream>
 using namespace std;
@@ -25,11 +23,14 @@ int main() {
   Screen *screen = new Screen();
   handle(screen, screen->open());
 
+  Menu::Main *main_menu = new Menu::Main(screen->get_container());
+  screen->set_content(main_menu);
+
   int key;
   while ((key = getch()) != 'q') {
     switch (key) {
     case KEY_RESIZE:
-      screen->reposition();
+      handle(screen, screen->reposition());
       break;
     };
   }
