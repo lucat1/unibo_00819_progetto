@@ -193,7 +193,7 @@ public:
 
   ~TreeMap() { delete tree; }
 
-  void add(K key, V value) override { this->tree->insert(key, value); }
+  void put(K key, V value) override { this->tree->insert(key, value); }
 
   void remove(K key) override { this->tree->remove(key); }
 

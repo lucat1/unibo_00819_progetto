@@ -25,7 +25,7 @@ public:
   using Pairkv = Nostd::Pair<K, V>;
 
   // Add new key and value to the map
-  void add(K key, V value) override {
+  void put(K key, V value) override {
     for (size_t i = 0; i < data.size(); i++) {
       Pairkv x = data[i];
       if (x.first == key) {
