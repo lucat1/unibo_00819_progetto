@@ -104,14 +104,11 @@ public:
   }
 
   // returns whether the vector is empty
-  bool empty() { return sz == 0; };
+  bool empty() { return sz == 0; }
   // returns the size of the array (length)
   size_t size() { return sz; }
   // returns the capactiy of the array (allocated size)
   size_t capacity() { return cap; }
-
-  // returns wheter the vector is empty or not
-  bool empty() { return sz == 0; }
 };
 
 } // namespace Nostd

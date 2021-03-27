@@ -8,14 +8,21 @@
 #include <exception>
 
 namespace Nostd {
+/*
+ *  UnorderedMap
+ *
+ *  Built using a Nostd::Vector<Nostd::Pair<K,V>>.
+ *  Please refer to Nostd::Map for method's documentation.
+ *
+ *  <b> It does not allow duplicate </b>
+ * */
+
 template <typename K, typename V> class UnorderedMap : public Map<K, V> {
 private:
   Nostd::Vector<Nostd::Pair<K, V>> data;
 
 public:
   using Pairkv = Nostd::Pair<K, V>;
-
-  UnorderedMap() { data = Nostd::Vector<Nostd::Pair<K, V>>(); }
 
   // Add new key and value to the map
   void add(K key, V value) override {

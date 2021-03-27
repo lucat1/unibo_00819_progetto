@@ -1,7 +1,7 @@
 #ifndef ENGINE_UI_BOX_HPP
 #define ENGINE_UI_BOX_HPP
 
-#include "../../nostd/pair/pair.hpp"
+#include "../../nostd/pair.hpp"
 #include <map>
 #include <ncurses.h>
 #include <stdint.h>

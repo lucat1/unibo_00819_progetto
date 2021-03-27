@@ -14,8 +14,6 @@ public:
     this->second = second;
   }
 
-  Pair() {}
-
   bool operator==(Pair<A, B> cmp) {
     return cmp.first == this->first && cmp.second == this->second;
   }

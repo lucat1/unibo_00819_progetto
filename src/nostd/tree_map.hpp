@@ -6,13 +6,18 @@
 #include "vector.hpp"
 #include <cassert>
 #include <cstddef>
+#include <cstdio>
 #include <exception>
-
-#include <iostream>
-using namespace std;
 
 namespace Nostd {
 
+/**
+ *
+ * TreeMap
+ *
+ * Built using an BST. Please refere to Nostd::Map for method's documentation
+ *
+ * */
 template <class K, class V> class TreeMap : public virtual Map<K, V> {
 private:
   class Tree {
@@ -21,12 +26,12 @@ private:
     public:
       K key;
       V value;
-      TreeNode *father;
-      TreeNode *left;
-      TreeNode *right;
+      TreeNode *parent = nullptr;
+      TreeNode *left = nullptr;
+      TreeNode *right = nullptr;
 
-      TreeNode(K key, V value, TreeNode *f) {
-        this->father = f;
+      explicit TreeNode(K key, V value, TreeNode *f) {
+        this->parent = f;
         this->key = key;
         this->value = value;
       }
@@ -48,30 +53,40 @@ private:
       return vec;
     }
 
+    TreeNode *insert(TreeNode *node, K key, V value) {
+      if (node == nullptr) {
+        return new TreeNode(key, value, nullptr);
+      }
+      if (key <= node->key) {
+        node->left = insert(node->left, key, value);
+        node->left->parent = node;
+      } else {
+        node->right = insert(node->right, key, value);
+        node->right->parent = node;
+      }
+      return node;
+    }
+
+    void remove_node(TreeNode *ptr) {
+      if (ptr->parent == nullptr) // root
+        root = nullptr;
+      else {
+        if (ptr->parent->left != nullptr && ptr->parent->left->key == ptr->key)
+          ptr->parent->left = nullptr;
+        else
+          ptr->parent->right = nullptr;
+        delete ptr;
+      }
+    }
+
   public:
     Tree() {}
 
     ~Tree() { delete root; }
 
-    TreeNode *root;
+    TreeNode *root = nullptr;
 
-    void add(K key, V value) {
-      TreeNode *p = nullptr;
-      TreeNode *t = this->root;
-      while (t != nullptr) {
-        p = t;
-        if (key <= t->key)
-          t = t->left;
-        else
-          t = t->right;
-      }
-      if (p == nullptr)
-        this->root = new TreeNode(key, value, nullptr);
-      else if (key <= p->key)
-        p->left = new TreeNode(key, value, p);
-      else
-        p->right = new TreeNode(key, value, p);
-    }
+    void insert(K key, V value) { this->root = insert(root, key, value); }
 
     // Remove an element from the tree
     void remove(K key) {
@@ -88,32 +103,31 @@ private:
         return;
       // 1. Leaf
       if (ptr->left == nullptr && ptr->right == nullptr) {
-        cout << "qua" << endl;
-        delete ptr;
-        ptr = nullptr;
+        remove_node(ptr);
       }
       // 2. Right is null
       else if (ptr->right == nullptr) {
-        if (ptr->father->left == ptr)
-          ptr->father->left = ptr->left;
+        if (ptr->parent == nullptr)
+          ptr = ptr->left;
+        else if (ptr->parent->left == ptr)
+          ptr->parent->left = ptr->left;
         else
-          ptr->father->right = ptr->left;
-        delete ptr;
-        ptr = nullptr;
+          ptr->parent->right = ptr->left;
+        remove_node(ptr);
       }
       // 3. Left is null
       else if (ptr->left == nullptr) {
-        if (ptr->father->right == ptr)
-          ptr->father->right = ptr->right;
+        if (ptr->parent == nullptr)
+          ptr = ptr->right;
+        else if (ptr->parent->right == ptr)
+          ptr->parent->right = ptr->right;
         else
-          ptr->father->left = ptr->right;
-        delete ptr;
-        ptr = nullptr;
+          ptr->parent->left = ptr->right;
+        remove_node(ptr);
       }
       // 4 nobody is null
       else if (ptr->left != nullptr && ptr->right != nullptr) {
         TreeNode *tmp = get_predecessor(key);
-        assert(tmp != nullptr);
         remove(tmp->key);
         ptr->key = tmp->key;
         ptr->value = tmp->value;
@@ -179,7 +193,7 @@ public:
 
   ~TreeMap() { delete tree; }
 
-  void add(K key, V value) override { this->tree->add(key, value); }
+  void add(K key, V value) override { this->tree->insert(key, value); }
 
   void remove(K key) override { this->tree->remove(key); }
 

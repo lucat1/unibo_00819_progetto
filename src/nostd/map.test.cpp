@@ -78,8 +78,9 @@ int main() {
   it("tmap: remove", {
     Nostd::TreeMap<int, int> um;
     um.add(4, 5);
-    um.add(10, 15);
+    um.add(14, 10);
     um.remove(4);
+    cout << um.get_values().size() << endl;
     assert(um.get_values().size() == 1);
   });
   return 0;
