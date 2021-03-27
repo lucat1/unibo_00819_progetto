@@ -14,7 +14,7 @@ public:
   virtual Nostd::Vector<V> get_values() = 0;
   virtual Nostd::Vector<Nostd::Pair<K, V>> as_vector() = 0;
 
-  virtual V operator[](K key) = 0;
+  virtual V &operator[](K key) = 0;
 };
 
 } // namespace Nostd
