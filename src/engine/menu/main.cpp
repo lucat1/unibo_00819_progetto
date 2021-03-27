@@ -9,6 +9,7 @@ Engine::Menu::Main::Main(WINDOW *window)
   this->drawable_kind = Kind::menu;
   this->root = generate();
 }
+Engine::Menu::Main::~Main() { delete root; }
 
 Engine::UI::Box *Engine::Menu::Main::generate() {
   UI::Box *root = new UI::Box(width, height);
