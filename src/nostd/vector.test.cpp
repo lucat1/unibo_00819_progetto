@@ -26,6 +26,26 @@ int main() {
       assert(v[i] == 79);
   });
 
+  it("constructs a vector as a copy of another one", {
+    Vector<int> original;
+    for (size_t i = 0; i < 100; i++)
+      original.push_back(i);
+
+    Vector<int> cpy = Vector<int>(original);
+    for (size_t i = 0; i < 100; i++)
+      assert(cpy[i] == original[i]);
+  });
+
+  it("constructs a vector by moving the data from another one", {
+    Vector<int> original;
+    for (size_t i = 0; i < 100; i++)
+      original.push_back(i);
+
+    Vector<int> cpy = original;
+    for (size_t i = 0; i < 100; i++)
+      assert(cpy[i] == original[i]);
+  });
+
   it("adds one element to the vector", {
     Vector<int> v;
     v.push_back(1337);
