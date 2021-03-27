@@ -16,6 +16,7 @@ private:
 
 public:
   Main(WINDOW *window);
+  ~Main();
 
   void handle_event(Event e);
 };
