@@ -54,7 +54,7 @@ Engine::UI::Box::Box(uint16_t max_width, uint16_t max_height) {
   this->max_width = max_width;
   this->max_height = max_height;
   this->max_child_width = max_width - pl - pr;
-  this->max_child_height = max_width - pt - pb;
+  this->max_child_height = max_height - pt - pb;
 }
 
 // frees all instances created by the Box class.
@@ -74,44 +74,51 @@ Engine::UI::Box::~Box() {
 Engine::Color Engine::UI::Box::foreground() { return short_to_color(fg); }
 Engine::Color Engine::UI::Box::background() { return short_to_color(bg); }
 
+void Engine::UI::Box::prop(Box::Property key, bool value) {
+  switch (key) {
+  case Box::Property::direction_horizontal:
+    dh = value;
+    break;
+  case Box::Property::float_right:
+    fr = value;
+    break;
+  default:
+    throw std::invalid_argument(
+        "canont assign a bool property with a size/Color value");
+  }
+}
+
 void Engine::UI::Box::prop(Box::Property key, uint16_t value) {
   switch (key) {
-  case DIRECTION:
-    dv = value > 0 ? true : false;
-    break;
-  case FLOAT:
-    fr = value > 0 ? true : false;
-    break;
-
-  case PADDING_LEFT:
+  case Box::Property::padding_left:
     pl = value;
     break;
-  case PADDING_RIGHT:
+  case Box::Property::padding_right:
     pr = value;
     break;
-  case PADDING_TOP:
+  case Box::Property::padding_top:
     pt = value;
     break;
-  case PADDING_BOTTOM:
+  case Box::Property::padding_bottom:
     pb = value;
     break;
   default:
     throw std::invalid_argument(
-        "canont assign a color property with a uint16_t value");
+        "canont assign a size property with a bool/Color value");
   }
 }
 
 void Engine::UI::Box::prop(Box::Property key, Color color) {
   switch (key) {
-  case FOREGROUND:
+  case Box::Property::foreground:
     fg = color_to_short(color);
     break;
-  case BACKGROUND:
+  case Box::Property::background:
     bg = color_to_short(color);
     break;
   default:
     throw std::invalid_argument(
-        "canont assign a size property with a Color value");
+        "canont assign a color property with a bool/size value");
   }
 }
 
@@ -124,9 +131,9 @@ Engine::UI::Box *Engine::UI::Box::child(size_t n) {
 }
 
 void Engine::UI::Box::show(WINDOW *window, uint16_t x, uint16_t y) {
-  /* start_color(window); */
+  start_color(window);
   // values are given a defualt value supposing we are positioning items
-  // horizontally (dv = 0) on the left (fr = 0)
+  // horizontally (dh = 0) on the left (fr = 0)
   uint16_t rel_x = pl, rel_y = pt;
   if (fr)
     rel_x = max_child_width - pr;
@@ -134,17 +141,15 @@ void Engine::UI::Box::show(WINDOW *window, uint16_t x, uint16_t y) {
   // iterate over all the children and display then in the approrpriate position
   Box *it = first_child;
   while (it != nullptr && rel_x < max_child_width && rel_y < max_child_height) {
-    // Pair<width, height>
     auto child_size = it->size();
-    it->show(window, x + rel_x + (fr ? -child_size.first : 0), y + rel_y);
+    it->show(window, x + rel_x - (fr ? child_size.first : 0), y + rel_y);
 
-    // TODO: fix float right?
-    rel_x = rel_x + (dv ? child_size.first : 0);
-    if (!dv)
+    rel_x = rel_x + (dh ? child_size.first : 0);
+    if (!dh)
       rel_y += child_size.second;
     it = it->sibling;
   }
-  /* end_color(window); */
+  end_color(window);
 }
 
 Nostd::Pair<uint16_t, uint16_t> Engine::UI::Box::size() {
@@ -154,7 +159,7 @@ Nostd::Pair<uint16_t, uint16_t> Engine::UI::Box::size() {
     auto child_size = it->size();
     width = fr ? max_width : width + child_size.first;
     height =
-        dv ? std::max(height, child_size.second) : height + child_size.second;
+        dh ? std::max(height, child_size.second) : height + child_size.second;
   }
 
   uint16_t w = width + pl + pr, h = height + pt + pb;

@@ -17,7 +17,7 @@ protected:
   // padding(left|right|top|bottom)
   uint16_t pl = 0, pr = 0, pt = 0, pb = 0;
   // direction vertical, float right, should we paint custom colors
-  bool dv = false, fr = false;
+  bool dh = false, fr = false;
 
   // color values
   short fg = color_to_short(Colorable::foreground()),
@@ -31,18 +31,19 @@ protected:
   void end_color(WINDOW *window);
 
 public:
-  enum Property {
-    DIRECTION, // vertical = 0, horizontal = 1
-    FLOAT,     // left = 0, right = 1
+  enum class Property {
+    direction_horizontal, // vertical = 0, horizontal = 1
+    float_right,          // left = 0, right = 1
+    center_horizontal,    // vertical = 0, horizontal = 1
 
     // paddsings
-    PADDING_LEFT,
-    PADDING_RIGHT,
-    PADDING_TOP,
-    PADDING_BOTTOM,
+    padding_left,
+    padding_right,
+    padding_top,
+    padding_bottom,
 
-    FOREGROUND,
-    BACKGROUND,
+    foreground,
+    background,
   };
 
   // size values
@@ -56,8 +57,10 @@ public:
 
   Engine::Color foreground();
   Engine::Color background();
+  // sets a bool property
+  void prop(Box::Property key, bool value);
   // sets a size property
-  void prop(Box::Property key, uint16_t val);
+  void prop(Box::Property key, uint16_t value);
   // sets a color property
   void prop(Box::Property key, Color color);
   // returns the n-th child of this node, or null if an invalid index is

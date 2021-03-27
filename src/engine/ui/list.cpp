@@ -8,7 +8,7 @@ Engine::UI::List::List(uint16_t max_width, uint16_t max_height,
     : Box(max_width, max_height) {
   // override props which are fixed for lists
   this->pl = 2;
-  this->dv = false;
+  this->dh = false;
   this->fr = false;
   this->marker = marker;
   this->max_child_width = max_width - pl;
