@@ -12,10 +12,11 @@ Engine::Menu::Main::Main(WINDOW *window)
 
 Engine::UI::Box *Engine::Menu::Main::generate() {
   UI::Box *root = new UI::Box(width, height);
-  UI::Center *center = UI::append<UI::Center>(root);
-  /* center->prop(UI::Box::Property::center_horizontal, 1); */
+  UI::Center *hcenter = UI::append<UI::Center>(root);
+  hcenter->prop(UI::Box::Property::center_horizontal, 1);
+  UI::Center *vcenter = UI::append<UI::Center>(hcenter);
   UI::append<UI::TextBox, const wchar_t *>(
-      center,
+      vcenter,
       L"Press any key to change my cloror. q will quit the application");
 
   return root;
