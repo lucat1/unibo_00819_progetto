@@ -4,7 +4,7 @@
 using namespace Nostd;
 
 int main() {
-  it("constructs a list with no elements", {
+    it("constructs a list with no elements", {
     List<int> l;
     assert(l.size() == 0);
   });
@@ -68,5 +68,25 @@ int main() {
     assert(l.front() == 278);
     assert(l.back() == 490);
     assert(l.size() == 2);
+  });
+
+  it("copy content from another list", {
+    List<int> l;
+    l.push_back(3);
+    l.push_back(6);
+    List<int> m(l);
+    assert(l.size() == m.size());
+    assert(l.front() == m.front());
+    assert(l.back() == m.back());
+  });
+
+  it("moves its elements to another list", {
+    List<int> l;
+    l.push_back(3);
+    l.push_back(6);
+    List<int> m = l;
+    assert(l.size() == m.size());
+    assert(l.front() == m.front());
+    assert(l.back() == m.back());
   });
 }
