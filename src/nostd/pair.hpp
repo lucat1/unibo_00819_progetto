@@ -1,6 +1,8 @@
 #ifndef NOSTD_PAIR_HPP
 #define NOSTD_PAIR_HPP
 
+#include <ostream>
+
 namespace Nostd {
 
 template <typename A, typename B> class Pair {
@@ -19,6 +21,11 @@ public:
   }
   bool operator!=(Pair<A, B> cmp) { return !operator==(cmp); }
 };
+
+template <typename A, typename B>
+std::ostream &operator<<(std::ostream &os, const Pair<A, B> &pair) {
+  return os << '(' << pair.first << ',' << pair.second << ')';
+}
 
 } // namespace Nostd
 
