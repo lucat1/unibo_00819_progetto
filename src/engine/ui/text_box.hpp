@@ -7,10 +7,6 @@
 namespace Engine {
 namespace UI {
 
-// TextBox straigh up ignores the height value as it is defined by its width and
-// content length.
-// NOTE(tip): you can wrap a TextBox in a Box with an aribtrary height if you
-// for some reason wanna fill some amount of height
 class TextBox : public Box {
 public:
   Nostd::WString content;

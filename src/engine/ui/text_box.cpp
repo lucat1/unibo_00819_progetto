@@ -45,8 +45,8 @@ void Engine::UI::TextBox::show(WINDOW *window, uint16_t x, uint16_t y) {
   start_color(window);
 
   for (size_t i = 0; i < lines.size(); i++) {
-    Nostd::WString line = lines[i];
-    mvwaddwstr(window, y + i, fr ? x + (max_width - line.length()) : x,
+    auto line = lines[i];
+    mvwaddwstr(window, y + i, x + (fr ? max_width - line.length() : 0),
                line.c_str());
   }
 
@@ -55,5 +55,6 @@ void Engine::UI::TextBox::show(WINDOW *window, uint16_t x, uint16_t y) {
 
 Nostd::Pair<uint16_t, uint16_t> Engine::UI::TextBox::size() {
   uint16_t height = (uint16_t)lines.size();
-  return {max_width, height};
+  uint16_t width = lines.size() > 0 ? lines.at(0).length() : 0;
+  return {width, height};
 }
