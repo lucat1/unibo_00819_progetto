@@ -2,6 +2,7 @@
 #include "map.hpp"
 #include "tree_map.hpp"
 #include "unordered_map.hpp"
+#include <cassert>
 #include <iostream>
 
 using namespace std;
@@ -28,6 +29,12 @@ int main() {
     um.add(4, 25);
     auto v = um.get_values();
     assert(v.size() == 2);
+  });
+
+  it("umap contains", {
+    Nostd::UnorderedMap<int, int> um;
+    um.add(4, 5);
+    assert(um.contains(4));
   });
 
   it("umap: remove", {
@@ -60,6 +67,12 @@ int main() {
     um.add(4, 25);
     auto v = um.get_values();
     assert(v.size() == 2);
+  });
+
+  it("tmap: contains", {
+    Nostd::TreeMap<int, int> um;
+    um.add(4, 5);
+    assert(um.contains(4));
   });
 
   it("tmap: remove", {

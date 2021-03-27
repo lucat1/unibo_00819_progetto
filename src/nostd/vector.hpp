@@ -96,6 +96,9 @@ public:
 
   // returns the capactiy of the array (allocated size)
   size_t capacity() { return cap; }
+
+  // returns wheter the vector is empty or not
+  bool empty() { return sz == 0; }
 };
 
 } // namespace Nostd

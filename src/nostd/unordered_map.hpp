@@ -4,6 +4,7 @@
 #include "map.hpp"
 #include "pair.hpp"
 #include "vector.hpp"
+#include <cstddef>
 #include <exception>
 
 namespace Nostd {
@@ -12,12 +13,14 @@ private:
   Nostd::Vector<Nostd::Pair<K, V>> data;
 
 public:
+  using Pairkv = Nostd::Pair<K, V>;
+
   UnorderedMap() { data = Nostd::Vector<Nostd::Pair<K, V>>(); }
 
-  ~UnorderedMap() { delete data; }
-
+  // Add new key and value to the map
   void add(K key, V value) override {
-    for (auto &x : data) {
+    for (size_t i = 0; i < data.size(); i++) {
+      Pairkv x = data[i];
       if (x.first == key) {
         x.second = value;
         return;
@@ -29,7 +32,7 @@ public:
   void remove(K key) override {
     for (size_t i = 0; i < this->data.size(); i++)
       if (data[i].first == key) {
-        data.erase(this->data.begin() + i);
+        data.erase(i);
         return;
       }
   }
@@ -38,9 +41,8 @@ public:
 
   // Check if the map contains an element
   bool contains(K key) override {
-    // todo: waiting for noNostd::Vector implementation
-    for (auto &x : this->data)
-      if (key == x.first)
+    for (size_t i = 0; i < this->data.size(); i++)
+      if (key == data[i].first)
         return true;
     return false;
   }
@@ -48,8 +50,8 @@ public:
   // Returns all the value in a Nostd::Vector<T>
   Nostd::Vector<V> get_values() override {
     Nostd::Vector<V> res;
-    for (auto &x : this->data)
-      res.push_back(x.second);
+    for (size_t i = 0; i < this->data.size(); i++)
+      res.push_back(data[i].second);
     return res;
   }
 
@@ -58,9 +60,9 @@ public:
 
   // Access a value from his key
   V &operator[](K key) override {
-    for (auto &x : this->data)
-      if (x.first == key)
-        return x.second;
+    for (size_t i = 0; i < this->data.size(); i++)
+      if (data[i].first == key)
+        return data[i].second;
     throw std::invalid_argument("UnorderedMap: No value found for that key");
   }
 };
