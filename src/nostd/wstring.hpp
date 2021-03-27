@@ -1,5 +1,5 @@
-#ifndef WSTRING_HPP
-#define WSTRING_HPP
+#ifndef NOSTD_WSTRING_HPP
+#define NOSTD_WSTRING_HPP
 
 #include "vector.hpp"
 #include <iostream>
@@ -125,4 +125,4 @@ std::basic_istream<wchar_t> &getline(std::basic_istream<wchar_t> &os,
 
 } // namespace Nostd
 
-#endif // WSTRING_HPP
+#endif // NOSTD_WSTRING_HPP

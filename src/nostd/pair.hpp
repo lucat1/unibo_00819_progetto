@@ -1,5 +1,5 @@
-#ifndef PAIR_HPP
-#define PAIR_HPP
+#ifndef NOSTD_PAIR_HPP
+#define NOSTD_PAIR_HPP
 
 namespace Nostd {
 
@@ -8,6 +8,7 @@ public:
   A first;
   B second;
 
+  Pair() = default;
   Pair(A first, B second) {
     this->first = first;
     this->second = second;
@@ -23,4 +24,4 @@ public:
 
 } // namespace Nostd
 
-#endif // PAIR_HPP
+#endif // NOSTD_PAIR_HPP

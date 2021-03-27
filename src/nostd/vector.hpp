@@ -28,9 +28,8 @@ protected:
 public:
   // Constructs an empty container, with no elements.
   Vector() { init_v(0); }
-
+  // Constructs a vector of the given size
   explicit Vector(size_t size) { init_v(size); }
-
   // it is constructor that creates a vector with size elements and size * 1.5
   // capacity copying size times the ele value into the vector
   Vector(size_t size, V ele) {
@@ -38,9 +37,16 @@ public:
     for (size_t i = 0; i < sz; i++)
       v[i] = ele;
   }
+  // Copies from another vector instance
+  Vector(Vector &&v) {
+    this->v = v->v;
+    this->sz = v->sz;
+    this->cap = v->cap;
+    v->v = nullptr; // to preven unwanted deallocations
+  }
   ~Vector() { delete[] v; }
 
-  // Adds a new elements at the end of the vector
+  // Adds a new element at the end of the vector
   void push_back(V ele) {
     if (sz == cap)
       resize(sz);
@@ -59,7 +65,7 @@ public:
 
   V &operator[](size_t i) { return at(i); }
 
-  // Removes from the vector either a single (or renge of) element
+  // Removes a signle item from the vector
   size_t erase(size_t i) {
     if (i >= sz)
       throw std::out_of_range("index out of bounds");
@@ -75,7 +81,7 @@ public:
     return i;
   }
 
-  // Resize the container so that it contains n elements
+  // Resize the container so that it contain n elements
   void resize(size_t n) {
     sz = n;
     if (n == 0)
@@ -103,4 +109,4 @@ public:
 
 } // namespace Nostd
 
-#endif
+#endif // NOSTD_VECTOR_HPP

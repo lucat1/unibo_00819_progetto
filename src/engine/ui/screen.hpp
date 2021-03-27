@@ -1,5 +1,5 @@
-#ifndef SCREEN_HPP
-#define SCREEN_HPP
+#ifndef ENGINE_UI_SCREEN_HPP
+#define ENGINE_UI_SCREEN_HPP
 
 #include "box.hpp"
 
@@ -27,4 +27,4 @@ public:
 } // namespace UI
 } // namespace Engine
 
-#endif // SCREEN_HPP
+#endif // ENGINE_UI_SCREEN_HPP

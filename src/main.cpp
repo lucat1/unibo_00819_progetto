@@ -49,10 +49,12 @@ int main() {
 
   int key;
   while ((key = getch()) != 'q') {
-    if (key == KEY_RESIZE) {
-      handle(screen, screen->update());
-    }
-  };
+    switch (key) {
+    case KEY_RESIZE:
+      screen->update();
+      break;
+    };
+  }
 
   screen->close();
   return 0;
