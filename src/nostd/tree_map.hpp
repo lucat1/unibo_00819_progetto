@@ -89,8 +89,8 @@ private:
       // 1. Leaf
       if (ptr->left == nullptr && ptr->right == nullptr) {
         cout << "qua" << endl;
-        ptr = nullptr;
         delete ptr;
+        ptr = nullptr;
       }
       // 2. Right is null
       else if (ptr->right == nullptr) {
@@ -99,6 +99,7 @@ private:
         else
           ptr->father->right = ptr->left;
         delete ptr;
+        ptr = nullptr;
       }
       // 3. Left is null
       else if (ptr->left == nullptr) {
@@ -107,6 +108,7 @@ private:
         else
           ptr->father->left = ptr->right;
         delete ptr;
+        ptr = nullptr;
       }
       // 4 nobody is null
       else if (ptr->left != nullptr && ptr->right != nullptr) {
