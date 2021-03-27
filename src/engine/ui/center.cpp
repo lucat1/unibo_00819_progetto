@@ -4,13 +4,13 @@
 Engine::UI::Center::Center(uint16_t max_width, uint16_t max_height)
     : Box(max_width, max_height) {}
 
-void Engine::UI::Center::prop(Box::Property key, bool value) {
+void Engine::UI::Center::propb(Box::Property key, bool value) {
   switch (key) {
   case Box::Property::center_horizontal:
     center_horizontally = value;
     break;
   default:
-    Box::prop(key, value);
+    Box::propb(key, value);
   }
 }
 
