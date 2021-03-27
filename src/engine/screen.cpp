@@ -57,6 +57,9 @@ bool Engine::Screen::open() {
   keypad(stdscreen,
          false); // keypad(.., false) is used to caputre RESIZE events
 
+  if (container != nullptr)
+    delwin(container);
+
   container = newwin(SCREEN_LINES + 2, SCREEN_COLS + 2, y, x);
   return reposition();
 }
@@ -77,6 +80,7 @@ bool Engine::Screen::reposition() {
 }
 
 void Engine::Screen::close() {
+  delwin(container);
   endwin();
   stdscreen = nullptr;
   container = nullptr;

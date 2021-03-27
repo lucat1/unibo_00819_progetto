@@ -11,7 +11,7 @@ private:
 
 public:
   Center(uint16_t max_width, uint16_t max_height);
-  void prop(Box::Property key, bool value);
+  void propb(Box::Property key, bool value);
 
   void show(WINDOW *window, uint16_t x, uint16_t y);
   Nostd::Pair<uint16_t, uint16_t> size();

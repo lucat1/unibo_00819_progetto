@@ -1,8 +1,8 @@
 #include "main.hpp"
 #include "../screen.hpp"
 #include "../ui/append.hpp"
+#include "../ui/button.hpp"
 #include "../ui/center.hpp"
-#include "../ui/text_box.hpp"
 
 Engine::Menu::Main::Main(WINDOW *window)
     : Drawable(window, Screen::SCREEN_COLS, Screen::SCREEN_LINES) {
@@ -14,19 +14,20 @@ Engine::Menu::Main::~Main() { delete root; }
 Engine::UI::Box *Engine::Menu::Main::generate() {
   UI::Box *root = new UI::Box(width, height);
   UI::Center *hcenter = UI::append<UI::Center>(root);
-  hcenter->prop(UI::Box::Property::center_horizontal, 1);
+  hcenter->propb(UI::Box::Property::center_horizontal, 1);
   UI::Center *vcenter = UI::append<UI::Center>(hcenter);
-  UI::append<UI::TextBox, const wchar_t *>(
-      vcenter,
-      L"Press any key to change my cloror. q will quit the application");
+
+  UI::Button *play_btn =
+      UI::append<UI::Button, const wchar_t *>(vcenter, L"play!");
+  play_btn->propc(UI::Box::Property::background, Color::grey);
 
   return root;
 }
 
 void Engine::Menu::Main::redraw() {
-  UI::Box *tb = root->child(0)->child(0);
+  UI::Box *tb = root->child(0)->child(0)->child(0);
   Color c = short_to_color(rand() % 256);
-  tb->prop(UI::Box::Property::foreground, c);
+  tb->propc(UI::Box::Property::foreground, c);
   root->show(window, 1, 1);
   wrefresh(window);
 }

@@ -74,7 +74,21 @@ Engine::UI::Box::~Box() {
 Engine::Color Engine::UI::Box::foreground() { return short_to_color(fg); }
 Engine::Color Engine::UI::Box::background() { return short_to_color(bg); }
 
-void Engine::UI::Box::prop(Box::Property key, bool value) {
+void Engine::UI::Box::propc(Box::Property key, Color color) {
+  switch (key) {
+  case Box::Property::foreground:
+    fg = color_to_short(color);
+    break;
+  case Box::Property::background:
+    bg = color_to_short(color);
+    break;
+  default:
+    throw std::invalid_argument(
+        "canont assign a color property with a bool/size value");
+  }
+}
+
+void Engine::UI::Box::propb(Box::Property key, bool value) {
   switch (key) {
   case Box::Property::direction_horizontal:
     dh = value;
@@ -88,7 +102,7 @@ void Engine::UI::Box::prop(Box::Property key, bool value) {
   }
 }
 
-void Engine::UI::Box::prop(Box::Property key, uint16_t value) {
+void Engine::UI::Box::props(Box::Property key, uint16_t value) {
   switch (key) {
   case Box::Property::padding_left:
     pl = value;
@@ -105,20 +119,6 @@ void Engine::UI::Box::prop(Box::Property key, uint16_t value) {
   default:
     throw std::invalid_argument(
         "canont assign a size property with a bool/Color value");
-  }
-}
-
-void Engine::UI::Box::prop(Box::Property key, Color color) {
-  switch (key) {
-  case Box::Property::foreground:
-    fg = color_to_short(color);
-    break;
-  case Box::Property::background:
-    bg = color_to_short(color);
-    break;
-  default:
-    throw std::invalid_argument(
-        "canont assign a color property with a bool/size value");
   }
 }
 
