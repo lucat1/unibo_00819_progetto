@@ -20,7 +20,7 @@ void Engine::UI::List::show(WINDOW *window, uint16_t x, uint16_t y) {
   Box *it = first_child;
 
   while (it != nullptr && rel_y < max_child_height) {
-    Nostd::Pair<uint16_t, uint16_t> child_size = it->size();
+    auto child_size = it->size();
     mvwaddch(window, y + rel_y, x, marker);
     rel_y += child_size.second;
     it = it->sibling;
@@ -28,7 +28,7 @@ void Engine::UI::List::show(WINDOW *window, uint16_t x, uint16_t y) {
 }
 
 Nostd::Pair<uint16_t, uint16_t> Engine::UI::List::size() {
-  Nostd::Pair<uint16_t, uint16_t> psize = Box::size();
+  auto psize = Box::size();
   // the list removes 2 chars from the width to make room for the markers so
   // here we sum that to the size of its children (calculated by the method at
   // Box::size)
