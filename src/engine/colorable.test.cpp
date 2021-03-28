@@ -1,6 +1,6 @@
 #include "../util/test.hpp"
 #include "colorable.hpp"
-#include <assert.h>
+#include <cassert>
 #include <ncurses.h>
 
 int main() {

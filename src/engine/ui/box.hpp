@@ -4,9 +4,7 @@
 #include "../../nostd/pair.hpp"
 #include "../../nostd/vector.hpp"
 #include "../colorable.hpp"
-#include <map>
 #include <ncurses.h>
-#include <stdint.h>
 
 namespace Engine {
 namespace UI {

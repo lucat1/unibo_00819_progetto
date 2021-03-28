@@ -2,8 +2,8 @@
 #define NOSTD_WSTRING_HPP
 
 #include "vector.hpp"
+#include <cwchar>
 #include <iostream>
-#include <wchar.h>
 
 namespace Nostd {
 

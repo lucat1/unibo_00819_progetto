@@ -4,7 +4,6 @@
 #include "../nostd/pair.hpp"
 #include "drawable.hpp"
 #include <ncurses.h>
-#include <stdint.h>
 
 namespace Engine {
 

@@ -2,7 +2,6 @@
 #define ENGINE_DRAWABLE_HPP
 
 #include <ncurses.h>
-#include <stdint.h>
 
 namespace Engine {
 
