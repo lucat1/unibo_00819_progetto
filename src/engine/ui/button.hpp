@@ -1,3 +1,14 @@
+/*
+  University of Bologna
+  First cicle degree in Computer Science
+  00819 - Programmazione
+
+  Luca Tagliavini #971133
+  03/22/2021
+
+  button.cpp: Defines Engine::UI::Button visual component, clearly identifiable
+  by its monochrome background, shrot text and interactable nature.
+*/
 #ifndef ENGINE_UI_BUTTON_HPP
 #define ENGINE_UI_BUTTON_HPP
 

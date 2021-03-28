@@ -1,3 +1,15 @@
+/*
+  University of Bologna
+  First cicle degree in Computer Science
+  00819 - Programmazione
+
+  Luca Tagliavini #971133
+  03/22/2021
+
+  button.cpp: Implements the rendering (done via a ncurses subwindow) of the
+  Engine::UI::Button element. Most work is done in the show method to create the
+  ncurses' window and set its content properly.
+*/
 #include "button.hpp"
 
 Engine::UI::Button::Button(uint16_t max_width, uint16_t max_height,

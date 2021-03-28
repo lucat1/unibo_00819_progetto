@@ -1,3 +1,14 @@
+/*
+  University of Bologna
+  First cicle degree in Computer Science
+  00819 - Programmazione
+
+  Luca Tagliavini #971133
+  02/21/2021
+
+  screen.hpp: provides the public api for the Engine::Screen class, which
+  manages what and how content is displayed on the screen.
+*/
 #ifndef ENGINE_SCREEN_HPP
 #define ENGINE_SCREEN_HPP
 

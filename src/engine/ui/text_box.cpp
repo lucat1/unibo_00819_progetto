@@ -1,3 +1,15 @@
+/*
+  university of bologna
+  First cicle degree in Computer Science
+  00819 - Programmazione
+
+  Luca Tagliavini #971133
+  03/15/2021
+
+  text_box.cpp: Implements the Engine::UI::TextBox class with the line-splitting
+  algoritm to make a given strign fit inside a max_width large boh. Liens are
+  cut, with trailing '-' added where necessary.
+*/
 #include "text_box.hpp"
 
 Engine::UI::TextBox::TextBox(uint16_t max_width, uint16_t max_height,

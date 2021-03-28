@@ -1,3 +1,15 @@
+/*
+  University of Bologna
+  First cicle degree in Computer Science
+  00819 - Programmazione
+
+  Luca Tagliavini #971133
+  03/17/2021
+
+  append.hpp: a set of two utility functions used to append a children to a
+  parent, providing the ability to change the children's relative size and the
+  option to use an extra argument for some classes.
+*/
 #ifndef ENGINE_UI_APPEND_HPP
 #define ENGINE_UI_APPEND_HPP
 

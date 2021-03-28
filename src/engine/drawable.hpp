@@ -1,3 +1,14 @@
+/*
+  University of Bologna
+  First cicle degree in Computer Science
+  00819 - Programmazione
+
+  Luca Tagliavini #971133
+  03/20/2021
+
+  drawable.hpp: Defines the Engine::Drawable interface used to describe any
+  content which can be drawn on the screen.
+*/
 #ifndef ENGINE_DRAWABLE_HPP
 #define ENGINE_DRAWABLE_HPP
 

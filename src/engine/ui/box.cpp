@@ -1,3 +1,15 @@
+/*
+  University of Bologna
+  First cicle degree in Computer Science
+  00819 - Programmazione
+
+  Luca Tagliavini #971133
+  03/13/2021
+
+  box.cpp: Implements the Engine::UI::Box class. We mainly take care of childern
+  placement, color assignment when drawing and focus on providing a solid base
+  upon which other components can be built with the minimal adjustment.
+*/
 #include "box.hpp"
 #include "../../nostd/pair.hpp"
 #include <algorithm>

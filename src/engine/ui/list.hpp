@@ -1,3 +1,15 @@
+/*
+  University of Bologna
+  First cicle degree in Computer Science
+  00819 - Programmazione
+
+  Luca Tagliavini #971133
+  02/14/2021
+
+  list.hpp: Defines the Engine::UI::List class. A list is a container which
+  holds a number of children placed one after the other in a vertical
+  orientation. Each child is preceeded by a marker (one singole wchar).
+*/
 #ifndef ENGINE_UI_LIST_HPP
 #define ENGINE_UI_LIST_HPP
 

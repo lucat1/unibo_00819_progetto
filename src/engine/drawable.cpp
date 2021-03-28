@@ -1,3 +1,14 @@
+/*
+  University of Bologna
+  First cicle degree in Computer Science
+  00819 - Programmazione
+
+  Luca Tagliavini #971133
+  03/20/2021
+
+  drawable.cpp: Implements the default methods for the abstract class
+  Engine::Drawable.
+*/
 #include "drawable.hpp"
 
 Engine::Drawable::Drawable(WINDOW *window, uint16_t width, uint16_t height) {

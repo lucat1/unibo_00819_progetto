@@ -1,3 +1,15 @@
+/*
+  University of Bologna
+  First cicle degree in Computer Science
+  00819 - Programmazione
+
+  Luca Tagliavini #971133
+  03/14/2021
+
+  list.cpp: Implements the Engine::UI::List class methods. It is a minimal
+  variation of the box container where we take care to properly place children
+  and display the needed markers.
+*/
 #include "list.hpp"
 
 const uint16_t Engine::UI::List::default_left_padding = 2;

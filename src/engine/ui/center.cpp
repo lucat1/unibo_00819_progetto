@@ -1,3 +1,14 @@
+/*
+  university of bologna
+  First cicle degree in Computer Science
+  00819 - Programmazione
+
+  Luca Tagliavini #971133
+  03/21/2021
+
+  center.cpp: Implements the Engine::UI::Center class with its centering
+  computations.
+*/
 #include "center.hpp"
 #include <cmath>
 
