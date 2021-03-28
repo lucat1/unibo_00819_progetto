@@ -62,6 +62,10 @@ public:
     Iterator &operator=(const Iterator &) = default;
     ~Iterator() = default;
 
+    // iterators
+    Iterator begin() const noexcept;
+    Iterator end() const noexcept;
+
     Iterator &operator++();
     Iterator operator++(int);
     Iterator &operator--();
@@ -83,15 +87,20 @@ public:
     bool operator<=(const Iterator &) const;
     bool operator>=(const Iterator &) const;
 
-    U &operator*() const;
+    // As a submatrix cannot be dereferenced to a single value, *p must return
+    // p itself. This is still useful in for-each loops, but please remember:
+    // if you work with a copy of the iterator, you are still working on the
+    // same matrix.
+    Iterator &operator*();
     U *operator->() const;
     // p[n] is *not* the same as *(p + n): it returns an iterator pointing to
-    // a submatrix of the one originally pointed. It throws std::out_of_range
-    // on invalid submatrix indexes and std::domain_error when used on an
-    // iterator pointing to a single cell.
-    Iterator operator[](size_t) const;
+    // a submatrix of the one originally pointed. An at() method is also
+    // available: it throws std::out_of_range on invalid submatrix indexes and
+    // std::domain_error when used on an iterator pointing to a single cell.
+    Iterator operator[](size_t) const noexcept;
+    Iterator at(size_t) const;
 
-    operator U &() const;
+    value_type &value() const;
 
   private:
     Matrix *m{nullptr};
