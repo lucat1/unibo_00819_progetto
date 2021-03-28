@@ -37,12 +37,18 @@ public:
     for (size_t i = 0; i < sz; i++)
       v[i] = ele;
   }
-  // Copies from another vector instance
-  Vector(Vector &&v) {
-    this->v = v->v;
-    this->sz = v->sz;
-    this->cap = v->cap;
-    v->v = nullptr; // to preven unwanted deallocations
+  // Copies data from another vector instance (in linear time)
+  Vector(Vector &vec) {
+    init_v(vec.sz);
+    for (size_t i = 0; i < vec.sz; i++)
+      this->v[i] = vec[i];
+  }
+  // Moves data from another vector (resues same memory sequence for v)
+  Vector(Vector &&vec) {
+    this->v = vec.v;
+    this->sz = vec.sz;
+    this->cap = vec.cap;
+    vec.v = nullptr; // to prevent unwanted deallocations
   }
   ~Vector() { delete[] v; }
 
@@ -97,9 +103,10 @@ public:
     v = newv;
   }
 
+  // returns whether the vector is empty
+  bool empty() { return sz == 0; };
   // returns the size of the array (length)
   size_t size() { return sz; }
-
   // returns the capactiy of the array (allocated size)
   size_t capacity() { return cap; }
 };
