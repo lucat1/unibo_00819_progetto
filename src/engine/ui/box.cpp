@@ -71,8 +71,8 @@ Engine::UI::Box::~Box() {
   }
 }
 
-Engine::Color Engine::UI::Box::foreground() { return short_to_color(fg); }
-Engine::Color Engine::UI::Box::background() { return short_to_color(bg); }
+Engine::Color Engine::UI::Box::foreground() const { return short_to_color(fg); }
+Engine::Color Engine::UI::Box::background() const { return short_to_color(bg); }
 
 void Engine::UI::Box::propc(Box::Property key, Color color) {
   switch (key) {
