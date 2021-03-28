@@ -7,6 +7,7 @@ namespace Engine {
 namespace UI {
 class Button : public TextBox {
 private:
+  static const constexpr uint16_t side_padding = 4;
   WINDOW *button_window = nullptr;
 
 public:

@@ -19,8 +19,8 @@ void Engine::UI::Button::show(WINDOW *window, uint16_t x, uint16_t y) {
   if (button_window != nullptr)
     delwin(button_window);
 
-  button_window =
-      newwin(osize.second + 2, osize.first + 2, abs_y + y, abs_x + x);
+  button_window = newwin(osize.second + 2, osize.first + 2 * side_padding,
+                         abs_y + y, abs_x + x);
   wclear(button_window);
   refresh();
 
@@ -29,17 +29,18 @@ void Engine::UI::Button::show(WINDOW *window, uint16_t x, uint16_t y) {
     wbkgd(button_window, color);
 
   // draw a box of ' ' chars to around the text to fill the background
-  mvwhline(button_window, 0, 1, ' ', osize.first);
+  mvwhline(button_window, 0, 1, ' ', osize.first + side_padding - 1);
   mvwvline(button_window, 0, 0, ' ', osize.second + 2);
   mvwvline(button_window, 0, osize.first + 1, ' ', osize.second + 2);
-  mvwhline(button_window, osize.second + 1, 1, ' ', osize.first);
+  mvwhline(button_window, osize.second + 1, 1, ' ',
+           osize.first + side_padding - 1);
 
-  TextBox::show(button_window, 1, 1);
+  TextBox::show(button_window, side_padding, 1);
   refresh();
   wrefresh(button_window);
 }
 Nostd::Pair<uint16_t, uint16_t> Engine::UI::Button::size() {
   auto osize = TextBox::size();
-  uint16_t width = osize.first + 2, height = osize.second + 2;
+  uint16_t width = osize.first + 2 * side_padding, height = osize.second + 2;
   return {width, height};
 }

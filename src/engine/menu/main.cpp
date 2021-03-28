@@ -14,6 +14,7 @@ Engine::Menu::Main::~Main() { delete root; }
 Engine::UI::Box *mkbtn(Engine::UI::Box *parent, const wchar_t *str) {
   Engine::UI::Center *hcenter = Engine::UI::append<Engine::UI::Center>(parent);
   hcenter->propb(Engine::UI::Box::Property::center_horizontal, 1);
+  hcenter->props(Engine::UI::Box::Property::padding_bottom, 1);
   Engine::UI::Button *btn =
       Engine::UI::append<Engine::UI::Button, const wchar_t *>(hcenter, str);
   btn->propc(Engine::UI::Box::Property::background, Engine::Color::grey23);
