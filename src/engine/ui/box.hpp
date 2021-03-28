@@ -55,8 +55,8 @@ public:
   Box(uint16_t max_width, uint16_t max_height);
   ~Box();
 
-  Engine::Color foreground();
-  Engine::Color background();
+  Engine::Color foreground() const;
+  Engine::Color background() const;
   // sets a color property
   void propc(Box::Property key, Color color);
   // sets a bool property
