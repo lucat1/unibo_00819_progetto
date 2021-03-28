@@ -27,7 +27,7 @@ Engine::UI::Box *Engine::Menu::Main::generate() {
   hcenter->propb(UI::Box::Property::center_horizontal, 1);
   UI::Center *vcenter = UI::append<UI::Center>(hcenter);
 
-  mkbtn(vcenter, L"Start a game");
+  mkbtn(vcenter, L"Play a match");
   mkbtn(vcenter, L"Settings");
 
   return root;
