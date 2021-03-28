@@ -33,9 +33,13 @@ Engine::UI::Box *Engine::Menu::Main::generate() {
   return root;
 }
 
+bool a = false;
+
 void Engine::Menu::Main::redraw() {
   root->show(window, 1, 1);
-  wrefresh(window);
+  if (!a)
+    wrefresh(window);
+  a = true;
 }
 
 void Engine::Menu::Main::handle_event(Event e) {

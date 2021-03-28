@@ -2,8 +2,7 @@
 #include "append.hpp"
 #include "box.hpp"
 #include "text_box.hpp"
-#include <assert.h>
-using namespace Nostd;
+#include <cassert>
 using namespace Engine::UI;
 
 int main() {
@@ -66,7 +65,7 @@ int main() {
 
   TextBox *tb1 = append<TextBox, const wchar_t *>(box1, L"this is a test text");
   it("reports the corret size when it has children", {
-    Pair<uint16_t, uint16_t> size = box1->size();
+    auto size = box1->size();
     assert(size.first > 0);
     assert(size.second == 1);
 
@@ -114,8 +113,8 @@ int main() {
   pbox->props(Box::Property::padding_left, 2);
   pbox->props(Box::Property::padding_right, 2);
   it("places elements vertically with appropriate dimentions", {
-    Pair<uint16_t, uint16_t> box_size = vbox->size();
-    Pair<uint16_t, uint16_t> tb_size = tb->size();
+    auto box_size = vbox->size();
+    auto tb_size = tb->size();
     assert(box_size.first == tb_size.first + 4); // + 4 for the PadBox
     assert(box_size.second == tb_size.second);
   });

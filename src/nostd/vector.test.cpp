@@ -1,8 +1,7 @@
 #include "../util/test.hpp"
 #include "pair.hpp"
 #include "vector.hpp"
-#include <assert.h>
-#include <vector>
+#include <cassert>
 using namespace Nostd;
 
 int main() {

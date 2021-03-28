@@ -1,8 +1,6 @@
 #include "engine/menu/main.hpp"
 #include "engine/screen.hpp"
-#include <curses.h>
 #include <iostream>
-#include <unistd.h>
 using namespace std;
 using namespace Engine;
 
