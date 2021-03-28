@@ -1,3 +1,16 @@
+/*
+  University of Bologna
+  First cicle degree in Computer Science
+  00819 - Programmazione
+
+  Luca Tagliavini #971133
+  03/13/2021
+
+  box.hpp: Defines the Engine::UI::Box class. A Box is the most basic visual
+  element. It is a general visual container used to place content without adding
+  any visual details. It is also the class all other visual components base
+  upon.
+*/
 #ifndef ENGINE_UI_BOX_HPP
 #define ENGINE_UI_BOX_HPP
 

@@ -1,3 +1,15 @@
+/*
+  university of bologna
+  First cicle degree in Computer Science
+  00819 - Programmazione
+
+  Luca Tagliavini #971133
+  03/22/2021
+
+  center.hpp: Declares the Engine::UI::Center class, which is just a Box with
+  the extended functionality of being able to center items
+  horizonatlly/vertically.
+*/
 #ifndef ENGINE_UI_CENTER_HPP
 #define ENGINE_UI_CENTER_HPP
 

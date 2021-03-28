@@ -1,3 +1,15 @@
+/*
+  University of Bologna
+  First cicle degree in Computer Science
+  00819 - Programmazione
+
+  Luca Tagliavini #971133
+  02/21/2021
+
+  screen.cpp: implementation for the Screen class, setting up the ncurses' box
+  to contain the content and implementing other lifecycle initial/final setps in
+  the game engine (screen initialization/clearing/freeing/...)
+*/
 #include "screen.hpp"
 #include "menu/main.hpp"
 

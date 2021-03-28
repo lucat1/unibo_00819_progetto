@@ -1,3 +1,13 @@
+/*
+  University of Bologna
+  First cicle degree in Computer Science
+  00819 - Programmazione
+
+  Luca Tagliavini #971133
+  03/05/2021
+
+  pair.test.cpp: tests the few pair functionality we have implemented
+*/
 #include "../util/test.hpp"
 #include "pair.hpp"
 #include <cassert>

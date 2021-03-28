@@ -1,3 +1,15 @@
+/*
+  University of Bologna
+  First cicle degree in Computer Science
+  00819 - Programmazione
+
+  Luca Tagliavini #971133
+  03/20/2021
+
+  colorable.hpp: Defines the Engine::Colorable interface used to describe any
+  class which can be drawn and therefore has a foreground and background
+  attribute.
+*/
 #ifndef ENGINE_COLORABLE_HPP
 #define ENGINE_COLORABLE_HPP
 

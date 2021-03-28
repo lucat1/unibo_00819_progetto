@@ -1,3 +1,14 @@
+/*
+  University of Bologna
+  First cicle degree in Computer Science
+  00819 - Programmazione
+
+  Luca Tagliavini #971133
+  03/13/2021
+
+  box.test.cpp: Various unit tests to check the functionality of the
+  Engine::UI::Box class
+*/
 #include "../../util/test.hpp"
 #include "append.hpp"
 #include "box.hpp"

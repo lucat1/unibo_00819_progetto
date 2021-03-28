@@ -1,3 +1,15 @@
+/*
+  university of bologna
+  First cicle degree in Computer Science
+  00819 - Programmazione
+
+  Luca Tagliavini #971133
+  03/22/2021
+
+  main.cpp: Implements the Engine::Menu::Main main screen by using all
+  previously built visual elements and handling cursor movement, focus and
+  interaction with the UI.
+*/
 #include "main.hpp"
 #include "../screen.hpp"
 #include "../ui/append.hpp"

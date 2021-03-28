@@ -1,3 +1,14 @@
+/*
+  university of bologna
+  First cicle degree in Computer Science
+  00819 - Programmazione
+
+  Luca Tagliavini #971133
+  03/15/2021
+
+  text_box.hpp: Defines the Engine::UI::TextBox class used to display text in
+  the UI with the constraint of fitting the give max_width.
+*/
 #ifndef ENGINE_UI_TEXT_BOX_HPP
 #define ENGINE_UI_TEXT_BOX_HPP
 
