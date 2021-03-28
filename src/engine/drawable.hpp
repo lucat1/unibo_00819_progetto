@@ -1,6 +1,7 @@
 #ifndef ENGINE_DRAWABLE_HPP
 #define ENGINE_DRAWABLE_HPP
 
+#include <cstdint>
 #include <ncurses.h>
 
 namespace Engine {
