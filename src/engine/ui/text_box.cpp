@@ -21,7 +21,8 @@ void Engine::UI::TextBox::split_content() {
   while (len > max_width) {
     size_t ll = len < max_width ? Nostd::WString::npos : max_width - 1;
 
-    Nostd::WString sub = content.substr(content.length() - len, ll + 1).ltrim();
+    // TODO: toggle .ltrim
+    Nostd::WString sub = content.substr(content.length() - len, ll + 1);
     if (!Nostd::iswspace(sub[ll]) && ll != Nostd::WString::npos) {
       // when we have two ending chars that are not whitespace we consider this
       // as a word and we add the - charter. Otherwhise we consider this the
@@ -37,8 +38,8 @@ void Engine::UI::TextBox::split_content() {
     lines.push_back(sub);
     len -= ll;
   }
-  lines.push_back(
-      content.substr(content.length() - len, Nostd::WString::npos).ltrim());
+  // TODO: toggle .ltrim
+  lines.push_back(content.substr(content.length() - len, Nostd::WString::npos));
 }
 
 void Engine::UI::TextBox::show(WINDOW *window, uint16_t x, uint16_t y) {

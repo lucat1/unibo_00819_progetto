@@ -155,7 +155,6 @@ void Engine::UI::Box::show(WINDOW *window, uint16_t x, uint16_t y) {
 Nostd::Pair<uint16_t, uint16_t> Engine::UI::Box::size() {
   uint16_t width = 0, height = 0;
   for (Box *it = first_child; it != nullptr; it = it->sibling) {
-    // Pair<width, height>
     auto child_size = it->size();
     width = fr ? max_width : width + child_size.first;
     height =

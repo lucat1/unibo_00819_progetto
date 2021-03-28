@@ -1,6 +1,7 @@
 #ifndef ENGINE_SCREEN_HPP
 #define ENGINE_SCREEN_HPP
 
+#include "../nostd/pair.hpp"
 #include "drawable.hpp"
 #include <ncurses.h>
 #include <stdint.h>

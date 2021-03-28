@@ -11,23 +11,28 @@ Engine::Menu::Main::Main(WINDOW *window)
 }
 Engine::Menu::Main::~Main() { delete root; }
 
+Engine::UI::Box *mkbtn(Engine::UI::Box *parent, const wchar_t *str) {
+  Engine::UI::Center *hcenter = Engine::UI::append<Engine::UI::Center>(parent);
+  hcenter->propb(Engine::UI::Box::Property::center_horizontal, 1);
+  Engine::UI::Button *btn =
+      Engine::UI::append<Engine::UI::Button, const wchar_t *>(hcenter, str);
+  btn->propc(Engine::UI::Box::Property::background, Engine::Color::grey23);
+  return btn;
+}
+
 Engine::UI::Box *Engine::Menu::Main::generate() {
   UI::Box *root = new UI::Box(width, height);
   UI::Center *hcenter = UI::append<UI::Center>(root);
   hcenter->propb(UI::Box::Property::center_horizontal, 1);
   UI::Center *vcenter = UI::append<UI::Center>(hcenter);
 
-  UI::Button *play_btn =
-      UI::append<UI::Button, const wchar_t *>(vcenter, L"play!");
-  play_btn->propc(UI::Box::Property::background, Color::grey);
+  mkbtn(vcenter, L"Start a game");
+  mkbtn(vcenter, L"Settings");
 
   return root;
 }
 
 void Engine::Menu::Main::redraw() {
-  UI::Box *tb = root->child(0)->child(0)->child(0);
-  Color c = short_to_color(rand() % 256);
-  tb->propc(UI::Box::Property::foreground, c);
   root->show(window, 1, 1);
   wrefresh(window);
 }
