@@ -1,6 +1,6 @@
-#include "../nostd/test.hpp"
+#include "test.hpp"
 #include "wstring.hpp"
-#include <assert.h>
+#include <cassert>
 #include <sstream>
 using namespace Nostd;
 

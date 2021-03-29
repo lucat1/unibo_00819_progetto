@@ -1,10 +1,21 @@
+/*
+  University of Bologna
+  First cicle degree in Computer Science
+  00819 - Programmazione
+
+  Luca Tagliavini #971133
+  03/09/2021
+
+  wstring.hpp: defines the public interface for a string of wide charters. It is
+  resizeable and provides various helpers for common actions on strings such as
+  split, find, concatenation, etc.
+*/
 #ifndef NOSTD_WSTRING_HPP
 #define NOSTD_WSTRING_HPP
 
 #include "vector.hpp"
+#include <cwchar>
 #include <iostream>
-#include <stdexcept>
-#include <wchar.h>
 
 namespace Nostd {
 
