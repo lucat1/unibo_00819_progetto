@@ -17,9 +17,7 @@
 #include <exception>
 #include <stdexcept>
 
-// returns a new color_pair and caches it for future call.
-// Color pairs are then removed by the Screen::~Screen or Screen::close methods
-// when the game exits.
+// returns a new color_pair based on the fg and bg properties.
 int Engine::UI::Box::color_pair() {
   // check if fg == white and bg == transparent and in this case just return as
   // we are not coloring this box. Colors taken from Engine::Color enum and
@@ -28,13 +26,9 @@ int Engine::UI::Box::color_pair() {
     return -1;
 
   short bg = this->bg < 0 ? 0 : this->bg;
-  if (Engine::pairs[fg + bg] != 0)
-    return Engine::pairs[fg + bg];
 
-  init_pair(Engine::pair_i++, fg, bg);
-  int color = COLOR_PAIR(Engine::pair_i - 1);
-  Engine::pairs[fg + bg] = color;
-  return color;
+  init_pair(fg + bg, fg, bg);
+  return COLOR_PAIR(fg + bg);
 }
 
 void Engine::UI::Box::start_color(WINDOW *window) {

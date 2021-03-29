@@ -18,9 +18,6 @@
 
 namespace Engine {
 
-extern int pair_i;
-extern int pairs[512];
-
 // Screen wraps the whole ncurses screen in a box of SCREEN_WIDTHxSCREEN_HEIGHT
 // that is centered on the screen and repositioned properly on resizes
 // Furthermore the screen class keeps track of the terminal dimentions
