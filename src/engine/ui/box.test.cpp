@@ -9,16 +9,20 @@
   box.test.cpp: Various unit tests to check the functionality of the
   Engine::UI::Box class
 */
-#include "../../util/test.hpp"
+#include "../../nostd/test.hpp"
 #include "append.hpp"
 #include "box.hpp"
 #include "text_box.hpp"
 #include <cassert>
+using Engine::UI::append;
+using Engine::UI::Box;
+using Engine::UI::TextBox;
+using Nostd::it;
 using namespace Engine::UI;
 
 int main() {
   Box *box = new Box(60, 20);
-  it("constructs a box properly", {
+  it("constructs a box properly", [box] {
     assert(box->max_width == 60);
     assert(box->max_height == 20);
     assert(box->first_child == nullptr);
@@ -28,7 +32,7 @@ int main() {
   });
 
   Box *child = new Box(50, 20);
-  it("adds a new child", {
+  it("adds a new child", [box, child] {
     box->add_child(child);
     assert(box->sibling == nullptr);
     assert(box->first_child == child);
@@ -41,7 +45,7 @@ int main() {
   });
 
   Box *snd_child = new Box(50, 20);
-  it("adds a second child", {
+  it("adds a second child", [box, child, snd_child] {
     box->add_child(snd_child);
     assert(box->first_child == child);
     assert(box->last_child == snd_child);
@@ -50,7 +54,7 @@ int main() {
     assert(snd_child->sibling == nullptr);
   });
 
-  it("Box::append adds a child (with the proper dimentions)", {
+  it("Box::append adds a child (with the proper dimentions)", [box, snd_child] {
     Box *c = append<Box>(box, 0.5f, 0.25f);
     assert(c->parent == box);
     assert(snd_child->sibling == c);
@@ -59,7 +63,7 @@ int main() {
     assert(c->max_height == box->max_child_height * 0.25f);
   });
 
-  it("keeps the child size inside the parent", {
+  it("keeps the child size inside the parent", [box] {
     Box *c = new Box((uint16_t)10000, (uint16_t)10000);
     box->add_child(c);
     assert(c->parent == box);
@@ -68,14 +72,14 @@ int main() {
   });
 
   Box *box1 = new Box(10000, 10000);
-  it("reports the corret size when empty", {
+  it("reports the corret size when empty", [box1] {
     auto size = box1->size();
     assert(size.first == 0);
     assert(size.second == 0);
   });
 
   TextBox *tb1 = append<TextBox, const wchar_t *>(box1, L"this is a test text");
-  it("reports the corret size when it has children", {
+  it("reports the corret size when it has children", [box1, tb1] {
     auto size = box1->size();
     assert(size.first > 0);
     assert(size.second == 1);
@@ -85,7 +89,7 @@ int main() {
     assert(tsize.first == size.first);
   });
 
-  it("properly adds left padding", {
+  it("properly adds left padding", [] {
     Box *b = new Box(10, 10);
     b->props(Box::Property::padding_left, 2);
     auto size = b->size();
@@ -93,7 +97,7 @@ int main() {
     assert(size.second == 0);
   });
 
-  it("properly adds right padding", {
+  it("properly adds right padding", [] {
     Box *b = new Box(10, 10);
     b->props(Box::Property::padding_right, 2);
     auto size = b->size();
@@ -101,7 +105,7 @@ int main() {
     assert(size.second == 0);
   });
 
-  it("properly adds top padding", {
+  it("properly adds top padding", [] {
     Box *b = new Box(10, 10);
     b->props(Box::Property::padding_top, 2);
     auto size = b->size();
@@ -109,7 +113,7 @@ int main() {
     assert(size.second == 2);
   });
 
-  it("properly adds bottom padding", {
+  it("properly adds bottom padding", [] {
     Box *b = new Box(10, 10);
     b->props(Box::Property::padding_bottom, 2);
     auto size = b->size();
@@ -123,7 +127,7 @@ int main() {
   Box *pbox = append<Box>(vbox);
   pbox->props(Box::Property::padding_left, 2);
   pbox->props(Box::Property::padding_right, 2);
-  it("places elements vertically with appropriate dimentions", {
+  it("places elements vertically with appropriate dimentions", [vbox, tb] {
     auto box_size = vbox->size();
     auto tb_size = tb->size();
     assert(box_size.first == tb_size.first + 4); // + 4 for the PadBox
