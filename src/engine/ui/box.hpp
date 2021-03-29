@@ -33,7 +33,6 @@ protected:
   // color values
   short fg = color_to_short(Colorable::foreground()),
         bg = color_to_short(Colorable::background());
-  Nostd::Vector<int> used_color_pairs;
   // returns a ncurses color pair to draw the content in the approriate color
   int color_pair();
   // starts to draw chars in the color described by the Box's properties

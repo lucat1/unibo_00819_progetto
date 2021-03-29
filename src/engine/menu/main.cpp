@@ -29,6 +29,7 @@ Engine::UI::Box *mkbtn(Engine::UI::Box *parent, const wchar_t *str) {
   hcenter->props(Engine::UI::Box::Property::padding_bottom, 1);
   Engine::UI::Button *btn =
       Engine::UI::append<Engine::UI::Button, const wchar_t *>(hcenter, str);
+  btn->propc(Engine::UI::Box::Property::foreground, Engine::Color::red);
   btn->propc(Engine::UI::Box::Property::background, Engine::Color::grey23);
   return btn;
 }
