@@ -56,7 +56,8 @@ public:
     background,
   };
 
-  // size values
+  // component size values. kept public as they are only assigned in the code by
+  // constructors (and these classes are local to the module anyway)
   uint16_t max_width, max_height, max_child_width, max_child_height;
   // child-parent-sibling relation values;
   Box *first_child = nullptr, *last_child = nullptr, *sibling = nullptr,
