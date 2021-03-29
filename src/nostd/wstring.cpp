@@ -1,4 +1,16 @@
+/*
+  University of Bologna
+  First cicle degree in Computer Science
+  00819 - Programmazione
+
+  Luca Tagliavini #971133
+  03/09/2021
+
+  wstring.cpp: implements the methods to construct, modify and do IO operations
+  on a string of whide charters.
+*/
 #include "wstring.hpp"
+#include <stdexcept>
 
 Nostd::WString::WString() : Vector(1, L'\0') {}
 
