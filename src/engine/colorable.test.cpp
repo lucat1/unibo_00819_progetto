@@ -22,5 +22,6 @@ int main() {
         if (c == 15 || (c - 15) % 16 == 0)
           std::cout << std::endl;
       }
-    });
+    }
+  });
 }
