@@ -12,6 +12,7 @@
 #ifndef NOSTD_TEST_HPP
 #define NOSTD_TEST_HPP
 
+#include <functional>
 #include <iostream>
 
 namespace Nostd {
@@ -20,7 +21,7 @@ namespace Nostd {
 // afterwards. Examples:
 // it("passes the 'f function' test", f);
 // it("passes a very easy test", []() { assert(2 + 2 == 4); });
-void it(const char *str, void test()) {
+void it(const char *str, std::function<void()> test) {
   test();
   std::cout << "\t✓ " << str << '\n';
 }

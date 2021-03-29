@@ -13,7 +13,7 @@ int main() {
     assert(cn == 255);
   });
 
-  it("prints all the expected colors", {
+  it("prints all the expected colors", [] {
     for (int c = color_to_int(Engine::Color::black);
          c <= color_to_int(Engine::Color::grey93); c++) {
       printf("\x1b[48;5;%dm%3d\e[0m ", c, c);

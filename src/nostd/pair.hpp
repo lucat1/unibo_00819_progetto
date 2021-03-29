@@ -14,10 +14,10 @@ public:
     this->second = second;
   }
 
-  bool operator==(Pair<A, B> cmp) {
+  bool operator==(Pair<A, B> cmp) const {
     return cmp.first == this->first && cmp.second == this->second;
   }
-  bool operator!=(Pair<A, B> cmp) { return !operator==(cmp); }
+  bool operator!=(Pair<A, B> cmp) const { return !operator==(cmp); }
 };
 
 } // namespace Nostd
