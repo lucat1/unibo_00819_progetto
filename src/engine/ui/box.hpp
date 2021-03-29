@@ -1,48 +1,110 @@
-#ifndef BOX_HPP
-#define BOX_HPP
+/*
+  University of Bologna
+  First cicle degree in Computer Science
+  00819 - Programmazione
+
+  Luca Tagliavini #971133
+  03/13/2021
+
+  box.hpp: Defines the Engine::UI::Box class. A Box is the most basic visual
+  element. It is a general visual container used to place content without adding
+  any visual details. It is also the class all other visual components base
+  upon.
+*/
+#ifndef ENGINE_UI_BOX_HPP
+#define ENGINE_UI_BOX_HPP
 
 #include "../../nostd/pair.hpp"
-#include <map>
+#include "../../nostd/vector.hpp"
+#include "../colorable.hpp"
 #include <ncurses.h>
-#include <stdint.h>
-using namespace std;
-using namespace Nostd;
 
 namespace Engine {
 namespace UI {
 
-class Box {
+// Box is a UI primitive extended by all other UI elements
+class Box : public Colorable {
 protected:
   // padding(left|right|top|bottom)
   uint16_t pl = 0, pr = 0, pt = 0, pb = 0;
-  // direction vertical, float right
-  bool dv = false, fr = false;
+  // direction vertical, float right, should we paint custom colors
+  bool dh = false, fr = false;
+
+  // color values
+  short fg = color_to_short(Colorable::foreground()),
+        bg = color_to_short(Colorable::background());
+  // returns a ncurses color pair to draw the content in the approriate color
+  int color_pair();
+  // starts to draw chars in the color described by the Box's properties
+  void start_color(WINDOW *window);
+  // stops drawing in color
+  void end_color(WINDOW *window);
 
 public:
-  enum Props {
-    DIRECTION, // vertical = 0, horizontal = 1
-    FLOAT,     // left = 0, right = 1
+  enum class Property {
+    direction_horizontal, // vertical = 0, horizontal = 1
+    float_right,          // left = 0, right = 1
+    center_horizontal,    // vertical = 0, horizontal = 1
 
     // paddsings
-    PADDING_LEFT,
-    PADDING_RIGHT,
-    PADDING_TOP,
-    PADDING_BOTTOM,
+    padding_left,
+    padding_right,
+    padding_top,
+    padding_bottom,
+
+    foreground,
+    background,
   };
 
+  // component size values. kept public as they are only assigned in the code by
+  // constructors (and these classes are local to the module anyway)
   uint16_t max_width, max_height, max_child_width, max_child_height;
+  // child-parent-sibling relation values;
   Box *first_child = nullptr, *last_child = nullptr, *sibling = nullptr,
       *parent = nullptr;
 
-  Box(uint16_t max_width, uint16_t max_height,
-      map<enum Box::Props, uint16_t> props = {});
+  Box(uint16_t max_width, uint16_t max_height);
+  ~Box();
 
+  Engine::Color foreground() const;
+  Engine::Color background() const;
+  // sets a color property
+  void propc(Box::Property key, Color color);
+  // sets a bool property
+  void propb(Box::Property key, bool value);
+  // sets a size property
+  void props(Box::Property key, uint16_t value);
+  // returns the n-th child of this node, or null if an invalid index is
+  // provided
+  Box *child(size_t n);
+
+  // Engine::UI::Box is merely a container, therefore we are only interested in
+  // displaying its children and most importantly _how_ we display then. When
+  // showing the children we have to take into account three major factors:
+  // - Engine::UI::Box::Property::DIRECTION which defines the direction in which
+  // to display the children and therefore also imposes relative limits
+  // regarding the number of children to be shown.
+  //
+  // - Engine::UI::Box::Property::FLOAT which defines the direction from which
+  // we should start displaying the children. Left is the most commonly used
+  // value
+  //
+  // - Engine::UI::Box::Property::PADDING_* adds paddings on the side of the Box
+  // around its children
   virtual void show(WINDOW *window, uint16_t x, uint16_t y);
-  virtual Pair<uint16_t, uint16_t> size();
+  // returns the dimentions of the element when drawn
+  virtual Nostd::Pair<uint16_t, uint16_t> size();
+
+  // adds a child to the list of children of this node. This method is meant for
+  // internal usage only relatively to the Engine::UI library. External usage
+  // should be avoided. Please refer to the Engine::UI::append function
+  //
+  // NOTE: it prevents the width and height of the child from exceeding the ones
+  // of the parent
   void add_child(Box *box);
 };
 
 } // namespace UI
 } // namespace Engine
 
-#endif // BOX_HPP
+#endif // ENGINE_UI_BOX_HPP

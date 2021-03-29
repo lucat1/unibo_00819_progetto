@@ -1,6 +1,5 @@
 #ifndef NOSTD_VECTOR_HPP
 #define NOSTD_VECTOR_HPP
-#include <stddef.h>
 #include <stdexcept>
 
 namespace Nostd {
@@ -28,9 +27,8 @@ protected:
 public:
   // Constructs an empty container, with no elements.
   Vector() { init_v(0); }
-
+  // Constructs a vector of the given size
   explicit Vector(size_t size) { init_v(size); }
-
   // it is constructor that creates a vector with size elements and size * 1.5
   // capacity copying size times the ele value into the vector
   Vector(size_t size, V ele) {
@@ -38,9 +36,22 @@ public:
     for (size_t i = 0; i < sz; i++)
       v[i] = ele;
   }
+  // Copies data from another vector instance (in linear time)
+  Vector(Vector &vec) {
+    init_v(vec.sz);
+    for (size_t i = 0; i < vec.sz; i++)
+      this->v[i] = vec[i];
+  }
+  // Moves data from another vector (resues same memory sequence for v)
+  Vector(Vector &&vec) {
+    this->v = vec.v;
+    this->sz = vec.sz;
+    this->cap = vec.cap;
+    vec.v = nullptr; // to prevent unwanted deallocations
+  }
   ~Vector() { delete[] v; }
 
-  // Adds a new elements at the end of the vector
+  // Adds a new element at the end of the vector
   void push_back(V ele) {
     if (sz == cap)
       resize(sz);
@@ -59,7 +70,7 @@ public:
 
   V &operator[](size_t i) { return at(i); }
 
-  // Removes from the vector either a single (or renge of) element
+  // Removes a signle item from the vector
   size_t erase(size_t i) {
     if (i >= sz)
       throw std::out_of_range("index out of bounds");
@@ -75,7 +86,7 @@ public:
     return i;
   }
 
-  // Resize the container so that it contains n elements
+  // Resize the container so that it contain n elements
   void resize(size_t n) {
     sz = n;
     if (n == 0)
@@ -91,13 +102,14 @@ public:
     v = newv;
   }
 
+  // returns whether the vector is empty
+  bool empty() { return sz == 0; };
   // returns the size of the array (length)
   size_t size() { return sz; }
-
   // returns the capactiy of the array (allocated size)
   size_t capacity() { return cap; }
 };
 
 } // namespace Nostd
 
-#endif
+#endif // NOSTD_VECTOR_HPP

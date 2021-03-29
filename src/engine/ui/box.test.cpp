@@ -1,8 +1,19 @@
+/*
+  University of Bologna
+  First cicle degree in Computer Science
+  00819 - Programmazione
+
+  Luca Tagliavini #971133
+  03/13/2021
+
+  box.test.cpp: Various unit tests to check the functionality of the
+  Engine::UI::Box class
+*/
 #include "../../util/test.hpp"
 #include "append.hpp"
 #include "box.hpp"
 #include "text_box.hpp"
-#include <assert.h>
+#include <cassert>
 using namespace Engine::UI;
 
 int main() {
@@ -58,59 +69,63 @@ int main() {
 
   Box *box1 = new Box(10000, 10000);
   it("reports the corret size when empty", {
-    Pair<uint16_t, uint16_t> size = box1->size();
+    auto size = box1->size();
     assert(size.first == 0);
     assert(size.second == 0);
   });
 
-  TextBox *tb1 =
-      append<TextBox, const wchar_t *>(box1, 1, 1, {}, L"this is a test text");
+  TextBox *tb1 = append<TextBox, const wchar_t *>(box1, L"this is a test text");
   it("reports the corret size when it has children", {
-    Pair<uint16_t, uint16_t> size = box1->size();
+    auto size = box1->size();
     assert(size.first > 0);
     assert(size.second == 1);
 
-    Pair<uint16_t, uint16_t> tsize = tb1->size();
+    auto tsize = tb1->size();
     assert(tsize.first == size.first);
     assert(tsize.first == size.first);
   });
 
   it("properly adds left padding", {
-    Box *b = new Box(10, 10, {{Box::Props::PADDING_LEFT, 2}});
-    Pair<uint16_t, uint16_t> size = b->size();
+    Box *b = new Box(10, 10);
+    b->props(Box::Property::padding_left, 2);
+    auto size = b->size();
     assert(size.first == 2);
     assert(size.second == 0);
   });
 
   it("properly adds right padding", {
-    Box *b = new Box(10, 10, {{Box::Props::PADDING_RIGHT, 2}});
-    Pair<uint16_t, uint16_t> size = b->size();
+    Box *b = new Box(10, 10);
+    b->props(Box::Property::padding_right, 2);
+    auto size = b->size();
     assert(size.first == 2);
     assert(size.second == 0);
   });
 
   it("properly adds top padding", {
-    Box *b = new Box(10, 10, {{Box::Props::PADDING_TOP, 2}});
-    Pair<uint16_t, uint16_t> size = b->size();
+    Box *b = new Box(10, 10);
+    b->props(Box::Property::padding_top, 2);
+    auto size = b->size();
     assert(size.first == 0);
     assert(size.second == 2);
   });
 
   it("properly adds bottom padding", {
-    Box *b = new Box(10, 10, {{Box::Props::PADDING_BOTTOM, 2}});
-    Pair<uint16_t, uint16_t> size = b->size();
+    Box *b = new Box(10, 10);
+    b->props(Box::Property::padding_bottom, 2);
+    auto size = b->size();
     assert(size.first == 0);
     assert(size.second == 2);
   });
 
   Box *vbox = new Box(50, 4);
-  TextBox *tb = append<TextBox, const wchar_t *>(vbox, 1, 1, {},
-                                                 L"this is a test string");
-  append<Box>(vbox, 1, 1,
-              {{Box::Props::PADDING_LEFT, 2}, {Box::Props::PADDING_RIGHT, 2}});
+  TextBox *tb =
+      append<TextBox, const wchar_t *>(vbox, L"this is a test string");
+  Box *pbox = append<Box>(vbox);
+  pbox->props(Box::Property::padding_left, 2);
+  pbox->props(Box::Property::padding_right, 2);
   it("places elements vertically with appropriate dimentions", {
-    Pair<uint16_t, uint16_t> box_size = vbox->size();
-    Pair<uint16_t, uint16_t> tb_size = tb->size();
+    auto box_size = vbox->size();
+    auto tb_size = tb->size();
     assert(box_size.first == tb_size.first + 4); // + 4 for the PadBox
     assert(box_size.second == tb_size.second);
   });

@@ -1,17 +1,23 @@
-#ifndef TEXT_BOX_HPP
-#define TEXT_BOX_HPP
+/*
+  University of bologna
+  First cicle degree in Computer Science
+  00819 - Programmazione
+
+  Luca Tagliavini #971133
+  03/15/2021
+
+  text_box.hpp: Defines the Engine::UI::TextBox class used to display text in
+  the UI with the constraint of fitting the give max_width.
+*/
+#ifndef ENGINE_UI_TEXT_BOX_HPP
+#define ENGINE_UI_TEXT_BOX_HPP
 
 #include "../../nostd/wstring.hpp"
 #include "box.hpp"
-#include <ncurses.h>
 
 namespace Engine {
 namespace UI {
 
-// TextBox straigh up ignores the height value as it is defined by its width and
-// content length.
-// NOTE(tip): you can wrap a TextBox in a Box with an aribtrary height if you
-// for some reason wanna fill some amount of height
 class TextBox : public Box {
 public:
   Nostd::WString content;
@@ -19,18 +25,16 @@ public:
 
   static constexpr const wchar_t *append_default_value = L"";
   TextBox(uint16_t max_width, uint16_t max_height,
-          map<enum Box::Props, uint16_t> props = {},
           Nostd::WString &&content = L"");
   TextBox(uint16_t max_width, uint16_t max_height,
-          map<enum Box::Props, uint16_t> props = {},
           const wchar_t *content = L"");
 
   void split_content();
-  Pair<uint16_t, uint16_t> size();
+  Nostd::Pair<uint16_t, uint16_t> size();
   void show(WINDOW *window, uint16_t x, uint16_t y);
 };
 
 } // namespace UI
 } // namespace Engine
 
-#endif // TEXT_BOX_HPP
+#endif // ENGINE_UI_TEXT_BOX_HPP

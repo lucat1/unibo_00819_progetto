@@ -1,19 +1,26 @@
+/*
+  University of bologna
+  First cicle degree in Computer Science
+  00819 - Programmazione
+
+  Luca Tagliavini #971133
+  03/15/2021
+
+  text_box.cpp: Implements the Engine::UI::TextBox class with the line-splitting
+  algoritm to make a given strign fit inside a max_width large boh. Liens are
+  cut, with trailing '-' added where necessary.
+*/
 #include "text_box.hpp"
 
 Engine::UI::TextBox::TextBox(uint16_t max_width, uint16_t max_height,
-                             map<enum Engine::UI::Box::Props, uint16_t> props,
                              const wchar_t *content)
-    : Box(max_width, max_height, props) {
+    : Box(max_width, max_height) {
   this->content = content;
   split_content();
 }
 Engine::UI::TextBox::TextBox(uint16_t max_width, uint16_t max_height,
-                             map<enum Engine::UI::Box::Props, uint16_t> props,
                              Nostd::WString &&content)
-    : Box(max_width, max_height, props) {
-  this->content = content;
-  split_content();
-}
+    : TextBox(max_width, max_height, content.c_str()) {}
 
 // splits the content into various lines to fit into `max_width` and adds
 // '-' where necessary, when splitting a word
@@ -23,7 +30,8 @@ void Engine::UI::TextBox::split_content() {
   while (len > max_width) {
     size_t ll = len < max_width ? Nostd::WString::npos : max_width - 1;
 
-    Nostd::WString sub = content.substr(content.length() - len, ll + 1).ltrim();
+    // TODO: toggle .ltrim
+    Nostd::WString sub = content.substr(content.length() - len, ll + 1);
     if (!Nostd::iswspace(sub[ll]) && ll != Nostd::WString::npos) {
       // when we have two ending chars that are not whitespace we consider this
       // as a word and we add the - charter. Otherwhise we consider this the
@@ -39,19 +47,24 @@ void Engine::UI::TextBox::split_content() {
     lines.push_back(sub);
     len -= ll;
   }
-  lines.push_back(
-      content.substr(content.length() - len, Nostd::WString::npos).ltrim());
+  // TODO: toggle .ltrim
+  lines.push_back(content.substr(content.length() - len, Nostd::WString::npos));
 }
 
 void Engine::UI::TextBox::show(WINDOW *window, uint16_t x, uint16_t y) {
+  start_color(window);
+
   for (size_t i = 0; i < lines.size(); i++) {
-    Nostd::WString line = lines[i];
-    mvwaddwstr(window, y + i, fr ? x + (max_width - line.length()) : x,
+    auto line = lines[i];
+    mvwaddwstr(window, y + i, x + (fr ? max_width - line.length() : 0),
                line.c_str());
   }
+
+  end_color(window);
 }
 
-Pair<uint16_t, uint16_t> Engine::UI::TextBox::size() {
+Nostd::Pair<uint16_t, uint16_t> Engine::UI::TextBox::size() {
   uint16_t height = (uint16_t)lines.size();
-  return {max_width, height};
+  uint16_t width = lines.size() > 0 ? lines.at(0).length() : 0;
+  return {width, height};
 }
