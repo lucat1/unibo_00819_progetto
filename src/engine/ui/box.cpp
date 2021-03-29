@@ -12,14 +12,14 @@
 */
 #include "box.hpp"
 #include "../../nostd/pair.hpp"
+#include "../screen.hpp"
 #include <algorithm>
 #include <exception>
 #include <stdexcept>
 
-// the documentation on `man new_pair` was extremely useful in understanding
-// ncurses' color and color_pair system. I suggest a read to understand what and
-// why we did things the way they are. Here's a copy of the man page:
-// https://man7.org/linux/man-pages/man3/new_pair.3x.html
+// returns a new color_pair and caches it for future call.
+// Color pairs are then removed by the Screen::~Screen or Screen::close methods
+// when the game exits.
 int Engine::UI::Box::color_pair() {
   // check if fg == white and bg == transparent and in this case just return as
   // we are not coloring this box. Colors taken from Engine::Color enum and
@@ -27,22 +27,14 @@ int Engine::UI::Box::color_pair() {
   if (fg == 15 && bg == -1)
     return -1;
 
-  int pair;
   short bg = this->bg < 0 ? 0 : this->bg;
-  // if we already have allocated a pair then we can just return it
-  if ((pair = find_pair(fg, bg)) != -1)
-    return pair;
+  if (Engine::pairs[fg + bg] != 0)
+    return Engine::pairs[fg + bg];
 
-  // oterwhise we allocate a new pair and add it to the vector of pairs for this
-  // Box so later on when the box will be delted we'll also be albe to free any
-  // excess color pairs
-  pair = alloc_pair(fg, bg);
-  if (pair == -1)
-    // we got an allocation error, throw an exception
-    throw std::bad_alloc();
-
-  used_color_pairs.push_back(pair);
-  return COLOR_PAIR(pair);
+  init_pair(Engine::pair_i++, fg, bg);
+  int color = COLOR_PAIR(Engine::pair_i - 1);
+  Engine::pairs[fg + bg] = color;
+  return color;
 }
 
 void Engine::UI::Box::start_color(WINDOW *window) {
@@ -69,12 +61,9 @@ Engine::UI::Box::Box(uint16_t max_width, uint16_t max_height) {
   this->max_child_height = max_height - pt - pb;
 }
 
-// frees all instances created by the Box class.
-// namely: all color pairs,
+// frees its children list recursively (as deleted children will do the same and
+// so on)
 Engine::UI::Box::~Box() {
-  for (size_t i = 0; i < used_color_pairs.size(); i++) {
-    free_pair(used_color_pairs[i]);
-  }
   Box *it = first_child;
   while (it != nullptr) {
     Box *tmp = it;

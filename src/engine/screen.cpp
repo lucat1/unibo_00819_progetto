@@ -13,6 +13,9 @@
 #include "screen.hpp"
 #include "menu/main.hpp"
 
+int Engine::pairs[512] = {0};
+int Engine::pair_i = 1;
+
 Engine::Screen::Screen() {
   this->content = nullptr;
   this->stdscreen = nullptr;
@@ -94,6 +97,8 @@ bool Engine::Screen::reposition() {
 void Engine::Screen::close() {
   delwin(container);
   endwin();
+  // free any allocated color pair
+  reset_color_pairs();
   stdscreen = nullptr;
   container = nullptr;
 }
