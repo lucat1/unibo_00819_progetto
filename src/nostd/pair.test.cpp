@@ -8,22 +8,23 @@
 
   pair.test.cpp: tests the few pair functionality we have implemented
 */
-#include "../util/test.hpp"
 #include "pair.hpp"
+#include "test.hpp"
 #include <cassert>
 #include <cstring>
 #include <sstream>
+using Nostd::it;
 using namespace Nostd;
 
 int main() {
   Pair<char, char> p1 = {'a', 'b'};
   Pair<char, char> p2 = {'a', 'b'};
   Pair<char, char> p3 = {'c', 'd'};
-  it("appropriately checks == of two pairs", { assert(p1 == p2); });
+  it("appropriately checks == of two pairs", [p1, p2] { assert(p1 == p2); });
 
-  it("appropriately checks != of two pairs", { assert(p1 != p3); });
+  it("appropriately checks != of two pairs", [p1, p3] { assert(p1 != p3); });
 
-  it("prints a pair to output stream", {
+  it("prints a pair to output stream", [] {
     Pair<char, char> pair = {'k', 'v'};
     std::stringstream out;
     out << pair;
