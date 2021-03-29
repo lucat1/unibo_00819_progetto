@@ -27,7 +27,7 @@ Engine::Menu::Main::~Main() { delete root; }
 Engine::UI::Logo *append_logo(Engine::UI::Box *parent) {
   Engine::UI::Center *hcenter = Engine::UI::append<Engine::UI::Center>(parent);
   hcenter->propb(Engine::UI::Box::Property::center_horizontal, 1);
-  hcenter->props(Engine::UI::Box::Property::padding_bottom, 2);
+  hcenter->props(Engine::UI::Box::Property::padding_bottom, 4);
   auto logo = Engine::UI::append<Engine::UI::Logo>(hcenter);
   return logo;
 }
@@ -35,7 +35,6 @@ Engine::UI::Logo *append_logo(Engine::UI::Box *parent) {
 Engine::UI::Button *append_button(Engine::UI::Box *parent, const wchar_t *str) {
   Engine::UI::Center *hcenter = Engine::UI::append<Engine::UI::Center>(parent);
   hcenter->propb(Engine::UI::Box::Property::center_horizontal, 1);
-  hcenter->props(Engine::UI::Box::Property::padding_bottom, 1);
   auto btn =
       Engine::UI::append<Engine::UI::Button, const wchar_t *>(hcenter, str);
   btn->propc(Engine::UI::Box::Property::foreground, Engine::Color::red);
@@ -50,7 +49,8 @@ Engine::UI::Box *Engine::Menu::Main::generate() {
   auto vcenter = UI::append<UI::Center>(hcenter);
 
   append_logo(vcenter);
-  append_button(vcenter, L"Play a match");
+  auto play = append_button(vcenter, L"Play");
+  play->parent->props(Engine::UI::Box::Property::padding_bottom, 1);
   append_button(vcenter, L"Settings");
 
   return root;
