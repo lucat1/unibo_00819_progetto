@@ -20,7 +20,7 @@ namespace Nostd {
 // afterwards. Examples:
 // it("passes the 'f function' test", f);
 // it("passes a very easy test", []() { assert(2 + 2 == 4); });
-inline void it(const char *str, void test()) {
+void it(const char *str, void test()) {
   test();
   std::cout << "\t✓ " << str << '\n';
 }
