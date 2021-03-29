@@ -16,11 +16,7 @@
 namespace Engine {
 // copied, edited with vim and by hand to compy with our naming convetion, from
 // https://jonasjacek.github.io/colors/
-<<<<<<< HEAD
-enum class Color : int {
-=======
 enum class Color : short {
->>>>>>> 2e9becb (add coloring support to TextBoxes)
   transparent = -1,
   black,
   maroon,
@@ -280,12 +276,8 @@ enum class Color : short {
   grey93,
 };
 
-<<<<<<< HEAD
-int color_to_int(Color c) noexcept;
-=======
 short color_to_short(Color c) noexcept;
 Color short_to_color(short c) noexcept;
->>>>>>> 2e9becb (add coloring support to TextBoxes)
 
 /*
  Interface representing anything that can be printed on screen using both a
