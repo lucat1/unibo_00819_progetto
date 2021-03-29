@@ -6,7 +6,7 @@
   Stefano Volpe #969766
   03/18/2021
 
-  test.hpp: utilities for testing purposes only.
+  test.hpp: user interface of the utilities for testing purposes only.
 */
 
 #ifndef NOSTD_TEST_HPP
@@ -21,10 +21,7 @@ namespace Nostd {
 // afterwards. Examples:
 // it("passes the 'f function' test", f);
 // it("passes a very easy test", []() { assert(2 + 2 == 4); });
-void it(const char *str, std::function<void()> test) {
-  test();
-  std::cout << "\t✓ " << str << '\n';
-}
+void it(const char *str, std::function<void()> test);
 
 } // namespace Nostd
 
