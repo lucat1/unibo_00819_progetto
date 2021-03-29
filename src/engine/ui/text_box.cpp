@@ -20,10 +20,7 @@ Engine::UI::TextBox::TextBox(uint16_t max_width, uint16_t max_height,
 }
 Engine::UI::TextBox::TextBox(uint16_t max_width, uint16_t max_height,
                              Nostd::WString &&content)
-    : Box(max_width, max_height) {
-  this->content = content;
-  split_content();
-}
+    : TextBox(max_width, max_height, content.c_str()) {}
 
 // splits the content into various lines to fit into `max_width` and adds
 // '-' where necessary, when splitting a word
