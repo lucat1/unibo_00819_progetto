@@ -1,6 +1,8 @@
+#include "../nostd/test.hpp"
 #include <iostream>
-using namespace std;
+
+using Nostd::it;
 
 int main() {
-    cout << "Hello World!" << endl;
+  // it("test", []{});
 }

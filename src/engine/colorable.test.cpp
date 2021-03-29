@@ -1,10 +1,12 @@
-#include "../util/test.hpp"
+#include "../nostd/test.hpp"
 #include "colorable.hpp"
 #include <assert.h>
 #include <ncurses.h>
 
+using Nostd::it;
+
 int main() {
-  it("offers all 0-255 colors", {
+  it("offers all 0-255 colors", [] {
     int c1 = Engine::color_to_int(Engine::Color::black);
     int cn = Engine::color_to_int(Engine::Color::grey93);
     assert(c1 == 0);
