@@ -35,7 +35,7 @@ auto Nostd::Allocator<T>::address(const_reference x) const noexcept
 template <class T>
 auto Nostd::Allocator<T>::allocate(size_type n, Allocator<void>::const_pointer)
     -> pointer {
-  return ::operator new(n * sizeof(value_type));
+  return reinterpret_cast<pointer>(::operator new(n * sizeof(value_type)));
 }
 
 template <class T> void Nostd::Allocator<T>::deallocate(pointer p, size_type) {
@@ -50,7 +50,7 @@ auto Nostd::Allocator<T>::max_size() const noexcept -> size_type {
 template <class T>
 template <class U, class... Args>
 void Nostd::Allocator<T>::construct(U *p, Args &&...args) {
-  static_assert(std::is_constructible<U>(args...),
+  static_assert(std::is_constructible<U, Args...>::value,
                 "unconstructible type (with the given set of arguments)");
   ::new (p) U{args...};
 }
