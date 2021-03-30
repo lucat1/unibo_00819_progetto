@@ -30,12 +30,11 @@ jobs:
         run: make clean all
 
       - name: release
-          uses: softprops/action-gh-release@v1
-          if: startsWith(github.ref, 'refs/tags/')
-          name: ${{ github.ref }}
-          body: ${{ github.sha }}
-          with:
-            files: |
-              alma 
+        uses: softprops/action-gh-release@v1
+        name: ${{ github.ref }}-${{matrix.platform}}
+        body: ${{ github.sha }}
+        with:
+          files: |
+            alma 
           env:
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
