@@ -1,4 +1,4 @@
-name: release binaries
+name: release binaries and upload artifacts
 
 on:
   push:
@@ -31,10 +31,15 @@ jobs:
 
       - name: release
         uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
         with:
-          name: ${{ github.ref }}-${{matrix.platform}}
+          name: ${{ replace(github.ref, 'refs/tags/' }}-${{matrix.platform}}
           body: ${{ github.sha }}
-          files: |
-            alma 
+          files: alma 
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: upload artifact
+        with:
+          name: alma
+          path: alma
