@@ -16,12 +16,9 @@ int main() {
   it("prints all the expected colors", [] {
     for (short c = color_to_short(Engine::Color::black);
          c <= color_to_short(Engine::Color::grey93); c++) {
-      for (short c = color_to_short(Engine::Color::black);
-           c <= color_to_short(Engine::Color::grey93); c++) {
-        printf("\x1b[48;5;%dm%3d\e[0m ", c, c);
-        if (c == 15 || (c - 15) % 16 == 0)
-          std::cout << std::endl;
-      }
+      printf("\x1b[48;5;%dm%3d\e[0m ", c, c);
+      if (c == 15 || (c - 15) % 16 == 0)
+        std::cout << std::endl;
     }
   });
 }
