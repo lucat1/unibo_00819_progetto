@@ -10,7 +10,7 @@ CXX = g++
 ## -MT specifies the dependency target (path qualified obj file name)
 DEP_FLAGS = -std=c++11 -MT $@ -MMD -MP -MF $(@:.o=.d)
 CXXFLAGS = $(DEP_FLAGS) -Wall -Werror
-LDFLAGS = -lstdc++ -lcurses -lncurses
+LDFLAGS = -lstdc++ -lncurses
 # conditional linker flags based on OS (Linux, Darwin = MacOS)
 UNAME := $(shell uname)
 ifeq ($(UNAME), Linux)
