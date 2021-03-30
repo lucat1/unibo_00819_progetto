@@ -31,10 +31,10 @@ jobs:
 
       - name: release
         uses: softprops/action-gh-release@v1
-        name: ${{ github.ref }}-${{matrix.platform}}
-        body: ${{ github.sha }}
         with:
+          name: ${{ github.ref }}-${{matrix.platform}}
+          body: ${{ github.sha }}
           files: |
             alma 
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
