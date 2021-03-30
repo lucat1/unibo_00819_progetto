@@ -41,6 +41,8 @@ all: info $(TARGET)
 test: info $(TEST_TARGETS)
 debug: CXXFLAGS += -ggdb
 debug: clean all test
+static: LDFLAGS += -static
+static: info all
 
 info:
 	@echo

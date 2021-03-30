@@ -1,5 +1,4 @@
 name: release binaries and upload artifacts
-
 on:
   push:
     branches: [ develop ]
@@ -43,4 +42,15 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: alma-${{ matrix.platform }}
+          path: alma
+
+      - name: 'make clean static'
+        if: startsWith(matrix.platform, 'ubuntu-latest')
+        run: make clean all
+
+      - name: upload artifact
+        uses: actions/upload-artifact@v2
+        if: startsWith(matrix.platform, 'ubuntu-latest')
+        with:
+          name: alma-${{ matrix.platform }}-static
           path: alma
