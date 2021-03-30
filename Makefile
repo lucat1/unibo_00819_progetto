@@ -14,10 +14,18 @@ LDFLAGS = -lstdc++
 # conditional linker flags based on OS (Linux, Darwin = MacOS)
 UNAME := $(shell uname)
 ifeq ($(UNAME), Linux)
-LDFLAGS +=  -lncursesw
+
+# use ncursesw6-config utility to find libraries when available
+# therwhise go for a best guess
+ifeq (, $(shell which ncursesw6-config))
+LDFLAGS += -lncurses -lncursesw
+else
+LDFLAGS += $(shell ncursesw6-config --libs)
+endif
+
 endif
 ifeq ($(UNAME), Darwin)
-LDFLAGS +=  -lncurses
+LDFLAGS += -lncurses
 DEP_FLAGS += -D_XOPEN_SOURCE_EXTENDED
 endif
 
