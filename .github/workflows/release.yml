@@ -33,7 +33,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          name: ${{ replace(github.ref, 'refs/tags/' }}-${{matrix.platform}}
+          name: ${{ github.ref }}-${{ matrix.platform }}
           body: ${{ github.sha }}
           files: alma 
         env:
