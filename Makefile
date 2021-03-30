@@ -41,7 +41,7 @@ all: info $(TARGET)
 test: info $(TEST_TARGETS)
 debug: CXXFLAGS += -ggdb
 debug: clean all test
-static: LDFLAGS := -static -static-libstdc++ -static-libgcc $(LDFLAGS)
+static: LDFLAGS += -static -static-libstdc++ -static-libgcc
 static: info all
 
 info:
