@@ -42,5 +42,5 @@ jobs:
       - name: upload artifact
         uses: actions/upload-artifact@v2
         with:
-          name: alma
+          name: alma-${{ matrix.platform }}
           path: alma
