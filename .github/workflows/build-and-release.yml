@@ -46,7 +46,7 @@ jobs:
 
       - name: 'make clean static'
         if: startsWith(matrix.platform, 'ubuntu-latest')
-        run: make clean all
+        run: make clean static
 
       - name: upload artifact
         uses: actions/upload-artifact@v2
