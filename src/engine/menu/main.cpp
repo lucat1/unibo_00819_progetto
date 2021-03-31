@@ -31,9 +31,6 @@ Engine::UI::Logo *append_logo(Box *parent) {
 }
 
 Engine::UI::Button *append_button(Box *parent, const wchar_t *str) {
-  /* Engine::UI::Center *hcenter =
-   * Engine::UI::append<Engine::UI::Center>(parent); */
-  /* hcenter->propb(Box::Property::center_horizontal, 1); */
   auto btn =
       Engine::UI::append<Engine::UI::Button, const wchar_t *>(parent, str);
   btn->propc(Box::Property::foreground, Engine::Color::red);

@@ -24,7 +24,7 @@ class Main : public Menu {
   using Menu::Menu;
 
 private:
-  int focused = -1, max_focused = 1;
+  int focused = 0, max_focused = 1;
   UI::Box *focus_start();
 
 protected:

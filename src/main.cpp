@@ -27,11 +27,9 @@ int main() {
       handle(screen, screen->reposition());
       break;
     case KEY_UP:
-      cout << "sent it" << endl;
       screen->send_event(Drawable::Event::move_up);
       break;
     case KEY_DOWN:
-      cout << "sent it" << endl;
       screen->send_event(Drawable::Event::move_down);
       break;
     };
