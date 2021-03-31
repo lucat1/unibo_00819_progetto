@@ -17,6 +17,10 @@
 
 namespace Engine {
 namespace UI {
+
+// Centers its content either veritcally or horizontally.
+// NOTE: does not respect the padding values. If padding is needed please wrap
+// this element in a standard Engine::UI::Box.
 class Center : public Box {
 private:
   bool center_horizontally = 0;

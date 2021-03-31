@@ -66,8 +66,9 @@ bool Engine::Screen::open() {
   noecho(); // prevents user-inputted charters to be displayed on the stdscreen
   raw();    // intercept all keystrokes and prevent ^C from quitting the game
   curs_set(0); // hide the cursor by default
-  keypad(stdscreen,
-         false); // keypad(.., false) is used to caputre RESIZE events
+  keypad(
+      stdscreen,
+      true); // `true` is used to caputre arrow keys and other special sequences
 
   if (container != nullptr)
     delwin(container);

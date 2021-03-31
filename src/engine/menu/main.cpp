@@ -1,4 +1,5 @@
 /*
+
   University of bologna
   First cicle degree in Computer Science
   00819 - Programmazione
@@ -16,60 +17,64 @@
 #include "../ui/button.hpp"
 #include "../ui/center.hpp"
 #include "../ui/logo.hpp"
+using Engine::UI::Box;
 
-Engine::Menu::Main::Main(WINDOW *window)
-    : Drawable(window, Screen::SCREEN_COLS, Screen::SCREEN_LINES) {
-  this->drawable_kind = Kind::menu;
-  this->root = generate();
-}
-Engine::Menu::Main::~Main() { delete root; }
+Engine::Color foc_color = Engine::Color::grey53,
+              unfoc_color = Engine::Color::grey23;
 
-Engine::UI::Logo *append_logo(Engine::UI::Box *parent) {
-  Engine::UI::Center *hcenter = Engine::UI::append<Engine::UI::Center>(parent);
-  hcenter->propb(Engine::UI::Box::Property::center_horizontal, 1);
-  hcenter->props(Engine::UI::Box::Property::padding_bottom, 4);
-  auto logo = Engine::UI::append<Engine::UI::Logo>(hcenter);
+Engine::UI::Logo *append_logo(Box *parent) {
+  auto container = Engine::UI::append<Engine::UI::Box>(parent);
+  container->props(Box::Property::padding_bottom, 2);
+
+  auto logo = Engine::UI::append<Engine::UI::Logo>(container);
   return logo;
 }
 
-Engine::UI::Button *append_button(Engine::UI::Box *parent, const wchar_t *str) {
-  Engine::UI::Center *hcenter = Engine::UI::append<Engine::UI::Center>(parent);
-  hcenter->propb(Engine::UI::Box::Property::center_horizontal, 1);
+Engine::UI::Button *append_button(Box *parent, const wchar_t *str) {
+  /* Engine::UI::Center *hcenter =
+   * Engine::UI::append<Engine::UI::Center>(parent); */
+  /* hcenter->propb(Box::Property::center_horizontal, 1); */
   auto btn =
-      Engine::UI::append<Engine::UI::Button, const wchar_t *>(hcenter, str);
-  btn->propc(Engine::UI::Box::Property::foreground, Engine::Color::red);
-  btn->propc(Engine::UI::Box::Property::background, Engine::Color::grey23);
+      Engine::UI::append<Engine::UI::Button, const wchar_t *>(parent, str);
+  btn->propc(Box::Property::foreground, Engine::Color::red);
+  btn->propc(Box::Property::background, unfoc_color);
   return btn;
 }
 
-Engine::UI::Box *Engine::Menu::Main::generate() {
-  auto root = new UI::Box(width, height);
-  auto hcenter = UI::append<UI::Center>(root);
-  hcenter->propb(UI::Box::Property::center_horizontal, 1);
-  auto vcenter = UI::append<UI::Center>(hcenter);
+Box *Engine::Menu::Main::generate() {
+  auto root = new UI::Center(width, height);
+  auto center = UI::append<UI::Center>(root);
+  center->propb(Box::Property::center_horizontal, 1);
 
-  append_logo(vcenter);
-  auto play = append_button(vcenter, L"Play");
-  play->parent->props(Engine::UI::Box::Property::padding_bottom, 1);
-  append_button(vcenter, L"Settings");
+  append_logo(center);
+
+  auto btn_container = UI::append<UI::Center>(center);
+  btn_container->propb(Box::Property::center_horizontal, 1);
+  auto play = append_button(btn_container, L"Play");
+  play->props(Box::Property::padding_bottom, 1);
+  append_button(btn_container, L"Settings");
 
   return root;
 }
 
-void Engine::Menu::Main::redraw() {
-  root->show(window, 1, 1);
-  wrefresh(window);
+// TODO: consider adding this to the Menu generalization as it seems pretty
+// generic and universal. just leave the focus_start function up to the user.
+Box *Engine::Menu::Main::focus_start() { return root->child(0)->child(1); }
+Box *Engine::Menu::Main::curr_box() { return focus_start()->child(focused); }
+Box *Engine::Menu::Main::next_box() {
+  if (focused == max_focused)
+    focused = 0;
+  return focus_start()->child(focused++);
+}
+Box *Engine::Menu::Main::prev_box() {
+  if (focused == 0)
+    focused = max_focused;
+  return focus_start()->child(focused--);
 }
 
-void Engine::Menu::Main::handle_event(Event e) {
-  switch (e) {
-  case Event::redraw:
-    redraw();
-    break;
-  case Event::move_up:
-  case Event::move_down:
-  case Event::move_left:
-  case Event::move_right:
-    break;
-  };
+void Engine::Menu::Main::focus(Box *box) {
+  box->propc(Box::Property::background, Color::blue);
+}
+void Engine::Menu::Main::unfocus(Box *box) {
+  box->propc(Box::Property::background, Color::red);
 }

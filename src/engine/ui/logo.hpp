@@ -16,6 +16,9 @@
 
 namespace Engine {
 namespace UI {
+
+// NOTE: deliberately ignores any padding given. To achieve that wrap this
+// element inside a Box
 class Logo : public TextBox {
 public:
   Logo(uint16_t max_width, uint16_t max_height);
