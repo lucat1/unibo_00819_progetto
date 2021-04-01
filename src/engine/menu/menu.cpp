@@ -14,8 +14,6 @@
 #include "../screen.hpp"
 #include <exception>
 
-#include <iostream>
-
 void Engine::Menu::Menu::redraw() {
   // assert the root is not null by
   // - attempting to generate it for the first time

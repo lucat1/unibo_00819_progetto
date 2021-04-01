@@ -14,7 +14,6 @@ void handle(bool can_display) {
 
 int main() {
   Screen screen;
-  screen.open();
   handle(screen.open());
 
   Menu::Main *main_menu = new Menu::Main(screen.get_container());

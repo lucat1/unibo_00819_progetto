@@ -13,15 +13,10 @@
 #include "main.hpp"
 #include "../screen.hpp"
 #include "../ui/append.hpp"
-#include "../ui/button.hpp"
 #include "../ui/center.hpp"
-#include "../ui/logo.hpp"
 using Engine::UI::Box;
 
-Engine::Color foc_color = Engine::Color::grey53,
-              unfoc_color = Engine::Color::grey23;
-
-Engine::UI::Logo *append_logo(Box *parent) {
+Engine::UI::Logo *Engine::Menu::Main::append_logo(Box *parent) {
   auto container = Engine::UI::append<Engine::UI::Box>(parent);
   container->props(Box::Property::padding_bottom, 2);
 
@@ -29,11 +24,11 @@ Engine::UI::Logo *append_logo(Box *parent) {
   return logo;
 }
 
-Engine::UI::Button *append_button(Box *parent, const wchar_t *str) {
+Engine::UI::Button *Engine::Menu::Main::append_button(Box *parent,
+                                                      const wchar_t *str) {
   auto btn =
       Engine::UI::append<Engine::UI::Button, const wchar_t *>(parent, str);
-  btn->propc(Box::Property::foreground, Engine::Color::red);
-  btn->propc(Box::Property::background, unfoc_color);
+  unfocus(btn);
   return btn;
 }
 
@@ -74,10 +69,14 @@ Box *Engine::Menu::Main::prev_box() {
   return curr_box();
 }
 
+Engine::Color fg = Engine::Color::red, bg = Engine::Color::grey23;
+
 void Engine::Menu::Main::focus(Box *box) {
-  box->propc(Box::Property::background, foc_color);
+  box->propc(Box::Property::background, fg);
+  box->propc(Box::Property::foreground, bg);
 }
 
 void Engine::Menu::Main::unfocus(Box *box) {
-  box->propc(Box::Property::background, unfoc_color);
+  box->propc(Box::Property::background, bg);
+  box->propc(Box::Property::foreground, fg);
 }

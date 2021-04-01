@@ -14,6 +14,8 @@
 #ifndef ENGINE_MENU_MAIN_HPP
 #define ENGINE_MENU_MAIN_HPP
 
+#include "../ui/button.hpp"
+#include "../ui/logo.hpp"
 #include "menu.hpp"
 
 namespace Engine {
@@ -26,6 +28,8 @@ class Main : public Menu {
 private:
   int focused = 0, max_focused = 1;
   UI::Box *focus_start();
+  UI::Logo *append_logo(UI::Box *parent);
+  UI::Button *append_button(UI::Box *parent, const wchar_t *str);
 
 protected:
   UI::Box *generate();
