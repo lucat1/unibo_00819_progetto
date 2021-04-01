@@ -1,5 +1,5 @@
-#ifndef UNORDEREDMAP_HPP
-#define UNORDEREDMAP_HPP
+#ifndef NOSTD_UNORDEREDMAP_HPP
+#define NOSTD_UNORDEREDMAP_HPP
 
 #include "map.hpp"
 #include "pair.hpp"

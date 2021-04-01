@@ -1,5 +1,5 @@
-#ifndef __NOSTDMAP__
-#define __NOSTDMAP__
+#ifndef __NOSTD_MAP_HPP__
+#define __NOSTD_MAP_HPP__
 
 #include "pair.hpp"
 #include "vector.hpp"
