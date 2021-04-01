@@ -15,9 +15,7 @@ void handle(bool can_display) {
 int main() {
   Screen screen;
   handle(screen.open());
-
-  Menu::Main *main_menu = new Menu::Main(screen.get_container());
-  screen.set_content(main_menu);
+  screen.set_content<Menu::Main>();
 
   int key;
   while ((key = getch()) != 'q') {

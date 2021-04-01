@@ -29,12 +29,16 @@ Engine::Drawable::Kind Engine::Screen::get_state() {
 
   return content->kind();
 }
-void Engine::Screen::set_content(Engine::Drawable *drawable) {
+
+template <typename T> void Engine::Screen::set_content() {
   clear_content();
-  content = drawable;
+  content = new T(container);
   send_event(Engine::Drawable::Event::redraw);
 }
+template void Engine::Screen::set_content<Engine::Menu::Main>();
+
 Engine::Drawable *Engine::Screen::get_content() { return content; }
+
 void Engine::Screen::send_event(Drawable::Event e) {
   if (content != nullptr)
     content->handle_event(e);
