@@ -26,29 +26,34 @@ void Engine::UI::Center::propb(Box::Property key, bool value) {
 }
 
 void Engine::UI::Center::show(WINDOW *window, uint16_t x, uint16_t y) {
-  if (center_horizontally)
-    Box::show(window, x + std::floor((max_child_width - Box::size().first) / 2),
-              y);
-  else
-    Box::show(window, x,
-              y + std::floor((max_child_height - Box::size().second) / 2));
+  start_color(window);
+  if (center_horizontally) {
+    uint16_t rel_y = 0;
+    for (Box *it = first_child; it != nullptr && rel_y < max_height;
+         it = it->sibling) {
+      auto size = it->size();
+      uint16_t rel_x = std::max((max_width - size.first) / 2, 0);
+      it->show(window, x + rel_x, y + rel_y);
+      rel_y += size.second;
+    }
+  } else {
+    uint16_t rel_y = std::max((max_height - Box::size().second) / 2, 0);
+    for (Box *it = first_child; it != nullptr && rel_y < max_height;
+         it = it->sibling) {
+      it->show(window, x, y + rel_y);
+      rel_y += it->size().second;
+    }
+  }
+  end_color(window);
 }
 
 Nostd::Pair<uint16_t, uint16_t> Engine::UI::Center::size() {
-  uint16_t width = 0, height = 0;
+  auto size = Box::size();
+  uint16_t width = size.first, height = size.second;
   if (center_horizontally)
-    width = max_child_width;
+    width = max_width;
   else
-    height = max_child_height;
+    height = max_height;
 
-  for (Box *it = first_child; it != nullptr; it = it->sibling) {
-    auto child_size = it->size();
-    if (center_horizontally)
-      height = std::max(height, child_size.second);
-    else
-      width = std::max(width, child_size.first);
-  }
-
-  uint16_t w = width + pl + pr, h = height + pt + pb;
-  return {w, h};
+  return {width, height};
 }

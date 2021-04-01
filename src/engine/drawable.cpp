@@ -16,6 +16,7 @@ Engine::Drawable::Drawable(WINDOW *window, uint16_t width, uint16_t height) {
   this->width = width;
   this->height = height;
 }
+Engine::Drawable::~Drawable() {}
 
 Engine::Drawable::Kind Engine::Drawable::kind() const { return drawable_kind; }
 

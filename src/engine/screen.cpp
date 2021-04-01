@@ -20,8 +20,7 @@ Engine::Screen::Screen() {
 }
 Engine::Screen::~Screen() {
   close();
-  // free the currently allocated drawable
-  delete content;
+  clear_content();
 }
 
 Engine::Drawable::Kind Engine::Screen::get_state() {
@@ -30,15 +29,16 @@ Engine::Drawable::Kind Engine::Screen::get_state() {
 
   return content->kind();
 }
-void Engine::Screen::set_content(Engine::Drawable *drawable) {
-  if (content != nullptr)
-    // free the previous content data
-    delete content;
 
-  content = drawable;
+template <typename T> void Engine::Screen::set_content() {
+  clear_content();
+  content = new T(container);
   send_event(Engine::Drawable::Event::redraw);
 }
+template void Engine::Screen::set_content<Engine::Menu::Main>();
+
 Engine::Drawable *Engine::Screen::get_content() { return content; }
+
 void Engine::Screen::send_event(Drawable::Event e) {
   if (content != nullptr)
     content->handle_event(e);
@@ -66,8 +66,9 @@ bool Engine::Screen::open() {
   noecho(); // prevents user-inputted charters to be displayed on the stdscreen
   raw();    // intercept all keystrokes and prevent ^C from quitting the game
   curs_set(0); // hide the cursor by default
-  keypad(stdscreen,
-         false); // keypad(.., false) is used to caputre RESIZE events
+  keypad(
+      stdscreen,
+      true); // `true` is used to caputre arrow keys and other special sequences
 
   if (container != nullptr)
     delwin(container);
@@ -96,4 +97,11 @@ void Engine::Screen::close() {
   endwin();
   stdscreen = nullptr;
   container = nullptr;
+}
+
+void Engine::Screen::clear_content() {
+  // free the previous content data
+  if (content != nullptr)
+    delete content;
+  content = nullptr;
 }

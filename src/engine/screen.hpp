@@ -36,8 +36,12 @@ private:
   // x, y are the offest from the screen (left, top) to start printing inside
   // the game container
   uint16_t x, y, terminal_cols, terminal_lines;
-  Drawable *content;
+  // checks if the terminal window is big enough to make the content fit
   bool can_fit();
+
+  Drawable *content;
+  // removes and frees the content of the window
+  void clear_content();
 
 public:
   static const uint16_t SCREEN_COLS = 80;
@@ -50,7 +54,7 @@ public:
   // game, a menu or none (therefore we use Drawable::Kind)
   Drawable::Kind get_state();
   // updates the screen with a fresh drawing of a new content
-  void set_content(Drawable *drawable);
+  template <typename T> void set_content();
   // returns the current drawable being displayed on the screen
   Drawable *get_content();
   // sends an event to the current content displayed on the screen which will

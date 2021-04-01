@@ -52,7 +52,7 @@ public:
   virtual void handle_event(Event e);
 
   Drawable(WINDOW *window, uint16_t width, uint16_t height);
-  virtual ~Drawable() = default;
+  virtual ~Drawable();
 };
 
 } // namespace Engine

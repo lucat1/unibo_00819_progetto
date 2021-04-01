@@ -14,24 +14,30 @@
 #ifndef ENGINE_MENU_MAIN_HPP
 #define ENGINE_MENU_MAIN_HPP
 
-#include "../drawable.hpp"
-#include "../ui/box.hpp"
+#include "../ui/button.hpp"
+#include "../ui/logo.hpp"
+#include "menu.hpp"
 
 namespace Engine {
 namespace Menu {
 
-class Main : public Drawable {
+class Main : public Menu {
+  // inherit the parent constructor
+  using Menu::Menu;
+
 private:
-  UI::Box *root;
+  int focused = 0, max_focused = 1;
+  UI::Box *focus_start();
+  UI::Logo *append_logo(UI::Box *parent);
+  UI::Button *append_button(UI::Box *parent, const wchar_t *str);
 
+protected:
   UI::Box *generate();
-  void redraw();
-
-public:
-  Main(WINDOW *window);
-  ~Main();
-
-  void handle_event(Event e);
+  UI::Box *curr_box();
+  UI::Box *next_box();
+  UI::Box *prev_box();
+  void focus(UI::Box *box);
+  void unfocus(UI::Box *box);
 };
 
 } // namespace Menu

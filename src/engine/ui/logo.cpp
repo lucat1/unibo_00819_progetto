@@ -25,6 +25,7 @@ Engine::UI::Logo::Logo(uint16_t max_width, uint16_t max_height)
   lines.clear();
   for (size_t i = 0; i < logo_height; i++)
     lines.push_back(logo[i]);
+
   propc(Box::Property::foreground, Color::red);
 }
 
