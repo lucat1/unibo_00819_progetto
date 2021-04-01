@@ -68,7 +68,15 @@ public:
     return v[i];
   }
 
+  const V &at(size_t i) const {
+    if (i >= sz)
+      throw std::out_of_range("index out of bounds");
+    return v[i];
+  }
+
   V &operator[](size_t i) { return at(i); }
+
+  const V &operator[](size_t i) const { return at(i); };
 
   // Removes a signle item from the vector
   size_t erase(size_t i) {
@@ -103,11 +111,11 @@ public:
   }
 
   // returns whether the vector is empty
-  bool empty() { return sz == 0; };
+  bool empty() const { return sz == 0; };
   // returns the size of the array (length)
-  size_t size() { return sz; }
+  size_t size() const { return sz; }
   // returns the capactiy of the array (allocated size)
-  size_t capacity() { return cap; }
+  size_t capacity() const { return cap; }
 };
 
 } // namespace Nostd
