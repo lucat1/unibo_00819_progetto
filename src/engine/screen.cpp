@@ -20,8 +20,7 @@ Engine::Screen::Screen() {
 }
 Engine::Screen::~Screen() {
   close();
-  // free the currently allocated drawable
-  delete content;
+  clear_content();
 }
 
 Engine::Drawable::Kind Engine::Screen::get_state() {
@@ -31,10 +30,7 @@ Engine::Drawable::Kind Engine::Screen::get_state() {
   return content->kind();
 }
 void Engine::Screen::set_content(Engine::Drawable *drawable) {
-  if (content != nullptr)
-    // free the previous content data
-    delete content;
-
+  clear_content();
   content = drawable;
   send_event(Engine::Drawable::Event::redraw);
 }
@@ -97,4 +93,11 @@ void Engine::Screen::close() {
   endwin();
   stdscreen = nullptr;
   container = nullptr;
+}
+
+void Engine::Screen::clear_content() {
+  // free the previous content data
+  if (content != nullptr)
+    delete content;
+  content = nullptr;
 }
