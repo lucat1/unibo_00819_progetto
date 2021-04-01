@@ -49,13 +49,13 @@ void Engine::Menu::Menu::handle_event(Event e) {
 
   case Event::move_up:
   case Event::move_down: {
-    Engine::UI::Box *tmp = curr_box();
-    if (tmp != nullptr)
-      unfocus(tmp);
+    Engine::UI::Box *old_box = curr_box();
+    if (old_box != nullptr)
+      unfocus(old_box);
 
-    tmp = e == Event::move_up ? prev_box() : next_box();
-    if (tmp != nullptr)
-      focus(tmp);
+    Engine::UI::Box *new_box = e == Event::move_up ? prev_box() : next_box();
+    if (new_box != nullptr)
+      focus(new_box);
 
     redraw();
     break;

@@ -16,6 +16,9 @@
 #include "../ui/center.hpp"
 using Engine::UI::Box;
 
+#include <iostream>
+using namespace std;
+
 Engine::UI::Logo *Engine::Menu::Main::append_logo(Box *parent) {
   auto container = Engine::UI::append<Engine::UI::Box>(parent);
   container->props(Box::Property::padding_bottom, 2);
@@ -35,12 +38,12 @@ Engine::UI::Button *Engine::Menu::Main::append_button(Box *parent,
 Box *Engine::Menu::Main::generate() {
   auto root = new UI::Center(width, height);
   auto center = UI::append<UI::Center>(root);
-  center->propb(Box::Property::center_horizontal, 1);
+  center->propb(Box::Property::center_horizontal, true);
 
   append_logo(center);
 
   auto btn_container = UI::append<UI::Center>(center);
-  btn_container->propb(Box::Property::center_horizontal, 1);
+  btn_container->propb(Box::Property::center_horizontal, true);
   auto play = append_button(btn_container, L"Play");
   play->props(Box::Property::padding_bottom, 1);
   append_button(btn_container, L"Settings");
@@ -69,14 +72,14 @@ Box *Engine::Menu::Main::prev_box() {
   return curr_box();
 }
 
-Engine::Color fg = Engine::Color::red, bg = Engine::Color::grey23;
+Engine::Color button_fg = Engine::Color::red, button_bg = Engine::Color::grey23;
 
 void Engine::Menu::Main::focus(Box *box) {
-  box->propc(Box::Property::background, fg);
-  box->propc(Box::Property::foreground, bg);
+  box->propc(Box::Property::background, button_fg);
+  box->propc(Box::Property::foreground, button_bg);
 }
 
 void Engine::Menu::Main::unfocus(Box *box) {
-  box->propc(Box::Property::background, bg);
-  box->propc(Box::Property::foreground, fg);
+  box->propc(Box::Property::background, button_bg);
+  box->propc(Box::Property::foreground, button_fg);
 }

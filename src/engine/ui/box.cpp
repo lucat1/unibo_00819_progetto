@@ -17,18 +17,29 @@
 #include <exception>
 #include <stdexcept>
 
+// this map for colors _could_ be avoided if we have
+// alloc_pair, free_pair, find_pair on macos
+short map[256 + (100 * 256)] = {0};
+short i = 1;
+
 // returns a new color_pair based on the fg and bg properties.
+// we cache already initializes color pairs.
 int Engine::UI::Box::color_pair() {
   // check if fg == white and bg == transparent and in this case just return as
-  // we are not coloring this box. Colors taken from Engine::Color enum and
-  // Engine::Colorable default values and hardcoded for performance
-  if (fg == 15 && bg == -1)
+  // we are not coloring this box.
+  if (short_to_color(fg) == Colorable::foreground() &&
+      short_to_color(bg) == Colorable::background())
     return -1;
 
-  short bg = this->bg < 0 ? 0 : this->bg;
+  short bg = std::max((short)0, this->bg);
+  short hash = fg + (100 * bg);
+  if (map[hash] != 0)
+    return map[hash];
 
-  init_pair(fg + bg, fg, bg);
-  return COLOR_PAIR(fg + bg);
+  int k = i++;
+  init_pair(k, fg, bg);
+  map[hash] = COLOR_PAIR(k);
+  return map[hash];
 }
 
 void Engine::UI::Box::start_color(WINDOW *window) {

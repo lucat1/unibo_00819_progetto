@@ -49,7 +49,6 @@ void Engine::UI::Button::show(WINDOW *window, uint16_t x, uint16_t y) {
            osize.first + side_padding - 1);
 
   TextBox::show(button_window, side_padding, 1);
-  refresh();
   wrefresh(button_window);
 }
 
