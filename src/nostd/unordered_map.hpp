@@ -1,3 +1,14 @@
+/*
+  University of Bologna
+  First cicle degree in Computer Science
+  00819 - Programmazione
+
+  Mattia Girolimetto #977478
+  04/01/2021
+
+  unordered_map.cpp: Implementation of Nostd::UnorderedMap.
+*/
+
 #ifndef NOSTD_UNORDEREDMAP_HPP
 #define NOSTD_UNORDEREDMAP_HPP
 

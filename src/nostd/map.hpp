@@ -1,5 +1,16 @@
-#ifndef __NOSTD_MAP_HPP__
-#define __NOSTD_MAP_HPP__
+/*
+  University of Bologna
+  First cicle degree in Computer Science
+  00819 - Programmazione
+
+  Mattia Girolimetto #977478
+  04/01/2021
+
+  map.cpp: Nostd::Map definition.
+*/
+
+#ifndef NOSTD_MAP_HPP
+#define NOSTD_MAP_HPP
 
 #include "pair.hpp"
 #include "vector.hpp"

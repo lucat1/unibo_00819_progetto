@@ -1,5 +1,16 @@
-#ifndef TREEMAP_HPP
-#define TREEMAP_HPP
+/*
+  University of Bologna
+  First cicle degree in Computer Science
+  00819 - Programmazione
+
+  Mattia Girolimetto #977478
+  04/01/2021
+
+  tree_map.cpp: implementation of Nostd::TreeMap.
+*/
+
+#ifndef NOSTD_TREEMAP_HPP
+#define NOSTD_TREEMAP_HPP
 
 #include "map.hpp"
 #include "vector.hpp"
@@ -28,7 +39,6 @@ private:
       TreeNode *parent = nullptr;
       TreeNode *left = nullptr;
       TreeNode *right = nullptr;
-
       explicit TreeNode(K key, V value, TreeNode *f) {
         this->parent = f;
         this->key = key;
