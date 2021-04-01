@@ -1,5 +1,4 @@
 /*
-
   University of bologna
   First cicle degree in Computer Science
   00819 - Programmazione

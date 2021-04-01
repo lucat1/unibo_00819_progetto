@@ -1,3 +1,15 @@
+/*
+  University of bologna
+  First cicle degree in Computer Science
+  00819 - Programmazione
+
+  Luca Tagliavini #971133
+  03/31/2021
+
+  menu.hpp: Implements the Engine::Menu::Menu shared methods across all menus
+  subclasses. This implementation should allow menus not to have any focusable
+  item, that's why we take care and check each Box* for nullness.
+*/
 #include "menu.hpp"
 #include "../screen.hpp"
 #include <exception>
