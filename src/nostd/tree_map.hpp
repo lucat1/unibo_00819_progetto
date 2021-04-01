@@ -22,12 +22,12 @@
 namespace Nostd {
 
 /**
- *
- * TreeMap
- *
- * Built using an BST. Please refere to Nostd::Map for method's documentation
- *
- * */
+
+  TreeMap
+
+  Built using an BST. Please refere to Nostd::Map for method's documentation
+
+**/
 template <class K, class V> class TreeMap : public virtual Map<K, V> {
 private:
   class Tree {
@@ -64,14 +64,19 @@ private:
 
     TreeNode *insert(TreeNode *node, K key, V value) {
       if (node == nullptr) {
+        children++;
         return new TreeNode(key, value, nullptr);
       }
-      if (key <= node->key) {
+      if (key == node->key) {
+        node->value = value;
+      } else if (key <= node->key) {
         node->left = insert(node->left, key, value);
         node->left->parent = node;
+        children++;
       } else {
         node->right = insert(node->right, key, value);
         node->right->parent = node;
+        children++;
       }
       return node;
     }
@@ -84,18 +89,29 @@ private:
           ptr->parent->left = nullptr;
         else
           ptr->parent->right = nullptr;
-        delete ptr;
       }
+      delete ptr;
+      children--;
     }
 
   public:
-    Tree() {}
+    size_t children;
+
+    Tree() : children(0) {}
 
     ~Tree() { delete root; }
 
     TreeNode *root = nullptr;
 
     void insert(K key, V value) { this->root = insert(root, key, value); }
+
+    void clear(TreeNode *root) {
+      if (root == nullptr)
+        return;
+      remove_node(root->left);
+      remove_node(root->right);
+      remove_node(root);
+    }
 
     // Remove an element from the tree
     void remove(K key) {
@@ -198,11 +214,17 @@ private:
   Tree *tree;
 
 public:
-  TreeMap() { this->tree = new Tree(); }
+  TreeMap() {
+    this->tree = new Tree();
+    this->sz = 0;
+  }
 
   ~TreeMap() { delete tree; }
 
-  void put(K key, V value) override { this->tree->insert(key, value); }
+  void put(K key, V value) override {
+    this->tree->insert(key, value);
+    this->sz++;
+  }
 
   void remove(K key) override { this->tree->remove(key); }
 
@@ -212,7 +234,11 @@ public:
 
   bool contains(K key) override { return this->tree->find(key); }
 
+  size_t size() override { return this->tree->children; }
+
   Nostd::Vector<V> get_values() override { return this->tree->get_values(); }
+
+  void clear() override { this->tree->clear(this->tree->root); }
 
   Nostd::Vector<Nostd::Pair<K, V>> as_vector() override {
     return Nostd::Vector<Nostd::Pair<K, V>>();

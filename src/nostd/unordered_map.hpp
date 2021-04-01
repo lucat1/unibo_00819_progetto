@@ -18,6 +18,8 @@
 #include <cstddef>
 #include <exception>
 
+#include <iostream>
+
 namespace Nostd {
 /*
  *  UnorderedMap
@@ -31,33 +33,35 @@ namespace Nostd {
 template <typename K, typename V> class UnorderedMap : public Map<K, V> {
 private:
   Nostd::Vector<Nostd::Pair<K, V>> data;
+  size_t sz;
 
 public:
-  using Pairkv = Nostd::Pair<K, V>;
+  UnorderedMap() : sz(0) {}
 
   // Add new key and value to the map
   void put(K key, V value) override {
     for (size_t i = 0; i < data.size(); i++) {
-      Pairkv x = data[i];
+      Nostd::Pair<K, V> x = data[i];
       if (x.first == key) {
         x.second = value;
         return;
       }
     }
     data.push_back({key, value});
+    this->sz++;
   }
 
   void remove(K key) override {
     for (size_t i = 0; i < this->data.size(); i++)
       if (data[i].first == key) {
         data.erase(i);
+        this->sz--;
         return;
       }
   }
 
   bool empty() override { return this->data.empty(); }
 
-  // Check if the map contains an element
   bool contains(K key) override {
     for (size_t i = 0; i < this->data.size(); i++)
       if (key == data[i].first)
@@ -65,18 +69,19 @@ public:
     return false;
   }
 
-  // Returns all the value in a Nostd::Vector<T>
+  size_t size() override { return this->sz; }
+
   Nostd::Vector<V> get_values() override {
-    Nostd::Vector<V> res;
+    Nostd::Vector<V> res(data.size());
     for (size_t i = 0; i < this->data.size(); i++)
       res.push_back(data[i].second);
     return res;
   }
 
-  // Returns all the key-values as a Nostd::Vector<Nostd::Pair<K,V>>
   Nostd::Vector<Nostd::Pair<K, V>> as_vector() override { return this->data; }
 
-  // Access a value from his key
+  void clear() override { data.clear(); }
+
   V &operator[](K key) override {
     for (size_t i = 0; i < this->data.size(); i++)
       if (data[i].first == key)
