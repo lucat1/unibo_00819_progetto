@@ -6,12 +6,13 @@
   Stefano Volpe #969766
   04/01/2021
 
-  setting.hpp: user interface of Data::Setting.
+  setting.hpp: user interface of Data::Setting and its helper entities.
 */
 
 #ifndef DATA_SETTING_HPP
 #define DATA_SETTING_HPP
 
+#include <iostream>
 #include <iterator>
 
 #include "../nostd/wstring.hpp"
@@ -25,6 +26,13 @@ namespace Data {
 */
 class Setting {
 public:
+  class Iterator;
+
+  using iterator = Iterator;
+  using reverse_iterator = std::reverse_iterator<Iterator>;
+  using size_type = size_t;
+  using difference_type = ptrdiff_t;
+
   /*
     A random access iterator pointing to a (virtual) element among the values
     a Setting can assume.
@@ -66,16 +74,17 @@ public:
   };
 
   Setting() = delete;
+  // label: name of the Setting
   // start: lowest possible value
-  // size: number of possible values
-  // stride: step between possible values
+  // size: number of possible values (cannot be 0)
+  // stride: step between possible values (cannot be negative)
   // default_index: index (starting from 0) of default value
-  Setting(int start = 0, size_t size = 2, int stride = 1,
-          size_t default_index = 0);
-  // value_index: index (starting from 0) of default value. If not specified,
-  // it is the same as default_value
-  Setting(int start, size_t size, int stride, size_t default_index,
-          size_t value_index);
+  Setting(const Nostd::WString &label, int start = 0, size_t size = 2,
+          int stride = 1, size_t default_index = 0);
+  // current_index: index (starting from 0) of default value. If not specified,
+  // it is the same as default_index
+  Setting(const Nostd::WString &label, int start, size_t size, int stride,
+          size_t default_index, size_t current_index);
 
   // move
   Setting(Setting &&) = default;
@@ -87,10 +96,36 @@ public:
 
   ~Setting() = default;
 
+  // iteratros
+  iterator begin() const noexcept;
+  iterator end() const noexcept;
+  reverse_iterator rbegin() const noexcept;
+  reverse_iterator rend() const noexcept;
+  iterator default_value() const noexcept;
+  reverse_iterator rdefault_value() const noexcept;
+  iterator current_value() const noexcept;
+  iterator rcurrent_value() const noexcept;
+  void set(const iterator &);
+  void rset(const reverse_iterator &);
+
+  // getters
+  const Nostd::WString &label() const noexcept;
+  size_type size() const noexcept;
+  int stride() const noexcept;
+
+  // element access
+  int operator[](size_type) const noexcept;
+  int at(size_type) const;
+
 private:
   Nostd::WString lbl;
   int strt, strd;
   size_t sz, def_ind, val_ind;
 };
+
+std::istream &operator>>(std::istream &, Setting &);
+std::ostream &operator<<(std::ostream &, Setting &);
+
+} // namespace Data
 
 #endif
