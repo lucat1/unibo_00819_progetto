@@ -12,6 +12,8 @@
 #ifndef DATA_SETTING_HPP
 #define DATA_SETTING_HPP
 
+#include <iterator>
+
 #include "../nostd/wstring.hpp"
 
 namespace Data {
@@ -23,7 +25,45 @@ namespace Data {
 */
 class Setting {
 public:
-  class Iterator;
+  /*
+    A random access iterator pointing to a (virtual) element among the values
+    a Setting can assume.
+  */
+  class Iterator : public std::iterator<std::random_access_iterator_tag, int> {
+  public:
+    Iterator() = default;
+    Iterator(const Setting *, size_t position = 0);
+    Iterator(const Iterator &) = default;
+    Iterator &operator=(const Iterator &) = default;
+    ~Iterator() = default;
+
+    Iterator &operator++();
+    Iterator operator++(int);
+    Iterator &operator--();
+    Iterator operator--(int);
+    Iterator operator+(difference_type) const;
+    Iterator operator-(difference_type) const;
+    difference_type operator-(Iterator) const;
+    Iterator &operator+=(difference_type);
+    Iterator &operator-=(difference_type);
+
+    bool operator==(const Iterator &) const noexcept;
+    bool operator!=(const Iterator &) const noexcept;
+    bool operator<(const Iterator &) const;
+    bool operator>(const Iterator &) const;
+    bool operator<=(const Iterator &) const;
+    bool operator>=(const Iterator &) const;
+
+    // as the values themselves are virtual, dereferencing an iterator actually
+    // returns a value, instead of an rvalue reference. Also, -> is obviously
+    // unsupported.
+    int operator*() const;
+    int operator[](size_t) const;
+
+  private:
+    const Setting *s{nullptr};
+    size_t pos{0};
+  };
 
   Setting() = delete;
   // start: lowest possible value
