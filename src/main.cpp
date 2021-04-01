@@ -26,9 +26,11 @@ int main() {
     case KEY_RESIZE:
       handle(screen, screen->reposition());
       break;
+    case 'k':
     case KEY_UP:
       screen->send_event(Drawable::Event::move_up);
       break;
+    case 'j':
     case KEY_DOWN:
       screen->send_event(Drawable::Event::move_down);
       break;

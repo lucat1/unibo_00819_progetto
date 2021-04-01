@@ -36,9 +36,9 @@ void Engine::Menu::Menu::handle_event(Event e) {
     break;
 
   case Event::move_up:
-  case Event::move_down:
-    Engine::UI::Box *tmp;
-    if ((tmp = curr_box()) != nullptr)
+  case Event::move_down: {
+    Engine::UI::Box *tmp = curr_box();
+    if (tmp != nullptr)
       unfocus(tmp);
 
     tmp = e == Event::move_up ? prev_box() : next_box();
@@ -47,6 +47,7 @@ void Engine::Menu::Menu::handle_event(Event e) {
 
     redraw();
     break;
+  }
 
   // TODO: for more complex menus. to be handeld manually (?)
   // will close this out when we do the settings menu

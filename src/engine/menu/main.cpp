@@ -54,24 +54,31 @@ Box *Engine::Menu::Main::generate() {
   return root;
 }
 
-// TODO: consider adding this to the Menu generalization as it seems pretty
-// generic and universal. just leave the focus_start function up to the user.
+// These are common across al menus, but a shared abstraction has been avoided
+// to allow more complex menus to be created. This naive appreach with simple
+// `child` calls and a counter would not work in a more complex element tree
+// where the fous items are scattered around and not all contained neatly under
+// the same parent.
 Box *Engine::Menu::Main::focus_start() { return root->child(0)->child(1); }
+
 Box *Engine::Menu::Main::curr_box() { return focus_start()->child(focused); }
+
 Box *Engine::Menu::Main::next_box() {
-  if (focused == max_focused)
-    focused = 0;
-  return focus_start()->child(focused++);
+  // if we are at the last element go to the top, otherwhise increment
+  focused = focused == max_focused ? 0 : focused + 1;
+  return curr_box();
 }
+
 Box *Engine::Menu::Main::prev_box() {
-  if (focused == 0)
-    focused = max_focused;
-  return focus_start()->child(focused--);
+  // if we are at the first element go to the bottom, otherwhise decrement
+  focused = focused == 0 ? max_focused : focused - 1;
+  return curr_box();
 }
 
 void Engine::Menu::Main::focus(Box *box) {
-  box->propc(Box::Property::background, Color::blue);
+  box->propc(Box::Property::background, foc_color);
 }
+
 void Engine::Menu::Main::unfocus(Box *box) {
-  box->propc(Box::Property::background, Color::red);
+  box->propc(Box::Property::background, unfoc_color);
 }
