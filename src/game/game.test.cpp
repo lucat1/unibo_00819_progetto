@@ -1,6 +1,3 @@
-#include <iostream>
-using namespace std;
+#include "../nostd/test.hpp"
 
-int main() {
-    cout << "Hello World!" << endl;
-}
+int main() {}

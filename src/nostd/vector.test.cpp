@@ -1,24 +1,23 @@
-#include "../util/test.hpp"
 #include "pair.hpp"
+#include "test.hpp"
 #include "vector.hpp"
-#include <assert.h>
-#include <vector>
+#include <cassert>
 using namespace Nostd;
 
 int main() {
-  it("constructs a vector with no elements", {
+  it("constructs a vector with no elements", [] {
     Vector<int> v;
     assert(v.size() == 0);
     assert(v.capacity() == 1);
   });
 
-  it("constructs a vector with a given size", {
+  it("constructs a vector with a given size", [] {
     Vector<int> v(58);
     assert(v.size() == 58);
     assert(v.capacity() == 87);
   });
 
-  it("constructs a vector containing n times the given element", {
+  it("constructs a vector containing n times the given element", [] {
     Vector<int> v(20, 79);
     assert(v.size() == 20);
     assert(v.capacity() == 30);
@@ -26,7 +25,7 @@ int main() {
       assert(v[i] == 79);
   });
 
-  it("constructs a vector as a copy of another one", {
+  it("constructs a vector as a copy of another one", [] {
     Vector<int> original;
     for (size_t i = 0; i < 100; i++)
       original.push_back(i);
@@ -36,7 +35,7 @@ int main() {
       assert(cpy[i] == original[i]);
   });
 
-  it("constructs a vector by moving the data from another one", {
+  it("constructs a vector by moving the data from another one", [] {
     Vector<int> original;
     for (size_t i = 0; i < 100; i++)
       original.push_back(i);
@@ -46,13 +45,13 @@ int main() {
       assert(cpy[i] == original[i]);
   });
 
-  it("adds one element to the vector", {
+  it("adds one element to the vector", [] {
     Vector<int> v;
     v.push_back(1337);
     assert(v.at(0) == 1337);
   });
 
-  it("cleans the vector", {
+  it("cleans the vector", [] {
     Vector<int> v;
     v.push_back(124);
     v.push_back(1268);
@@ -62,7 +61,7 @@ int main() {
     assert(v.capacity() == 1);
   });
 
-  it("removes one element from the vector", {
+  it("removes one element from the vector", [] {
     Vector<int> v;
     v.push_back(124);
     v.push_back(1268);
@@ -73,7 +72,7 @@ int main() {
     assert(v[1] == 1594);
   });
 
-  it("resizes the vector to the given length", {
+  it("resizes the vector to the given length", [] {
     Vector<int> v;
     for (int i = 0; i < 100; i++)
       v.push_back(i);
@@ -84,7 +83,7 @@ int main() {
       assert(v[i] == i);
   });
 
-  it("accepts complex elements as values", {
+  it("accepts complex elements as values", [] {
     Vector<Pair<int, int>> v;
     Pair<int, int> p = {1, 1};
     v.push_back(p);

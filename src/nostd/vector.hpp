@@ -1,6 +1,5 @@
 #ifndef NOSTD_VECTOR_HPP
 #define NOSTD_VECTOR_HPP
-#include <stddef.h>
 #include <stdexcept>
 
 namespace Nostd {

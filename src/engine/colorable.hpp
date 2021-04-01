@@ -1,10 +1,22 @@
+/*
+  University of Bologna
+  First cicle degree in Computer Science
+  00819 - Programmazione
+
+  Luca Tagliavini #971133
+  03/20/2021
+
+  colorable.hpp: Defines the Engine::Colorable interface used to describe any
+  class which can be drawn and therefore has a foreground and background
+  attribute.
+*/
 #ifndef ENGINE_COLORABLE_HPP
 #define ENGINE_COLORABLE_HPP
 
 namespace Engine {
 // copied, edited with vim and by hand to compy with our naming convetion, from
 // https://jonasjacek.github.io/colors/
-enum class Color : int {
+enum class Color : short {
   transparent = -1,
   black,
   maroon,
@@ -264,7 +276,8 @@ enum class Color : int {
   grey93,
 };
 
-int color_to_int(Color c) noexcept;
+short color_to_short(Color c) noexcept;
+Color short_to_color(short c) noexcept;
 
 /*
  Interface representing anything that can be printed on screen using both a
