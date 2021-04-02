@@ -14,12 +14,12 @@
 
 Nostd::WString::WString() : Vector(1, L'\0') {}
 
-Nostd::WString::WString(WString &str) : Vector(str.size()) {
+Nostd::WString::WString(const WString &str) : Vector(str.size()) {
   for (size_t i = 0; i < str.size(); i++)
     v[i] = str[i];
 }
 
-Nostd::WString::WString(WString &str, size_t start, size_t len)
+Nostd::WString::WString(const WString &str, size_t start, size_t len)
     : Vector(len == npos ? str.size() - start : len + 1) {
   // we also check that we don't go out of the *str array as we
   // could loop infinitely when len = npos (read entire string)
@@ -80,7 +80,7 @@ wchar_t &Nostd::WString::back() {
   return v[sz - 2];
 }
 
-Nostd::WString &Nostd::WString::append(Nostd::WString &str) {
+Nostd::WString &Nostd::WString::append(const Nostd::WString &str) {
   return insert(sz - 1, str);
 }
 Nostd::WString &Nostd::WString::append(const wchar_t *str) {
@@ -91,7 +91,7 @@ void Nostd::WString::push_back(const wchar_t c) {
   v[sz - 2] = c;
   v[sz - 1] = L'\0';
 }
-Nostd::WString &Nostd::WString::insert(size_t start, Nostd::WString &str,
+Nostd::WString &Nostd::WString::insert(size_t start, const Nostd::WString &str,
                                        size_t substart, size_t subend) {
   WString substr = str.substr(substart, subend);
   return insert(start, substr.c_str());
@@ -165,7 +165,7 @@ size_t Nostd::WString::find(const wchar_t c, size_t start) const {
   wchar_t str[2] = {c, L'\0'};
   return find(str, start);
 }
-Nostd::WString Nostd::WString::substr(size_t start, size_t len) {
+Nostd::WString Nostd::WString::substr(size_t start, size_t len) const {
   WString res(*this, start, len);
   return res;
 }
@@ -188,7 +188,7 @@ Nostd::WString Nostd::WString::ltrim() {
   return substr(i);
 }
 
-Nostd::WString &Nostd::WString::operator=(Nostd::WString &str) {
+Nostd::WString &Nostd::WString::operator=(const Nostd::WString &str) {
   return operator=(str.c_str());
 }
 Nostd::WString &Nostd::WString::operator=(Nostd::WString &&str) {
@@ -216,7 +216,7 @@ Nostd::WString &Nostd::WString::operator=(const wchar_t c) {
   return operator=(str);
 }
 
-Nostd::WString &Nostd::WString::operator+=(Nostd::WString &str) {
+Nostd::WString &Nostd::WString::operator+=(const Nostd::WString &str) {
   append(str);
   return *this;
 }

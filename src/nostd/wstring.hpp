@@ -40,9 +40,9 @@ public:
   // constructs an empty WString
   explicit WString();
   // construct a WString from another WString copying its content
-  WString(WString &str);
+  WString(const WString &str);
   // construct a WString from another WString from start to start+len
-  WString(WString &str, size_t start, size_t len = npos);
+  WString(const WString &str, size_t start, size_t len = npos);
   // constructs a WString from a c-style string
   WString(const wchar_t *str);
   // constructs a WString from a c-style string limiting its length
@@ -70,13 +70,13 @@ public:
   // returns the last char in the string
   wchar_t &back();
   // appends another WString at the end of this instance (copying its contents)
-  WString &append(WString &str);
+  WString &append(const WString &str);
   // appends a copy of a wchar_t* at the end of this instance
   WString &append(const wchar_t *str);
   // postpends a charter to the string
   void push_back(const wchar_t c);
   // inserts a WString in between the current string instance, copying it
-  WString &insert(size_t start, WString &str, size_t substart = 0,
+  WString &insert(size_t start, const WString &str, size_t substart = 0,
                   size_t subend = npos);
   // inserts the chars of a wchar_t* in between the current string
   WString &insert(size_t start, const wchar_t *str, size_t len = npos);
@@ -108,7 +108,7 @@ public:
   size_t find(const wchar_t c, size_t start = 0) const;
   // returns a WString instance where the chars from start to start+len have
   // been copied over
-  WString substr(size_t start = 0, size_t len = npos);
+  WString substr(size_t start = 0, size_t len = npos) const;
   // trims whitespace from the right
   WString rtrim();
   // trims whitespace from the left
@@ -116,11 +116,11 @@ public:
 
   // various operators
 
-  WString &operator=(WString &str);
+  WString &operator=(const WString &str);
   WString &operator=(WString &&str);
   WString &operator=(const wchar_t *str);
   WString &operator=(const wchar_t c);
-  WString &operator+=(WString &str);
+  WString &operator+=(const WString &str);
   WString &operator+=(const wchar_t *str);
   WString &operator+=(const wchar_t c);
 };

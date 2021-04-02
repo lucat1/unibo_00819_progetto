@@ -14,13 +14,13 @@
 
 #include "matrix.hpp"
 
-#include "allocator.hpp"
-#include "concepts.hpp"
 #include <algorithm>
-#include <iostream>
 #include <iterator>
 #include <memory>
 #include <stdexcept>
+
+#include "allocator.hpp"
+#include "concepts.hpp"
 
 template <class T, class Alloc>
 template <class U>
