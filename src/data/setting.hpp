@@ -29,7 +29,6 @@ public:
   class Iterator;
 
   using iterator = Iterator;
-  using reverse_iterator = std::reverse_iterator<Iterator>;
   using size_type = size_t;
   using difference_type = ptrdiff_t;
 
@@ -79,11 +78,11 @@ public:
   // size: number of possible values (cannot be 0)
   // stride: step between possible values (cannot be 0)
   // default_index: index (starting from 0) of default value
-  Setting(const Nostd::WString &label, int start = 0, size_t size = 2,
-          int stride = 1, size_t default_index = 0);
+  Setting(Nostd::WString label, int start = 0, size_t size = 2, int stride = 1,
+          size_t default_index = 0);
   // current_index: index (starting from 0) of default value. If not specified,
   // it is the same as default_index
-  Setting(const Nostd::WString &label, int start, size_t size, int stride,
+  Setting(Nostd::WString label, int start, size_t size, int stride,
           size_t default_index, size_t current_index);
 
   // move
@@ -99,14 +98,10 @@ public:
   // iteratros
   iterator begin() const noexcept;
   iterator end() const noexcept;
-  reverse_iterator rbegin() const noexcept;
-  reverse_iterator rend() const noexcept;
   iterator default_value() const noexcept;
-  reverse_iterator rdefault_value() const noexcept;
   iterator current_value() const noexcept;
-  reverse_iterator rcurrent_value() const noexcept;
+  // the following two methods update the current value
   int set(const iterator &);
-  int rset(const reverse_iterator &);
 
   // getters
   const Nostd::WString &label() const noexcept;

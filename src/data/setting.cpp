@@ -18,8 +18,8 @@ using Data::Setting;
 using Iterator = Setting::Iterator;
 
 Iterator::Iterator(const Setting *setting, size_t position) : s{setting} {
-  if (position > s->size())
-    throw std::out_of_range("position > s->size()");
+  if (position > s->size() && position + 1)
+    throw std::out_of_range("position > s->size() && position + 1");
   pos = position;
 }
 
@@ -40,8 +40,8 @@ Iterator Iterator::operator--(int) {
 }
 
 Iterator Iterator::operator+(difference_type n) const {
-  if (static_cast<difference_type>(pos) + n < 0)
-    throw std::out_of_range("static_cast<difference_type>(pos) + n < 0");
+  if (static_cast<difference_type>(pos) + n < -1)
+    throw std::out_of_range("static_cast<difference_type>(pos) + n < -1");
   return Iterator(s, static_cast<difference_type>(pos) + n);
 }
 
@@ -83,12 +83,12 @@ int Iterator::operator*() const { return (*s)[pos]; }
 
 int Iterator::operator[](size_t n) const { return *(*this + n); }
 
-Setting::Setting(const Nostd::WString &label, int start, size_t size,
-                 int stride, size_t default_index)
+Setting::Setting(Nostd::WString label, int start, size_t size, int stride,
+                 size_t default_index)
     : Setting(label, start, size, stride, default_index, default_index){};
 
-Setting::Setting(const Nostd::WString &label, int start, size_t size,
-                 int stride, size_t default_index, size_t current_index)
+Setting::Setting(Nostd::WString label, int start, size_t size, int stride,
+                 size_t default_index, size_t current_index)
     : lbl{label}, strt{start}, strd{stride}, sz{size}, def_ind{default_index},
       curr_ind{current_index} {
   if (!sz)
@@ -105,40 +105,18 @@ auto Setting::begin() const noexcept -> iterator { return Iterator(this, 0); }
 
 auto Setting::end() const noexcept -> iterator { return Iterator(this, sz); }
 
-auto Setting::rbegin() const noexcept -> reverse_iterator {
-  return std::reverse_iterator<iterator>(end() - 1);
-}
-
-auto Setting::rend() const noexcept -> reverse_iterator {
-  return std::reverse_iterator<iterator>(begin()) + 1;
-}
-
 auto Setting::default_value() const noexcept -> iterator {
   return begin() + def_ind;
-}
-
-auto Setting::rdefault_value() const noexcept -> reverse_iterator {
-  return std::reverse_iterator<iterator>(default_value());
 }
 
 auto Setting::current_value() const noexcept -> iterator {
   return begin() + curr_ind;
 }
 
-auto Setting::rcurrent_value() const noexcept -> reverse_iterator {
-  return std::reverse_iterator<iterator>(current_value());
-}
-
 int Setting::set(const iterator &i) {
   if (i == end())
     throw std::invalid_argument("i == end()");
   return at(curr_ind = i - begin());
-}
-
-int Setting::rset(const reverse_iterator &i) {
-  if (i == rend())
-    throw std::invalid_argument("i == rend()");
-  return at(curr_ind = i - rbegin());
 }
 
 const Nostd::WString &Setting::label() const noexcept { return lbl; }
