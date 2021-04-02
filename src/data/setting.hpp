@@ -77,7 +77,7 @@ public:
   // label: name of the Setting
   // start: lowest possible value
   // size: number of possible values (cannot be 0)
-  // stride: step between possible values (cannot be negative)
+  // stride: step between possible values (cannot be 0)
   // default_index: index (starting from 0) of default value
   Setting(const Nostd::WString &label, int start = 0, size_t size = 2,
           int stride = 1, size_t default_index = 0);
@@ -104,9 +104,9 @@ public:
   iterator default_value() const noexcept;
   reverse_iterator rdefault_value() const noexcept;
   iterator current_value() const noexcept;
-  iterator rcurrent_value() const noexcept;
-  void set(const iterator &);
-  void rset(const reverse_iterator &);
+  reverse_iterator rcurrent_value() const noexcept;
+  int set(const iterator &);
+  int rset(const reverse_iterator &);
 
   // getters
   const Nostd::WString &label() const noexcept;
@@ -117,14 +117,19 @@ public:
   int operator[](size_type) const noexcept;
   int at(size_type) const;
 
+  friend std::basic_ostream<wchar_t> &operator<<(std::basic_ostream<wchar_t> &,
+                                                 const Setting &);
+
 private:
   Nostd::WString lbl;
   int strt, strd;
-  size_t sz, def_ind, val_ind;
+  size_t sz, def_ind, curr_ind;
 };
 
-std::istream &operator>>(std::istream &, Setting &);
-std::ostream &operator<<(std::ostream &, Setting &);
+std::basic_istream<wchar_t> &operator>>(std::basic_istream<wchar_t> &,
+                                        Setting &);
+std::basic_ostream<wchar_t> &operator<<(std::basic_ostream<wchar_t> &,
+                                        const Setting &);
 
 } // namespace Data
 
