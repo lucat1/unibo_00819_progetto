@@ -30,14 +30,19 @@ int main() {
     assert(s2.current_value() == s2.begin() + 1);
   });
   it("updates its own current value", [] {
-    Setting s1(L"", 0, 11, 10, 5);
-    assert(s1.set(s1.current_value() + 2) == 70);
-    assert(s1.current_value() == s1.begin() + 7);
+    Setting s(L"", 0, 11, 10, 5);
+    assert(s.set(s.current_value() + 2) == 70);
+    assert(s.current_value() == s.begin() + 7);
   });
   it("iterates through possible values", [] {
-    Setting s1(L"", 1, 10, 1, 4);
+    Setting s(L"", 1, 10, 1, 4);
     int check{0};
-    for (auto x : s1)
+    for (auto x : s)
       assert(x == ++check);
+  });
+  it("exposes its first and last values", [] {
+    Setting s(L"", 1, 10, 1, 4);
+    assert(s.first() == 1);
+    assert(s.last() == 10);
   });
 }

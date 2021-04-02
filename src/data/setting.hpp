@@ -107,6 +107,8 @@ public:
   const Nostd::WString &label() const noexcept;
   size_type size() const noexcept;
   int stride() const noexcept;
+  int first() const noexcept;
+  int last() const noexcept;
 
   // element access
   int operator[](size_type) const noexcept;
@@ -121,6 +123,7 @@ private:
   size_t sz, def_ind, curr_ind;
 };
 
+// The two following methods ignore the setting's current value
 std::basic_istream<wchar_t> &operator>>(std::basic_istream<wchar_t> &,
                                         Setting &);
 std::basic_ostream<wchar_t> &operator<<(std::basic_ostream<wchar_t> &,

@@ -125,6 +125,10 @@ auto Setting::size() const noexcept -> size_type { return sz; }
 
 int Setting::stride() const noexcept { return strd; }
 
+int Setting::first() const noexcept { return (*this)[0]; }
+
+int Setting::last() const noexcept { return (*this)[sz - 1]; }
+
 int Setting::operator[](size_type n) const noexcept { return strt + n * strd; }
 
 int Setting::at(size_type n) const {
@@ -137,14 +141,13 @@ std::basic_istream<wchar_t> &Data::operator>>(std::basic_istream<wchar_t> &is,
                                               Setting &s) {
   Nostd::WString label;
   int start, stride;
-  size_t size, default_index, current_index;
-  Nostd::getline(is, label) >> start >> size >> stride >> default_index >>
-      current_index;
-  s = Setting(label, start, size, stride, default_index, current_index);
+  size_t size, default_index;
+  Nostd::getline(is, label) >> start >> size >> stride >> default_index;
+  s = Setting(label, start, size, stride, default_index);
   return is;
 }
 
 std::basic_ostream<wchar_t> &Data::operator<<(std::basic_ostream<wchar_t> &os,
                                               const Setting &s) {
-  return os << s.label() << s.strt << s.sz << s.def_ind << s.curr_ind;
+  return os << s.label() << s.strt << s.sz << s.def_ind;
 }
