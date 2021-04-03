@@ -6,7 +6,7 @@
   Stefano Volpe #969766
   04/03/2021
 
-  database.hpp: implementation of Data::Database and its helper entities.
+  database.hpp: user interface of Data::Database and its helper entities.
 */
 
 #ifndef DATA_DATABASE_HPP

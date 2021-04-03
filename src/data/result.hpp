@@ -6,7 +6,7 @@
   Stefano Volpe #969766
   04/02/2021
 
-  result.hpp: user interface of Data::Result and its helper entities.
+  result.hpp: user interface of Data::Result.
 */
 
 #ifndef DATA_RESULT_HPP

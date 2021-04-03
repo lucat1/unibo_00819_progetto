@@ -6,7 +6,7 @@
   Stefano Volpe #969766
   04/03/2021
 
-  result.cpp: implementation of Data::Result and its helper entities.
+  result.cpp: implementation of Data::Result.
 */
 
 #include "result.hpp"
