@@ -19,14 +19,32 @@ namespace Data {
 
 /*
   A Result describes the aftermath of a single game. It stores the
-  player's nickname, a reference to the Hero they used and their score.
+  player's nickname, a reference to the Hero they used and their score (which
+  must not be negative).
 */
 class Result {
 public:
+  Result() = default;
+  Result(const Nostd::WString &nickname, const Interactables::Hero *hero,
+         int score);
+  Result(Result &&) = default;
+  Result &operator=(Result &&) = default;
+  Result(const Result &) = default;
+  Result &operator=(const Result &) = default;
+
+  ~Result() = default;
+
+  // getters
+  const Nostd::WString &nickname() const noexcept;
+  const Interactables::Hero *hero() const noexcept;
+  int score() const noexcept;
+
+  operator int() const;
+
 private:
-  Nostd::WString nick;
-  const Interactables::Hero *chr;
-  int pts;
+  Nostd::WString nick{};
+  const Interactables::Hero *hr{nullptr};
+  int scr{0};
 };
 
 } // namespace Data

@@ -40,6 +40,8 @@ public:
   public:
     Iterator() = default;
     Iterator(const Setting *, size_t position = 0);
+    Iterator(Iterator &&) = default;
+    Iterator &operator=(Iterator &&) = default;
     Iterator(const Iterator &) = default;
     Iterator &operator=(const Iterator &) = default;
     ~Iterator() = default;
