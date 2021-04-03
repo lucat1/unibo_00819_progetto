@@ -33,10 +33,9 @@ namespace Nostd {
 template <typename K, typename V> class UnorderedMap : public Map<K, V> {
 private:
   Nostd::Vector<Nostd::Pair<K, V>> data;
-  size_t sz;
 
 public:
-  UnorderedMap() : sz(0) {}
+  UnorderedMap() {}
 
   // Add new key and value to the map
   void put(K key, V value) override {
@@ -48,14 +47,12 @@ public:
       }
     }
     data.push_back({key, value});
-    this->sz++;
   }
 
   void remove(K key) override {
     for (size_t i = 0; i < this->data.size(); i++)
       if (data[i].first == key) {
         data.erase(i);
-        this->sz--;
         return;
       }
   }
@@ -69,12 +66,12 @@ public:
     return false;
   }
 
-  size_t size() override { return this->sz; }
+  size_t size() override { return this->data.size(); }
 
   Nostd::Vector<V> get_values() override {
-    Nostd::Vector<V> res(data.size());
+    Nostd::Vector<V> res(this->data.size());
     for (size_t i = 0; i < this->data.size(); i++)
-      res.push_back(data[i].second);
+      res[i] = data[i].second;
     return res;
   }
 

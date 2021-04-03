@@ -11,6 +11,9 @@
 
 #include "test.hpp"
 #include "tree_map.hpp"
+#include <cassert>
+#include <exception>
+#include <stdexcept>
 
 int main() {
 
@@ -27,6 +30,13 @@ int main() {
     tm.put(2, 5);
     tm[2] = 10;
     assert(tm[2] == 10);
+    bool ex = false;
+    try {
+      tm[22] = 12;
+    } catch (std::invalid_argument &e) {
+      ex = true;
+    }
+    assert(ex);
   });
 
   Nostd::it("gets values of tmap", [] {
@@ -37,18 +47,47 @@ int main() {
     assert(v.size() == 2);
   });
 
+  Nostd::it("checks the size of the tmap", [] {
+    Nostd::TreeMap<int, int> tm;
+    tm.put(3, 4);
+    tm.put(3, 4);
+    tm.put(3, 4);
+    tm.put(3, 4);
+    tm.put(3, 4);
+    assert(tm.size() == 1);
+    tm.put(33, 4);
+    tm.put(23, 4);
+    assert(tm.size() == 3);
+  });
+
   Nostd::it("checks wheter the tmap contains an element", [] {
     Nostd::TreeMap<int, int> tm;
     tm.put(4, 5);
     assert(tm.contains(4));
+    assert(!tm.contains(5));
   });
 
-  Nostd::it("removes an element from the tmap", [] {
+  /*Nostd::it("removes an element from the tmap", [] {
     Nostd::TreeMap<int, int> tm;
-    tm.put(4, 5);
-    tm.put(14, 10);
-    tm.remove(4);
-    assert(tm.get_values().size() == 1);
+    tm.put(10, 10);
+    tm.put(5, 5);
+    tm.put(3, 3);
+    tm.put(6, 6);
+    tm.put(20, 20);
+    tm.put(1, 1);
+    tm.remove(5);
+    tm.remove(6);
+    tm.remove(3);
+    tm.remove(10);
+    assert(tm.get_values().size() == 2);
+  });
+*/
+  Nostd::it("Remove leaf", [] {
+    Nostd::TreeMap<int, int> tm;
+    tm.put(10, 10);
+    tm.put(5, 5);
+    tm.remove(5);
+    assert(tm.size() == 1);
   });
 
   Nostd::it("puts elements into tmap", [] {

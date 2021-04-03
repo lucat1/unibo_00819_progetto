@@ -18,6 +18,7 @@
 #include <cstddef>
 #include <cstdio>
 #include <exception>
+#include <iostream>
 
 namespace Nostd {
 
@@ -69,28 +70,27 @@ private:
       }
       if (key == node->key) {
         node->value = value;
-      } else if (key <= node->key) {
+      } else if (key < node->key) {
         node->left = insert(node->left, key, value);
         node->left->parent = node;
-        children++;
       } else {
         node->right = insert(node->right, key, value);
         node->right->parent = node;
-        children++;
       }
       return node;
     }
 
     void remove_node(TreeNode *ptr) {
-      if (ptr->parent == nullptr) // root
+      /*if (ptr->parent == nullptr) // root
         root = nullptr;
       else {
-        if (ptr->parent->left != nullptr && ptr->parent->left->key == ptr->key)
+        if (ptr->parent->left != nullptr && ptr->parent->left == ptr)
           ptr->parent->left = nullptr;
         else
           ptr->parent->right = nullptr;
-      }
+      }*/
       delete ptr;
+      ptr = nullptr;
       children--;
     }
 
@@ -116,54 +116,66 @@ private:
     // Remove an element from the tree
     void remove(K key) {
       TreeNode *ptr = this->root;
-      while (ptr != nullptr) {
-        if (ptr->key == key)
-          break;
-        if (key <= ptr->key)
+      while (ptr != nullptr && ptr->key != key) {
+        if (ptr->key <= key)
           ptr = ptr->left;
         else
           ptr = ptr->right;
       }
+      // Empty tree/key not found
       if (ptr == nullptr)
         return;
       // 1. Leaf
       if (ptr->left == nullptr && ptr->right == nullptr) {
         remove_node(ptr);
+        return;
       }
-      // 2. Right is null
-      else if (ptr->right == nullptr) {
-        if (ptr->parent == nullptr)
-          ptr = ptr->left;
-        else if (ptr->parent->left == ptr)
+      // 2. One child null
+
+      // if ptr is left child
+      if (ptr->parent->left == ptr) {
+        // Left is null
+        if (ptr->left == nullptr && ptr->right != nullptr)
+          ptr->parent->left = ptr->right;
+        // Right is null
+        if (ptr->right == nullptr && ptr->left != nullptr)
           ptr->parent->left = ptr->left;
-        else
+        remove_node(ptr);
+        return;
+      }
+      // if ptr is right child
+      else {
+        // left is null
+        if (ptr->left == nullptr && ptr->right != nullptr)
+          ptr->parent->right = ptr->right;
+        // right is null
+        if (ptr->right == nullptr && ptr->left != nullptr)
           ptr->parent->right = ptr->left;
         remove_node(ptr);
+        return;
       }
-      // 3. Left is null
-      else if (ptr->left == nullptr) {
-        if (ptr->parent == nullptr)
-          ptr = ptr->right;
-        else if (ptr->parent->right == ptr)
-          ptr->parent->right = ptr->right;
-        else
-          ptr->parent->left = ptr->right;
-        remove_node(ptr);
-      }
-      // 4 nobody is null
-      else if (ptr->left != nullptr && ptr->right != nullptr) {
-        TreeNode *tmp = get_predecessor(key);
-        remove(tmp->key);
-        ptr->key = tmp->key;
-        ptr->value = tmp->value;
+
+      // 3. Both children null
+      if (ptr->left != nullptr && ptr->right != nullptr) {
+        // a. Find predecessor
+        // b. Replace node to delete predecessor
+        // c. Delete old predecessor
+        TreeNode *pred = get_predecessor(key);
+        // assert pred != null
+        assert(pred != nullptr);
+        remove(pred->key);
+        ptr->key = pred->key;
+        ptr->value = pred->value;
+        return;
       }
     }
 
+    // Return nullptr if there is no predecessor
     TreeNode *get_predecessor(K key) {
       TreeNode *res = nullptr;
       TreeNode *ptr = this->root;
       while (ptr != nullptr) {
-        if (ptr->key > res->key) {
+        if (ptr->key < key && (res == nullptr || ptr->key > res->key)) {
           res = ptr;
         }
         if (key <= ptr->key) {
@@ -214,19 +226,21 @@ private:
   Tree *tree;
 
 public:
-  TreeMap() {
-    this->tree = new Tree();
-    this->sz = 0;
-  }
+  TreeMap() { this->tree = new Tree(); }
 
   ~TreeMap() { delete tree; }
 
-  void put(K key, V value) override {
-    this->tree->insert(key, value);
-    this->sz++;
-  }
+  void put(K key, V value) override { this->tree->insert(key, value); }
 
-  void remove(K key) override { this->tree->remove(key); }
+  void remove(K key) override {
+    this->tree->remove(key);
+    auto v = get_values();
+    std::cout << "removed " << key << ": <";
+    for (size_t i = 0; i < v.size(); i++) {
+      std::cout << v[i] << " ";
+    }
+    std::cout << ">" << std::endl;
+  }
 
   V &operator[](K key) override { return this->tree->get(key); }
 

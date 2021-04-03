@@ -12,9 +12,11 @@
 
 #include "test.hpp"
 #include "unordered_map.hpp"
+#include "vector.hpp"
 #include <cassert>
 
 int main() {
+
   Nostd::it("puts elements into  an umap", [] {
     Nostd::UnorderedMap<int, int> um;
     um.put(2, 5);
@@ -33,18 +35,21 @@ int main() {
     Nostd::UnorderedMap<int, int> um;
     um.put(2, 5);
     um.put(4, 25);
-    Nostd::Vector<int>  v = um.get_values();
-    std::cout << v.size() << std::endl;
+    Nostd::Vector<int> v = um.get_values();
     assert(v.size() == 2);
   });
 
   Nostd::it("checks wheter an umap contains an element or not", [] {
     Nostd::UnorderedMap<int, int> um;
     um.put(4, 5);
+    um.put(14, 5);
+    um.put(24, 5);
+    um.put(34, 5);
     assert(um.contains(4));
+    assert(!um.contains(5));
   });
 
-  Nostd::it("removes and element from an umap", [] {
+  Nostd::it("removes all element from an umap", [] {
     Nostd::UnorderedMap<int, int> um;
     um.put(4, 5);
     um.put(10, 15);
