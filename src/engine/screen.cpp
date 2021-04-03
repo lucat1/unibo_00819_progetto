@@ -69,11 +69,13 @@ bool Engine::Screen::open() {
   keypad(
       stdscreen,
       true); // `true` is used to caputre arrow keys and other special sequences
+  nodelay(stdscr, true); // makes getch non-blocking
 
   if (container != nullptr)
     delwin(container);
 
-  container = newwin(SCREEN_LINES + 2, SCREEN_COLS + 2, y, x);
+  outer_box = newwin(SCREEN_LINES + 2, SCREEN_COLS + 2, y, x);
+  container = newwin(SCREEN_LINES, SCREEN_COLS, y + 1, x + 1);
   return reposition();
 }
 
@@ -81,18 +83,23 @@ bool Engine::Screen::reposition() {
   if (!can_fit())
     return false;
 
-  clear();   // clear the stdscreen and
+  erase();   // clear the stdscreen and
   refresh(); // send the changes to the user so we can start drawing
 
-  mvwin(container, y, x);
-  box(container, ACS_VLINE, ACS_HLINE);
+  mvwin(outer_box, y, x);
+  box(outer_box, ACS_VLINE, ACS_HLINE);
+
+  mvwin(container, y + 1, x + 1);
   send_event(Engine::Drawable::Event::redraw);
+
+  wrefresh(outer_box);
   wrefresh(container);
 
   return true;
 }
 
 void Engine::Screen::close() {
+  delwin(outer_box);
   delwin(container);
   endwin();
   stdscreen = nullptr;

@@ -1,6 +1,7 @@
 #include "engine/menu/main.hpp"
 #include "engine/screen.hpp"
 #include <iostream>
+#include <unistd.h>
 using namespace std;
 using namespace Engine;
 
@@ -19,19 +20,26 @@ int main() {
 
   int key;
   while ((key = getch()) != 'q') {
-    switch (key) {
-    case KEY_RESIZE:
-      handle(screen.reposition());
+    // quit if usleep returns an error
+    if (usleep(1000000 / 25)) // 25fps
       break;
-    case 'k':
-    case KEY_UP:
-      screen.send_event(Drawable::Event::move_up);
-      break;
-    case 'j':
-    case KEY_DOWN:
-      screen.send_event(Drawable::Event::move_down);
-      break;
-    };
+
+    // keyboard handling
+    if (key != ERR) {
+      switch (key) {
+      case KEY_RESIZE:
+        handle(screen.reposition());
+        break;
+      case 'k':
+      case KEY_UP:
+        screen.send_event(Drawable::Event::move_up);
+        break;
+      case 'j':
+      case KEY_DOWN:
+        screen.send_event(Drawable::Event::move_down);
+        break;
+      };
+    }
   }
 
   return 0;
