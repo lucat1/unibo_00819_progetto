@@ -40,6 +40,8 @@ public:
   public:
     Iterator() = default;
     Iterator(const Setting *, size_t position = 0);
+    Iterator(Iterator &&) = default;
+    Iterator &operator=(Iterator &&) = default;
     Iterator(const Iterator &) = default;
     Iterator &operator=(const Iterator &) = default;
     ~Iterator() = default;
@@ -123,7 +125,8 @@ private:
   size_t sz, def_ind, curr_ind;
 };
 
-// The two following methods ignore the setting's current value
+// The two following methods ignore the setting's current value and work with
+// non-standard CSV format
 std::basic_istream<wchar_t> &operator>>(std::basic_istream<wchar_t> &,
                                         Setting &);
 std::basic_ostream<wchar_t> &operator<<(std::basic_ostream<wchar_t> &,
