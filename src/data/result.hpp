@@ -39,7 +39,7 @@ public:
   const Interactables::Hero *hero() const noexcept;
   int score() const noexcept;
 
-  operator int() const;
+  operator int() const; // converts results to scores (so they can be compared)
 
 private:
   Nostd::WString nick{};

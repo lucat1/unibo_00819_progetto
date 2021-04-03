@@ -125,7 +125,8 @@ private:
   size_t sz, def_ind, curr_ind;
 };
 
-// The two following methods ignore the setting's current value
+// The two following methods ignore the setting's current value and work with
+// non-standard CSV format
 std::basic_istream<wchar_t> &operator>>(std::basic_istream<wchar_t> &,
                                         Setting &);
 std::basic_ostream<wchar_t> &operator<<(std::basic_ostream<wchar_t> &,
