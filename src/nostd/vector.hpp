@@ -21,7 +21,7 @@ protected:
   void init_v(size_t size) {
     sz = size;
     calc_cap();
-    v = new V[cap];
+    v = reinterpret_cast<V *>(::operator new(cap * sizeof(V)));
   }
 
 public:
@@ -49,7 +49,7 @@ public:
     this->cap = vec.cap;
     vec.v = nullptr; // to prevent unwanted deallocations
   }
-  ~Vector() { delete[] v; }
+  ~Vector() { ::operator delete(v); }
 
   // Adds a new element at the end of the vector
   void push_back(V ele) {
@@ -103,10 +103,10 @@ public:
       cap = 2;
     else
       cap = n * 1.5;
-    V *newv = new V[cap];
+    V *newv = reinterpret_cast<V *>(::operator new((cap + 1) * sizeof(V)));
     for (size_t i = 0; i < n; i++)
       newv[i] = v[i];
-    delete[] v;
+    ::operator delete(v);
     v = newv;
   }
 
