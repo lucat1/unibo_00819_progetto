@@ -23,7 +23,7 @@ namespace Engine {
 class Drawable {
 public:
   // two kinds of objects we can draw into the main container
-  // - *_menu: a series of Engine::UI elements used to form a TUI menu to change
+  // - menu: a series of Engine::UI elements used to form a TUI menu to change
   // settings, select maps and difficulty
   // - game: the abstract world provided and modified by other modules drawn to
   // the screen
