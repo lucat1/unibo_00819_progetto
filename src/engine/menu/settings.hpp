@@ -24,10 +24,6 @@ class Settings : public Menu {
   // inherit the parent constructor
   using Menu::Menu;
 
-private:
-  int focused = 0, max_focused = 1;
-  int clicked_on = -1;
-
 protected:
   UI::Box *generate();
   UI::Box *curr_box();

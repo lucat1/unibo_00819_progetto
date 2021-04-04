@@ -29,5 +29,5 @@ void Engine::Menu::Settings::focus(Box *box) {}
 void Engine::Menu::Settings::unfocus(Box *box) {}
 
 // TODO
-bool Engine::Menu::Settings::is_over() { return clicked_on != -1; }
+bool Engine::Menu::Settings::is_over() { return false; }
 bool Engine::Menu::Settings::get_result() { return false; }
