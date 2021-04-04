@@ -4,15 +4,14 @@
   00819 - Programmazione
 
   Luca Tagliavini #971133
-  03/22/2021
+  04/04/2021
 
-  main.hpp: Defines the Engine::Menu::Main drawable, which is the main menu for
-  the game. It is the first interactive screen printed to the user when the game
-  is launched. It's aim is to allow the user to tweak settings or start a new
-  match.
+  settings.hpp: Defines the Engine::Menu::Settings drawable, which is the
+  options menu of the game, allowing the user to interact and modify the game
+  before launching a match.
 */
-#ifndef ENGINE_MENU_MAIN_HPP
-#define ENGINE_MENU_MAIN_HPP
+#ifndef ENGINE_MENU_SETTINGS_HPP
+#define ENGINE_MENU_SETTINGS_HPP
 
 #include "../ui/button.hpp"
 #include "../ui/logo.hpp"
@@ -21,16 +20,13 @@
 namespace Engine {
 namespace Menu {
 
-class Main : public Menu {
+class Settings : public Menu {
   // inherit the parent constructor
   using Menu::Menu;
 
 private:
   int focused = 0, max_focused = 1;
   int clicked_on = -1;
-  UI::Box *focus_start();
-  UI::Logo *append_logo(UI::Box *parent);
-  UI::Button *append_button(UI::Box *parent, const wchar_t *str);
 
 protected:
   UI::Box *generate();
@@ -48,4 +44,4 @@ public:
 } // namespace Menu
 } // namespace Engine
 
-#endif // ENGINE_MENU_MAIN_HPP
+#endif // ENGINE_MENU_SETTINGS_HPP

@@ -16,9 +16,6 @@
 #include "../ui/center.hpp"
 using Engine::UI::Box;
 
-#include <iostream>
-using namespace std;
-
 Engine::UI::Logo *Engine::Menu::Main::append_logo(Box *parent) {
   auto container = Engine::UI::append<Engine::UI::Box>(parent);
   container->props(Box::Property::padding_bottom, 2);
@@ -83,3 +80,7 @@ void Engine::Menu::Main::unfocus(Box *box) {
   box->propc(Box::Property::background, button_bg);
   box->propc(Box::Property::foreground, button_fg);
 }
+
+bool Engine::Menu::Main::is_over() { return clicked_on != -1; }
+template <typename T> T Engine::Menu::Main::get_result() { return false; }
+template bool Engine::Menu::Main::get_result<bool>();

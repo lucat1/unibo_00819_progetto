@@ -1,4 +1,5 @@
 #include "engine/menu/main.hpp"
+#include "engine/menu/settings.hpp"
 #include "engine/screen.hpp"
 #include <iostream>
 #include <unistd.h>
@@ -18,13 +19,24 @@ int main() {
   handle(screen.open());
   screen.set_content<Menu::Main>();
 
-  int key;
-  while ((key = getch()) != 'q') {
+  int key = -1, running = true;
+  while (running) {
     // quit if usleep returns an error
     if (usleep(1000000 / 25)) // 25fps
       break;
 
+    if (screen.get_content()->is_over()) {
+      if (screen.is_content<Menu::Main>()) {
+        // do something when the main menu is exited
+        screen.get_content<Menu::Main>()->get_result<bool>();
+      } else if (screen.is_content<Menu::Settings>()) {
+        // do something when the main menu is exited
+        screen.get_content<Menu::Settings>()->get_result<bool>();
+      }
+    }
+
     // keyboard handling
+    key = getch();
     if (key != ERR) {
       switch (key) {
       case KEY_RESIZE:
@@ -39,6 +51,9 @@ int main() {
         screen.send_event(Drawable::Event::move_down);
         break;
       };
+
+      if (key == 'q')
+        break;
     }
   }
 

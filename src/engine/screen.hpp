@@ -59,9 +59,21 @@ public:
   // game, a menu or none (therefore we use Drawable::Kind)
   Drawable::Kind get_state();
   // updates the screen with a fresh drawing of a new content
-  template <typename T> void set_content();
+  template <typename T = Drawable> void set_content() {
+    clear_content();
+    content = new T(container);
+    send_event(Engine::Drawable::Event::redraw);
+  }
   // returns the current drawable being displayed on the screen
-  Drawable *get_content();
+  template <typename T = Drawable> T *get_content() {
+    return static_cast<T *>(content);
+  }
+  // returns true if the currently displayed content if of the requested type
+  template <typename T = Drawable> bool is_content() {
+    return dynamic_cast<T *>(content);
+  }
+  // returns true if the current content has finished its drawing duties
+  bool is_over();
   // sends an event to the current content displayed on the screen which will
   // react accordingly
   void send_event(Drawable::Event e);

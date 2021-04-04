@@ -29,15 +29,11 @@ Engine::Drawable::Kind Engine::Screen::get_state() {
 
   return content->kind();
 }
-
-template <typename T> void Engine::Screen::set_content() {
-  clear_content();
-  content = new T(container);
-  send_event(Engine::Drawable::Event::redraw);
+bool Engine::Screen::is_over() {
+  if (content == nullptr)
+    return false; // undefined behaviour TODO: exception
+  return content->is_over();
 }
-template void Engine::Screen::set_content<Engine::Menu::Main>();
-
-Engine::Drawable *Engine::Screen::get_content() { return content; }
 
 void Engine::Screen::send_event(Drawable::Event e) {
   if (content != nullptr)

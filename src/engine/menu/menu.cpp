@@ -65,6 +65,7 @@ void Engine::Menu::Menu::handle_event(Event e) {
   // will close this out when we do the settings menu
   case Event::move_left:
   case Event::move_right:
+  case Event::interact:
     break;
   };
 }

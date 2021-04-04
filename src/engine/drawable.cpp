@@ -21,3 +21,5 @@ Engine::Drawable::~Drawable() {}
 Engine::Drawable::Kind Engine::Drawable::kind() const { return drawable_kind; }
 
 void Engine::Drawable::handle_event(Event e) {}
+
+bool Engine::Drawable::is_over() { return false; }

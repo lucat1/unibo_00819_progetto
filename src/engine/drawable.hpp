@@ -1,6 +1,5 @@
 /*
-  University of Bologna
-  First cicle degree in Computer Science
+  University of Bologna First cicle degree in Computer Science
   00819 - Programmazione
 
   Luca Tagliavini #971133
@@ -24,7 +23,7 @@ namespace Engine {
 class Drawable {
 public:
   // two kinds of objects we can draw into the main container
-  // - menu: a series of Engine::UI elements used to form a TUI menu to change
+  // - *_menu: a series of Engine::UI elements used to form a TUI menu to change
   // settings, select maps and difficulty
   // - game: the abstract world provided and modified by other modules drawn to
   // the screen
@@ -39,6 +38,7 @@ public:
     move_down,
     move_left,
     move_right,
+    interact,
   };
 
 protected:
@@ -50,6 +50,8 @@ protected:
 public:
   virtual Kind kind() const;
   virtual void handle_event(Event e);
+  virtual bool is_over();
+  template <typename T> T get_result();
 
   Drawable(WINDOW *window, uint16_t width, uint16_t height);
   virtual ~Drawable();
