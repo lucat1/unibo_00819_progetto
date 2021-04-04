@@ -38,7 +38,7 @@ protected:
 
 public:
   bool is_over();
-  template <typename T> T get_result();
+  bool get_result();
 };
 
 } // namespace Menu

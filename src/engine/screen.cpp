@@ -59,13 +59,14 @@ bool Engine::Screen::open() {
   if (stdscreen == nullptr || start_color())
     return false;
 
+  // NOTE: look at man curses(3) for documentation on these functions
   noecho(); // prevents user-inputted charters to be displayed on the stdscreen
   raw();    // intercept all keystrokes and prevent ^C from quitting the game
   curs_set(0); // hide the cursor by default
   keypad(
       stdscreen,
       true); // `true` is used to caputre arrow keys and other special sequences
-  nodelay(stdscr, true); // makes getch non-blocking
+  nodelay(stdscreen, true); // makes getch non-blocking
 
   if (container != nullptr)
     delwin(container);

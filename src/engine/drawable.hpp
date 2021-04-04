@@ -51,7 +51,6 @@ public:
   virtual Kind kind() const;
   virtual void handle_event(Event e);
   virtual bool is_over();
-  template <typename T> T get_result();
 
   Drawable(WINDOW *window, uint16_t width, uint16_t height);
   virtual ~Drawable();

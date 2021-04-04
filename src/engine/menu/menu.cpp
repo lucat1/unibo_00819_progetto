@@ -60,12 +60,17 @@ void Engine::Menu::Menu::handle_event(Event e) {
     redraw();
     break;
   }
+  case Event::interact: {
+    Engine::UI::Box *box;
+    if ((box = curr_box()) != nullptr)
+      interact(box);
+    break;
+  }
 
   // TODO: for more complex menus. to be handeld manually (?)
   // will close this out when we do the settings menu
   case Event::move_left:
   case Event::move_right:
-  case Event::interact:
     break;
   };
 }

@@ -36,14 +36,15 @@ Box *Engine::Menu::Main::generate() {
   auto root = new UI::Center(width, height);
   auto center = UI::append<UI::Center>(root);
   center->propb(Box::Property::center_horizontal, true);
-
   append_logo(center);
 
   auto btn_container = UI::append<UI::Center>(center);
   btn_container->propb(Box::Property::center_horizontal, true);
   auto play = append_button(btn_container, L"Play");
   play->props(Box::Property::padding_bottom, 1);
-  append_button(btn_container, L"Settings");
+  auto settings = append_button(btn_container, L"Settings");
+  settings->props(Box::Property::padding_bottom, 1);
+  append_button(btn_container, L"Quit");
 
   return root;
 }
@@ -81,6 +82,11 @@ void Engine::Menu::Main::unfocus(Box *box) {
   box->propc(Box::Property::foreground, button_fg);
 }
 
+void Engine::Menu::Main::interact(Box *) { clicked_on = focused; }
+
 bool Engine::Menu::Main::is_over() { return clicked_on != -1; }
-template <typename T> T Engine::Menu::Main::get_result() { return false; }
-template bool Engine::Menu::Main::get_result<bool>();
+Engine::Menu::Main::Result Engine::Menu::Main::get_result() {
+  Engine::Menu::Main::Result actions[] = {Result::play, Result::settings,
+                                          Result::quit};
+  return actions[clicked_on];
+}

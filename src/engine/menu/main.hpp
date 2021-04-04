@@ -26,7 +26,7 @@ class Main : public Menu {
   using Menu::Menu;
 
 private:
-  int focused = 0, max_focused = 1;
+  int focused = 0, max_focused = 2;
   int clicked_on = -1;
   UI::Box *focus_start();
   UI::Logo *append_logo(UI::Box *parent);
@@ -39,10 +39,17 @@ protected:
   UI::Box *prev_box();
   void focus(UI::Box *box);
   void unfocus(UI::Box *box);
+  void interact(UI::Box *box);
 
 public:
+  enum class Result {
+    play,
+    settings,
+    quit,
+  };
+
   bool is_over();
-  template <typename T> T get_result();
+  Result get_result();
 };
 
 } // namespace Menu

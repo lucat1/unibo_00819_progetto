@@ -56,6 +56,7 @@ protected:
   virtual UI::Box *prev_box() = 0;
   virtual void focus(UI::Box *box) = 0;
   virtual void unfocus(UI::Box *box) = 0;
+  virtual void interact(UI::Box *box) = 0;
 
 public:
   Menu(WINDOW *window);

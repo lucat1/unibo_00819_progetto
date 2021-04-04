@@ -28,6 +28,6 @@ void Engine::Menu::Settings::focus(Box *box) {}
 
 void Engine::Menu::Settings::unfocus(Box *box) {}
 
+// TODO
 bool Engine::Menu::Settings::is_over() { return clicked_on != -1; }
-template <typename T> T Engine::Menu::Settings::get_result() { return false; }
-template bool Engine::Menu::Settings::get_result<bool>();
+bool Engine::Menu::Settings::get_result() { return false; }

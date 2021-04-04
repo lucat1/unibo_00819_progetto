@@ -28,10 +28,13 @@ int main() {
     if (screen.get_content()->is_over()) {
       if (screen.is_content<Menu::Main>()) {
         // do something when the main menu is exited
-        screen.get_content<Menu::Main>()->get_result<bool>();
-      } else if (screen.is_content<Menu::Settings>()) {
-        // do something when the main menu is exited
-        screen.get_content<Menu::Settings>()->get_result<bool>();
+        auto res = screen.get_content<Menu::Main>()->get_result();
+        switch (res) {
+        case Menu::Main::Result::quit:
+          running = false;
+        default:
+          break;
+        }
       }
     }
 
@@ -42,18 +45,22 @@ int main() {
       case KEY_RESIZE:
         handle(screen.reposition());
         break;
+
+      case '\n':
+      case KEY_ENTER: // enter key for the numpad
+        screen.send_event(Drawable::Event::interact);
+        break;
+
       case 'k':
       case KEY_UP:
         screen.send_event(Drawable::Event::move_up);
         break;
+
       case 'j':
       case KEY_DOWN:
         screen.send_event(Drawable::Event::move_down);
         break;
       };
-
-      if (key == 'q')
-        break;
     }
   }
 
