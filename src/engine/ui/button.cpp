@@ -11,6 +11,7 @@
   ncurses' window and set its content properly.
 */
 #include "button.hpp"
+#include <curses.h>
 
 Engine::UI::Button::Button(uint16_t max_width, uint16_t max_height,
                            const wchar_t *content)
@@ -29,24 +30,16 @@ void Engine::UI::Button::show(WINDOW *window, uint16_t x, uint16_t y) {
   getbegyx(window, abs_y, abs_x);
 
   if (button_window != nullptr)
-    delwin(button_window);
-
-  button_window =
-      newwin(pt + osize.second + 2, pl + osize.first + 2 * side_padding,
-             abs_y + y, abs_x + x);
-  wclear(button_window);
-  refresh();
+    mvwin(button_window, abs_y + y, abs_x + x);
+  else
+    button_window =
+        newwin(pt + osize.second + 2, pl + osize.first + 2 * side_padding,
+               abs_y + y, abs_x + x);
 
   int color = color_pair();
   if (color != -1)
     wbkgd(button_window, color);
-
-  // draw a box of ' ' chars to around the text to fill the background
-  mvwhline(button_window, 0, 1, ' ', osize.first + side_padding - 1);
-  mvwvline(button_window, 0, 0, ' ', osize.second + 2);
-  mvwvline(button_window, 0, osize.first + 1, ' ', osize.second + 2);
-  mvwhline(button_window, osize.second + 1, 1, ' ',
-           osize.first + side_padding - 1);
+  werase(button_window);
 
   TextBox::show(button_window, side_padding, 1);
   wrefresh(button_window);
