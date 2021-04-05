@@ -72,14 +72,14 @@ int main() {
   });
 
   Box *box1 = new Box(10000, 10000);
-  it("reports the corret size when empty", [box1] {
+  it("reports the correct size when empty", [box1] {
     auto size = box1->size();
     assert(size.first == 0);
     assert(size.second == 0);
   });
 
   TextBox *tb1 = append<TextBox, const wchar_t *>(box1, L"this is a test text");
-  it("reports the corret size when it has children", [box1, tb1] {
+  it("reports the correct size when it has children", [box1, tb1] {
     auto size = box1->size();
     assert(size.first > 0);
     assert(size.second == 1);
