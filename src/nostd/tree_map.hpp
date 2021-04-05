@@ -18,7 +18,6 @@
 #include <cstddef>
 #include <cstdio>
 #include <exception>
-#include <iostream>
 
 namespace Nostd {
 
@@ -42,6 +41,14 @@ private:
       TreeNode *right = nullptr;
       explicit TreeNode(K key, V value, TreeNode *f) {
         this->parent = f;
+        this->key = key;
+        this->value = value;
+      }
+
+      explicit TreeNode(K key, V value, TreeNode *p, TreeNode *l, TreeNode *r) {
+        this->parent = p;
+        this->left = l;
+        this->right = r;
         this->key = key;
         this->value = value;
       }
@@ -80,18 +87,12 @@ private:
       return node;
     }
 
+    // Does not care of the parent
     void remove_node(TreeNode *ptr) {
-      /*if (ptr->parent == nullptr) // root
-        root = nullptr;
-      else {
-        if (ptr->parent->left != nullptr && ptr->parent->left == ptr)
-          ptr->parent->left = nullptr;
-        else
-          ptr->parent->right = nullptr;
-      }*/
-      delete ptr;
-      ptr = nullptr;
-      children--;
+      if (ptr != nullptr) {
+        delete ptr;
+        children--;
+      }
     }
 
   public:
@@ -105,11 +106,12 @@ private:
 
     void insert(K key, V value) { this->root = insert(root, key, value); }
 
+    // Root's parent will have a "nodo penzolante"
     void clear(TreeNode *root) {
       if (root == nullptr)
         return;
-      remove_node(root->left);
-      remove_node(root->right);
+      clear(root->left);
+      clear(root->right);
       remove_node(root);
     }
 
@@ -117,55 +119,65 @@ private:
     void remove(K key) {
       TreeNode *ptr = this->root;
       while (ptr != nullptr && ptr->key != key) {
-        if (ptr->key <= key)
+        if (ptr->key >= key)
           ptr = ptr->left;
         else
           ptr = ptr->right;
       }
       // Empty tree/key not found
-      if (ptr == nullptr)
+      if (ptr == nullptr) {
+        throw std::invalid_argument("Treemap: No value found for the key " +
+                                    std::to_string(key));
         return;
+      }
       // 1. Leaf
       if (ptr->left == nullptr && ptr->right == nullptr) {
+        if (ptr->parent->left != nullptr && ptr->parent->left == ptr)
+          ptr->parent->left = nullptr;
+        else
+          ptr->parent->right = nullptr;
         remove_node(ptr);
         return;
       }
       // 2. One child null
-
-      // if ptr is left child
-      if (ptr->parent->left == ptr) {
-        // Left is null
-        if (ptr->left == nullptr && ptr->right != nullptr)
-          ptr->parent->left = ptr->right;
-        // Right is null
-        if (ptr->right == nullptr && ptr->left != nullptr)
-          ptr->parent->left = ptr->left;
-        remove_node(ptr);
-        return;
-      }
-      // if ptr is right child
-      else {
-        // left is null
-        if (ptr->left == nullptr && ptr->right != nullptr)
-          ptr->parent->right = ptr->right;
-        // right is null
-        if (ptr->right == nullptr && ptr->left != nullptr)
-          ptr->parent->right = ptr->left;
-        remove_node(ptr);
-        return;
+      else if (ptr->left == nullptr || ptr->right == nullptr) {
+        // if ptr is left child
+        if (ptr->parent->left == ptr) {
+          // Left is null
+          if (ptr->left == nullptr && ptr->right != nullptr)
+            ptr->parent->left = ptr->right;
+          // Right is null
+          if (ptr->right == nullptr && ptr->left != nullptr)
+            ptr->parent->left = ptr->left;
+          remove_node(ptr);
+          return;
+        }
+        // if ptr is right child
+        else {
+          // left is null
+          if (ptr->left == nullptr && ptr->right != nullptr)
+            ptr->parent->right = ptr->right;
+          // right is null
+          if (ptr->right == nullptr && ptr->left != nullptr)
+            ptr->parent->right = ptr->left;
+          remove_node(ptr);
+          return;
+        }
       }
 
       // 3. Both children null
-      if (ptr->left != nullptr && ptr->right != nullptr) {
+      else if (ptr->left != nullptr && ptr->right != nullptr) {
         // a. Find predecessor
         // b. Replace node to delete predecessor
         // c. Delete old predecessor
         TreeNode *pred = get_predecessor(key);
         // assert pred != null
         assert(pred != nullptr);
+        K pkey = pred->key;
+        V pvalue = pred->value;
         remove(pred->key);
-        ptr->key = pred->key;
-        ptr->value = pred->value;
+        ptr->key = pkey;
+        ptr->value = pvalue;
         return;
       }
     }
@@ -199,7 +211,8 @@ private:
       }
 
       if (ptr == nullptr) {
-        throw std::invalid_argument("Treemap: No value found for that key");
+        throw std::invalid_argument("Treemap: No value found for the key " +
+                                    std::to_string(key));
       }
       return ptr->value;
     }
@@ -232,15 +245,7 @@ public:
 
   void put(K key, V value) override { this->tree->insert(key, value); }
 
-  void remove(K key) override {
-    this->tree->remove(key);
-    auto v = get_values();
-    std::cout << "removed " << key << ": <";
-    for (size_t i = 0; i < v.size(); i++) {
-      std::cout << v[i] << " ";
-    }
-    std::cout << ">" << std::endl;
-  }
+  void remove(K key) override { this->tree->remove(key); }
 
   V &operator[](K key) override { return this->tree->get(key); }
 
@@ -252,7 +257,10 @@ public:
 
   Nostd::Vector<V> get_values() override { return this->tree->get_values(); }
 
-  void clear() override { this->tree->clear(this->tree->root); }
+  void clear() override {
+    this->tree->clear(this->tree->root);
+    this->tree->root = nullptr;
+  }
 
   Nostd::Vector<Nostd::Pair<K, V>> as_vector() override {
     return Nostd::Vector<Nostd::Pair<K, V>>();

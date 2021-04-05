@@ -82,12 +82,49 @@ int main() {
     assert(tm.get_values().size() == 2);
   });
 */
-  Nostd::it("Remove leaf", [] {
+  Nostd::it("removes leaf", [] {
     Nostd::TreeMap<int, int> tm;
     tm.put(10, 10);
     tm.put(5, 5);
     tm.remove(5);
     assert(tm.size() == 1);
+  });
+
+  Nostd::it("removes single childed node", [] {
+    Nostd::TreeMap<int, int> tm;
+    // remove left left
+    tm.put(10, 10);
+    tm.put(5, 5);
+    tm.put(4, 4);
+    tm.remove(5);
+    assert(tm.size() == 2);
+
+    // remove left right
+    tm.put(5, 5);
+    tm.remove(4);
+    assert(tm.size() == 2);
+
+    // remove right left
+    tm.put(20, 20);
+    tm.put(15, 15);
+    tm.remove(20);
+    assert(tm.size() == 3);
+
+    // remove right right
+    tm.put(20, 20);
+    tm.remove(15);
+    assert(tm.size() == 3);
+  });
+
+  Nostd::it("removes node with two children", [] {
+    Nostd::TreeMap<int, int> tm;
+    tm.put(10, 10);
+    tm.put(5, 5);
+    tm.put(6, 6);
+    tm.put(3, 3);
+    tm.put(1, 1);
+    tm.remove(5);
+    assert(tm.size() == 4);
   });
 
   Nostd::it("puts elements into tmap", [] {
@@ -97,7 +134,7 @@ int main() {
     tm.put(1, 23);
     tm.put(5, 111);
     tm.clear();
-    assert(tm.get_values().size() == 0);
+    assert(tm.size() == 0);
   });
 
   return 0;
