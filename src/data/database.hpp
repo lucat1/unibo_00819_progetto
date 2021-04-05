@@ -15,6 +15,8 @@
 #include <istream>
 #include <ostream>
 
+#include "../engine/colorable.hpp"
+#include "../nostd/pair.hpp"
 #include "../nostd/wstring.hpp"
 
 namespace Data {
@@ -24,6 +26,11 @@ namespace Data {
 */
 class Database {
 public:
+  using Subpalette = Nostd::Pair<Engine::Color, Engine::Color>;
+  const struct Palette {
+    Subpalette logo, frame, button, slider, message, gauge;
+  } palette;
+
   constexpr static wchar_t separator{','}, escape{'\\'}, newline{'\n'};
 };
 
