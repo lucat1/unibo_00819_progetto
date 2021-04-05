@@ -1,13 +1,21 @@
 #ifndef NOSTD_VECTOR_HPP
 #define NOSTD_VECTOR_HPP
+#include "allocator.hpp"
 #include <stdexcept>
+
+#include <iostream>
+using namespace std;
 
 namespace Nostd {
 
-template <typename V> class Vector {
+template <typename V, class Alloc = Allocator<V>> class Vector {
+public:
+  using allocator_type = Alloc;
+
 protected:
-  V *v;
-  size_t sz, cap;
+  allocator_type all_elems;
+  V *v = nullptr;
+  size_t sz = 0, cap = 0;
 
   void calc_cap() {
     if (sz == 0)
@@ -21,35 +29,48 @@ protected:
   void init_v(size_t size) {
     sz = size;
     calc_cap();
-    v = reinterpret_cast<V *>(::operator new(cap * sizeof(V)));
+    cout << "allocating - init_v " << v << endl;
+    v = all_elems.allocate(cap);
   }
 
 public:
   // Constructs an empty container, with no elements.
-  Vector() { init_v(0); }
+  Vector(const allocator_type &alloc = allocator_type()) {
+    all_elems = alloc;
+    init_v(0);
+  }
   // Constructs a vector of the given size
-  explicit Vector(size_t size) { init_v(size); }
+  explicit Vector(size_t size, const allocator_type &alloc = allocator_type()) {
+    all_elems = alloc;
+    init_v(size);
+  }
   // it is constructor that creates a vector with size elements and size * 1.5
   // capacity copying size times the ele value into the vector
-  Vector(size_t size, V ele) {
+  Vector(size_t size, V ele, const allocator_type &alloc = allocator_type()) {
+    all_elems = alloc;
     init_v(size);
     for (size_t i = 0; i < sz; i++)
       v[i] = ele;
   }
   // Copies data from another vector instance (in linear time)
-  Vector(Vector &vec) {
+  Vector(Vector &vec, const allocator_type &alloc = allocator_type()) {
+    all_elems = alloc;
     init_v(vec.sz);
     for (size_t i = 0; i < vec.sz; i++)
       this->v[i] = vec[i];
   }
   // Moves data from another vector (resues same memory sequence for v)
-  Vector(Vector &&vec) {
+  Vector(Vector &&vec, const allocator_type &alloc = allocator_type()) {
+    all_elems = alloc;
     this->v = vec.v;
     this->sz = vec.sz;
     this->cap = vec.cap;
     vec.v = nullptr; // to prevent unwanted deallocations
   }
-  ~Vector() { ::operator delete(v); }
+  ~Vector() {
+    cout << "deleting - vector::destructor " << v << endl;
+    all_elems.deallocate(v, cap);
+  }
 
   // Adds a new element at the end of the vector
   void push_back(V ele) {
@@ -103,10 +124,12 @@ public:
       cap = 2;
     else
       cap = n * 1.5;
-    V *newv = reinterpret_cast<V *>(::operator new((cap + 1) * sizeof(V)));
+    V *newv = all_elems.allocate(cap);
+    cout << "allocating - resize " << newv << endl;
     for (size_t i = 0; i < n; i++)
       newv[i] = v[i];
-    ::operator delete(v);
+    cout << "deleting - resize " << v << endl;
+    all_elems.deallocate(v, cap);
     v = newv;
   }
 
@@ -120,4 +143,5 @@ public:
 
 } // namespace Nostd
 
+#include "allocator.cpp"
 #endif // NOSTD_VECTOR_HPP

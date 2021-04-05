@@ -39,13 +39,7 @@ Nostd::WString::WString(const wchar_t *str, size_t len) : Vector(len + 1) {
   v[len] = L'\0';
 }
 
-Nostd::WString::WString(WString &&str) {
-  delete[] v;
-  v = str.v;
-  sz = str.sz;
-  cap = str.cap;
-  str.v = nullptr;
-}
+Nostd::WString::WString(WString &&str) : Vector(str) {}
 
 bool Nostd::WString::empty() const {
   return sz <= 1 || (sz == 1 && v[0] == L'\0');
@@ -105,7 +99,9 @@ Nostd::WString &Nostd::WString::insert(size_t start, const wchar_t *str,
     len = wcslen(str);
   sz += len;
   calc_cap();
-  wchar_t *newv = new wchar_t[cap];
+  wchar_t *newv =
+      reinterpret_cast<wchar_t *>(::operator new((cap + 1) * sizeof(wchar_t)));
+  /* wchar_t *newv = (::operator new(wchar_t[cap])); */
 
   for (size_t i = 0; i < start; i++)
     newv[i] = v[i];
@@ -116,7 +112,8 @@ Nostd::WString &Nostd::WString::insert(size_t start, const wchar_t *str,
   for (size_t i = start; i < sz - len; i++)
     newv[i + len] = v[i];
 
-  delete[] v;
+  cout << "(insert) deleting " << v << endl;
+  ::operator delete(v);
   v = newv;
   return *this;
 }
@@ -192,7 +189,8 @@ Nostd::WString &Nostd::WString::operator=(const Nostd::WString &str) {
   return operator=(str.c_str());
 }
 Nostd::WString &Nostd::WString::operator=(Nostd::WString &&str) {
-  delete[] v;
+  cout << "(operator=&&) deleting " << v << endl;
+  ::operator delete(v);
   v = str.v;
   sz = str.sz;
   cap = str.cap;
@@ -204,8 +202,11 @@ Nostd::WString &Nostd::WString::operator=(const wchar_t *str) {
   // about the old string and therefore we can avoid the copy loop
   sz = wcslen(str) + 1;
   calc_cap();
-  delete[] v;
-  v = new wchar_t[cap];
+  cout << "wstring delete - operator= copy " << v << endl;
+  if (v != nullptr)
+    ::operator delete(v);
+  v = reinterpret_cast<wchar_t *>(::operator new((cap + 1) * sizeof(wchar_t)));
+  /* v = new wchar_t[cap]; */
 
   for (size_t i = 0; i <= wcslen(str); i++) // = to copy the '\0' char
     v[i] = str[i];
