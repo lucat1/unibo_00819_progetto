@@ -30,6 +30,7 @@ namespace Nostd {
 // - comparisons of _two_ substrings are left out for simplicity, but can be
 // added fairly easily if deemed necessary
 class WString : public Vector<wchar_t> {
+  using Vector::allocator_type;
 public:
   // index used to mean two concepts:
   // - run an operation to the end of the string (be it a copy, substring, etc)
@@ -38,17 +39,17 @@ public:
   static const size_t npos = -1;
 
   // constructs an empty WString
-  explicit WString();
+  explicit WString(const allocator_type &alloc = allocator_type());
   // construct a WString from another WString copying its content
-  WString(const WString &str);
+  WString(const WString &str, const allocator_type &alloc = allocator_type());
   // construct a WString from another WString from start to start+len
-  WString(const WString &str, size_t start, size_t len = npos);
+  WString(const WString &str, size_t start, size_t len = npos, const allocator_type &alloc = allocator_type());
   // constructs a WString from a c-style string
-  WString(const wchar_t *str);
+  WString(const wchar_t *str, const allocator_type &alloc = allocator_type());
   // constructs a WString from a c-style string limiting its length
-  WString(const wchar_t *str, size_t len);
+  WString(const wchar_t *str, size_t len, const allocator_type &alloc = allocator_type());
   // construct a WString from another _temporary_ WString copying its content
-  WString(WString &&str);
+  WString(WString &&str, const allocator_type &alloc = allocator_type());
 
   // checks whether the WString is empty
   bool empty() const;
