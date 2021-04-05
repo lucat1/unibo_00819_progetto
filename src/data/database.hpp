@@ -12,7 +12,8 @@
 #ifndef DATA_DATABASE_HPP
 #define DATA_DATABASE_HPP
 
-#include <iostream>
+#include <istream>
+#include <ostream>
 
 #include "../nostd/wstring.hpp"
 

@@ -48,11 +48,17 @@ Nostd::WString::WString(const wchar_t *str, size_t len,
 }
 
 Nostd::WString::WString(WString &&str, const WString::allocator_type &alloc)
-    : Vector(str, alloc) {}
+    : Vector(str, alloc) {
+  v = str.v;
+  sz = str.sz;
+  cap = str.cap;
+  str.v = nullptr;
+}
 
 bool Nostd::WString::empty() const {
   return sz <= 1 || (sz == 1 && v[0] == L'\0');
 }
+
 wchar_t *Nostd::WString::c_str() const { return v; }
 wchar_t *Nostd::WString::data() const { return v; }
 size_t Nostd::WString::length() const { return sz - 1; }
@@ -64,7 +70,8 @@ void Nostd::WString::resize(size_t n) {
   Vector::resize(n + 1);
   v[n] = L'\0';
 }
-// we override the Vector::celar to resize to size 1 and keep space for the
+
+// we override the Vector::clear to resize to size 1 and keep space for the
 // '\0' char
 void Nostd::WString::clear() {
   // we can use Vector::resize as it will at max copy 1 char into the new array,
@@ -72,11 +79,13 @@ void Nostd::WString::clear() {
   Vector::resize(1);
   v[0] = L'\0';
 }
+
 wchar_t &Nostd::WString::front() {
   if (empty())
     throw std::out_of_range("called WString::front on an empty string");
   return v[0];
 }
+
 wchar_t &Nostd::WString::back() {
   if (empty())
     throw std::out_of_range("called WString::back on an empty string");
@@ -86,19 +95,23 @@ wchar_t &Nostd::WString::back() {
 Nostd::WString &Nostd::WString::append(const Nostd::WString &str) {
   return insert(sz - 1, str);
 }
+
 Nostd::WString &Nostd::WString::append(const wchar_t *str) {
   return insert(sz - 1, str);
 }
+
 void Nostd::WString::push_back(const wchar_t c) {
   resize(sz); // increases the size by 1
   v[sz - 2] = c;
   v[sz - 1] = L'\0';
 }
+
 Nostd::WString &Nostd::WString::insert(size_t start, const Nostd::WString &str,
                                        size_t substart, size_t subend) {
   WString substr = str.substr(substart, subend);
   return insert(start, substr.c_str());
 }
+
 Nostd::WString &Nostd::WString::insert(size_t start, const wchar_t *str,
                                        size_t len) {
   // deliberately not using Vector::resize as we'd do the copying twice, which
@@ -119,11 +132,11 @@ Nostd::WString &Nostd::WString::insert(size_t start, const wchar_t *str,
   for (size_t i = start; i < sz - len; i++)
     newv[i + len] = v[i];
 
-  cout << "(insert) deleting " << v << endl;
   all_elems.deallocate(v, cap);
   v = newv;
   return *this;
 }
+
 Nostd::WString &Nostd::WString::insert(size_t start, const wchar_t c) {
   wchar_t str[2] = {c, L'\0'};
   return insert(start, str);
@@ -193,10 +206,14 @@ Nostd::WString Nostd::WString::ltrim() {
 }
 
 Nostd::WString &Nostd::WString::operator=(const Nostd::WString &str) {
-  return operator=(str.c_str());
+  all_elems = str.all_elems;
+  init_v(str.sz);
+  for (size_t i = 0; i < str.sz; i++)
+    this->v[i] = str[i];
+  return *this;
 }
+
 Nostd::WString &Nostd::WString::operator=(Nostd::WString &&str) {
-  cout << "(operator=&&) deleting " << v << endl;
   all_elems.deallocate(v, cap);
   v = str.v;
   sz = str.sz;
@@ -204,12 +221,12 @@ Nostd::WString &Nostd::WString::operator=(Nostd::WString &&str) {
   str.v = nullptr;
   return *this;
 }
+
 Nostd::WString &Nostd::WString::operator=(const wchar_t *str) {
   // we shrink/grow the vector deliberately by hand as we don't care
   // about the old string and therefore we can avoid the copy loop
   sz = wcslen(str) + 1;
   calc_cap();
-  cout << "wstring deleting - operator= copy " << v << endl;
   all_elems.deallocate(v, cap);
   v = all_elems.allocate(cap);
 
@@ -217,6 +234,7 @@ Nostd::WString &Nostd::WString::operator=(const wchar_t *str) {
     v[i] = str[i];
   return *this;
 }
+
 Nostd::WString &Nostd::WString::operator=(const wchar_t c) {
   const wchar_t str[] = {c, L'\0'};
   return operator=(str);
@@ -226,10 +244,12 @@ Nostd::WString &Nostd::WString::operator+=(const Nostd::WString &str) {
   append(str);
   return *this;
 }
+
 Nostd::WString &Nostd::WString::operator+=(const wchar_t *str) {
   append(str);
   return *this;
 }
+
 Nostd::WString &Nostd::WString::operator+=(const wchar_t c) {
   push_back(c);
   return *this;
@@ -246,6 +266,7 @@ std::basic_ostream<wchar_t> &Nostd::operator<<(std::basic_ostream<wchar_t> &os,
                                                const Nostd::WString &str) {
   return os << str.c_str();
 }
+
 std::basic_istream<wchar_t> &Nostd::operator>>(std::basic_istream<wchar_t> &is,
                                                Nostd::WString &str) {
   str.clear();
@@ -254,6 +275,7 @@ std::basic_istream<wchar_t> &Nostd::operator>>(std::basic_istream<wchar_t> &is,
     str.push_back(c);
   return is;
 }
+
 std::basic_istream<wchar_t> &Nostd::getline(std::basic_istream<wchar_t> &is,
                                             Nostd::WString &str) {
   str.clear();

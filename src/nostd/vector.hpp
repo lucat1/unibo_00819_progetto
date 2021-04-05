@@ -3,9 +3,6 @@
 #include "allocator.hpp"
 #include <stdexcept>
 
-#include <iostream>
-using namespace std;
-
 namespace Nostd {
 
 template <typename V, class Alloc = Allocator<V>> class Vector {
@@ -29,7 +26,6 @@ protected:
   void init_v(size_t size) {
     sz = size;
     calc_cap();
-    cout << "allocating - init_v " << v << endl;
     v = all_elems.allocate(cap);
   }
 
@@ -68,8 +64,8 @@ public:
     vec.v = nullptr; // to prevent unwanted deallocations
   }
   ~Vector() {
-    cout << "deleting - vector::destructor " << v << endl;
     all_elems.deallocate(v, cap);
+    v = nullptr;
   }
 
   // Adds a new element at the end of the vector
@@ -89,15 +85,37 @@ public:
     return v[i];
   }
 
+  // Returns a constant reference to the element at index i
   const V &at(size_t i) const {
     if (i >= sz)
       throw std::out_of_range("index out of bounds");
     return v[i];
   }
 
+  // Reference "at" operator. NOTE: throws unlike C++'s
   V &operator[](size_t i) { return at(i); }
 
+  // Cconstant "at" operator reference. NOTE: throws unlike C++'s
   const V &operator[](size_t i) const { return at(i); };
+
+  // Copy assignment operator
+  Vector<V> &operator=(const Vector<V> &vec) {
+    resize(vec.sz);
+    for (size_t i = 0; i < vec.sz; i++)
+      v[i] = vec[i];
+    return *this;
+  }
+
+  // Move assigment operator
+  Vector<V> &operator=(Vector<V> &&vec) {
+    all_elems.deallocate(v, cap);
+    all_elems = vec.all_elems;
+    v = vec.v;
+    sz = vec.sz;
+    cap = vec.cap;
+    vec.v = nullptr; // to prevent unwanted deallocations
+    return *this;
+  }
 
   // Removes a signle item from the vector
   size_t erase(size_t i) {
@@ -125,10 +143,8 @@ public:
     else
       cap = n * 1.5;
     V *newv = all_elems.allocate(cap);
-    cout << "allocating - resize " << newv << endl;
     for (size_t i = 0; i < n; i++)
       newv[i] = v[i];
-    cout << "deleting - resize " << v << endl;
     all_elems.deallocate(v, cap);
     v = newv;
   }

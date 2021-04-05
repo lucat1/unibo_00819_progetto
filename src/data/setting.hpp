@@ -12,10 +12,10 @@
 #ifndef DATA_SETTING_HPP
 #define DATA_SETTING_HPP
 
-#include <iostream>
-#include <iterator>
-
 #include "../nostd/wstring.hpp"
+#include <istream>
+#include <iterator>
+#include <ostream>
 
 namespace Data {
 
