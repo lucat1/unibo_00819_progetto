@@ -23,37 +23,41 @@ protected:
       cap = sz * 1.5;
   }
 
-  void init_v(size_t size) {
+  void allocate_v(size_t size) {
     sz = size;
     calc_cap();
     v = all_elems.allocate(cap);
+  }
+
+  void construct_v(size_t size, const V &ele) {
+    for (size_t i = 0; i < size; i++)
+      all_elems.construct(v + i, ele);
   }
 
 public:
   // Constructs an empty container, with no elements.
   Vector(const allocator_type &alloc = allocator_type()) {
     all_elems = alloc;
-    init_v(0);
+    allocate_v(0);
   }
   // Constructs a vector of the given size
   explicit Vector(size_t size, const allocator_type &alloc = allocator_type()) {
     all_elems = alloc;
-    init_v(size);
+    allocate_v(size);
   }
   // it is constructor that creates a vector with size elements and size * 1.5
   // capacity copying size times the ele value into the vector
   Vector(size_t size, V ele, const allocator_type &alloc = allocator_type()) {
     all_elems = alloc;
-    init_v(size);
-    for (size_t i = 0; i < sz; i++)
-      v[i] = ele;
+    allocate_v(size);
+    construct_v(size, ele);
   }
   // Copies data from another vector instance (in linear time)
-  Vector(Vector &vec, const allocator_type &alloc = allocator_type()) {
+  Vector(const Vector &vec, const allocator_type &alloc = allocator_type()) {
     all_elems = alloc;
-    init_v(vec.sz);
+    allocate_v(vec.sz);
     for (size_t i = 0; i < vec.sz; i++)
-      this->v[i] = vec[i];
+      all_elems.construct(v + i, vec[i]);
   }
   // Moves data from another vector (resues same memory sequence for v)
   Vector(Vector &&vec, const allocator_type &alloc = allocator_type()) {
@@ -72,7 +76,7 @@ public:
   void push_back(V ele) {
     if (sz == cap)
       resize(sz);
-    v[sz++] = ele;
+    all_elems.construct(v + sz++, ele);
   }
 
   // Removes all elemennts from the vector
@@ -135,17 +139,14 @@ public:
 
   // Resize the container so that it contain n elements
   void resize(size_t n) {
+    size_t old_cap = cap;
     sz = n;
-    if (n == 0)
-      cap = 1;
-    else if (n == 1)
-      cap = 2;
-    else
-      cap = n * 1.5;
+    calc_cap();
+
     V *newv = all_elems.allocate(cap);
     for (size_t i = 0; i < n; i++)
-      newv[i] = v[i];
-    all_elems.deallocate(v, cap);
+      all_elems.construct(newv + i, v[i]);
+    all_elems.deallocate(v, old_cap);
     v = newv;
   }
 

@@ -17,10 +17,7 @@ Nostd::WString::WString(const WString::allocator_type &alloc)
 
 Nostd::WString::WString(const WString &str,
                         const WString::allocator_type &alloc)
-    : Vector(str.size(), alloc) {
-  for (size_t i = 0; i < str.size(); i++)
-    v[i] = str[i];
-}
+    : WString(str.c_str(), alloc) {}
 
 Nostd::WString::WString(const WString &str, size_t start, size_t len,
                         const WString::allocator_type &alloc)
@@ -72,13 +69,8 @@ void Nostd::WString::resize(size_t n) {
 }
 
 // we override the Vector::clear to resize to size 1 and keep space for the
-// '\0' char
-void Nostd::WString::clear() {
-  // we can use Vector::resize as it will at max copy 1 char into the new array,
-  // which is not expensive
-  Vector::resize(1);
-  v[0] = L'\0';
-}
+// '\0' char, using the previously defined method
+void Nostd::WString::clear() { resize(0); }
 
 wchar_t &Nostd::WString::front() {
   if (empty())
@@ -206,11 +198,7 @@ Nostd::WString Nostd::WString::ltrim() {
 }
 
 Nostd::WString &Nostd::WString::operator=(const Nostd::WString &str) {
-  all_elems = str.all_elems;
-  init_v(str.sz);
-  for (size_t i = 0; i < str.sz; i++)
-    this->v[i] = str[i];
-  return *this;
+  return operator=(str.c_str());
 }
 
 Nostd::WString &Nostd::WString::operator=(Nostd::WString &&str) {
@@ -225,12 +213,14 @@ Nostd::WString &Nostd::WString::operator=(Nostd::WString &&str) {
 Nostd::WString &Nostd::WString::operator=(const wchar_t *str) {
   // we shrink/grow the vector deliberately by hand as we don't care
   // about the old string and therefore we can avoid the copy loop
-  sz = wcslen(str) + 1;
-  calc_cap();
+  //
+  // NOTE: we could reuse the previous vector if it's big enough but that
+  // optimization will be put in place if we need to squeeze extra performance
+  // from this
   all_elems.deallocate(v, cap);
-  v = all_elems.allocate(cap);
+  allocate_v(wcslen(str) + 1);
 
-  for (size_t i = 0; i <= wcslen(str); i++) // = to copy the '\0' char
+  for (size_t i = 0; i < sz; i++) // = to copy the '\0' char
     v[i] = str[i];
   return *this;
 }
