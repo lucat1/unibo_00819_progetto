@@ -99,9 +99,7 @@ Nostd::WString &Nostd::WString::insert(size_t start, const wchar_t *str,
     len = wcslen(str);
   sz += len;
   calc_cap();
-  wchar_t *newv =
-      reinterpret_cast<wchar_t *>(::operator new((cap + 1) * sizeof(wchar_t)));
-  /* wchar_t *newv = (::operator new(wchar_t[cap])); */
+  wchar_t *newv = all_elems.allocate(cap);
 
   for (size_t i = 0; i < start; i++)
     newv[i] = v[i];
@@ -113,7 +111,7 @@ Nostd::WString &Nostd::WString::insert(size_t start, const wchar_t *str,
     newv[i + len] = v[i];
 
   cout << "(insert) deleting " << v << endl;
-  ::operator delete(v);
+  all_elems.deallocate(v, cap);
   v = newv;
   return *this;
 }
@@ -190,7 +188,7 @@ Nostd::WString &Nostd::WString::operator=(const Nostd::WString &str) {
 }
 Nostd::WString &Nostd::WString::operator=(Nostd::WString &&str) {
   cout << "(operator=&&) deleting " << v << endl;
-  ::operator delete(v);
+  all_elems.deallocate(v, cap);
   v = str.v;
   sz = str.sz;
   cap = str.cap;
@@ -202,11 +200,9 @@ Nostd::WString &Nostd::WString::operator=(const wchar_t *str) {
   // about the old string and therefore we can avoid the copy loop
   sz = wcslen(str) + 1;
   calc_cap();
-  cout << "wstring delete - operator= copy " << v << endl;
-  if (v != nullptr)
-    ::operator delete(v);
-  v = reinterpret_cast<wchar_t *>(::operator new((cap + 1) * sizeof(wchar_t)));
-  /* v = new wchar_t[cap]; */
+  cout << "wstring deleting - operator= copy " << v << endl;
+  all_elems.deallocate(v, cap);
+  v = all_elems.allocate(cap);
 
   for (size_t i = 0; i <= wcslen(str); i++) // = to copy the '\0' char
     v[i] = str[i];
@@ -257,3 +253,5 @@ std::basic_istream<wchar_t> &Nostd::getline(std::basic_istream<wchar_t> &is,
     str.push_back(c);
   return is;
 }
+
+
