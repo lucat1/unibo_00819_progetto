@@ -24,7 +24,7 @@ class List {
     head = nullptr;
     tail = nullptr;
   }
-  // It is a costructor that creates a list with width "size" .
+  // It is a costructor that creates a list with width "size".
   List(size_t size) {
     sz = size;
     for (size_t i = 0; i < sz; i++) {
@@ -80,12 +80,12 @@ class List {
     tail->next = nullptr;
   }
 
-  // Returns whether the list container is empty.
+  // Returns whether the list container is empty
   bool empty() { return sz == 0; }
-  // Returns the number of elements in the list container.
+  // Returns the number of elements in the list container
   size_t size() { return sz; }
 
-  // Returns a reference to the first element in the list container.
+  // Returns a reference to the first element in the list container
   V& front() { return head->val; }
   // Returns a reference to the last element in the list container.
   V& back() { return tail->val; }

@@ -4,7 +4,7 @@
 using namespace Nostd;
 
 int main() {
-    it("constructs a list with no elements", {
+  it("constructs a list with no elements", {
     List<int> l;
     assert(l.size() == 0);
   });
