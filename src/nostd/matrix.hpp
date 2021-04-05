@@ -62,8 +62,8 @@ public:
     ~Iterator() = default;
 
     // iterators
-    Iterator begin() const noexcept;
-    Iterator end() const noexcept;
+    Iterator begin() const noexcept; // iterator to the first row
+    Iterator end() const noexcept;   // iterator to the row after the last
 
     Iterator &operator++();
     Iterator operator++(int);
@@ -128,9 +128,9 @@ public:
   ~Matrix();
 
   // iterators
-  iterator begin() noexcept;
+  iterator begin() noexcept; // iterator referring to the first row
   const_iterator begin() const noexcept;
-  iterator end() noexcept;
+  iterator end() noexcept; // iterator referring to the row after the last
   const_iterator end() const noexcept;
   reverse_iterator rbegin() noexcept;
   const_reverse_iterator rbegin() const noexcept;
@@ -142,23 +142,23 @@ public:
   const_reverse_iterator crend() const noexcept;
 
   // capacity
-  size_t order() const noexcept;
-  size_t extent(size_t) const;
-  size_t size() const noexcept;
+  size_t order() const noexcept; // number of dimensions
+  size_t extent(size_t) const;   // given the index of a dimensions
+  size_t size() const noexcept;  // the total number of elements
   bool empty() const noexcept;
   allocator_type get_allocator() const noexcept;
 
   // element access
-  iterator operator[](size_t);
+  iterator operator[](size_t); // access to an indexed row
   const_iterator operator[](size_t) const;
   iterator at(size_type);
   const_iterator at(size_type) const;
-  value_type *data() noexcept;
+  value_type *data() noexcept; // access to the C-style array
   const value_type *data() const noexcept;
 
   // modifiers
-  void fill(const value_type &);
-  void swap(Matrix &) noexcept; // this will invalid pre-swap iterators
+  void fill(const value_type &); // sets every element to the given value
+  void swap(Matrix &) noexcept;  // this will invalid pre-swap iterators
 
   // Two matrixes are said to be equal when they have same extents and elements.
   typename std::enable_if<Has_equal<T>(), bool>::type
