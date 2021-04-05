@@ -12,14 +12,18 @@
 #include "wstring.hpp"
 #include <stdexcept>
 
-Nostd::WString::WString(const WString::allocator_type &alloc) : Vector(1, L'\0', alloc) {}
+Nostd::WString::WString(const WString::allocator_type &alloc)
+    : Vector(1, L'\0', alloc) {}
 
-Nostd::WString::WString(const WString &str, const WString::allocator_type &alloc) : Vector(str.size(), alloc) {
+Nostd::WString::WString(const WString &str,
+                        const WString::allocator_type &alloc)
+    : Vector(str.size(), alloc) {
   for (size_t i = 0; i < str.size(); i++)
     v[i] = str[i];
 }
 
-Nostd::WString::WString(const WString &str, size_t start, size_t len, const WString::allocator_type &alloc )
+Nostd::WString::WString(const WString &str, size_t start, size_t len,
+                        const WString::allocator_type &alloc)
     : Vector(len == npos ? str.size() - start : len + 1, alloc) {
   // we also check that we don't go out of the *str array as we
   // could loop infinitely when len = npos (read entire string)
@@ -31,15 +35,20 @@ Nostd::WString::WString(const WString &str, size_t start, size_t len, const WStr
   v[len] = L'\0';
 }
 
-Nostd::WString::WString(const wchar_t *str, const WString::allocator_type &alloc ) : WString(str, wcslen(str), alloc) {}
+Nostd::WString::WString(const wchar_t *str,
+                        const WString::allocator_type &alloc)
+    : WString(str, wcslen(str), alloc) {}
 
-Nostd::WString::WString(const wchar_t *str, size_t len, const WString::allocator_type &alloc ) : Vector(len + 1, alloc) {
+Nostd::WString::WString(const wchar_t *str, size_t len,
+                        const WString::allocator_type &alloc)
+    : Vector(len + 1, alloc) {
   for (size_t i = 0; i < len; i++)
     v[i] = str[i];
   v[len] = L'\0';
 }
 
-Nostd::WString::WString(WString &&str, const WString::allocator_type &alloc ) : Vector(str, alloc) {}
+Nostd::WString::WString(WString &&str, const WString::allocator_type &alloc)
+    : Vector(str, alloc) {}
 
 bool Nostd::WString::empty() const {
   return sz <= 1 || (sz == 1 && v[0] == L'\0');
@@ -253,5 +262,3 @@ std::basic_istream<wchar_t> &Nostd::getline(std::basic_istream<wchar_t> &is,
     str.push_back(c);
   return is;
 }
-
-

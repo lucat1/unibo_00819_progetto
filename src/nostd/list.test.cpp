@@ -1,6 +1,6 @@
-#include <assert.h>
-#include "../util/test.hpp"
 #include "list.hpp"
+#include "test.hpp"
+#include <cassert>
 using namespace Nostd;
 
 int main() {
