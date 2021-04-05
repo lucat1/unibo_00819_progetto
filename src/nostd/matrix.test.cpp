@@ -9,9 +9,10 @@
   matrix.test.cpp: tests for Nostd::Matrix and its helper entities.
 */
 
+#include <cassert>
+
 #include "matrix.hpp"
 #include "test.hpp"
-#include <cassert>
 
 using namespace Nostd;
 

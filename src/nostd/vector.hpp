@@ -21,7 +21,7 @@ protected:
   void init_v(size_t size) {
     sz = size;
     calc_cap();
-    v = new V[cap];
+    v = reinterpret_cast<V *>(::operator new(cap * sizeof(V)));
   }
 
 public:
@@ -49,7 +49,7 @@ public:
     this->cap = vec.cap;
     vec.v = nullptr; // to prevent unwanted deallocations
   }
-  ~Vector() { delete[] v; }
+  ~Vector() { ::operator delete(v); }
 
   // Adds a new element at the end of the vector
   void push_back(V ele) {
@@ -68,7 +68,15 @@ public:
     return v[i];
   }
 
+  const V &at(size_t i) const {
+    if (i >= sz)
+      throw std::out_of_range("index out of bounds");
+    return v[i];
+  }
+
   V &operator[](size_t i) { return at(i); }
+
+  const V &operator[](size_t i) const { return at(i); };
 
   // Removes a signle item from the vector
   size_t erase(size_t i) {
@@ -95,19 +103,19 @@ public:
       cap = 2;
     else
       cap = n * 1.5;
-    V *newv = new V[cap];
+    V *newv = reinterpret_cast<V *>(::operator new((cap + 1) * sizeof(V)));
     for (size_t i = 0; i < n; i++)
       newv[i] = v[i];
-    delete[] v;
+    ::operator delete(v);
     v = newv;
   }
 
   // returns whether the vector is empty
-  bool empty() { return sz == 0; }
+  bool empty() const { return sz == 0; };
   // returns the size of the array (length)
-  size_t size() { return sz; }
+  size_t size() const { return sz; }
   // returns the capactiy of the array (allocated size)
-  size_t capacity() { return cap; }
+  size_t capacity() const { return cap; }
 };
 
 } // namespace Nostd

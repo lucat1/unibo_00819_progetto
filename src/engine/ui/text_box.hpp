@@ -18,6 +18,8 @@
 namespace Engine {
 namespace UI {
 
+// NOTE: deliberately ignores any padding given. To achieve that wrap this
+// element inside a Box
 class TextBox : public Box {
 public:
   Nostd::WString content;

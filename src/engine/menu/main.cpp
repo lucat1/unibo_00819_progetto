@@ -13,63 +13,80 @@
 #include "main.hpp"
 #include "../screen.hpp"
 #include "../ui/append.hpp"
-#include "../ui/button.hpp"
 #include "../ui/center.hpp"
-#include "../ui/logo.hpp"
+using Engine::UI::Box;
 
-Engine::Menu::Main::Main(WINDOW *window)
-    : Drawable(window, Screen::SCREEN_COLS, Screen::SCREEN_LINES) {
-  this->drawable_kind = Kind::menu;
-  this->root = generate();
-}
-Engine::Menu::Main::~Main() { delete root; }
+Engine::UI::Logo *Engine::Menu::Main::append_logo(Box *parent) {
+  auto container = Engine::UI::append<Engine::UI::Box>(parent);
+  container->props(Box::Property::padding_bottom, 2);
 
-Engine::UI::Logo *append_logo(Engine::UI::Box *parent) {
-  Engine::UI::Center *hcenter = Engine::UI::append<Engine::UI::Center>(parent);
-  hcenter->propb(Engine::UI::Box::Property::center_horizontal, 1);
-  hcenter->props(Engine::UI::Box::Property::padding_bottom, 4);
-  auto logo = Engine::UI::append<Engine::UI::Logo>(hcenter);
+  auto logo = Engine::UI::append<Engine::UI::Logo>(container);
   return logo;
 }
 
-Engine::UI::Button *append_button(Engine::UI::Box *parent, const wchar_t *str) {
-  Engine::UI::Center *hcenter = Engine::UI::append<Engine::UI::Center>(parent);
-  hcenter->propb(Engine::UI::Box::Property::center_horizontal, 1);
+Engine::UI::Button *Engine::Menu::Main::append_button(Box *parent,
+                                                      const wchar_t *str) {
   auto btn =
-      Engine::UI::append<Engine::UI::Button, const wchar_t *>(hcenter, str);
-  btn->propc(Engine::UI::Box::Property::foreground, Engine::Color::red);
-  btn->propc(Engine::UI::Box::Property::background, Engine::Color::grey23);
+      Engine::UI::append<Engine::UI::Button, const wchar_t *>(parent, str);
+  unfocus(btn);
   return btn;
 }
 
-Engine::UI::Box *Engine::Menu::Main::generate() {
-  auto root = new UI::Box(width, height);
-  auto hcenter = UI::append<UI::Center>(root);
-  hcenter->propb(UI::Box::Property::center_horizontal, 1);
-  auto vcenter = UI::append<UI::Center>(hcenter);
+Box *Engine::Menu::Main::generate() {
+  auto root = new UI::Center(width, height);
+  auto center = UI::append<UI::Center>(root);
+  center->propb(Box::Property::center_horizontal, true);
+  append_logo(center);
 
-  append_logo(vcenter);
-  auto play = append_button(vcenter, L"Play");
-  play->parent->props(Engine::UI::Box::Property::padding_bottom, 1);
-  append_button(vcenter, L"Settings");
+  auto btn_container = UI::append<UI::Center>(center);
+  btn_container->propb(Box::Property::center_horizontal, true);
+  auto play = append_button(btn_container, L"Play");
+  play->props(Box::Property::padding_bottom, 1);
+  auto settings = append_button(btn_container, L"Settings");
+  settings->props(Box::Property::padding_bottom, 1);
+  append_button(btn_container, L"Quit");
 
   return root;
 }
 
-void Engine::Menu::Main::redraw() {
-  root->show(window, 1, 1);
-  wrefresh(window);
+// These are common across al menus, but a shared abstraction has been avoided
+// to allow more complex menus to be created. This naive appreach with simple
+// `child` calls and a counter would not work in a more complex element tree
+// where the fous items are scattered around and not all contained neatly under
+// the same parent.
+Box *Engine::Menu::Main::focus_start() { return root->child(0)->child(1); }
+
+Box *Engine::Menu::Main::curr_box() { return focus_start()->child(focused); }
+
+Box *Engine::Menu::Main::next_box() {
+  // if we are at the last element go to the top, otherwhise increment
+  focused = focused == max_focused ? 0 : focused + 1;
+  return curr_box();
 }
 
-void Engine::Menu::Main::handle_event(Event e) {
-  switch (e) {
-  case Event::redraw:
-    redraw();
-    break;
-  case Event::move_up:
-  case Event::move_down:
-  case Event::move_left:
-  case Event::move_right:
-    break;
-  };
+Box *Engine::Menu::Main::prev_box() {
+  // if we are at the first element go to the bottom, otherwhise decrement
+  focused = focused == 0 ? max_focused : focused - 1;
+  return curr_box();
+}
+
+Engine::Color button_fg = Engine::Color::red, button_bg = Engine::Color::grey23;
+
+void Engine::Menu::Main::focus(Box *box) {
+  box->propc(Box::Property::background, button_fg);
+  box->propc(Box::Property::foreground, button_bg);
+}
+
+void Engine::Menu::Main::unfocus(Box *box) {
+  box->propc(Box::Property::background, button_bg);
+  box->propc(Box::Property::foreground, button_fg);
+}
+
+void Engine::Menu::Main::interact(Box *) { clicked_on = focused; }
+
+bool Engine::Menu::Main::is_over() { return clicked_on != -1; }
+Engine::Menu::Main::Result Engine::Menu::Main::get_result() {
+  Engine::Menu::Main::Result actions[] = {Result::play, Result::settings,
+                                          Result::quit};
+  return actions[clicked_on];
 }

@@ -14,24 +14,42 @@
 #ifndef ENGINE_MENU_MAIN_HPP
 #define ENGINE_MENU_MAIN_HPP
 
-#include "../drawable.hpp"
-#include "../ui/box.hpp"
+#include "../ui/button.hpp"
+#include "../ui/logo.hpp"
+#include "menu.hpp"
 
 namespace Engine {
 namespace Menu {
 
-class Main : public Drawable {
-private:
-  UI::Box *root;
+class Main : public Menu {
+  // inherit the parent constructor
+  using Menu::Menu;
 
+private:
+  int focused = 0, max_focused = 2;
+  int clicked_on = -1;
+  UI::Box *focus_start();
+  UI::Logo *append_logo(UI::Box *parent);
+  UI::Button *append_button(UI::Box *parent, const wchar_t *str);
+
+protected:
   UI::Box *generate();
-  void redraw();
+  UI::Box *curr_box();
+  UI::Box *next_box();
+  UI::Box *prev_box();
+  void focus(UI::Box *box);
+  void unfocus(UI::Box *box);
+  void interact(UI::Box *box);
 
 public:
-  Main(WINDOW *window);
-  ~Main();
+  enum class Result {
+    play,
+    settings,
+    quit,
+  };
 
-  void handle_event(Event e);
+  bool is_over();
+  Result get_result();
 };
 
 } // namespace Menu

@@ -20,7 +20,7 @@ public:
   A first;
   B second;
 
-  Pair() = default;
+  Pair() = delete;
   Pair(A first, B second) {
     this->first = first;
     this->second = second;

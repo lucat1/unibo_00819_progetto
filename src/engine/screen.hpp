@@ -32,12 +32,21 @@ private:
   // stdscreen refers to the WINDOW* returns by initscr, whereas container is
   // the main ncurses window where all content is drawn. The container borders
   // are marked with ncurses' box function
-  WINDOW *stdscreen, *container;
+  //
+  // we use a wrapper around container called outer_box to draw the borders of
+  // the window but still be able to call werase/wclear on container without
+  // removing these borders. It should also prevent some flicekrign when
+  // erasing content at a fast rate.
+  WINDOW *stdscreen, *outer_box, *container;
   // x, y are the offest from the screen (left, top) to start printing inside
   // the game container
   uint16_t x, y, terminal_cols, terminal_lines;
-  Drawable *content;
+  // checks if the terminal window is big enough to make the content fit
   bool can_fit();
+
+  Drawable *content;
+  // removes and frees the content of the window
+  void clear_content();
 
 public:
   static const uint16_t SCREEN_COLS = 80;
@@ -50,9 +59,21 @@ public:
   // game, a menu or none (therefore we use Drawable::Kind)
   Drawable::Kind get_state();
   // updates the screen with a fresh drawing of a new content
-  void set_content(Drawable *drawable);
+  template <typename T = Drawable> void set_content() {
+    clear_content();
+    content = new T(container);
+    send_event(Engine::Drawable::Event::redraw);
+  }
   // returns the current drawable being displayed on the screen
-  Drawable *get_content();
+  template <typename T = Drawable> T *get_content() {
+    return static_cast<T *>(content);
+  }
+  // returns true if the currently displayed content if of the requested type
+  template <typename T = Drawable> bool is_content() {
+    return dynamic_cast<T *>(content);
+  }
+  // returns true if the current content has finished its drawing duties
+  bool is_over();
   // sends an event to the current content displayed on the screen which will
   // react accordingly
   void send_event(Drawable::Event e);
@@ -65,8 +86,8 @@ public:
   bool open();
   // repositions the content box on resize events
   bool reposition();
-  // closes the current ncurses screen wihtout freeing the content values.
-  // it is suggestd to use this ONLY if you know what you're after. In all other
+  // closes the current ncurses screen wihtout freeing the content values. it is
+  // suggestd to use this ONLY if you know what you're after. In all other
   // cases, _please_ delete the Screen instance.
   void close();
 };
