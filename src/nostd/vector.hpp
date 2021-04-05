@@ -1,12 +1,20 @@
 #ifndef NOSTD_VECTOR_HPP
 #define NOSTD_VECTOR_HPP
+#include <iterator>
 #include <stdexcept>
 
 namespace Nostd {
 
-template <typename V> class Vector {
-protected:
-  V *v;
+template <typename V>
+class Vector {
+ public:
+  using iterator = V*;
+  using reverse_iterator = std::reverse_iterator<iterator>;
+  using const_iterator = const V*;
+  using const_reverse_iterator = std::reverse_iterator<const_iterator>;
+
+ protected:
+  V* v;
   size_t sz, cap;
 
   void calc_cap() {
@@ -21,10 +29,10 @@ protected:
   void init_v(size_t size) {
     sz = size;
     calc_cap();
-    v = reinterpret_cast<V *>(::operator new(cap * sizeof(V)));
+    v = reinterpret_cast<V*>(::operator new(cap * sizeof(V)));
   }
 
-public:
+ public:
   // Constructs an empty container, with no elements.
   Vector() { init_v(0); }
   // Constructs a vector of the given size
@@ -37,17 +45,17 @@ public:
       v[i] = ele;
   }
   // Copies data from another vector instance (in linear time)
-  Vector(Vector &vec) {
+  Vector(Vector& vec) {
     init_v(vec.sz);
     for (size_t i = 0; i < vec.sz; i++)
       this->v[i] = vec[i];
   }
   // Moves data from another vector (resues same memory sequence for v)
-  Vector(Vector &&vec) {
+  Vector(Vector&& vec) {
     this->v = vec.v;
     this->sz = vec.sz;
     this->cap = vec.cap;
-    vec.v = nullptr; // to prevent unwanted deallocations
+    vec.v = nullptr;  // to prevent unwanted deallocations
   }
   ~Vector() { ::operator delete(v); }
 
@@ -62,21 +70,21 @@ public:
   void clear() { resize(0); };
 
   // Returns a reference to the element at position i in the vector
-  V &at(size_t i) {
+  V& at(size_t i) {
     if (i >= sz)
       throw std::out_of_range("index out of bounds");
     return v[i];
   }
 
-  const V &at(size_t i) const {
+  const V& at(size_t i) const {
     if (i >= sz)
       throw std::out_of_range("index out of bounds");
     return v[i];
   }
 
-  V &operator[](size_t i) { return at(i); }
+  V& operator[](size_t i) { return at(i); }
 
-  const V &operator[](size_t i) const { return at(i); };
+  const V& operator[](size_t i) const { return at(i); };
 
   // Removes a signle item from the vector
   size_t erase(size_t i) {
@@ -103,7 +111,7 @@ public:
       cap = 2;
     else
       cap = n * 1.5;
-    V *newv = reinterpret_cast<V *>(::operator new((cap + 1) * sizeof(V)));
+    V* newv = reinterpret_cast<V*>(::operator new((cap + 1) * sizeof(V)));
     for (size_t i = 0; i < n; i++)
       newv[i] = v[i];
     ::operator delete(v);
@@ -116,8 +124,23 @@ public:
   size_t size() const { return sz; }
   // returns the capactiy of the array (allocated size)
   size_t capacity() const { return cap; }
+
+  iterator begin() { return &v[0]; }
+  const_iterator begin() const { return &v[0]; }
+  iterator end() { return &v[sz - 1] + 1; }
+  const_iterator end() const { return &v[sz - 1] + 1; }
+  reverse_iterator rbegin() { return reverse_iterator(end() - 1); }
+  reverse_iterator rend() { return reverse_iterator(begin() - 1); }
+  const_iterator cbegin() const { return &v[0]; }
+  const_iterator cend() const { return &v[sz - 1] + 1; }
+  const_reverse_iterator crbegin() const {
+    return const_reverse_iterator(end() - 1);
+  }
+  const_reverse_iterator crend() const {
+    return const_reverse_iterator(begin() - 1);
+  }
 };
 
-} // namespace Nostd
+}  // namespace Nostd
 
-#endif // NOSTD_VECTOR_HPP
+#endif  // NOSTD_VECTOR_HPP
