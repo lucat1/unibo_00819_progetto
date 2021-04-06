@@ -249,20 +249,24 @@ public:
 
   V &operator[](K key) override { return this->tree->get(key); }
 
-  bool empty() override { return this->tree == nullptr; }
+  const V &operator[](K key) const override { return this->tree->get(key); }
 
-  bool contains(K key) override { return this->tree->find(key); }
+  bool empty() const override { return this->tree == nullptr; }
 
-  size_t size() override { return this->tree->children; }
+  bool contains(K key) const override { return this->tree->find(key); }
 
-  Nostd::Vector<V> get_values() override { return this->tree->get_values(); }
+  size_t size() const override { return this->tree->children; }
+
+  Nostd::Vector<V> get_values() const override {
+    return this->tree->get_values();
+  }
 
   void clear() override {
     this->tree->clear(this->tree->root);
     this->tree->root = nullptr;
   }
 
-  Nostd::Vector<Nostd::Pair<K, V>> as_vector() override {
+  Nostd::Vector<Nostd::Pair<K, V>> as_vector() const override {
     return Nostd::Vector<Nostd::Pair<K, V>>();
   }
 };

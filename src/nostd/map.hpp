@@ -34,23 +34,25 @@ public:
   virtual void remove(K key) = 0;
 
   /// Check wheter the map has no keys
-  virtual bool empty() = 0;
+  virtual bool empty() const = 0;
 
   /// Check wheter the map contains the key
-  virtual bool contains(K key) = 0;
+  virtual bool contains(K key) const = 0;
 
   /// Remove all elements
   virtual void clear() = 0;
 
   /// Returns all the values inside the map as Nostd::Vector<V>
-  virtual Nostd::Vector<V> get_values() = 0;
+  virtual Nostd::Vector<V> get_values() const = 0;
 
   /// Returns all the Key-Values pairs as Nostd::Vector<Nostd::Pair<K,V>>
-  virtual Nostd::Vector<Nostd::Pair<K, V>> as_vector() = 0;
+  virtual Nostd::Vector<Nostd::Pair<K, V>> as_vector() const = 0;
 
-  virtual size_t size() = 0;
+  virtual size_t size() const = 0;
 
   virtual V &operator[](K key) = 0;
+
+  virtual const V &operator[](K key) const = 0;
 };
 
 } // namespace Nostd

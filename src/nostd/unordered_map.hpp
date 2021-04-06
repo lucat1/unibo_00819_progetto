@@ -32,7 +32,7 @@ namespace Nostd {
 
 template <typename K, typename V> class UnorderedMap : public Map<K, V> {
 private:
-  Nostd::Vector<Nostd::Pair<K, V>> data;
+  mutable Nostd::Vector<Nostd::Pair<K, V>> data;
 
 public:
   UnorderedMap() {}
@@ -57,29 +57,38 @@ public:
       }
   }
 
-  bool empty() override { return this->data.empty(); }
+  bool empty() const override { return this->data.empty(); }
 
-  bool contains(K key) override {
+  bool contains(K key) const override {
     for (size_t i = 0; i < this->data.size(); i++)
       if (key == data[i].first)
         return true;
     return false;
   }
 
-  size_t size() override { return this->data.size(); }
+  size_t size() const override { return this->data.size(); }
 
-  Nostd::Vector<V> get_values() override {
+  Nostd::Vector<V> get_values() const override {
     Nostd::Vector<V> res(this->data.size());
     for (size_t i = 0; i < this->data.size(); i++)
       res[i] = data[i].second;
     return res;
   }
 
-  Nostd::Vector<Nostd::Pair<K, V>> as_vector() override { return this->data; }
+  Nostd::Vector<Nostd::Pair<K, V>> as_vector() const override {
+    return this->data;
+  }
 
   void clear() override { data.clear(); }
 
   V &operator[](K key) override {
+    for (size_t i = 0; i < this->data.size(); i++)
+      if (data[i].first == key)
+        return data[i].second;
+    throw std::invalid_argument("UnorderedMap: No value found for that key");
+  }
+
+  const V &operator[](K key) const override {
     for (size_t i = 0; i < this->data.size(); i++)
       if (data[i].first == key)
         return data[i].second;

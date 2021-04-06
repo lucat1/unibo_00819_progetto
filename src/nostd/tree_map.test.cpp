@@ -67,21 +67,6 @@ int main() {
     assert(!tm.contains(5));
   });
 
-  /*Nostd::it("removes an element from the tmap", [] {
-    Nostd::TreeMap<int, int> tm;
-    tm.put(10, 10);
-    tm.put(5, 5);
-    tm.put(3, 3);
-    tm.put(6, 6);
-    tm.put(20, 20);
-    tm.put(1, 1);
-    tm.remove(5);
-    tm.remove(6);
-    tm.remove(3);
-    tm.remove(10);
-    assert(tm.get_values().size() == 2);
-  });
-*/
   Nostd::it("removes leaf", [] {
     Nostd::TreeMap<int, int> tm;
     tm.put(10, 10);
