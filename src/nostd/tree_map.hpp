@@ -6,7 +6,10 @@
   Mattia Girolimetto #977478
   04/01/2021
 
-  tree_map.cpp: implementation of Nostd::TreeMap.
+  tree_map.cpp: implementation of Nostd::TreeMap built using an BST.
+  Please refere to Nostd::Map for method's documentation.
+
+  Warining: It does not allow duplicates
 */
 
 #ifndef NOSTD_TREEMAP_HPP
@@ -21,13 +24,6 @@
 
 namespace Nostd {
 
-/**
-
-  TreeMap
-
-  Built using an BST. Please refere to Nostd::Map for method's documentation
-
-**/
 template <class K, class V> class TreeMap : public virtual Map<K, V> {
 private:
   class Tree {
