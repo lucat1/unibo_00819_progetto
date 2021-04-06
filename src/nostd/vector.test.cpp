@@ -4,6 +4,10 @@
 #include <cassert>
 using namespace Nostd;
 
+#include <iostream>
+
+int touched = 0;
+
 int main() {
   it("constructs a vector with no elements", [] {
     Vector<int> v;
@@ -89,4 +93,23 @@ int main() {
     v.push_back(p);
     assert(v[0] == p);
   });
+
+  class A {
+  public:
+    A() { touched++; }
+    A(const A &) { touched++; }
+  };
+
+  it("allocates but does not construct elements", [] {
+    Vector<A> v(5);
+    assert(touched == 0);
+  });
+
+  it("allocates and constructs elements", [] {
+    A test;
+    Vector<A> v(5, test);
+    assert(touched == 6); // 5 constructed classes plus the `test` instance
+  });
+
+  // TODO: tests on iterators
 }

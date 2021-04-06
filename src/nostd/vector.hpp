@@ -53,7 +53,8 @@ public:
   }
   // it is constructor that creates a vector with size elements and size * 1.5
   // capacity copying size times the ele value into the vector
-  Vector(size_t size, V ele, const allocator_type &alloc = allocator_type()) {
+  Vector(size_t size, const V &ele,
+         const allocator_type &alloc = allocator_type()) {
     all_elems = alloc;
     allocate_v(size);
     construct_v(size, ele);
