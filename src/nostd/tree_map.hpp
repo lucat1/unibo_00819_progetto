@@ -233,10 +233,7 @@ private:
       return ptr != nullptr;
     }
 
-    Nostd::Vector<V> get_values() {
-      Nostd::Vector<V> res;
-      return get_elements(this->root);
-    }
+    Nostd::Vector<V> get_values() { return get_elements(this->root); }
 
     Nostd::Vector<Nostd::Pair<K, V>> as_vector() {
       Nostd::Vector<Nostd::Pair<K, V>> res;
