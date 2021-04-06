@@ -1,5 +1,5 @@
 /*
-  UniversNostd::ity of Bologna
+  University of Bologna
   First cicle degree in Computer Science
   00819 - Programmazione
 
@@ -12,21 +12,20 @@
 #include "test.hpp"
 #include "tree_map.hpp"
 #include <cassert>
-#include <exception>
-#include <stdexcept>
+
+using namespace Nostd;
 
 int main() {
-
-  Nostd::it("puts elements into tmap", [] {
-    Nostd::TreeMap<int, int> tm;
+  it("puts elements into tmap", [] {
+    TreeMap<int, int> tm;
     tm.put(2, 5);
     tm.put(4, 10);
     tm.put(1, 23);
     tm.put(5, 111);
   });
 
-  Nostd::it("tests operator []", [] {
-    Nostd::TreeMap<int, int> tm;
+  it("tests operator []", [] {
+    TreeMap<int, int> tm;
     tm.put(2, 5);
     tm[2] = 10;
     assert(tm[2] == 10);
@@ -39,16 +38,16 @@ int main() {
     assert(ex);
   });
 
-  Nostd::it("gets values of tmap", [] {
-    Nostd::TreeMap<int, int> tm;
+  it("gets values of tmap", [] {
+    TreeMap<int, int> tm;
     tm.put(2, 5);
     tm.put(4, 25);
     auto v = tm.get_values();
     assert(v.size() == 2);
   });
 
-  Nostd::it("checks the size of the tmap", [] {
-    Nostd::TreeMap<int, int> tm;
+  it("checks the size of the tmap", [] {
+    TreeMap<int, int> tm;
     tm.put(3, 4);
     tm.put(3, 4);
     tm.put(3, 4);
@@ -60,23 +59,28 @@ int main() {
     assert(tm.size() == 3);
   });
 
-  Nostd::it("checks wheter the tmap contains an element", [] {
-    Nostd::TreeMap<int, int> tm;
+  it("checks wheter the tmap contains an element", [] {
+    TreeMap<int, int> tm;
     tm.put(4, 5);
     assert(tm.contains(4));
     assert(!tm.contains(5));
   });
 
+<<<<<<< HEAD
   Nostd::it("removes leaf", [] {
     Nostd::TreeMap<int, int> tm;
+=======
+  it("removes leaf", [] {
+    TreeMap<int, int> tm;
+>>>>>>> 80b891c9a6382910e38e2460f2bbe7cd76405ac2
     tm.put(10, 10);
     tm.put(5, 5);
     tm.remove(5);
     assert(tm.size() == 1);
   });
 
-  Nostd::it("removes single childed node", [] {
-    Nostd::TreeMap<int, int> tm;
+  it("removes single childed node", [] {
+    TreeMap<int, int> tm;
     // remove left left
     tm.put(10, 10);
     tm.put(5, 5);
@@ -101,8 +105,8 @@ int main() {
     assert(tm.size() == 3);
   });
 
-  Nostd::it("removes node with two children", [] {
-    Nostd::TreeMap<int, int> tm;
+  it("removes node with two children", [] {
+    TreeMap<int, int> tm;
     tm.put(10, 10);
     tm.put(5, 5);
     tm.put(6, 6);
@@ -112,8 +116,8 @@ int main() {
     assert(tm.size() == 4);
   });
 
-  Nostd::it("puts elements into tmap", [] {
-    Nostd::TreeMap<int, int> tm;
+  it("puts elements into tmap", [] {
+    TreeMap<int, int> tm;
     tm.put(2, 5);
     tm.put(4, 10);
     tm.put(1, 23);

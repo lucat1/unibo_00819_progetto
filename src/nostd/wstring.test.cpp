@@ -2,7 +2,9 @@
 #include "wstring.hpp"
 #include <cassert>
 #include <sstream>
-using namespace Nostd;
+
+using Nostd::it;
+using Nostd::WString;
 
 int main() {
   it("creates an empty WString", [] {
