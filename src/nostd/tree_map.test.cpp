@@ -66,13 +66,8 @@ int main() {
     assert(!tm.contains(5));
   });
 
-<<<<<<< HEAD
-  Nostd::it("removes leaf", [] {
-    Nostd::TreeMap<int, int> tm;
-=======
   it("removes leaf", [] {
     TreeMap<int, int> tm;
->>>>>>> 80b891c9a6382910e38e2460f2bbe7cd76405ac2
     tm.put(10, 10);
     tm.put(5, 5);
     tm.remove(5);
