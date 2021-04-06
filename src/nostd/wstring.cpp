@@ -10,6 +10,7 @@
   on a string of whide charters.
 */
 #include "wstring.hpp"
+#include <cassert>
 #include <stdexcept>
 
 Nostd::WString::WString(const WString::allocator_type &alloc)
@@ -17,7 +18,8 @@ Nostd::WString::WString(const WString::allocator_type &alloc)
 
 Nostd::WString::WString(const WString &str,
                         const WString::allocator_type &alloc)
-    : WString(str.c_str(), alloc) {}
+    // TODO: remove assert
+    : WString((assert(str.c_str() != nullptr), str.c_str()), alloc) {}
 
 Nostd::WString::WString(const WString &str, size_t start, size_t len,
                         const WString::allocator_type &alloc)

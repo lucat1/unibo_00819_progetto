@@ -35,22 +35,25 @@ Engine::Menu::Settings::Settings(WINDOW *window,
 }
 
 Box *Engine::Menu::Settings::generate() {
-  auto root = new UI::Center(width, height);
+  auto root = new UI::Box(width, height);
   auto list = UI::append<UI::List>(root);
   for (auto setting : updated)
     UI::append<UI::TextBox, const Nostd::WString &>(list, setting.label());
 
   // buttons at the end of the page for closing the menu
-  auto hbox = UI::append<Box>(root);
+  auto chbox = UI::append<UI::Center>(root);
+  chbox->propb(Box::Property::center_horizontal, true);
+  auto hbox = UI::append<UI::Box>(chbox);
   hbox->propb(Box::Property::direction_horizontal, true);
-  Engine::UI::append<UI::Button, const wchar_t *>(hbox, L"Save");
-  Engine::UI::append<UI::Button, const wchar_t *>(hbox, L"Discard");
+  auto btn1 = append_button(hbox, L"Save");
+  btn1->props(Box::Property::padding_right, 8);
+  append_button(hbox, L"Discard");
   return root;
 }
 
 Box *Engine::Menu::Settings::curr_box() {
   if (focused >= max_focused - 1)
-    return root->child(1)->child(-(focused - max_focused));
+    return root->child(1)->child(0)->child(focused == max_focused ? 1 : 0);
   else
     return root->child(0)->child(focused);
 }
