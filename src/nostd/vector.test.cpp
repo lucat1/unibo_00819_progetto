@@ -4,8 +4,6 @@
 #include <cassert>
 using namespace Nostd;
 
-#include <iostream>
-
 int touched = 0;
 
 int main() {
