@@ -1,6 +1,8 @@
 #ifndef NOSTD_VECTOR_HPP
 #define NOSTD_VECTOR_HPP
+
 #include "allocator.hpp"
+#include <iterator>
 #include <stdexcept>
 
 namespace Nostd {
@@ -8,6 +10,10 @@ namespace Nostd {
 template <typename V, class Alloc = Allocator<V>> class Vector {
 public:
   using allocator_type = Alloc;
+  using iterator = V *;
+  using reverse_iterator = std::reverse_iterator<iterator>;
+  using const_iterator = const V *;
+  using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
 protected:
   allocator_type all_elems;
@@ -156,9 +162,25 @@ public:
   size_t size() const { return sz; }
   // returns the capactiy of the array (allocated size)
   size_t capacity() const { return cap; }
+
+  iterator begin() { return &v[0]; }
+  const_iterator begin() const { return &v[0]; }
+  iterator end() { return &v[sz - 1] + 1; }
+  const_iterator end() const { return &v[sz - 1] + 1; }
+  reverse_iterator rbegin() { return reverse_iterator(end() - 1); }
+  reverse_iterator rend() { return reverse_iterator(begin() - 1); }
+  const_iterator cbegin() const { return &v[0]; }
+  const_iterator cend() const { return &v[sz - 1] + 1; }
+  const_reverse_iterator crbegin() const {
+    return const_reverse_iterator(end() - 1);
+  }
+  const_reverse_iterator crend() const {
+    return const_reverse_iterator(begin() - 1);
+  }
 };
 
 } // namespace Nostd
 
 #include "allocator.cpp"
+
 #endif // NOSTD_VECTOR_HPP

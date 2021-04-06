@@ -108,4 +108,6 @@ void Engine::Screen::clear_content() {
   if (content != nullptr)
     delete content;
   content = nullptr;
+  werase(container);
+  wrefresh(container);
 }
