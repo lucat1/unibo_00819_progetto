@@ -13,16 +13,20 @@
 #ifndef ENGINE_MENU_SETTINGS_HPP
 #define ENGINE_MENU_SETTINGS_HPP
 
+#include "../../data/setting.hpp"
+#include "../../nostd/vector.hpp"
 #include "../ui/button.hpp"
-#include "../ui/logo.hpp"
 #include "menu.hpp"
 
 namespace Engine {
 namespace Menu {
 
 class Settings : public Menu {
-  // inherit the parent constructor
-  using Menu::Menu;
+private:
+  Nostd::Vector<Data::Setting> original, updated;
+  int focused = 0, max_focused;
+  int clicked_on = -1;
+  Engine::UI::Button *append_button(UI::Box *parent, const wchar_t *str);
 
 protected:
   UI::Box *generate();
@@ -31,10 +35,13 @@ protected:
   UI::Box *prev_box();
   void focus(UI::Box *box);
   void unfocus(UI::Box *box);
+  void interact(UI::Box *box);
 
 public:
+  Settings(WINDOW *window, Nostd::Vector<Data::Setting> settings);
+
   bool is_over();
-  bool get_result();
+  Nostd::Vector<Data::Setting> get_result();
 };
 
 } // namespace Menu

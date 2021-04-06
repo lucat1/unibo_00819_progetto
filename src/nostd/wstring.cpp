@@ -10,6 +10,7 @@
   on a string of whide charters.
 */
 #include "wstring.hpp"
+#include <cassert>
 #include <stdexcept>
 
 Nostd::WString::WString(const WString::allocator_type &alloc)

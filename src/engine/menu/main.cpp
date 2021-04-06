@@ -11,23 +11,22 @@
   interaction with the UI.
 */
 #include "main.hpp"
-#include "../screen.hpp"
 #include "../ui/append.hpp"
 #include "../ui/center.hpp"
+
 using Engine::UI::Box;
 
 Engine::UI::Logo *Engine::Menu::Main::append_logo(Box *parent) {
-  auto container = Engine::UI::append<Engine::UI::Box>(parent);
+  auto container = UI::append<UI::Box>(parent);
   container->props(Box::Property::padding_bottom, 2);
 
-  auto logo = Engine::UI::append<Engine::UI::Logo>(container);
+  auto logo = UI::append<UI::Logo>(container);
   return logo;
 }
 
 Engine::UI::Button *Engine::Menu::Main::append_button(Box *parent,
                                                       const wchar_t *str) {
-  auto btn =
-      Engine::UI::append<Engine::UI::Button, const wchar_t *>(parent, str);
+  auto btn = UI::append<UI::Button, const wchar_t *>(parent, str);
   unfocus(btn);
   return btn;
 }
@@ -70,23 +69,24 @@ Box *Engine::Menu::Main::prev_box() {
   return curr_box();
 }
 
-Engine::Color button_fg = Engine::Color::red, button_bg = Engine::Color::grey23;
+Engine::Color main_button_fg = Engine::Color::red,
+              main_button_bg = Engine::Color::grey23;
 
 void Engine::Menu::Main::focus(Box *box) {
-  box->propc(Box::Property::background, button_fg);
-  box->propc(Box::Property::foreground, button_bg);
+  box->propc(Box::Property::background, main_button_fg);
+  box->propc(Box::Property::foreground, main_button_bg);
 }
 
 void Engine::Menu::Main::unfocus(Box *box) {
-  box->propc(Box::Property::background, button_bg);
-  box->propc(Box::Property::foreground, button_fg);
+  box->propc(Box::Property::background, main_button_bg);
+  box->propc(Box::Property::foreground, main_button_fg);
 }
 
 void Engine::Menu::Main::interact(Box *) { clicked_on = focused; }
 
 bool Engine::Menu::Main::is_over() { return clicked_on != -1; }
+
 Engine::Menu::Main::Result Engine::Menu::Main::get_result() {
-  Engine::Menu::Main::Result actions[] = {Result::play, Result::settings,
-                                          Result::quit};
+  Result actions[] = {Result::play, Result::settings, Result::quit};
   return actions[clicked_on];
 }
