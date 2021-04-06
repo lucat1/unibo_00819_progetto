@@ -95,6 +95,15 @@ private:
       }
     }
 
+    // Returns an in-order visit of a subtree
+    void in_order(TreeNode *node, Nostd::Vector<Nostd::Pair<K, V>> &res) {
+      if (node == nullptr)
+        return;
+      in_order(node->left, res);
+      res.push_back(Pair<K, V>(node->key, node->value));
+      in_order(node->right, res);
+    }
+
   public:
     size_t children;
 
@@ -171,8 +180,6 @@ private:
         // b. Replace node to delete predecessor
         // c. Delete old predecessor
         TreeNode *pred = get_predecessor(key);
-        // assert pred != null
-        assert(pred != nullptr);
         K pkey = pred->key;
         V pvalue = pred->value;
         remove(pred->key);
@@ -234,6 +241,12 @@ private:
       Nostd::Vector<V> res;
       return get_elements(this->root);
     }
+
+    Nostd::Vector<Nostd::Pair<K, V>> as_vector() {
+      Nostd::Vector<Nostd::Pair<K, V>> res;
+      in_order(this->root, res);
+      return res;
+    }
   };
 
   Tree *tree;
@@ -267,7 +280,7 @@ public:
   }
 
   Nostd::Vector<Nostd::Pair<K, V>> as_vector() const override {
-    return Nostd::Vector<Nostd::Pair<K, V>>();
+    return this->tree->as_vector();
   }
 };
 

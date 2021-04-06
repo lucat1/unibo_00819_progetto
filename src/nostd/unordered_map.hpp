@@ -6,7 +6,11 @@
   Mattia Girolimetto #977478
   04/01/2021
 
-  unordered_map.cpp: Implementation of Nostd::UnorderedMap.
+  unordered_map.cpp: Implementation of Nostd::UnorderedMap, built using a
+  Nostd::Vector<Nostd::Pair<K,V>>.
+  Please refer to Nostd::Map for method's documentation.
+
+  WARNING: It does not allow duplicate
 */
 
 #ifndef NOSTD_UNORDEREDMAP_HPP
@@ -21,14 +25,6 @@
 #include <iostream>
 
 namespace Nostd {
-/*
- *  UnorderedMap
- *
- *  Built using a Nostd::Vector<Nostd::Pair<K,V>>.
- *  Please refer to Nostd::Map for method's documentation.
- *
- *  <b> It does not allow duplicate </b>
- * */
 
 template <typename K, typename V> class UnorderedMap : public Map<K, V> {
 private:

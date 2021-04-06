@@ -122,5 +122,13 @@ int main() {
     assert(tm.size() == 0);
   });
 
+  Nostd::it("gets tmap's pairs as Vector", [] {
+    Nostd::TreeMap<int, int> tm;
+    tm.put(2, 5);
+    tm.put(4, 10);
+    tm.put(1, 23);
+    assert(tm.as_vector().size() == 3);
+  });
+
   return 0;
 }
