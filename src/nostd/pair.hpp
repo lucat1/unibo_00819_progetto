@@ -21,10 +21,7 @@ public:
   B second;
 
   Pair() = delete;
-  Pair(A first, B second) {
-    this->first = first;
-    this->second = second;
-  }
+  constexpr Pair(A first, B second) : first{first}, second{second} {}
 
   bool operator==(Pair<A, B> cmp) const {
     return cmp.first == this->first && cmp.second == this->second;

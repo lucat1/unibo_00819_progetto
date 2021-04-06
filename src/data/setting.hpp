@@ -97,22 +97,21 @@ public:
 
   ~Setting() = default;
 
-  // iteratros
+  // iterators
   iterator begin() const noexcept;
   iterator end() const noexcept;
   iterator default_value() const noexcept;
   iterator current_value() const noexcept;
-  // the following two methods update the current value
-  int set(const iterator &);
+  int set(const iterator &); // update the current setting value
 
   // getters
   const Nostd::WString &label() const noexcept;
-  size_type size() const noexcept;
-  int stride() const noexcept;
-  int first() const noexcept;
-  int last() const noexcept;
+  size_type size() const noexcept; // number of possible values
+  int stride() const noexcept;     // distance between two possible values
+  int first() const noexcept;      // first possible value
+  int last() const noexcept;       // last possible value
 
-  // element access
+  // element access (to the possible values)
   int operator[](size_type) const noexcept;
   int at(size_type) const;
 
