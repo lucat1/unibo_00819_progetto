@@ -20,6 +20,7 @@
 #include "pair.hpp"
 #include "vector.hpp"
 #include <exception>
+#include <iterator>
 
 namespace Nostd {
 
@@ -28,6 +29,11 @@ private:
   mutable Nostd::Vector<Nostd::Pair<K, V>> data;
 
 public:
+  using iterator = Nostd::Pair<K, V>;
+  using reverse_iterator = std::reverse_iterator<iterator>;
+  using const_iterator = const Nostd::Pair<K, V>;
+  using const_reverse_iterator = std::reverse_iterator<const_iterator>;
+
   UnorderedMap() {}
 
   // Add new key and value to the map
@@ -87,6 +93,15 @@ public:
         return data[i].second;
     throw std::invalid_argument("UnorderedMap: No value found for that key");
   }
+
+  iterator begin() { return this->data.begin(); }
+  iterator end() { return this->data.end(); }
+
+  const_iterator cbegin() const { return this->data.cbegin(); }
+  const_iterator cend() const { return this->data.cend(); }
+
+  reverse_iterator rbegin() const { return this->data.rbegin(); }
+  reverse_iterator rend() const { return this->data.rend(); }
 };
 
 } // namespace Nostd
