@@ -29,10 +29,13 @@ private:
   mutable Nostd::Vector<Nostd::Pair<K, V>> data;
 
 public:
-  using iterator = Nostd::Pair<K, V>;
-  using reverse_iterator = std::reverse_iterator<iterator>;
-  using const_iterator = const Nostd::Pair<K, V>;
-  using const_reverse_iterator = std::reverse_iterator<const_iterator>;
+  using iterator = typename Nostd::Vector<Nostd::Pair<K, V>>::iterator;
+  using reverse_iterator =
+      typename Nostd::Vector<Nostd::Pair<K, V>>::reverse_iterator;
+  using const_iterator =
+      const typename Nostd::Vector<Nostd::Pair<K, V>>::const_iterator;
+  using const_reverse_iterator =
+      const typename Nostd::Vector<Nostd::Pair<K, V>>::const_reverse_iterator;
 
   UnorderedMap() {}
 
