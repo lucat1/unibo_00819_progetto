@@ -2,6 +2,9 @@
 #include "test.hpp"
 #include "vector.hpp"
 #include <cassert>
+
+#include <iostream> // TODO: remove this
+
 using namespace Nostd;
 
 int touched = 0;
@@ -76,11 +79,12 @@ int main() {
 
   it("resizes the vector to the given length", [] {
     Vector<int> v;
-    for (int i = 0; i < 100; i++)
+    for (int i = 0; i < 100; i++) {
       v.push_back(i);
+    }
 
     v.resize(50);
-    assert(v.size() == 50);
+
     for (int i = 0; i < 50; i++)
       assert(v[i] == i);
   });

@@ -40,6 +40,19 @@ protected:
       all_elems.construct(v + i, ele);
   }
 
+  void shrink(size_t size) {
+    if (size < sz) {
+      size_t old_cap = cap;
+      sz = size;
+      calc_cap();
+      V *newv = all_elems.allocate(cap);
+      for (size_t i = 0; i < sz; ++i)
+        all_elems.construct(newv + i, v[i]);
+      all_elems.deallocate(v, old_cap);
+      v = newv;
+    }
+  }
+
 public:
   // Constructs an empty container, with no elements.
   Vector(const allocator_type &alloc = allocator_type()) {
@@ -82,12 +95,13 @@ public:
   // Adds a new element at the end of the vector
   void push_back(V ele) {
     if (sz == cap)
-      resize(sz);
-    all_elems.construct(v + sz++, ele);
+      resize(sz + 1, ele);
+    else
+      all_elems.construct(v + sz++, ele);
   }
 
   // Removes all elemennts from the vector
-  void clear() { resize(0); };
+  void clear() { shrink(0); };
 
   // Returns a reference to the element at position i in the vector
   V &at(size_t i) {
@@ -111,9 +125,14 @@ public:
 
   // Copy assignment operator
   Vector<V> &operator=(const Vector<V> &vec) {
-    resize(vec.sz);
-    for (size_t i = 0; i < vec.sz; i++)
-      v[i] = vec[i];
+    this->~Vector();
+    sz = vec.size();
+    calc_cap();
+
+    V *newv = all_elems.allocate(cap);
+    for (size_t i = 0; i < sz; i++)
+      all_elems.construct(newv + i, vec[i]);
+    v = newv;
     return *this;
   }
 
@@ -132,27 +151,31 @@ public:
   size_t erase(size_t i) {
     if (i >= sz)
       throw std::out_of_range("index out of bounds");
-
+    all_elems.destroy(v + i);
     for (size_t k = i; k < sz - 1; k++)
       v[k] = v[k + 1];
 
     if (sz >= cap * 2 / 3)
       sz = sz - 1;
     else
-      resize(sz - 1);
+      shrink(sz - 1);
 
     return i;
   }
 
   // Resize the container so that it contain n elements
-  void resize(size_t n) {
-    size_t old_cap = cap;
+  void resize(size_t n, V val = V()) {
+    size_t old_sz = sz, old_cap = cap, n_copies = n < sz ? n : sz;
     sz = n;
     calc_cap();
 
     V *newv = all_elems.allocate(cap);
-    for (size_t i = 0; i < n; i++)
+    // copy old values
+    for (size_t i = 0; i < n_copies; i++)
       all_elems.construct(newv + i, v[i]);
+    // initialize new values (n > old_sz)
+    for (size_t i = old_sz; i < sz; i++)
+      all_elems.construct(newv + i, val);
     all_elems.deallocate(v, old_cap);
     v = newv;
   }

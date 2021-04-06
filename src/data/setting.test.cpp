@@ -29,6 +29,8 @@ int main() {
     Setting s2(L"Switch", 0, 2, 1, 0, 1); // : 0 (= def), 1 (= curr)
     assert(s2.current_value() == s2.begin() + 1);
   });
+  it("constructs a Setting with a temporary string",
+     [] { assert(Setting(L"test").label().c_str() != nullptr); });
   it("updates its own current value", [] {
     Setting s(L"", 0, 11, 10, 5);
     assert(s.set(s.current_value() + 2) == 70);

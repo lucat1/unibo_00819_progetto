@@ -27,7 +27,7 @@ public:
 
   static constexpr const wchar_t *append_default_value = L"";
   TextBox(uint16_t max_width, uint16_t max_height,
-          Nostd::WString &&content = L"");
+          const Nostd::WString &content = L"");
   TextBox(uint16_t max_width, uint16_t max_height,
           const wchar_t *content = L"");
 

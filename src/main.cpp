@@ -18,6 +18,10 @@ int main() {
   Screen screen;
   handle(screen.open());
   screen.set_content<Menu::Main>();
+  Nostd::Vector<Data::Setting> settings = {};
+  Nostd::WString t = L"option 1";
+  settings.push_back(Data::Setting(t));
+  settings.push_back(Data::Setting(L"option 2"));
 
   int key = -1, running = true;
   while (running) {
@@ -32,9 +36,17 @@ int main() {
         switch (res) {
         case Menu::Main::Result::quit:
           running = false;
+          break;
+        case Menu::Main::Result::settings:
+          screen.set_content<Menu::Settings, Nostd::Vector<Data::Setting>>(
+              settings);
+          break;
         default:
           break;
         }
+      } else if (screen.is_content<Menu::Settings>()) {
+        // do something when the settings menu is closed
+        screen.set_content<Menu::Main>();
       }
     }
 
