@@ -1,6 +1,7 @@
 #include "../nostd/test.hpp"
 #include "colorable.hpp"
 #include <cassert>
+#include <iostream>
 #include <ncurses.h>
 
 using Nostd::it;

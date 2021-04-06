@@ -1,35 +1,36 @@
-#include <assert.h>
-#include "../util/test.hpp"
 #include "list.hpp"
+#include "test.hpp"
+#include <cassert>
+
 using namespace Nostd;
 
 int main() {
-  it("constructs a list with no elements", {
+  it("constructs a list with no elements", [] {
     List<int> l;
     assert(l.size() == 0);
   });
 
-  it("pushes an element in front of the list", {
+  it("pushes an element in front of the list", [] {
     List<int> l;
     l.push_front(5);
     assert(l.front() == 5);
     assert(l.back() == 5);
   });
 
-  it("pushes an element at the end of the list", {
+  it("pushes an element at the end of the list", [] {
     List<int> l;
     l.push_back(5);
     assert(l.front() == 5);
     assert(l.back() == 5);
   });
 
-  it("has the same head and tail with just one element", {
+  it("has the same head and tail with just one element", [] {
     List<int> l;
     l.push_back(97);
     assert(l.front() == l.back());
   });
 
-  it("deletes the first element in front of the list", {
+  it("deletes the first element in front of the list", [] {
     List<int> l;
     l.push_back(5);
     l.push_back(9);
@@ -39,7 +40,7 @@ int main() {
     assert(l.front() == 5);
   });
 
-  it("deletes the last element at the end of the list", {
+  it("deletes the last element at the end of the list", [] {
     List<int> l;
     l.push_back(7);
     l.push_back(27);
@@ -48,7 +49,7 @@ int main() {
     assert(l.front() == 7);
   });
 
-  it("removes matching values", {
+  it("removes matching values", [] {
     List<int> l;
     l.push_back(8);
     l.push_back(89);
@@ -59,7 +60,7 @@ int main() {
     assert(l.size() == 2);
   });
 
-  it("changes the length of the list", {
+  it("changes the length of the list", [] {
     List<int> l;
     l.push_back(278);
     l.push_back(490);
@@ -70,7 +71,7 @@ int main() {
     assert(l.size() == 2);
   });
 
-  it("copy content from another list", {
+  it("copy content from another list", [] {
     List<int> l;
     l.push_back(3);
     l.push_back(6);
@@ -80,7 +81,7 @@ int main() {
     assert(l.back() == m.back());
   });
 
-  it("moves its elements to another list", {
+  it("moves its elements to another list", [] {
     List<int> l;
     l.push_back(3);
     l.push_back(6);

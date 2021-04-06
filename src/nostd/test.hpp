@@ -13,7 +13,6 @@
 #define NOSTD_TEST_HPP
 
 #include <functional>
-#include <iostream>
 
 namespace Nostd {
 
@@ -25,4 +24,4 @@ void it(const char *str, std::function<void()> test);
 
 } // namespace Nostd
 
-#endif
+#endif // NOSTD_TEST_HPP

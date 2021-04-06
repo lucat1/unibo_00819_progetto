@@ -1,21 +1,24 @@
 #ifndef NOSTD_VECTOR_HPP
 #define NOSTD_VECTOR_HPP
+
+#include "allocator.hpp"
 #include <iterator>
 #include <stdexcept>
 
 namespace Nostd {
 
-template <typename V>
-class Vector {
- public:
-  using iterator = V*;
+template <typename V, class Alloc = Allocator<V>> class Vector {
+public:
+  using allocator_type = Alloc;
+  using iterator = V *;
   using reverse_iterator = std::reverse_iterator<iterator>;
-  using const_iterator = const V*;
+  using const_iterator = const V *;
   using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
- protected:
-  V* v;
-  size_t sz, cap;
+protected:
+  allocator_type all_elems;
+  V *v = nullptr;
+  size_t sz = 0, cap = 0;
 
   void calc_cap() {
     if (sz == 0)
@@ -26,65 +29,103 @@ class Vector {
       cap = sz * 1.5;
   }
 
-  void init_v(size_t size) {
+  void allocate_v(size_t size) {
     sz = size;
     calc_cap();
-    v = reinterpret_cast<V*>(::operator new(cap * sizeof(V)));
+    v = all_elems.allocate(cap);
   }
 
- public:
+  void construct_v(size_t size, const V &ele) {
+    for (size_t i = 0; i < size; i++)
+      all_elems.construct(v + i, ele);
+  }
+
+public:
   // Constructs an empty container, with no elements.
-  Vector() { init_v(0); }
+  Vector(const allocator_type &alloc = allocator_type()) {
+    all_elems = alloc;
+    allocate_v(0);
+  }
   // Constructs a vector of the given size
-  explicit Vector(size_t size) { init_v(size); }
+  explicit Vector(size_t size, const allocator_type &alloc = allocator_type()) {
+    all_elems = alloc;
+    allocate_v(size);
+  }
   // it is constructor that creates a vector with size elements and size * 1.5
   // capacity copying size times the ele value into the vector
-  Vector(size_t size, V ele) {
-    init_v(size);
-    for (size_t i = 0; i < sz; i++)
-      v[i] = ele;
+  Vector(size_t size, V ele, const allocator_type &alloc = allocator_type()) {
+    all_elems = alloc;
+    allocate_v(size);
+    construct_v(size, ele);
   }
   // Copies data from another vector instance (in linear time)
-  Vector(Vector& vec) {
-    init_v(vec.sz);
+  Vector(const Vector &vec, const allocator_type &alloc = allocator_type()) {
+    all_elems = alloc;
+    allocate_v(vec.sz);
     for (size_t i = 0; i < vec.sz; i++)
-      this->v[i] = vec[i];
+      all_elems.construct(v + i, vec[i]);
   }
   // Moves data from another vector (resues same memory sequence for v)
-  Vector(Vector&& vec) {
+  Vector(Vector &&vec, const allocator_type &alloc = allocator_type()) {
+    all_elems = alloc;
     this->v = vec.v;
     this->sz = vec.sz;
     this->cap = vec.cap;
-    vec.v = nullptr;  // to prevent unwanted deallocations
+    vec.v = nullptr; // to prevent unwanted deallocations
   }
-  ~Vector() { ::operator delete(v); }
+  ~Vector() {
+    all_elems.deallocate(v, cap);
+    v = nullptr;
+  }
 
   // Adds a new element at the end of the vector
   void push_back(V ele) {
     if (sz == cap)
       resize(sz);
-    v[sz++] = ele;
+    all_elems.construct(v + sz++, ele);
   }
 
   // Removes all elemennts from the vector
   void clear() { resize(0); };
 
   // Returns a reference to the element at position i in the vector
-  V& at(size_t i) {
+  V &at(size_t i) {
     if (i >= sz)
       throw std::out_of_range("index out of bounds");
     return v[i];
   }
 
-  const V& at(size_t i) const {
+  // Returns a constant reference to the element at index i
+  const V &at(size_t i) const {
     if (i >= sz)
       throw std::out_of_range("index out of bounds");
     return v[i];
   }
 
-  V& operator[](size_t i) { return at(i); }
+  // Reference "at" operator. NOTE: throws unlike C++'s
+  V &operator[](size_t i) { return at(i); }
 
-  const V& operator[](size_t i) const { return at(i); };
+  // Cconstant "at" operator reference. NOTE: throws unlike C++'s
+  const V &operator[](size_t i) const { return at(i); };
+
+  // Copy assignment operator
+  Vector<V> &operator=(const Vector<V> &vec) {
+    resize(vec.sz);
+    for (size_t i = 0; i < vec.sz; i++)
+      v[i] = vec[i];
+    return *this;
+  }
+
+  // Move assigment operator
+  Vector<V> &operator=(Vector<V> &&vec) {
+    all_elems.deallocate(v, cap);
+    all_elems = vec.all_elems;
+    v = vec.v;
+    sz = vec.sz;
+    cap = vec.cap;
+    vec.v = nullptr; // to prevent unwanted deallocations
+    return *this;
+  }
 
   // Removes a signle item from the vector
   size_t erase(size_t i) {
@@ -104,17 +145,14 @@ class Vector {
 
   // Resize the container so that it contain n elements
   void resize(size_t n) {
+    size_t old_cap = cap;
     sz = n;
-    if (n == 0)
-      cap = 1;
-    else if (n == 1)
-      cap = 2;
-    else
-      cap = n * 1.5;
-    V* newv = reinterpret_cast<V*>(::operator new((cap + 1) * sizeof(V)));
+    calc_cap();
+
+    V *newv = all_elems.allocate(cap);
     for (size_t i = 0; i < n; i++)
-      newv[i] = v[i];
-    ::operator delete(v);
+      all_elems.construct(newv + i, v[i]);
+    all_elems.deallocate(v, old_cap);
     v = newv;
   }
 
@@ -141,6 +179,8 @@ class Vector {
   }
 };
 
-}  // namespace Nostd
+} // namespace Nostd
 
-#endif  // NOSTD_VECTOR_HPP
+#include "allocator.cpp"
+
+#endif // NOSTD_VECTOR_HPP

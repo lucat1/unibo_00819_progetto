@@ -10,6 +10,7 @@
 */
 
 #include "test.hpp"
+#include <iostream>
 
 void Nostd::it(const char *str, std::function<void()> test) {
   test();
