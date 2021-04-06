@@ -19,19 +19,19 @@
 
 using Engine::UI::Box;
 
-Engine::UI::Button *Engine::Menu::Settings::append_button(Box *parent,
-                                                          const wchar_t *str) {
-  auto btn = UI::append<UI::Button, const wchar_t *>(parent, str);
-  unfocus(btn);
-  return btn;
-}
-
 Engine::Menu::Settings::Settings(WINDOW *window,
                                  Nostd::Vector<Data::Setting> settings)
     : Menu(window) {
   original = updated = settings;
   max_focused =
       settings.size() + 1; // n of settings + 1 for the save and discard button
+}
+
+Engine::UI::Button *Engine::Menu::Settings::append_button(Box *parent,
+                                                          const wchar_t *str) {
+  auto btn = UI::append<UI::Button, const wchar_t *>(parent, str);
+  unfocus(btn);
+  return btn;
 }
 
 Box *Engine::Menu::Settings::generate() {
@@ -93,7 +93,7 @@ void Engine::Menu::Settings::unfocus(Box *box) {
   }
 }
 
-void Engine::Menu::Settings::interact(Box *box) { clicked_on = 0; }
+void Engine::Menu::Settings::interact(Box *box) { clicked_on = focused; }
 
 bool Engine::Menu::Settings::is_over() { return clicked_on >= max_focused - 1; }
 

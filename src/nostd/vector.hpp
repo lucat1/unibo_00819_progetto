@@ -145,12 +145,12 @@ public:
 
   // Resize the container so that it contain n elements
   void resize(size_t n) {
-    size_t old_cap = cap;
+    size_t old_cap = cap, old_sz = sz;
     sz = n;
     calc_cap();
 
     V *newv = all_elems.allocate(cap);
-    for (size_t i = 0; i < n; i++)
+    for (size_t i = 0; i < old_sz; i++)
       all_elems.construct(newv + i, v[i]);
     all_elems.deallocate(v, old_cap);
     v = newv;
