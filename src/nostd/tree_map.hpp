@@ -21,6 +21,7 @@
 #include <cstddef>
 #include <cstdio>
 #include <exception>
+#include <iterator>
 
 namespace Nostd {
 
@@ -98,6 +99,22 @@ private:
       in_order(node->left, res);
       res.push_back(Pair<K, V>(node->key, node->value));
       in_order(node->right, res);
+    }
+
+    // Returns the node with the smallest key
+    TreeNode *min() const noexcept {
+      TreeNode *ptr = root;
+      while (ptr->left)
+        ptr = ptr->left;
+      return ptr;
+    }
+
+    // Returns the node with the greatest key
+    TreeNode *max() const noexcept {
+      TreeNode *ptr = root;
+      while (ptr->right != nullptr)
+        ptr = ptr->right;
+      return ptr;
     }
 
   public:
@@ -202,6 +219,22 @@ private:
       return res;
     }
 
+    // Return nullptr if there is no successor
+    TreeNode *get_successor(K key) {
+      TreeNode *res = nullptr;
+      TreeNode *ptr = this->root;
+      while (ptr != nullptr) {
+        if (ptr->key > key && (res == nullptr || ptr->key < res->key)) {
+          res = ptr;
+        }
+        if (key <= ptr->key) {
+          ptr = ptr->left;
+        } else {
+          ptr = ptr->right;
+        }
+      }
+      return res;
+    }
     V &get(K key) {
       TreeNode *ptr = this->root;
 
@@ -240,6 +273,45 @@ private:
       in_order(this->root, res);
       return res;
     }
+
+    class Iterator : public std::iterator<std::bidirectional_iterator_tag,
+                                          Nostd::Pair<const K, V>, long,
+                                          TreeNode *, TreeNode> {
+    private:
+      const TreeNode *ptr;
+
+    public:
+      Iterator() noexcept : ptr(root) {}
+
+      Iterator(const TreeNode *node) noexcept : ptr(node) {}
+
+      Nostd::Pair<const K, V> begin() noexcept {
+        TreeNode *t = min();
+        return Pair<const K, V>(t->key, t->value);
+      }
+
+      Nostd::Pair<const K, V> end() noexcept {}
+
+      Iterator &operator=(TreeNode *node) {
+        this->ptr = node;
+        return *this;
+      }
+
+      Iterator &operator++() {
+        if (ptr) {
+          ptr = get_successor(ptr);
+        }
+        return *this;
+      }
+
+      bool operator!=(const Iterator &iterator) {
+        return this->ptr != iterator->ptr;
+      }
+
+      Nostd::Pair<const K, V> *operator*() {
+        return new Nostd::Pair<const K, V>(ptr->key, ptr->value);
+      }
+    };
   };
 
   Tree *tree;
