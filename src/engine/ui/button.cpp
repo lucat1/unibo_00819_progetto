@@ -22,35 +22,18 @@ Engine::UI::Button::Button(uint16_t max_width, uint16_t max_height,
 Engine::UI::Button::Button(uint16_t max_width, uint16_t max_height,
                            Nostd::WString &&content)
     : TextBox(max_width - 2, max_height - 2, content.c_str()) {}
-Engine::UI::Button::~Button() {
-  werase(button_window);
-  delwin(button_window);
-  button_window = nullptr;
-}
 
 void Engine::UI::Button::show(WINDOW *window, uint16_t x, uint16_t y) {
-  auto osize = TextBox::size();
-  uint16_t abs_x, abs_y;
-  getbegyx(window, abs_y, abs_x);
-
-  if (button_window != nullptr)
-    mvwin(button_window, abs_y + y, abs_x + x);
-  else
-    button_window =
-        newwin(pt + osize.second + 2, pl + osize.first + 2 * side_padding,
-               abs_y + y, abs_x + x);
-
-  int color = color_pair();
-  if (color != -1)
-    wbkgd(button_window, color);
-  werase(button_window);
+  start_color(window);
+  // draw the button's background
+  auto sz = TextBox::size();
+  for (size_t i = 0; i < sz.second + 2; i++)
+    mvwhline(window, y + i, x, ' ', sz.first + 2 * side_padding);
 
   attron(A_BOLD);
-  TextBox::show(button_window, side_padding, 1);
+  TextBox::show(window, x + side_padding, y + 1);
   attroff(A_BOLD);
-  /* cout << "l8r" << endl; */
-  redrawwin(button_window);
-  wrefresh(button_window);
+  end_color(window);
 }
 
 Nostd::Pair<uint16_t, uint16_t> Engine::UI::Button::size() {

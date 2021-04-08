@@ -19,14 +19,11 @@ namespace UI {
 class Button : public TextBox {
 private:
   static const constexpr uint16_t side_padding = 4;
-  WINDOW *button_window = nullptr;
 
 public:
   Button(uint16_t max_width, uint16_t max_height,
          Nostd::WString &&content = L"");
   Button(uint16_t max_width, uint16_t max_height, const wchar_t *content = L"");
-  ~Button();
-  void prop(Box::Property key, bool value);
 
   void show(WINDOW *window, uint16_t x, uint16_t y);
   Nostd::Pair<uint16_t, uint16_t> size();

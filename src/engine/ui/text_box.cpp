@@ -60,6 +60,7 @@ void Engine::UI::TextBox::show(WINDOW *window, uint16_t x, uint16_t y) {
                line.c_str());
   }
 
+  wnoutrefresh(window);
   end_color(window);
 }
 
