@@ -13,6 +13,9 @@
 #include "button.hpp"
 #include <curses.h>
 
+#include <iostream>
+using namespace std;
+
 Engine::UI::Button::Button(uint16_t max_width, uint16_t max_height,
                            const wchar_t *content)
     : TextBox(max_width - 2, max_height - 2, content) {}
@@ -20,6 +23,7 @@ Engine::UI::Button::Button(uint16_t max_width, uint16_t max_height,
                            Nostd::WString &&content)
     : TextBox(max_width - 2, max_height - 2, content.c_str()) {}
 Engine::UI::Button::~Button() {
+  werase(button_window);
   delwin(button_window);
   button_window = nullptr;
 }
@@ -41,7 +45,10 @@ void Engine::UI::Button::show(WINDOW *window, uint16_t x, uint16_t y) {
     wbkgd(button_window, color);
   werase(button_window);
 
+  attron(A_BOLD);
   TextBox::show(button_window, side_padding, 1);
+  attroff(A_BOLD);
+  /* cout << "l8r" << endl; */
   wrefresh(button_window);
 }
 

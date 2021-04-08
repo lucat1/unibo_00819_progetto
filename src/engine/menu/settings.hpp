@@ -26,7 +26,8 @@ private:
   Nostd::Vector<Data::Setting> original, updated;
   int focused = 0, max_focused;
   int clicked_on = -1;
-  Engine::UI::Button *append_button(UI::Box *parent, const wchar_t *str);
+  UI::Button *append_button(UI::Box *parent, const wchar_t *str);
+  UI::Box *append_line(UI::Box *parent, const Nostd::WString &str);
 
 protected:
   UI::Box *generate();

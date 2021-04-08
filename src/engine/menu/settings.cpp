@@ -34,17 +34,31 @@ Engine::UI::Button *Engine::Menu::Settings::append_button(Box *parent,
   return btn;
 }
 
+Box *Engine::Menu::Settings::append_line(Box *parent,
+                                         const Nostd::WString &str) {
+  auto line = UI::append<UI::Box>(parent);
+  line->props(Box::Property::padding_left, 2);
+  line->props(Box::Property::padding_right, 2);
+  line->props(Box::Property::padding_top, 1);
+  line->props(Box::Property::padding_bottom, 1);
+
+  UI::append<UI::TextBox, const Nostd::WString &>(line, str);
+  unfocus(line);
+  return line;
+}
+
 Box *Engine::Menu::Settings::generate() {
   auto root = new UI::Box(width, height);
   auto list = UI::append<UI::List>(root);
   for (auto setting : updated)
-    UI::append<UI::TextBox, const Nostd::WString &>(list, setting.label());
+    append_line(list, setting.label());
 
   // buttons at the end of the page for closing the menu
   auto chbox = UI::append<UI::Center>(root);
   chbox->propb(Box::Property::center_horizontal, true);
   auto hbox = UI::append<UI::Box>(chbox);
   hbox->propb(Box::Property::direction_horizontal, true);
+  hbox->props(Box::Property::padding_top, 8);
   auto btn1 = append_button(hbox, L"Save");
   btn1->props(Box::Property::padding_right, 8);
   append_button(hbox, L"Discard");
@@ -71,7 +85,8 @@ Box *Engine::Menu::Settings::prev_box() {
 }
 
 Engine::Color settings_button_fg = Engine::Color::red,
-              settings_button_bg = Engine::Color::grey23;
+              settings_button_bg = Engine::Color::grey23,
+              settings_line = Engine::Color::grey23;
 
 void Engine::Menu::Settings::focus(Box *box) {
   if (dynamic_cast<Engine::UI::Button *>(box)) {
@@ -80,6 +95,7 @@ void Engine::Menu::Settings::focus(Box *box) {
     box->propc(Box::Property::foreground, settings_button_bg);
   } else {
     // visually focus boxes (lines of the list)
+    box->propc(Box::Property::background, settings_line);
   }
 }
 
@@ -90,6 +106,7 @@ void Engine::Menu::Settings::unfocus(Box *box) {
     box->propc(Box::Property::foreground, settings_button_fg);
   } else {
     // visually unfocus boxes (lines of the list)
+    box->propc(Box::Property::background, Color::transparent);
   }
 }
 

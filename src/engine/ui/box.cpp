@@ -141,6 +141,11 @@ Engine::UI::Box *Engine::UI::Box::child(size_t n) {
 
 void Engine::UI::Box::show(WINDOW *window, uint16_t x, uint16_t y) {
   start_color(window);
+  // fill the box's space with the provided background color
+  auto sz = size();
+  for (size_t i = 0; i < sz.second; i++)
+    mvwhline(window, y + i, x, ' ', sz.first);
+
   // values are given a defualt value supposing we are positioning items
   // horizontally (dh = 0) on the left (fr = 0)
   uint16_t rel_x = pl, rel_y = pt;
