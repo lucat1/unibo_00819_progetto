@@ -49,6 +49,7 @@ void Engine::UI::Button::show(WINDOW *window, uint16_t x, uint16_t y) {
   TextBox::show(button_window, side_padding, 1);
   attroff(A_BOLD);
   /* cout << "l8r" << endl; */
+  redrawwin(button_window);
   wrefresh(button_window);
 }
 

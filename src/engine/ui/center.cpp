@@ -45,6 +45,7 @@ void Engine::UI::Center::show(WINDOW *window, uint16_t x, uint16_t y) {
     }
   }
   end_color(window);
+  wnoutrefresh(window);
 }
 
 Nostd::Pair<uint16_t, uint16_t> Engine::UI::Center::size() {

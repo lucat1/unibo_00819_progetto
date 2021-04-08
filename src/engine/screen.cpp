@@ -89,8 +89,10 @@ bool Engine::Screen::reposition() {
   mvwin(container, y + 1, x + 1);
   send_event(Engine::Drawable::Event::redraw);
 
-  wrefresh(outer_box);
-  wrefresh(container);
+  // do two refreshes in one
+  wnoutrefresh(outer_box);
+  wnoutrefresh(container);
+  doupdate();
 
   return true;
 }

@@ -30,8 +30,8 @@ void Engine::Menu::Menu::redraw() {
     first_draw = false;
   }
 
-  root->show(window, 1, 1);
-  wrefresh(window);
+  root->show(window, 0, 0);
+  doupdate();
 }
 
 Engine::Menu::Menu::Menu(WINDOW *window)

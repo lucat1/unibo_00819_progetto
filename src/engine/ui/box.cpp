@@ -164,6 +164,7 @@ void Engine::UI::Box::show(WINDOW *window, uint16_t x, uint16_t y) {
     it = it->sibling;
   }
   end_color(window);
+  wnoutrefresh(window);
 }
 
 Nostd::Pair<uint16_t, uint16_t> Engine::UI::Box::size() {
