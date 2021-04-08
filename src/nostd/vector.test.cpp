@@ -3,8 +3,6 @@
 #include "vector.hpp"
 #include <cassert>
 
-#include <iostream> // TODO: remove this
-
 using namespace Nostd;
 
 int main() {

@@ -23,9 +23,10 @@ Engine::UI::List::List(uint16_t max_width, uint16_t max_height,
   this->dh = false;
   this->fr = false;
   this->marker = marker;
-  this->max_child_width = max_width - pl;
+  this->max_child_width = max_child_width - pl;
 }
 
+// draws each child prefixed by a centered marker
 void Engine::UI::List::show(WINDOW *window, uint16_t x, uint16_t y) {
   Box::show(window, x, y);
   uint16_t rel_y = 0;
@@ -33,7 +34,7 @@ void Engine::UI::List::show(WINDOW *window, uint16_t x, uint16_t y) {
 
   while (it != nullptr && rel_y < max_child_height) {
     auto child_size = it->size();
-    mvwaddch(window, y + rel_y, x, marker);
+    mvwaddch(window, y + rel_y + (child_size.second / 2), x, marker);
     rel_y += child_size.second;
     it = it->sibling;
   }

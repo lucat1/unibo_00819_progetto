@@ -129,6 +129,8 @@ void Engine::UI::Box::props(Box::Property key, uint16_t value) {
     throw std::invalid_argument(
         "canont assign a size property with a bool/Color value");
   }
+  max_child_width = max_width - pl - pr;
+  max_child_height = max_height - pt - pb;
 }
 
 Engine::UI::Box *Engine::UI::Box::child(size_t n) {
@@ -143,25 +145,28 @@ void Engine::UI::Box::show(WINDOW *window, uint16_t x, uint16_t y) {
   start_color(window);
   // fill the box's space with the provided background color
   auto sz = size();
-  for (size_t i = 0; i < sz.second; i++)
+  for (uint16_t i = 0; i < sz.second; i++)
     mvwhline(window, y + i, x, ' ', sz.first);
 
   // values are given a defualt value supposing we are positioning items
   // horizontally (dh = 0) on the left (fr = 0)
   uint16_t rel_x = pl, rel_y = pt;
-  if (fr)
-    rel_x = max_child_width - pr;
 
   // iterate over all the children and display then in the approrpriate position
-  Box *it = first_child;
-  while (it != nullptr && rel_x < max_child_width && rel_y < max_child_height) {
+  for (Box *it = first_child; it != nullptr && rel_x < max_child_width + pr &&
+                              rel_y < max_child_height + pb;
+       it = it->sibling) {
     auto child_size = it->size();
-    it->show(window, x + rel_x - (fr ? child_size.first : 0), y + rel_y);
+    if (fr)
+      it->show(window, x + max_child_width - rel_x - child_size.first,
+               y + rel_y);
+    else
+      it->show(window, x + rel_x, y + rel_y);
 
-    rel_x = rel_x + (dh ? child_size.first : 0);
-    if (!dh)
+    if (dh)
+      rel_x += child_size.first;
+    else
       rel_y += child_size.second;
-    it = it->sibling;
   }
   end_color(window);
   wnoutrefresh(window);

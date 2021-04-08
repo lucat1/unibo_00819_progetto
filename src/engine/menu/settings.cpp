@@ -35,21 +35,28 @@ Engine::UI::Button *Engine::Menu::Settings::append_button(Box *parent,
 }
 
 Box *Engine::Menu::Settings::append_line(Box *parent,
-                                         const Nostd::WString &str) {
-  auto line = UI::append<UI::Box>(parent);
+                                         const Data::Setting &setting) {
+  auto wrapper = UI::append<UI::Box>(parent);
+  wrapper->props(Box::Property::padding_top, 1);
+  auto line = UI::append<UI::Box>(wrapper);
+  line->propb(Box::Property::direction_horizontal, true);
   line->props(Box::Property::padding_left, 2);
   line->props(Box::Property::padding_right, 2);
   line->props(Box::Property::padding_top, 1);
   line->props(Box::Property::padding_bottom, 1);
 
-  UI::append<UI::TextBox, const Nostd::WString &>(line, str);
+  UI::append<UI::TextBox, const Nostd::WString &>(line, setting.label());
+  auto container = UI::append<UI::Box>(line);
+  container->propb(Box::Property::float_right, true);
+  UI::append<UI::TextBox, const Nostd::WString &>(container, L"test");
   unfocus(line);
-  return line;
+  return wrapper;
 }
 
 Box *Engine::Menu::Settings::generate() {
   auto root = new UI::Box(width, height);
   auto list = UI::append<UI::List>(root);
+  list->props(Box::Property::padding_right, 2);
   for (auto setting : updated)
     append_line(list, setting.label());
 
@@ -69,7 +76,7 @@ Box *Engine::Menu::Settings::curr_box() {
   if (focused >= max_focused - 1)
     return root->child(1)->child(0)->child(focused == max_focused ? 1 : 0);
   else
-    return root->child(0)->child(focused);
+    return root->child(0)->child(focused)->child(0);
 }
 
 Box *Engine::Menu::Settings::next_box() {

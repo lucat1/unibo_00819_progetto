@@ -13,9 +13,6 @@
 #include "button.hpp"
 #include <curses.h>
 
-#include <iostream>
-using namespace std;
-
 Engine::UI::Button::Button(uint16_t max_width, uint16_t max_height,
                            const wchar_t *content)
     : TextBox(max_width - 2, max_height - 2, content) {}
@@ -27,7 +24,7 @@ void Engine::UI::Button::show(WINDOW *window, uint16_t x, uint16_t y) {
   start_color(window);
   // draw the button's background
   auto sz = TextBox::size();
-  for (size_t i = 0; i < sz.second + 2; i++)
+  for (uint16_t i = 0; i < sz.second + 2; i++)
     mvwhline(window, y + i, x, ' ', sz.first + 2 * side_padding);
 
   attron(A_BOLD);
