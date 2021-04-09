@@ -29,9 +29,9 @@ std::basic_istream<char> &operator>>(std::basic_istream<char> &i, Map &m) {
   i >> w;
   m = Map(w);
   for (auto &row : m) {
+    i.ignore();
     for (auto &cell : row)
       i >> cell.value();
-    i.ignore();
   }
   return i;
 }
