@@ -30,6 +30,7 @@ private:
   class Tree {
   private:
     class TreeNode {
+    private:
       Nostd::Pair<K, V> data;
 
     public:
@@ -46,8 +47,10 @@ private:
         this->data = Nostd::Pair<K, V>(key, value);
       }
 
-      K &get_key() { return this->data.first; }
-      V &get_value() { return this->data.second; }
+      K get_key() { return this->data.first; }
+      V get_value() const { return this->data.second; }
+
+      Nostd::Pair<K, V> &get_data() const { return this->data; }
 
       void set_key(K k) { this->data.first = k; }
       void set_value(V v) { this->data.second = v; }
@@ -57,7 +60,7 @@ private:
       }
     };
 
-    Nostd::Vector<V> get_elements(const TreeNode *current) {
+    Nostd::Vector<V> get_elements(const TreeNode *current) const {
       Nostd::Vector<V> vec;
       if (current == nullptr)
         return vec;
@@ -241,7 +244,8 @@ private:
       }
       return res;
     }
-    V &get(K key) {
+
+    Nostd::Pair<K, V> &get(K key) const {
       TreeNode *ptr = this->root;
 
       while (ptr != nullptr && ptr->get_key() != key) {
@@ -256,7 +260,7 @@ private:
         throw std::invalid_argument("Treemap: No value found for the key " +
                                     std::to_string(key));
       }
-      return ptr->get_value();
+      return ptr->get_data();
     }
 
     bool find(const K &key) {
@@ -331,9 +335,11 @@ public:
 
   void remove(K key) override { this->tree->remove(key); }
 
-  V &operator[](K key) override { return this->tree->get(key); }
+  V &operator[](K key) override { return this->tree->get(key).second; }
 
-  const V &operator[](K key) const override { return this->tree->get(key); }
+  const V &operator[](K key) const override {
+    return this->tree->get(key).second;
+  }
 
   bool empty() const override { return this->tree == nullptr; }
 
