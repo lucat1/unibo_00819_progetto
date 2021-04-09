@@ -10,21 +10,29 @@
   series of options in a List element drawing sliders/multi options on the
   right of each line
 */
+
 #include "settings.hpp"
 #include "../ui/append.hpp"
 #include "../ui/button.hpp"
 #include "../ui/center.hpp"
+#include "../ui/choice.hpp"
 #include "../ui/list.hpp"
 #include "../ui/text_box.hpp"
 
 using Engine::UI::Box;
 
-Engine::Menu::Settings::Settings(WINDOW *window,
-                                 Nostd::Vector<Data::Setting> settings)
-    : Menu(window) {
-  original = updated = settings;
-  max_focused =
-      settings.size() + 1; // n of settings + 1 for the save and discard button
+void Engine::Menu::Settings::alloc_updated(
+    Nostd::Vector<Data::Setting> &settings) {
+  for (auto setting : settings)
+    updated.push_back(new Data::Setting(setting));
+}
+
+Nostd::Vector<Data::Setting> Engine::Menu::Settings::dereference_updated() {
+  Nostd::Vector<Data::Setting> res(updated.size());
+  for (size_t i = 0; i < updated.size(); i++)
+    res[i] = *updated[i];
+
+  return res;
 }
 
 Engine::UI::Button *Engine::Menu::Settings::append_button(Box *parent,
@@ -34,8 +42,7 @@ Engine::UI::Button *Engine::Menu::Settings::append_button(Box *parent,
   return btn;
 }
 
-Box *Engine::Menu::Settings::append_line(Box *parent,
-                                         const Data::Setting &setting) {
+Box *Engine::Menu::Settings::append_line(Box *parent, Data::Setting *setting) {
   auto wrapper = UI::append<UI::Box>(parent);
   wrapper->props(Box::Property::padding_top, 1);
   auto line = UI::append<UI::Box>(wrapper);
@@ -45,12 +52,26 @@ Box *Engine::Menu::Settings::append_line(Box *parent,
   line->props(Box::Property::padding_top, 1);
   line->props(Box::Property::padding_bottom, 1);
 
-  UI::append<UI::TextBox, const Nostd::WString &>(line, setting.label());
-  auto container = UI::append<UI::Box>(line);
-  container->propb(Box::Property::float_right, true);
-  UI::append<UI::TextBox, const Nostd::WString &>(container, L"test");
+  UI::append<UI::TextBox, const Nostd::WString &>(line, setting->label());
+  auto choice = UI::append<UI::Choice, Data::Setting *>(line, setting);
+  choice->propb(Box::Property::float_right, true);
   unfocus(line);
   return wrapper;
+}
+
+Engine::Menu::Settings::Settings(WINDOW *window,
+                                 const Nostd::Vector<Data::Setting> &settings)
+    : Menu(window) {
+  original = settings;
+  alloc_updated(original);
+
+  max_focused =
+      settings.size() + 1; // n of settings + 1 for the save and discard button
+}
+
+Engine::Menu::Settings::~Settings() {
+  for (auto setting : updated)
+    delete setting;
 }
 
 Box *Engine::Menu::Settings::generate() {
@@ -58,7 +79,7 @@ Box *Engine::Menu::Settings::generate() {
   auto list = UI::append<UI::List>(root);
   list->props(Box::Property::padding_right, 2);
   for (auto setting : updated)
-    append_line(list, setting.label());
+    append_line(list, setting);
 
   // buttons at the end of the page for closing the menu
   auto chbox = UI::append<UI::Center>(root);
@@ -126,5 +147,5 @@ Nostd::Vector<Data::Setting> Engine::Menu::Settings::get_result() {
   if (clicked_on == max_focused)
     return original;
   else
-    return updated;
+    return dereference_updated();
 }

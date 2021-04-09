@@ -22,6 +22,12 @@
 namespace Engine {
 namespace UI {
 
+// returns a new color_pair based on the fg and bg arguments
+// we cache already initializes color pairs.
+int color_pair(short fg, short bg);
+void start_color(WINDOW *window, int pair);
+void end_color(WINDOW *window, int pair);
+
 // Box is a UI primitive extended by all other UI elements
 class Box : public Colorable {
 protected:

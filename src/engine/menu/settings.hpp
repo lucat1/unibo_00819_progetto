@@ -23,11 +23,14 @@ namespace Menu {
 
 class Settings : public Menu {
 private:
-  Nostd::Vector<Data::Setting> original, updated;
+  Nostd::Vector<Data::Setting *> updated;
+  Nostd::Vector<Data::Setting> original;
   int focused = 0, max_focused;
   int clicked_on = -1;
+  void alloc_updated(Nostd::Vector<Data::Setting> &settings);
+  Nostd::Vector<Data::Setting> dereference_updated();
   UI::Button *append_button(UI::Box *parent, const wchar_t *str);
-  UI::Box *append_line(UI::Box *parent, const Data::Setting &str);
+  UI::Box *append_line(UI::Box *parent, Data::Setting *str);
 
 protected:
   UI::Box *generate();
@@ -39,7 +42,8 @@ protected:
   void interact(UI::Box *box);
 
 public:
-  Settings(WINDOW *window, Nostd::Vector<Data::Setting> settings);
+  Settings(WINDOW *window, const Nostd::Vector<Data::Setting> &settings);
+  ~Settings();
 
   bool is_over();
   Nostd::Vector<Data::Setting> get_result();

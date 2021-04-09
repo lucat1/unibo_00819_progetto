@@ -19,8 +19,7 @@ int main() {
   handle(screen.open());
   screen.set_content<Menu::Main>();
   Nostd::Vector<Data::Setting> settings = {};
-  Nostd::WString t = L"option 1";
-  settings.push_back(Data::Setting(t));
+  settings.push_back(Data::Setting(L"option 1"));
   settings.push_back(Data::Setting(L"option 2"));
 
   int key = -1, running = true;
@@ -38,8 +37,8 @@ int main() {
           running = false;
           break;
         case Menu::Main::Result::settings:
-          screen.set_content<Menu::Settings, Nostd::Vector<Data::Setting>>(
-              settings);
+          screen.set_content<Menu::Settings,
+                             const Nostd::Vector<Data::Setting> &>(settings);
           break;
         default:
           break;

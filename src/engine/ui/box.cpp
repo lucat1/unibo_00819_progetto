@@ -25,16 +25,17 @@
 short map[256 + (100 * 256)] = {0};
 short i = 1;
 
-// returns a new color_pair based on the fg and bg properties.
+// returns a new color_pair based on the fg and bg arguments
 // we cache already initializes color pairs.
-int Engine::UI::Box::color_pair() {
+int Engine::UI::color_pair(short vfg, short vbg) {
   // check if fg == white and bg == transparent and in this case just return as
   // we are not coloring this box.
-  if (short_to_color(fg) == Colorable::foreground() &&
-      short_to_color(bg) == Colorable::background())
+  if (short_to_color(vfg) == Color::white &&
+      short_to_color(vbg) == Color::transparent)
     return -1;
 
-  short bg = std::max((short)0, this->bg);
+  short bg = std::max((short)0, vbg);
+  short fg = std::max((short)0, vfg);
   short hash = fg + (100 * bg);
   if (map[hash] != 0)
     return map[hash];
@@ -45,16 +46,24 @@ int Engine::UI::Box::color_pair() {
   return map[hash];
 }
 
-void Engine::UI::Box::start_color(WINDOW *window) {
-  int pair = color_pair();
+void Engine::UI::start_color(WINDOW *window, int pair) {
   if (pair != -1)
     wattron(window, pair);
 }
 
-void Engine::UI::Box::end_color(WINDOW *window) {
-  int pair = color_pair();
+void Engine::UI::end_color(WINDOW *window, int pair) {
   if (pair != -1)
     wattroff(window, pair);
+}
+
+int Engine::UI::Box::color_pair() { return UI::color_pair(fg, bg); }
+
+void Engine::UI::Box::start_color(WINDOW *window) {
+  UI::start_color(window, color_pair());
+}
+
+void Engine::UI::Box::end_color(WINDOW *window) {
+  UI::end_color(window, color_pair());
 }
 
 // Engine::UI::Box has nothing to do with ncurses's box function
@@ -176,10 +185,12 @@ Nostd::Pair<uint16_t, uint16_t> Engine::UI::Box::size() {
   uint16_t width = 0, height = 0;
   for (Box *it = first_child; it != nullptr; it = it->sibling) {
     auto child_size = it->size();
-    width = fr ? max_width : width + child_size.first;
+    width += child_size.first;
     height =
         dh ? std::max(height, child_size.second) : height + child_size.second;
   }
+  if (fr)
+    width = max_child_width;
 
   uint16_t w = width + pl + pr, h = height + pt + pb;
   return {w, h};

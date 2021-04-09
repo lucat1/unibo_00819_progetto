@@ -11,7 +11,6 @@
   ncurses' window and set its content properly.
 */
 #include "button.hpp"
-#include <curses.h>
 
 Engine::UI::Button::Button(uint16_t max_width, uint16_t max_height,
                            const wchar_t *content)
