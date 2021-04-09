@@ -32,6 +32,9 @@ enum class MapUnit : char {
   item = '$'
 };
 
+std::basic_istream<wchar_t> &operator>>(std::basic_istream<wchar_t> &,
+                                        MapUnit &);
+
 /*
   A Map describes the topology of a piece of the game world, but not its
   appearence. This is greatly different from the current state of part of the
@@ -41,15 +44,9 @@ class Map : public Nostd::Matrix<MapUnit> {
 public:
   // width is mandatory
   Map() = delete;
+  // width is the number of columns of the map, value is the initial value of
+  // every MapUnit in it
   Map(size_t width, MapUnit value = MapUnit::nothing);
-  // move
-  Map(Map &&);
-  Map &operator=(Matrix &&);
-  // copy
-  Map(const Map &);
-  Map &operator=(const Map &);
-
-  ~Map();
 
   // capacity
   size_t width() const noexcept;
@@ -57,11 +54,13 @@ public:
 };
 
 // A stream can represent a Map using:
-// - a line with a single int (the width of the Map)
+// - a line with a single size_t (the width of the Map)
 // - Map::height lines, each containing as many valid MapUnit chars as the width
 //   of the map
-std::basic_istream<wchar_t> &operator>>(std::basic_istream<wchar_t> &, Map &);
+std::basic_istream<char> &operator>>(std::basic_istream<char> &, Map &);
 
 } // namespace Data
+
+#include "../nostd/matrix.cpp"
 
 #endif
