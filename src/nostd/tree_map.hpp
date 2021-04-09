@@ -30,27 +30,31 @@ private:
   class Tree {
   private:
     class TreeNode {
+      Nostd::Pair<K, V> data;
+
     public:
-      K key;
-      V value;
       TreeNode *parent = nullptr;
       TreeNode *left = nullptr;
       TreeNode *right = nullptr;
-      explicit TreeNode(K key, V value, TreeNode *f) {
-        this->parent = f;
-        this->key = key;
-        this->value = value;
-      }
+      explicit TreeNode(K key, V value, TreeNode *f)
+          : parent(f), data(Nostd::Pair<K, V>(key, value)) {}
 
       explicit TreeNode(K key, V value, TreeNode *p, TreeNode *l, TreeNode *r) {
         this->parent = p;
         this->left = l;
         this->right = r;
-        this->key = key;
-        this->value = value;
+        this->data = Nostd::Pair<K, V>(key, value);
       }
 
-      bool operator==(TreeNode other) { return other->key == this->key; }
+      K &get_key() { return this->data.first; }
+      V &get_value() { return this->data.second; }
+
+      void set_key(K k) { this->data.first = k; }
+      void set_value(V v) { this->data.second = v; }
+
+      bool operator==(TreeNode other) {
+        return other->get_key() == this->get_key();
+      }
     };
 
     Nostd::Vector<V> get_elements(const TreeNode *current) {
@@ -58,7 +62,7 @@ private:
       if (current == nullptr)
         return vec;
       Nostd::Vector<V> lv = get_elements(current->left);
-      vec.push_back(current->value);
+      vec.push_back(current->get_value());
       Nostd::Vector<V> rv = get_elements(current->right);
       for (size_t i = 0; i < lv.size(); i++)
         vec.push_back(lv[i]);
@@ -72,9 +76,9 @@ private:
         children++;
         return new TreeNode(key, value, nullptr);
       }
-      if (key == node->key) {
-        node->value = value;
-      } else if (key < node->key) {
+      if (key == node->get_key()) {
+        node->set_value(value);
+      } else if (key < node->get_key()) {
         node->left = insert(node->left, key, value);
         node->left->parent = node;
       } else {
@@ -97,7 +101,7 @@ private:
       if (node == nullptr)
         return;
       in_order(node->left, res);
-      res.push_back(Pair<K, V>(node->key, node->value));
+      res.push_back(Pair<K, V>(node->get_key(), node->get_value()));
       in_order(node->right, res);
     }
 
@@ -140,8 +144,8 @@ private:
     // Remove an element from the tree
     void remove(K key) {
       TreeNode *ptr = this->root;
-      while (ptr != nullptr && ptr->key != key) {
-        if (ptr->key >= key)
+      while (ptr != nullptr && ptr->get_key() != key) {
+        if (ptr->get_key() >= key)
           ptr = ptr->left;
         else
           ptr = ptr->right;
@@ -193,11 +197,11 @@ private:
         // b. Replace node to delete predecessor
         // c. Delete old predecessor
         TreeNode *pred = get_predecessor(key);
-        K pkey = pred->key;
-        V pvalue = pred->value;
-        remove(pred->key);
-        ptr->key = pkey;
-        ptr->value = pvalue;
+        K pkey = pred->get_key();
+        V pvalue = pred->get_value();
+        remove(pred->get_key());
+        ptr->set_key(pkey);
+        ptr->set_value(pvalue);
         return;
       }
     }
@@ -207,10 +211,11 @@ private:
       TreeNode *res = nullptr;
       TreeNode *ptr = this->root;
       while (ptr != nullptr) {
-        if (ptr->key < key && (res == nullptr || ptr->key > res->key)) {
+        if (ptr->get_key() < key &&
+            (res == nullptr || ptr->get_key() > res->get_key())) {
           res = ptr;
         }
-        if (key <= ptr->key) {
+        if (key <= ptr->get_key()) {
           ptr = ptr->left;
         } else {
           ptr = ptr->right;
@@ -224,10 +229,11 @@ private:
       TreeNode *res = nullptr;
       TreeNode *ptr = this->root;
       while (ptr != nullptr) {
-        if (ptr->key > key && (res == nullptr || ptr->key < res->key)) {
+        if (ptr->get_key() > key &&
+            (res == nullptr || ptr->get_key() < res->get_key())) {
           res = ptr;
         }
-        if (key <= ptr->key) {
+        if (key <= ptr->get_key()) {
           ptr = ptr->left;
         } else {
           ptr = ptr->right;
@@ -238,8 +244,8 @@ private:
     V &get(K key) {
       TreeNode *ptr = this->root;
 
-      while (ptr != nullptr && ptr->key != key) {
-        if (ptr->key >= key) {
+      while (ptr != nullptr && ptr->get_key() != key) {
+        if (ptr->get_key() >= key) {
           ptr = ptr->left;
         } else {
           ptr = ptr->right;
@@ -250,14 +256,14 @@ private:
         throw std::invalid_argument("Treemap: No value found for the key " +
                                     std::to_string(key));
       }
-      return ptr->value;
+      return ptr->get_value();
     }
 
     bool find(const K &key) {
       TreeNode *ptr = this->root;
 
-      while (ptr != nullptr && ptr->key != key) {
-        if (ptr->key >= key) {
+      while (ptr != nullptr && ptr->get_key() != key) {
+        if (ptr->get_key() >= key) {
           ptr = ptr->left;
         } else {
           ptr = ptr->right;
@@ -287,7 +293,7 @@ private:
 
       Nostd::Pair<const K, V> begin() noexcept {
         TreeNode *t = min();
-        return Pair<const K, V>(t->key, t->value);
+        return Pair<const K, V>(t->get_key(), t->get_value());
       }
 
       Nostd::Pair<const K, V> end() noexcept {}
@@ -309,7 +315,7 @@ private:
       }
 
       Nostd::Pair<const K, V> *operator*() {
-        return new Nostd::Pair<const K, V>(ptr->key, ptr->value);
+        return new Nostd::Pair<const K, V>(ptr->get_key(), ptr->get_value());
       }
     };
   };
