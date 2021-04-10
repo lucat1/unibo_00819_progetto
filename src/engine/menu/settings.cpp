@@ -73,9 +73,11 @@ Engine::Menu::Settings::~Settings() {
 
 Box *Engine::Menu::Settings::generate() {
   auto root = new UI::Box();
-  auto list = root->append<UI::List>();
+  auto list = root->append<UI::Box>();
+  list->props(Box::Property::padding_left, 2);
   list->props(Box::Property::padding_right, 2);
   list->props(Box::Property::padding_top, 1);
+  list->props(Box::Property::padding_bottom, 2);
   for (auto setting : updated)
     append_line(list, setting);
 
@@ -94,7 +96,7 @@ Box *Engine::Menu::Settings::curr_box() {
   if (focused >= max_focused - 1)
     return root->child(1)->child(0)->child(focused == max_focused ? 1 : 0);
   else
-    return root->child(0)->child(focused)->child(0);
+    return root->child(0)->child(focused);
 }
 
 Box *Engine::Menu::Settings::next_box() {

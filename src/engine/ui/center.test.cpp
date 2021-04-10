@@ -14,9 +14,6 @@
 #include "center.hpp"
 #include <cassert>
 
-#include <iostream>
-using namespace std;
-
 using Engine::UI::Box;
 using Engine::UI::Center;
 using Nostd::it;
@@ -32,7 +29,6 @@ public:
     y = _y;
     w = _w;
     h = _h;
-    cout << "rendering at " << x << " " << y << " " << w << " " << h << endl;
   }
   dim size(szu max_width, szu max_height) { return {width, height}; }
 };

@@ -13,9 +13,6 @@
 
 #include "logo.hpp"
 
-#include <iostream>
-using namespace std;
-
 constexpr const wchar_t *Engine::UI::Logo::logo[];
 
 Engine::UI::Logo::Logo() : TextBox(L"") {
