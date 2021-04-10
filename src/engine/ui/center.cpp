@@ -11,12 +11,16 @@
 */
 
 #include "center.hpp"
-#include <cmath>
+#include <algorithm>
+
+#include <iostream>
+using namespace std;
 
 void Engine::UI::Center::propb(Box::Property key, bool value) {
   switch (key) {
   case Box::Property::center_horizontal:
     center_horizontally = value;
+    dh = value;
     break;
   default:
     Box::propb(key, value);
@@ -40,9 +44,11 @@ void Engine::UI::Center::show(WINDOW *window, szu x, szu y, szu max_width,
               : 0,
       remaining_width = max_width, remaining_height = max_height;
 
+  cout << "hor: " << center_horizontally << " y: " << y << " x: " << x << endl;
+
   for (Box *it = first_child; it != nullptr; it = it->sibling) {
-    auto size = it->size(max_width, max_height);
-    it->show(window, x + rel_x, y + rel_y, remaining_width, remaining_height);
+    auto size = it->size(remaining_width, remaining_width);
+    it->show(window, x + rel_x, y + rel_y, size.first, size.second);
 
     if (center_horizontally) {
       rel_x += size.first;

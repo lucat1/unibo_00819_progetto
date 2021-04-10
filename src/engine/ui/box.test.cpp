@@ -13,12 +13,12 @@
 #include "../../nostd/test.hpp"
 #include "box.hpp"
 #include "text_box.hpp"
+#include <algorithm>
 #include <cassert>
 
 using Engine::UI::Box;
 using Engine::UI::TextBox;
 using Nostd::it;
-using namespace Engine::UI;
 
 int main() {
   Box *box = new Box();
@@ -117,7 +117,9 @@ int main() {
   it("places elements vertically with appropriate dimentions", [vbox, tb] {
     auto box_size = vbox->size(1000, 1000);
     auto tb_size = tb->size(1000, 1000);
-    assert(box_size.first == tb_size.first + 4); // + 4 for the PadBox
+    assert(
+        box_size.first ==
+        std::max(tb_size.first, (Box::szu)4)); // + 4 for the Box with padding
     assert(box_size.second == tb_size.second);
   });
 }
