@@ -141,22 +141,26 @@ void Engine::Menu::Settings::unfocus(Box *box) {
 
 void Engine::Menu::Settings::interact(Box *box) { clicked_on = focused; }
 
-void Engine::Menu::Settings::decrement(Box *box) {
+void Engine::Menu::Settings::decrement(Box *parent_box) {
+  Box *box = parent_box->child(1);
   if (!dynamic_cast<Engine::UI::Choice *>(box))
     return;
 
   auto choice = static_cast<Engine::UI::Choice *>(box);
   Data::Setting *setting = choice->get_setting();
-  setting->set(setting->current_value()--);
+  if (*setting->current_value() != setting->first())
+    setting->set(--setting->current_value());
 }
 
-void Engine::Menu::Settings::increment(Box *box) {
+void Engine::Menu::Settings::increment(Box *parent_box) {
+  Box *box = parent_box->child(1);
   if (!dynamic_cast<Engine::UI::Choice *>(box))
     return;
 
   auto choice = static_cast<Engine::UI::Choice *>(box);
   Data::Setting *setting = choice->get_setting();
-  setting->set(setting->current_value()++);
+  if (*setting->current_value() != setting->last())
+    setting->set(++setting->current_value());
 }
 
 bool Engine::Menu::Settings::is_over() { return clicked_on >= max_focused - 1; }

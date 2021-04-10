@@ -49,23 +49,23 @@ void Engine::UI::Choice::show(WINDOW *window, szu abs_x, szu y, szu max_width,
   if (boolean) {
     bool on = *setting->current_value() == 1;
     UI::start_color(window, color_off);
-    mvwaddwstr(window, y, x, L"< ");
-    UI::end_color(window, color_off);
-
-    UI::start_color(window, on ? color_on : color_off);
-    mvwaddwstr(window, y, x + 2, L"on");
-    UI::end_color(window, on ? color_on : color_off);
-
-    UI::start_color(window, color_off);
-    mvwaddwstr(window, y, x + 4, L" / ");
+    mvwaddwstr(window, y, x, L"<");
     UI::end_color(window, color_off);
 
     UI::start_color(window, !on ? color_on : color_off);
-    mvwaddwstr(window, y, x + 7, L"off");
+    mvwaddwstr(window, y, x + 2, L"off");
     UI::end_color(window, !on ? color_on : color_off);
 
     UI::start_color(window, color_off);
-    mvwaddwstr(window, y, x + 10, L" >");
+    mvwaddwstr(window, y, x + 6, L"/");
+    UI::end_color(window, color_off);
+
+    UI::start_color(window, on ? color_on : color_off);
+    mvwaddwstr(window, y, x + 8, L"on");
+    UI::end_color(window, on ? color_on : color_off);
+
+    UI::start_color(window, color_off);
+    mvwaddwstr(window, y, x + 11, L">");
     UI::end_color(window, color_off);
   }
 }
