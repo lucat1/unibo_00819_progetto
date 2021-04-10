@@ -34,6 +34,9 @@ public:
   // override the TextBox's split_content function to always assign the logo
   // data
   strings split_content(const Nostd::WString content, szu max_width);
+
+  void show(WINDOW *window, szu x, szu y, szu max_width, szu max_height);
+  dim size(szu max_width, szu max_height);
 };
 
 } // namespace UI

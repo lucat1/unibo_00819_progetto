@@ -30,6 +30,10 @@ void Engine::UI::Center::propb(Box::Property key, bool value) {
 void Engine::UI::Center::show(WINDOW *window, szu x, szu y, szu max_width,
                               szu max_height) {
   start_color(window);
+  // fill the box's space with the provided background color
+  auto sz = size(max_width, max_height);
+  for (szu i = 0; i < sz.second; i++)
+    mvwhline(window, y + i, x, ' ', sz.first);
 
   szu rel_y =
           center_horizontally
@@ -44,10 +48,12 @@ void Engine::UI::Center::show(WINDOW *window, szu x, szu y, szu max_width,
               : 0,
       remaining_width = max_width, remaining_height = max_height;
 
-  cout << "hor: " << center_horizontally << " y: " << y << " x: " << x << endl;
+  /* cout << "hor: " << center_horizontally << " y: " << y << " x: " << x */
+  /*      << " rel_y: " << rel_y << " rel_x: " << rel_x << endl; */
 
   for (Box *it = first_child; it != nullptr; it = it->sibling) {
     auto size = it->size(remaining_width, remaining_width);
+    /* cout << "drawing at: " << x + rel_x << "," << y + rel_y << endl; */
     it->show(window, x + rel_x, y + rel_y, size.first, size.second);
 
     if (center_horizontally) {

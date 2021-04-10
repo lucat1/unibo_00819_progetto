@@ -21,6 +21,7 @@ namespace UI {
 // draws each child prefixed by a centered marker
 class List : public Box {
 private:
+  szu marker_padding = 0;
   wchar_t marker;
 
 public:
@@ -28,7 +29,10 @@ public:
   static const wchar_t append_default_value;
 
   List(const wchar_t marker = append_default_value);
+  // sets a size property
+  void props(Box::Property key, szu value);
 
+  // shows the list element marking each child with a marker
   void show(WINDOW *window, szu x, szu y, szu max_width, szu max_height);
 };
 

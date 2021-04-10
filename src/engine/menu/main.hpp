@@ -28,8 +28,6 @@ class Main : public Menu {
 private:
   int focused = 0, max_focused = 2;
   int clicked_on = -1;
-  UI::Box *focus_start();
-  UI::Logo *append_logo(UI::Box *parent);
   UI::Button *append_button(UI::Box *parent, const wchar_t *str);
 
 protected:
@@ -43,6 +41,7 @@ protected:
 
 public:
   enum class Result {
+    none,
     play,
     settings,
     quit,

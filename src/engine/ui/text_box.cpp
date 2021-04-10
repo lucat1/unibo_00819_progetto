@@ -30,7 +30,6 @@ Engine::UI::TextBox::strings
 Engine::UI::TextBox::split_content(const Nostd::WString content,
                                    szu max_width) {
   strings lines;
-  lines.clear();
   size_t len = content.length();
   while (len > max_width) {
     size_t ll = len < max_width ? Nostd::WString::npos : max_width - 1;

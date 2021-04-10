@@ -42,8 +42,6 @@ Engine::UI::Button *Engine::Menu::Settings::append_button(Box *parent,
 }
 
 Box *Engine::Menu::Settings::append_line(Box *parent, Data::Setting *setting) {
-  auto wrapper = parent->append<UI::Box>();
-  wrapper->props(Box::Property::padding_top, 1);
   auto line = parent->append<UI::Box>();
   line->propb(Box::Property::direction_horizontal, true);
   line->props(Box::Property::padding_left, 2);
@@ -55,7 +53,7 @@ Box *Engine::Menu::Settings::append_line(Box *parent, Data::Setting *setting) {
   auto choice = line->append<UI::Choice, Data::Setting *>(setting);
   choice->propb(Box::Property::float_right, true);
   unfocus(line);
-  return wrapper;
+  return line;
 }
 
 Engine::Menu::Settings::Settings(WINDOW *window,
@@ -77,6 +75,7 @@ Box *Engine::Menu::Settings::generate() {
   auto root = new UI::Box();
   auto list = root->append<UI::List>();
   list->props(Box::Property::padding_right, 2);
+  list->props(Box::Property::padding_top, 1);
   for (auto setting : updated)
     append_line(list, setting);
 
@@ -85,7 +84,6 @@ Box *Engine::Menu::Settings::generate() {
   chbox->propb(Box::Property::center_horizontal, true);
   auto hbox = chbox->append<UI::Box>();
   hbox->propb(Box::Property::direction_horizontal, true);
-  hbox->props(Box::Property::padding_top, 8);
   auto btn1 = append_button(hbox, L"Save");
   btn1->props(Box::Property::padding_right, 8);
   append_button(hbox, L"Discard");

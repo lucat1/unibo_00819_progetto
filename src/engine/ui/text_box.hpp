@@ -27,7 +27,7 @@ class TextBox : public Box {
 public:
   using strings = Nostd::Vector<Nostd::WString>;
 
-private:
+protected:
   Nostd::WString content;
   strings lines;
   szu old_max_width = -1;

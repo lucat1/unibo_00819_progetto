@@ -23,6 +23,18 @@ Engine::UI::List::List(const wchar_t marker) : Box() {
   this->marker = marker;
 }
 
+void Engine::UI::List::props(Box::Property key, szu value) {
+  switch (key) {
+  case Box::Property::padding_left:
+    pl = 2 + value;
+    marker_padding = value;
+    break;
+
+  default:
+    Box::props(key, value);
+  }
+}
+
 void Engine::UI::List::show(WINDOW *window, szu x, szu y, szu max_width,
                             szu max_height) {
   Box::show(window, x, y, max_width, max_height);
@@ -30,8 +42,9 @@ void Engine::UI::List::show(WINDOW *window, szu x, szu y, szu max_width,
 
   for (Box *it = first_child; it != nullptr && rel_y < remaining_height;
        it = it->sibling) {
-    szu child_height = it->size(max_width, max_height).second;
-    mvwaddch(window, y + rel_y + (child_height / 2), x + 1, marker);
+    szu child_height = it->size(max_width, remaining_height).second;
+    mvwaddch(window, y + rel_y + (child_height / 2) + pt,
+             x + marker_padding + 1, marker);
 
     rel_y += child_height;
     remaining_height -= child_height;

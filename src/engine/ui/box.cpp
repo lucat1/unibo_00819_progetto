@@ -183,7 +183,8 @@ void Engine::UI::Box::show(WINDOW *window, szu x, szu y, szu max_width,
 Engine::UI::Box::dim Engine::UI::Box::size(szu max_width, szu max_height) {
   szu width = 0, height = 0;
   for (Box *it = first_child; it != nullptr; it = it->sibling) {
-    auto child_size = it->size(max_width, max_height);
+    auto child_size =
+        it->size(max_width - width - pl - pr, max_height - height - pt - pb);
     width = dh ? width + child_size.first : std::max(width, child_size.first);
     height =
         dh ? std::max(height, child_size.second) : height + child_size.second;
