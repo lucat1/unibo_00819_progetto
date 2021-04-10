@@ -33,7 +33,6 @@ Engine::UI::Button *Engine::Menu::Main::append_button(Box *parent,
 Box *Engine::Menu::Main::generate() {
   auto root = new UI::Center();
   auto center = root->append<UI::Center>();
-  center->propb(Box::Property::center_horizontal, true);
   append_logo(center);
 
   auto btn_container = center->append<UI::Center>();

@@ -20,6 +20,12 @@ Engine::UI::TextBox::TextBox(const wchar_t *content) : Box() {
 Engine::UI::TextBox::TextBox(const Nostd::WString &content)
     : TextBox(content.c_str()) {}
 
+void Engine::UI::TextBox::update_lines(szu max_width) {
+  if (max_width != old_max_width)
+    lines = split_content(content, max_width);
+  max_width = old_max_width;
+}
+
 Engine::UI::TextBox::strings
 Engine::UI::TextBox::split_content(const Nostd::WString content,
                                    szu max_width) {
@@ -53,7 +59,7 @@ Engine::UI::TextBox::split_content(const Nostd::WString content,
 
 void Engine::UI::TextBox::show(WINDOW *window, szu x, szu y, szu max_width,
                                szu max_height) {
-  lines = split_content(content, max_width);
+  update_lines(max_width);
   start_color(window);
 
   for (size_t i = 0; i < lines.size(); i++) {
@@ -67,7 +73,9 @@ void Engine::UI::TextBox::show(WINDOW *window, szu x, szu y, szu max_width,
 }
 
 Engine::UI::Box::dim Engine::UI::TextBox::size(szu max_width, szu max_height) {
+  update_lines(max_width);
   szu height = std::min((szu)lines.size(), max_height);
-  szu width = std::min(lines.size() > 0 ? (szu)lines.at(0).length() : 0, 0);
+  szu width =
+      std::min((szu)(lines.size() > 0 ? lines.at(0).length() : 0), max_width);
   return {width, height};
 }

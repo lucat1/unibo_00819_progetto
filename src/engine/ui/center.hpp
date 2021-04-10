@@ -24,7 +24,7 @@ namespace UI {
 // this element in a standard Engine::UI::Box.
 class Center : public Box {
 private:
-  bool center_horizontally = 0;
+  bool center_horizontally = false;
 
 public:
   Center() = default;

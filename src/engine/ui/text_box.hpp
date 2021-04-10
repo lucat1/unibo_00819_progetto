@@ -27,10 +27,15 @@ class TextBox : public Box {
 public:
   using strings = Nostd::Vector<Nostd::WString>;
 
-public:
+private:
   Nostd::WString content;
   strings lines;
+  szu old_max_width = -1;
+  // updates the lines by re-splitting the content if necessary( namely width
+  // has changed)
+  void update_lines(szu max_width);
 
+public:
   // splits the content into various lines to fit into `max_width` and adds
   // '-' where necessary, when splitting a word
   strings split_content(const Nostd::WString content, szu max_width);
