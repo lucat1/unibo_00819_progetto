@@ -12,7 +12,6 @@
 */
 
 #include "settings.hpp"
-#include "../ui/append.hpp"
 #include "../ui/button.hpp"
 #include "../ui/center.hpp"
 #include "../ui/choice.hpp"
@@ -37,23 +36,23 @@ Nostd::Vector<Data::Setting> Engine::Menu::Settings::dereference_updated() {
 
 Engine::UI::Button *Engine::Menu::Settings::append_button(Box *parent,
                                                           const wchar_t *str) {
-  auto btn = UI::append<UI::Button, const wchar_t *>(parent, str);
+  auto btn = parent->append<UI::Button, const wchar_t *>(str);
   unfocus(btn);
   return btn;
 }
 
 Box *Engine::Menu::Settings::append_line(Box *parent, Data::Setting *setting) {
-  auto wrapper = UI::append<UI::Box>(parent);
+  auto wrapper = parent->append<UI::Box>();
   wrapper->props(Box::Property::padding_top, 1);
-  auto line = UI::append<UI::Box>(wrapper);
+  auto line = parent->append<UI::Box>();
   line->propb(Box::Property::direction_horizontal, true);
   line->props(Box::Property::padding_left, 2);
   line->props(Box::Property::padding_right, 2);
   line->props(Box::Property::padding_top, 1);
   line->props(Box::Property::padding_bottom, 1);
 
-  UI::append<UI::TextBox, const Nostd::WString &>(line, setting->label());
-  auto choice = UI::append<UI::Choice, Data::Setting *>(line, setting);
+  line->append<UI::TextBox, const Nostd::WString &>(setting->label());
+  auto choice = line->append<UI::Choice, Data::Setting *>(setting);
   choice->propb(Box::Property::float_right, true);
   unfocus(line);
   return wrapper;
@@ -75,16 +74,16 @@ Engine::Menu::Settings::~Settings() {
 }
 
 Box *Engine::Menu::Settings::generate() {
-  auto root = new UI::Box(width, height);
-  auto list = UI::append<UI::List>(root);
+  auto root = new UI::Box();
+  auto list = root->append<UI::List>();
   list->props(Box::Property::padding_right, 2);
   for (auto setting : updated)
     append_line(list, setting);
 
   // buttons at the end of the page for closing the menu
-  auto chbox = UI::append<UI::Center>(root);
+  auto chbox = root->append<UI::Center>();
   chbox->propb(Box::Property::center_horizontal, true);
-  auto hbox = UI::append<UI::Box>(chbox);
+  auto hbox = chbox->append<UI::Box>();
   hbox->propb(Box::Property::direction_horizontal, true);
   hbox->props(Box::Property::padding_top, 8);
   auto btn1 = append_button(hbox, L"Save");

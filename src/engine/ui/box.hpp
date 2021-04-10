@@ -11,6 +11,7 @@
   any visual details. It is also the class all other visual components base
   upon.
 */
+
 #ifndef ENGINE_UI_BOX_HPP
 #define ENGINE_UI_BOX_HPP
 
@@ -30,11 +31,20 @@ void end_color(WINDOW *window, int pair);
 
 // Box is a UI primitive extended by all other UI elements
 class Box : public Colorable {
+public:
+  // size unit
+  using szu = uint16_t;
+  // dimentions
+  using dim = Nostd::Pair<szu, szu>;
+
 protected:
   // padding(left|right|top|bottom)
-  uint16_t pl = 0, pr = 0, pt = 0, pb = 0;
+  szu pl = 0, pr = 0, pt = 0, pb = 0;
   // direction vertical, float right, should we paint custom colors
   bool dh = false, fr = false;
+
+  // adds a child to the tail of the list of children
+  void add_child(Box *child);
 
   // color values
   short fg = color_to_short(Colorable::foreground()),
@@ -62,14 +72,18 @@ public:
     background,
   };
 
-  // component size values. kept public as they are only assigned in the code by
-  // constructors (and these classes are local to the module anyway)
-  uint16_t max_width, max_height, max_child_width, max_child_height;
   // child-parent-sibling relation values;
   Box *first_child = nullptr, *last_child = nullptr, *sibling = nullptr,
       *parent = nullptr;
 
-  Box(uint16_t max_width, uint16_t max_height);
+  // Engine::UI::Box has nothing to do with ncurses's box function
+  // We use Box as a UI primitive to build interfaces. For example each block
+  // (be it a List, a Button, a Checkbox) extends the box class, which provides
+  // rendering primitives such as the automatic display of its children in the
+  // appropriate order
+  Box() = default;
+  // frees its children list recursively (as deleted children will do the same
+  // and so on)
   ~Box();
 
   Engine::Color foreground() const;
@@ -79,7 +93,7 @@ public:
   // sets a bool property
   void propb(Box::Property key, bool value);
   // sets a size property
-  void props(Box::Property key, uint16_t value);
+  void props(Box::Property key, szu value);
   // returns the n-th child of this node, or null if an invalid index is
   // provided
   Box *child(size_t n);
@@ -97,17 +111,28 @@ public:
   //
   // - Engine::UI::Box::Property::PADDING_* adds paddings on the side of the Box
   // around its children
-  virtual void show(WINDOW *window, uint16_t x, uint16_t y);
+  virtual void show(WINDOW *window, szu x, szu y, szu max_width,
+                    szu max_height);
   // returns the dimentions of the element when drawn
-  virtual Nostd::Pair<uint16_t, uint16_t> size();
+  virtual dim size(szu max_width, szu max_height);
 
-  // adds a child to the list of children of this node. This method is meant for
-  // internal usage only relatively to the Engine::UI library. External usage
-  // should be avoided. Please refer to the Engine::UI::append function
-  //
-  // NOTE: it prevents the width and height of the child from exceeding the ones
-  // of the parent
-  void add_child(Box *box);
+  // Creates a new %T instance and adds it to the target Box's list of children.
+  // The width and height of the new box can be defined relatively to the new
+  // parent's dimentions with the w and h parameters
+  template <typename T = Box> T *append() {
+    T *box = new T();
+    add_child(box);
+    return box;
+  }
+  // Creates a new %T instance and adds it to the target Box's list of children.
+  // The width and height of the new box can be defined relatively to the new
+  // parent's dimentions with the w and h parameters
+  template <typename T, typename A>
+  T *append(A extra = T::append_default_value) {
+    T *box = new T(extra);
+    add_child(box);
+    return box;
+  }
 };
 
 } // namespace UI

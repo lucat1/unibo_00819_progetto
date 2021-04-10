@@ -28,15 +28,15 @@ namespace UI {
 // caller
 class Choice : public Box {
 private:
-  Data::Setting *setting;
+  const Data::Setting *setting;
   bool boolean;
-  uint16_t width;
+  szu width;
 
 public:
-  Choice(uint16_t max_width, uint16_t max_height, Data::Setting *setting);
+  Choice(Data::Setting *setting);
 
-  void show(WINDOW *window, uint16_t x, uint16_t y);
-  Nostd::Pair<uint16_t, uint16_t> size();
+  void show(WINDOW *window, szu x, szu y, szu max_width, szu max_height);
+  dim size(szu max_width, szu max_height);
 };
 
 } // namespace UI

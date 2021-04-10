@@ -30,7 +30,7 @@ void Engine::Menu::Menu::redraw() {
     first_draw = false;
   }
 
-  root->show(window, 0, 0);
+  root->show(window, 0, 0, width, height);
   doupdate();
 }
 

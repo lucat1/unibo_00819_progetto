@@ -10,6 +10,7 @@
   placement, color assignment when drawing and focus on providing a solid base
   upon which other components can be built with the minimal adjustment.
 */
+
 #include "box.hpp"
 #include "../../nostd/pair.hpp"
 #include "../screen.hpp"
@@ -56,6 +57,26 @@ void Engine::UI::end_color(WINDOW *window, int pair) {
     wattroff(window, pair);
 }
 
+Engine::UI::Box::~Box() {
+  Box *it = first_child;
+  while (it != nullptr) {
+    Box *tmp = it;
+    it = it->sibling;
+    delete tmp;
+  }
+}
+
+void Engine::UI::Box::add_child(Box *new_box) {
+  if (last_child != nullptr)
+    last_child->sibling = new_box;
+
+  new_box->sibling = nullptr;
+  new_box->parent = this;
+  last_child = new_box;
+  if (first_child == nullptr)
+    first_child = new_box;
+}
+
 int Engine::UI::Box::color_pair() { return UI::color_pair(fg, bg); }
 
 void Engine::UI::Box::start_color(WINDOW *window) {
@@ -64,29 +85,6 @@ void Engine::UI::Box::start_color(WINDOW *window) {
 
 void Engine::UI::Box::end_color(WINDOW *window) {
   UI::end_color(window, color_pair());
-}
-
-// Engine::UI::Box has nothing to do with ncurses's box function
-// We use Box as a UI primitive to build interfaces. For example each block
-// (be it a List, a Button, a Checkbox) extends the box class, which provides
-// rendering primitives such as the automatic display of its children in the
-// appropriate order
-Engine::UI::Box::Box(uint16_t max_width, uint16_t max_height) {
-  this->max_width = max_width;
-  this->max_height = max_height;
-  this->max_child_width = max_width - pl - pr;
-  this->max_child_height = max_height - pt - pb;
-}
-
-// frees its children list recursively (as deleted children will do the same and
-// so on)
-Engine::UI::Box::~Box() {
-  Box *it = first_child;
-  while (it != nullptr) {
-    Box *tmp = it;
-    it = it->sibling;
-    delete tmp;
-  }
 }
 
 Engine::Color Engine::UI::Box::foreground() const { return short_to_color(fg); }
@@ -120,7 +118,7 @@ void Engine::UI::Box::propb(Box::Property key, bool value) {
   }
 }
 
-void Engine::UI::Box::props(Box::Property key, uint16_t value) {
+void Engine::UI::Box::props(Box::Property key, szu value) {
   switch (key) {
   case Box::Property::padding_left:
     pl = value;
@@ -138,8 +136,6 @@ void Engine::UI::Box::props(Box::Property key, uint16_t value) {
     throw std::invalid_argument(
         "canont assign a size property with a bool/Color value");
   }
-  max_child_width = max_width - pl - pr;
-  max_child_height = max_height - pt - pb;
 }
 
 Engine::UI::Box *Engine::UI::Box::child(size_t n) {
@@ -150,61 +146,50 @@ Engine::UI::Box *Engine::UI::Box::child(size_t n) {
   return it;
 }
 
-void Engine::UI::Box::show(WINDOW *window, uint16_t x, uint16_t y) {
+void Engine::UI::Box::show(WINDOW *window, szu x, szu y, szu max_width,
+                           szu max_height) {
   start_color(window);
   // fill the box's space with the provided background color
-  auto sz = size();
-  for (uint16_t i = 0; i < sz.second; i++)
+  auto sz = size(max_width, max_height);
+  for (szu i = 0; i < sz.second; i++)
     mvwhline(window, y + i, x, ' ', sz.first);
 
-  // values are given a defualt value supposing we are positioning items
-  // horizontally (dh = 0) on the left (fr = 0)
-  uint16_t rel_x = pl, rel_y = pt;
+  // positioning and with values updated as we loop trough child rendering
+  szu rel_x = pl, rel_y = pt, remaining_width = max_width - pl - pr,
+      remaining_height = max_height - pt - pb;
 
   // iterate over all the children and display then in the approrpriate position
-  for (Box *it = first_child; it != nullptr && rel_x < max_child_width + pr &&
-                              rel_y < max_child_height + pb;
-       it = it->sibling) {
-    auto child_size = it->size();
+  for (Box *it = first_child; it != nullptr; it = it->sibling) {
+    auto child_size = it->size(remaining_width, remaining_height);
     if (fr)
-      it->show(window, x + max_child_width - rel_x - child_size.first,
-               y + rel_y);
+      it->show(window, x + max_width - pr - rel_x, y + rel_y, remaining_width,
+               remaining_height);
     else
-      it->show(window, x + rel_x, y + rel_y);
+      it->show(window, x + rel_x, y + rel_y, remaining_width, remaining_height);
 
-    if (dh)
+    if (dh) {
       rel_x += child_size.first;
-    else
+      remaining_width -= child_size.first;
+    } else {
       rel_y += child_size.second;
+      remaining_height -= child_size.second;
+    }
   }
   end_color(window);
   wnoutrefresh(window);
 }
 
-Nostd::Pair<uint16_t, uint16_t> Engine::UI::Box::size() {
-  uint16_t width = 0, height = 0;
+Engine::UI::Box::dim Engine::UI::Box::size(szu max_width, szu max_height) {
+  szu width = 0, height = 0;
   for (Box *it = first_child; it != nullptr; it = it->sibling) {
-    auto child_size = it->size();
+    auto child_size = it->size(max_width, max_height);
     width += child_size.first;
     height =
         dh ? std::max(height, child_size.second) : height + child_size.second;
   }
   if (fr)
-    width = max_child_width;
+    width = max_width;
 
-  uint16_t w = width + pl + pr, h = height + pt + pb;
+  szu w = width + pl + pr, h = height + pt + pb;
   return {w, h};
-}
-
-void Engine::UI::Box::add_child(Box *new_box) {
-  new_box->max_width = std::min(new_box->max_width, max_child_width);
-  new_box->max_height = std::min(new_box->max_height, max_child_height);
-  if (last_child != nullptr)
-    last_child->sibling = new_box;
-
-  new_box->sibling = nullptr;
-  new_box->parent = this;
-  last_child = new_box;
-  if (first_child == nullptr)
-    first_child = new_box;
 }

@@ -9,6 +9,7 @@
   text_box.hpp: Defines the Engine::UI::TextBox class used to display text in
   the UI with the constraint of fitting the give max_width.
 */
+
 #ifndef ENGINE_UI_TEXT_BOX_HPP
 #define ENGINE_UI_TEXT_BOX_HPP
 
@@ -18,22 +19,28 @@
 namespace Engine {
 namespace UI {
 
+// Displays a text content and wraps a long sentence in multiple lines properly
+//
 // NOTE: deliberately ignores any padding given. To achieve that wrap this
 // element inside a Box
 class TextBox : public Box {
 public:
+  using strings = Nostd::Vector<Nostd::WString>;
+
+public:
   Nostd::WString content;
-  Nostd::Vector<Nostd::WString> lines;
+  strings lines;
+
+  // splits the content into various lines to fit into `max_width` and adds
+  // '-' where necessary, when splitting a word
+  strings split_content(const Nostd::WString content, szu max_width);
 
   static constexpr const wchar_t *append_default_value = L"";
-  TextBox(uint16_t max_width, uint16_t max_height,
-          const Nostd::WString &content = L"");
-  TextBox(uint16_t max_width, uint16_t max_height,
-          const wchar_t *content = L"");
+  TextBox(const Nostd::WString &content = L"");
+  TextBox(const wchar_t *content = L"");
 
-  void split_content();
-  Nostd::Pair<uint16_t, uint16_t> size();
-  void show(WINDOW *window, uint16_t x, uint16_t y);
+  void show(WINDOW *window, szu x, szu y, szu max_width, szu max_height);
+  dim size(szu max_width, szu max_height);
 };
 
 } // namespace UI

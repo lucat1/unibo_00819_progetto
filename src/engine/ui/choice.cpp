@@ -20,21 +20,20 @@ inline int digits(int n) {
   return k;
 }
 
-Engine::UI::Choice::Choice(uint16_t max_width, uint16_t max_height,
-                           Data::Setting *setting)
-    : Box(max_width, max_height) {
+Engine::UI::Choice::Choice(Data::Setting *setting) : Box() {
   if (setting->first() == 0 && setting->last() == 1 && setting->stride() == 1)
     boolean = true;
 
   // !boolean: min/max <==========> OR
   // twice the min/max + 14 for all other chars
-  // boolean:  < on / off > = 14 (2 spaces)
-  this->width = boolean ? 16 : 2 * digits(setting->last()) + 14;
+  // boolean: " < on / off > " = 14 (2 spaces)
+  this->width = boolean ? 12 : 2 * digits(setting->last()) + 14;
   this->setting = setting;
 }
 
-void Engine::UI::Choice::show(WINDOW *window, uint16_t abs_x, uint16_t y) {
-  uint16_t x = abs_x + (fr ? max_width - width : 0);
+void Engine::UI::Choice::show(WINDOW *window, szu abs_x, szu y, szu max_width,
+                              szu max_height) {
+  szu x = abs_x + (fr ? max_width - width : 0);
   int color_on = UI::color_pair(fg, bg), color_off = UI::color_pair(bg, fg);
 
   if (boolean) {
@@ -58,6 +57,7 @@ void Engine::UI::Choice::show(WINDOW *window, uint16_t abs_x, uint16_t y) {
   /*            line.c_str()); */
 }
 
-Nostd::Pair<uint16_t, uint16_t> Engine::UI::Choice::size() {
+Nostd::Pair<uint16_t, uint16_t> Engine::UI::Choice::size(szu max_width,
+                                                         szu max_height) {
   return {fr ? max_width : width, 1};
 }

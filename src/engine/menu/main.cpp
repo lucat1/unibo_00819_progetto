@@ -11,33 +11,32 @@
   interaction with the UI.
 */
 #include "main.hpp"
-#include "../ui/append.hpp"
 #include "../ui/center.hpp"
 
 using Engine::UI::Box;
 
 Engine::UI::Logo *Engine::Menu::Main::append_logo(Box *parent) {
-  auto container = UI::append<UI::Box>(parent);
+  auto container = parent->append<UI::Center>();
   container->props(Box::Property::padding_bottom, 2);
 
-  auto logo = UI::append<UI::Logo>(container);
+  auto logo = container->append<UI::Logo>();
   return logo;
 }
 
 Engine::UI::Button *Engine::Menu::Main::append_button(Box *parent,
                                                       const wchar_t *str) {
-  auto btn = UI::append<UI::Button, const wchar_t *>(parent, str);
+  auto btn = parent->append<UI::Button, const wchar_t *>(str);
   unfocus(btn);
   return btn;
 }
 
 Box *Engine::Menu::Main::generate() {
-  auto root = new UI::Center(width, height);
-  auto center = UI::append<UI::Center>(root);
+  auto root = new UI::Center();
+  auto center = root->append<UI::Center>();
   center->propb(Box::Property::center_horizontal, true);
   append_logo(center);
 
-  auto btn_container = UI::append<UI::Center>(center);
+  auto btn_container = center->append<UI::Center>();
   btn_container->propb(Box::Property::center_horizontal, true);
   auto play = append_button(btn_container, L"Play");
   play->props(Box::Property::padding_bottom, 1);

@@ -13,22 +13,17 @@
 
 #include "logo.hpp"
 
-const uint16_t logo_width = 28, logo_height = 6;
-const wchar_t *logo[logo_height] = {
-    L"        _                   ", L"       | |                  ",
-    L"  __ _ | | _ __ ___    __ _ ", L" / _` || || '_ ` _ \\  / _` |",
-    L"| (_| || || | | | | || (_| |", L" \\__,_||_||_| |_| |_| \\__,_|",
-};
+constexpr const wchar_t *Engine::UI::Logo::logo[];
 
-Engine::UI::Logo::Logo(uint16_t max_width, uint16_t max_height)
-    : TextBox(max_width - 2, max_height - 2, L"") {
-  lines.clear();
-  for (size_t i = 0; i < logo_height; i++)
-    lines.push_back(logo[i]);
-
+Engine::UI::Logo::Logo() : TextBox(L"") {
   propc(Box::Property::foreground, Color::red);
 }
 
-Nostd::Pair<uint16_t, uint16_t> Engine::UI::Logo::size() {
-  return {logo_width, logo_height};
+Engine::UI::TextBox::strings
+Engine::UI::Logo::split_content(const Nostd::WString content, szu max_width) {
+  strings lines;
+  for (size_t i = 0; i < logo_height; i++)
+    lines.push_back(logo[i]);
+
+  return lines;
 }
