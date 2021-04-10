@@ -9,9 +9,12 @@
   tree_map.test.cpp: tests for Nostd::TreeMap.
 */
 
+#include "pair.hpp"
 #include "test.hpp"
 #include "tree_map.hpp"
+#include <algorithm>
 #include <cassert>
+#include <iostream>
 
 using namespace Nostd;
 
@@ -127,6 +130,15 @@ int main() {
     tm.put(4, 10);
     tm.put(1, 23);
     assert(tm.as_vector().size() == 3);
+  });
+
+  it("tests foreach iteration", [] {
+    TreeMap<int, int> tm;
+    tm.put(2, 5);
+    tm.put(4, 10);
+    tm.put(1, 23);
+    auto it = std::max_element(tm.begin(), tm.end());
+    assert((*it)->first == 4);
   });
 
   return 0;
