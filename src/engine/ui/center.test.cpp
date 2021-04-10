@@ -102,7 +102,6 @@ int main() {
     assert(w == TestBox::width);
     assert(h == TestBox::height);
     assert(x == (100 - TestBox::width) / 2);
-    cout << y << endl;
     assert(y == (100 - 3 * TestBox::height) / 2 + (2 * TestBox::height));
   });
 }

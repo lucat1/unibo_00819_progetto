@@ -15,7 +15,6 @@
 #include "../ui/button.hpp"
 #include "../ui/center.hpp"
 #include "../ui/choice.hpp"
-#include "../ui/list.hpp"
 #include "../ui/text_box.hpp"
 
 using Engine::UI::Box;
