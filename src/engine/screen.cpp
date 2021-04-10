@@ -12,6 +12,7 @@
 */
 #include "screen.hpp"
 #include "menu/main.hpp"
+#include <curses.h>
 
 Engine::Screen::Screen() {
   this->content = nullptr;
@@ -60,6 +61,7 @@ bool Engine::Screen::open() {
     return false;
 
   // NOTE: look at man curses(3) for documentation on these functions
+  use_default_colors(); // allows to use -1 as a background neutral color
   noecho(); // prevents user-inputted charters to be displayed on the stdscreen
   raw();    // intercept all keystrokes and prevent ^C from quitting the game
   curs_set(0); // hide the cursor by default

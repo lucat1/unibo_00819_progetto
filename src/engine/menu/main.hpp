@@ -38,6 +38,8 @@ protected:
   void focus(UI::Box *box);
   void unfocus(UI::Box *box);
   void interact(UI::Box *box);
+  void decrement(UI::Box *box);
+  void increment(UI::Box *box);
 
 public:
   enum class Result {

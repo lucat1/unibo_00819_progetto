@@ -19,6 +19,10 @@
 
 using Engine::UI::Box;
 
+Engine::Color settings_button_fg = Engine::Color::red,
+              settings_button_bg = Engine::Color::grey23,
+              settings_line = Engine::Color::grey23;
+
 void Engine::Menu::Settings::alloc_updated(
     Nostd::Vector<Data::Setting> &settings) {
   for (auto setting : settings)
@@ -51,6 +55,9 @@ Box *Engine::Menu::Settings::append_line(Box *parent, Data::Setting *setting) {
   line->append<UI::TextBox, const Nostd::WString &>(setting->label());
   auto choice = line->append<UI::Choice, Data::Setting *>(setting);
   choice->propb(Box::Property::float_right, true);
+  choice->propc(Box::Property::foreground, settings_button_fg);
+  choice->propc(Box::Property::background, Color::transparent);
+
   unfocus(line);
   return line;
 }
@@ -110,10 +117,6 @@ Box *Engine::Menu::Settings::prev_box() {
   return curr_box();
 }
 
-Engine::Color settings_button_fg = Engine::Color::red,
-              settings_button_bg = Engine::Color::grey23,
-              settings_line = Engine::Color::grey23;
-
 void Engine::Menu::Settings::focus(Box *box) {
   if (dynamic_cast<Engine::UI::Button *>(box)) {
     // visually focus buttons
@@ -137,6 +140,24 @@ void Engine::Menu::Settings::unfocus(Box *box) {
 }
 
 void Engine::Menu::Settings::interact(Box *box) { clicked_on = focused; }
+
+void Engine::Menu::Settings::decrement(Box *box) {
+  if (!dynamic_cast<Engine::UI::Choice *>(box))
+    return;
+
+  auto choice = static_cast<Engine::UI::Choice *>(box);
+  Data::Setting *setting = choice->get_setting();
+  setting->set(setting->current_value()--);
+}
+
+void Engine::Menu::Settings::increment(Box *box) {
+  if (!dynamic_cast<Engine::UI::Choice *>(box))
+    return;
+
+  auto choice = static_cast<Engine::UI::Choice *>(box);
+  Data::Setting *setting = choice->get_setting();
+  setting->set(setting->current_value()++);
+}
 
 bool Engine::Menu::Settings::is_over() { return clicked_on >= max_focused - 1; }
 

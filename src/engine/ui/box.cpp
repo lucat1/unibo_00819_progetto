@@ -23,21 +23,19 @@
 // TODO: lower memory usage with an ordered map when available
 // (its gonna increase computation time toughfrom O(1) to O(log n)
 // but n will be a small number still (in the 10-30s range)
-short map[256 + (100 * 256)] = {0};
+short map[256 + (100 * 257)] = {0};
 short i = 1;
 
 // returns a new color_pair based on the fg and bg arguments
 // we cache already initializes color pairs.
-int Engine::UI::color_pair(short vfg, short vbg) {
+int Engine::UI::color_pair(short fg, short bg) {
   // check if fg == white and bg == transparent and in this case just return as
   // we are not coloring this box.
-  if (short_to_color(vfg) == Color::white &&
-      short_to_color(vbg) == Color::transparent)
+  if (short_to_color(fg) == Color::white &&
+      short_to_color(bg) == Color::transparent)
     return -1;
 
-  short bg = std::max((short)0, vbg);
-  short fg = std::max((short)0, vfg);
-  short hash = fg + (100 * bg);
+  short hash = fg + (100 * (bg + 1));
   if (map[hash] != 0)
     return map[hash];
 

@@ -28,12 +28,13 @@ namespace UI {
 // caller
 class Choice : public Box {
 private:
-  const Data::Setting *setting;
+  Data::Setting *setting;
   bool boolean;
   szu width;
 
 public:
   Choice(Data::Setting *setting);
+  Data::Setting *get_setting();
 
   void show(WINDOW *window, szu x, szu y, szu max_width, szu max_height);
   dim size(szu max_width, szu max_height);

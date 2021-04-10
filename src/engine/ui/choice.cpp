@@ -26,35 +26,48 @@ Engine::UI::Choice::Choice(Data::Setting *setting) : Box() {
 
   // !boolean: min/max <==========> OR
   // twice the min/max + 14 for all other chars
-  // boolean: " < on / off > " = 14 (2 spaces)
+  // boolean: " < on / off > " = 12 (2 spaces)
   this->width = boolean ? 12 : 2 * digits(setting->last()) + 14;
   this->setting = setting;
 }
 
+Data::Setting *Engine::UI::Choice::get_setting() { return setting; }
+
+// thanks to ncurses's color_pair(s), which turns out are just a huge
+// technical debt (https://softwareengineering.stackexchange.com/a/336063) from
+// the late '70s, we must always have to respecify the the background color in
+// each color pair, and therefore we not only assue that the node has a parent
+// from which we can take that color, but we also end up having an hilarious
+// amount of calls to start_color and end_color to begin and end the coloring
+// process for each couple of chars.
 void Engine::UI::Choice::show(WINDOW *window, szu abs_x, szu y, szu max_width,
                               szu max_height) {
   szu x = abs_x + (fr ? max_width - width : 0);
-  int color_on = UI::color_pair(fg, bg), color_off = UI::color_pair(bg, fg);
+  int color_on = UI::color_pair(fg, color_to_short(parent->background())),
+      color_off = UI::color_pair(bg, color_to_short(parent->background()));
 
   if (boolean) {
-    bool on = *setting->current_value();
+    bool on = *setting->current_value() == 1;
+    UI::start_color(window, color_off);
     mvwaddwstr(window, y, x, L"< ");
+    UI::end_color(window, color_off);
 
     UI::start_color(window, on ? color_on : color_off);
     mvwaddwstr(window, y, x + 2, L"on");
     UI::end_color(window, on ? color_on : color_off);
 
+    UI::start_color(window, color_off);
     mvwaddwstr(window, y, x + 4, L" / ");
+    UI::end_color(window, color_off);
 
     UI::start_color(window, !on ? color_on : color_off);
     mvwaddwstr(window, y, x + 7, L"off");
     UI::end_color(window, !on ? color_on : color_off);
 
+    UI::start_color(window, color_off);
     mvwaddwstr(window, y, x + 10, L" >");
+    UI::end_color(window, color_off);
   }
-
-  /* mvwaddwstr(window, y + i, x + (fr ? max_width - line.length() : 0), */
-  /*            line.c_str()); */
 }
 
 Nostd::Pair<uint16_t, uint16_t> Engine::UI::Choice::size(szu max_width,

@@ -80,6 +80,10 @@ void Engine::Menu::Main::unfocus(Box *box) {
 
 void Engine::Menu::Main::interact(Box *) { clicked_on = focused; }
 
+// no behaviour defiend for the main menu
+void Engine::Menu::Main::decrement(Box *) {}
+void Engine::Menu::Main::increment(Box *) {}
+
 bool Engine::Menu::Main::is_over() { return clicked_on != -1; }
 
 Engine::Menu::Main::Result Engine::Menu::Main::get_result() {
