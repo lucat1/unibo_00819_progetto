@@ -71,9 +71,9 @@ public:
   // clears the string content
   void clear();
   // returns the frist char in the string
-  wchar_t &front();
+  wchar_t &front() const;
   // returns the last char in the string
-  wchar_t &back();
+  wchar_t &back() const;
   // appends another WString at the end of this instance (copying its contents)
   WString &append(const WString &str);
   // appends a copy of a wchar_t* at the end of this instance

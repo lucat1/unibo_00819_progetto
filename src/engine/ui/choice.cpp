@@ -11,21 +11,42 @@
 */
 
 #include "choice.hpp"
+#include <curses.h>
 
 // returns the amount of digits needed to display an integer
 inline int digits(int n) {
   int k = 0;
-  while (n /= 10 > 0)
+  while (n > 0) {
     k++;
+    n /= 10;
+  }
+
   return k;
+}
+
+// converts a number between 0 and 9 (inclusive) to a wchar_t charter
+wchar_t digitize(int n) {
+  if (n > 9)
+    return L'-'; // undefined behaviour
+
+  return L'0' + n;
+}
+
+// puts the given number in digits inside the provided WString
+void stringify(int n, Nostd::WString &str) {
+  int last = str.length();
+  while (n > 0) {
+    str.insert(last, digitize(n % 10));
+    n /= 10;
+  }
 }
 
 Engine::UI::Choice::Choice(Data::Setting *setting) : Box() {
   if (setting->first() == 0 && setting->last() == 1 && setting->stride() == 1)
     boolean = true;
 
-  // !boolean: min/max <==========> OR
-  // twice the min/max + 14 for all other chars
+  // !boolean: val/max <==========> OR
+  // twice the val/max + 14 for all other chars
   // boolean: " < on / off > " = 12 (2 spaces)
   this->width = boolean ? 12 : 2 * digits(setting->last()) + 14;
   this->setting = setting;
@@ -68,7 +89,36 @@ void Engine::UI::Choice::show(WINDOW *window, szu abs_x, szu y, szu max_width,
     mvwaddwstr(window, y, x + 11, L">");
     UI::end_color(window, color_off);
   } else {
-    mvwaddwstr(window, y, x, L"non-bool");
+    szu next_x = x + 2 * digits(setting->last()) + 2;
+
+    UI::start_color(window, color_on);
+    Nostd::WString str;
+    stringify(*setting->current_value(), str);
+    str.push_back(L'/');
+    stringify(setting->last(), str);
+    str.push_back(L' ');
+    mvwaddwstr(window, y, x, str.c_str());
+    UI::end_color(window, color_on);
+
+    // val : 10 = max : min
+    int val = (10 * *setting->current_value()) / setting->last();
+
+    UI::start_color(window, color_off);
+    mvwaddch(window, y, next_x, '<');
+    UI::end_color(window, color_off);
+
+    UI::start_color(window, color_on);
+    for (int i = 0; i < val; i++)
+      mvwaddch(window, y, next_x + 1 + i, '=');
+    UI::end_color(window, color_on);
+    UI::start_color(window, color_off);
+    for (int i = val; i <= 10; i++)
+      mvwaddch(window, y, next_x + 1 + i, '=');
+    UI::end_color(window, color_off);
+
+    UI::start_color(window, color_off);
+    mvwaddch(window, y, next_x + 11, '>');
+    UI::end_color(window, color_off);
   }
 }
 

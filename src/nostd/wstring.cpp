@@ -73,13 +73,13 @@ void Nostd::WString::resize(size_t n) {
 // '\0' char, using the previously defined method
 void Nostd::WString::clear() { resize(0); }
 
-wchar_t &Nostd::WString::front() {
+wchar_t &Nostd::WString::front() const {
   if (empty())
     throw std::out_of_range("called WString::front on an empty string");
   return v[0];
 }
 
-wchar_t &Nostd::WString::back() {
+wchar_t &Nostd::WString::back() const {
   if (empty())
     throw std::out_of_range("called WString::back on an empty string");
   return v[sz - 2];
