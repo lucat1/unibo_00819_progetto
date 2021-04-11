@@ -79,7 +79,7 @@ wchar_t &Nostd::WString::front() {
   return v[0];
 }
 
-wchar_t Nostd::WString::front() const { return front(); }
+const wchar_t &Nostd::WString::front() const { return front(); }
 
 wchar_t &Nostd::WString::back() {
   if (empty())
@@ -87,7 +87,7 @@ wchar_t &Nostd::WString::back() {
   return v[sz - 2];
 }
 
-wchar_t Nostd::WString::back() const { return back(); }
+const wchar_t &Nostd::WString::back() const { return back(); }
 
 Nostd::WString &Nostd::WString::append(const Nostd::WString &str) {
   return insert(sz - 1, str);
