@@ -67,10 +67,11 @@ void Engine::UI::Choice::show(WINDOW *window, szu abs_x, szu y, szu max_width,
     UI::start_color(window, color_off);
     mvwaddwstr(window, y, x + 11, L">");
     UI::end_color(window, color_off);
+  } else {
+    mvwaddwstr(window, y, x, L"non-bool");
   }
 }
 
-Nostd::Pair<uint16_t, uint16_t> Engine::UI::Choice::size(szu max_width,
-                                                         szu max_height) {
+Engine::UI::Box::dim Engine::UI::Choice::size(szu max_width, szu max_height) {
   return {fr ? max_width : width, 1};
 }

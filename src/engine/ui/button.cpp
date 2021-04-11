@@ -30,7 +30,7 @@ void Engine::UI::Button::show(WINDOW *window, szu x, szu y, szu max_width,
   // draw the button's background
   auto sz = TextBox::size(text_max_sz.first, text_max_sz.second);
   start_color(window);
-  for (uint16_t i = 0; i < sz.second + 2; i++)
+  for (szu i = 0; i < sz.second + 2; i++)
     mvwhline(window, y + i + pt, x + pl, ' ', sz.first + 2 * side_padding);
   end_color(window);
 

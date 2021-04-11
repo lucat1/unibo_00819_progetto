@@ -22,6 +22,7 @@ namespace Engine {
 // its content and trigger a repaint on the ncurses' screen
 class Drawable {
 public:
+  using szu = uint16_t;
   // two kinds of objects we can draw into the main container
   // - menu: a series of Engine::UI elements used to form a TUI menu to change
   // settings, select maps and difficulty
@@ -44,7 +45,7 @@ public:
 protected:
   // the ncurses screen to draw upon
   WINDOW *window;
-  uint16_t width, height;
+  szu width, height;
   Kind drawable_kind = Kind::none;
 
 public:
@@ -52,7 +53,7 @@ public:
   virtual void handle_event(Event e);
   virtual bool is_over();
 
-  Drawable(WINDOW *window, uint16_t width, uint16_t height);
+  Drawable(WINDOW *window, szu width, szu height);
   virtual ~Drawable();
 };
 

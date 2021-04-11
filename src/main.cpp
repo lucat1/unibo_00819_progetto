@@ -19,8 +19,8 @@ int main() {
   handle(screen.open());
   screen.set_content<Menu::Main>();
   Nostd::Vector<Data::Setting> settings = {};
-  settings.push_back(Data::Setting(L"option 1", 0, 2, 1, 0, 1));
-  settings.push_back(Data::Setting(L"option 2", 0, 2, 1, 0));
+  settings.push_back(Data::Setting(L"Sound", 0, 2, 1, 0, 1));
+  settings.push_back(Data::Setting(L"Frames Per Second", 30, 3, 30, 1));
 
   int key = -1, running = true;
   while (running) {
