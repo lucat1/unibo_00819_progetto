@@ -13,7 +13,8 @@
 
 using Data::Database;
 
-constexpr wchar_t Database::separator, Database::escape, Database::newline;
+constexpr wchar_t Database::separator, Database::newline, Database::escape,
+    Database::newline_escape;
 
 std::basic_istream<wchar_t> &
 Data::get_CSV_WString(std::basic_istream<wchar_t> &is, Nostd::WString &s) {
