@@ -45,7 +45,7 @@ public:
   virtual Nostd::Vector<V> get_values() const = 0;
 
   /// Returns all the Key-Values pairs as Nostd::Vector<Nostd::Pair<K,V>>
-  virtual Nostd::Vector<Nostd::Pair<K, V>> as_vector() const = 0;
+  virtual Nostd::Vector<Nostd::Pair<const K, V> *> as_vector() const = 0;
 
   virtual size_t size() const = 0;
 

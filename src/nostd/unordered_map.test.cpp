@@ -12,10 +12,7 @@
 
 #include "test.hpp"
 #include "unordered_map.hpp"
-#include <algorithm>
 #include <cassert>
-#include <exception>
-#include <iostream>
 
 using namespace Nostd;
 
@@ -76,6 +73,10 @@ int main() {
     um.put(4, 10);
     um.put(1, 23);
     um.put(5, 111);
-    // todo
+    int max = -1;
+    for (auto x : um)
+      if (x->first > max)
+        max = x->first;
+    assert(max == 5);
   });
 }

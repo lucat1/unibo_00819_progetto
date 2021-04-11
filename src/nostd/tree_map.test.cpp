@@ -11,7 +11,6 @@
 
 #include "test.hpp"
 #include "tree_map.hpp"
-#include <algorithm>
 #include <cassert>
 
 using namespace Nostd;
@@ -135,8 +134,11 @@ int main() {
     tm.put(2, 5);
     tm.put(4, 10);
     tm.put(1, 23);
-    auto it = std::min_element(tm.begin(), tm.end());
-    assert((*it)->first == 4);
+    int max = -1;
+    for (auto x : tm)
+      if (x->first > max)
+        max = x->first;
+    assert(max == 4);
   });
 
   return 0;

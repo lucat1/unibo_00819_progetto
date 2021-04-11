@@ -108,12 +108,13 @@ private:
     }
 
     // Returns an in-order visit of a subtree
-    void in_order(TreeNode *node, Nostd::Vector<Nostd::Pair<const K, V>> &res) {
+    void in_order(TreeNode *node,
+                  Nostd::Vector<Nostd::Pair<const K, V> *> &res) {
       if (node == nullptr)
         return;
       in_order(node->left, res);
       res.push_back(
-          Nostd::Pair<const K, V>(node->data->first, node->data->second));
+          new Nostd::Pair<const K, V>(node->data->first, node->data->second));
       in_order(node->right, res);
     }
 
@@ -277,8 +278,8 @@ private:
 
     Nostd::Vector<V> get_values() { return get_elements(this->root); }
 
-    Nostd::Vector<Nostd::Pair<const K, V>> as_vector() {
-      Nostd::Vector<Nostd::Pair<const K, V>> res;
+    Nostd::Vector<Nostd::Pair<const K, V> *> as_vector() {
+      Nostd::Vector<Nostd::Pair<const K, V> *> res;
       in_order(this->root, res);
       return res;
     }
@@ -328,7 +329,6 @@ private:
           TreeNode *r = get_root(ptr);
           ptr = get_successor(r, ptr->get_key());
         }
-        // todo check for nullptr
         return *this;
       }
 
@@ -378,7 +378,7 @@ public:
     this->tree->root = nullptr;
   }
 
-  Nostd::Vector<Nostd::Pair<const K, V>> as_vector() const override {
+  Nostd::Vector<Nostd::Pair<const K, V> *> as_vector() const override {
     return this->tree->as_vector();
   }
 
