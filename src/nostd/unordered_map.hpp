@@ -26,23 +26,23 @@ namespace Nostd {
 
 template <typename K, typename V> class UnorderedMap : public Map<K, V> {
 private:
-  mutable Nostd::Vector<Nostd::Pair<K, V>> data;
+  mutable Nostd::Vector<Nostd::Pair<const K, V>> data;
 
 public:
-  using iterator = typename Nostd::Vector<Nostd::Pair<K, V>>::iterator;
+  using iterator = typename Nostd::Vector<Nostd::Pair<const K, V>>::iterator;
   using reverse_iterator =
-      typename Nostd::Vector<Nostd::Pair<K, V>>::reverse_iterator;
+      typename Nostd::Vector<Nostd::Pair<const K, V>>::reverse_iterator;
   using const_iterator =
-      const typename Nostd::Vector<Nostd::Pair<K, V>>::const_iterator;
-  using const_reverse_iterator =
-      const typename Nostd::Vector<Nostd::Pair<K, V>>::const_reverse_iterator;
+      const typename Nostd::Vector<Nostd::Pair<const K, V>>::const_iterator;
+  using const_reverse_iterator = const typename Nostd::Vector<
+      Nostd::Pair<const K, V>>::const_reverse_iterator;
 
   UnorderedMap() {}
 
   // Add new key and value to the map
   void put(K key, V value) override {
     for (size_t i = 0; i < data.size(); i++) {
-      Nostd::Pair<K, V> x = data[i];
+      Nostd::Pair<const K, V> x = data[i];
       if (x.first == key) {
         x.second = value;
         return;
@@ -54,7 +54,7 @@ public:
   void remove(K key) override {
     for (size_t i = 0; i < this->data.size(); i++)
       if (data[i].first == key) {
-        data.erase(i);
+        //   data.erase(i);
         return;
       }
   }
@@ -77,7 +77,7 @@ public:
     return res;
   }
 
-  Nostd::Vector<Nostd::Pair<K, V>> as_vector() const override {
+  Nostd::Vector<Nostd::Pair<const K, V>> as_vector() const override {
     return this->data;
   }
 
