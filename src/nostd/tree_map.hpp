@@ -10,9 +10,7 @@
   In this file you'll find the implementation of:
     - struct TreeNode: The BST's kernel.
     - class Tree: A class delegate used by TreeMap to use the BST.
-    - class Tree::Iterator: A foward-iterator for Tree class. Note that
-      the STL implementation of std::map (in which Nostd::TreeMap is based on)
-      uses a bidirectional-iterator.
+    - class Tree::Iterator: A foward-iterator for Tree class.
     - class TreeMap<K, V>: Extending Nostd::Map this class provides all the
   methods for the end user.
 
@@ -20,6 +18,14 @@
 
   Warning: Key types must have '<', '>', '==' and '!=' operator defined
   Warining: It does not allow duplicates
+
+  Notes about Tree::Iterator:
+  Note that the STL implementation of std::map (in which Nostd::TreeMap is based
+  on) uses a bidirectional-iterator. This implementation is complex in terms of
+  time. Going foward to the next element in the worst case has a cost of O(n)
+  where n is the number of elements. This could be avoided using a Red-Black
+  Tree instead of the Binary Search Tree. This choice was made for keeping the
+  complexity of the class low.
 */
 
 #ifndef NOSTD_TREEMAP_HPP
@@ -350,6 +356,7 @@ private:
 
 public:
   using Iterator = typename Tree::Iterator;
+  using ConstIterator = const Iterator;
 
   TreeMap() { this->tree = new Tree(); }
 
@@ -385,6 +392,10 @@ public:
   Iterator begin() { return Iterator(this->tree->min()); }
 
   Iterator end() { return Iterator(this->tree->max()->right); }
+
+  ConstIterator cbegin() const { return Iterator(this->tree->min()); }
+
+  ConstIterator cend() const { return Iterator(this->tree->max()->right); }
 };
 
 } // namespace Nostd

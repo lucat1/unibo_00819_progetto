@@ -26,7 +26,7 @@ namespace Nostd {
 
 template <typename K, typename V> class UnorderedMap : public Map<K, V> {
 private:
-  mutable Nostd::Vector<Nostd::Pair<const K, V> *> data;
+  Nostd::Vector<Nostd::Pair<const K, V> *> data;
 
 public:
   using iterator = typename Nostd::Vector<Nostd::Pair<const K, V> *>::iterator;
