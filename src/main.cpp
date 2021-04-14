@@ -22,7 +22,8 @@ int main() {
   settings.push_back(Data::Setting(L"Sound", 0, 2, 1, 0, 1));
   settings.push_back(Data::Setting(L"Frames Per Second", 30, 3, 30, 1));
 
-  int key = -1, running = true;
+  int key = -1;
+  bool running = true;
   while (running) {
     // quit if usleep returns an error
     if (usleep(1000000 / 25)) // 25fps

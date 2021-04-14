@@ -28,8 +28,8 @@ namespace UI {
 // caller
 class Choice : public Box {
 private:
-  Data::Setting *setting;
-  bool boolean;
+  Data::Setting *setting = nullptr;
+  bool boolean = false;
   szu width;
 
 public:

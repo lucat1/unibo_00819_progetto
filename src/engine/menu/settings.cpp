@@ -25,7 +25,6 @@ Engine::Color settings_button_fg = Engine::Color::red,
 
 void Engine::Menu::Settings::alloc_updated(
     Nostd::Vector<Data::Setting> &settings) {
-  updated.clear();
   for (auto setting : settings)
     updated.push_back(new Data::Setting(setting));
 }
@@ -76,6 +75,8 @@ Engine::Menu::Settings::Settings(WINDOW *window,
 Engine::Menu::Settings::~Settings() {
   for (auto setting : updated)
     delete setting;
+  updated.clear();
+  original.clear();
 }
 
 Box *Engine::Menu::Settings::generate() {
