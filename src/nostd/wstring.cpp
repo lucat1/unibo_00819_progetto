@@ -79,11 +79,15 @@ wchar_t &Nostd::WString::front() {
   return v[0];
 }
 
+const wchar_t &Nostd::WString::front() const { return front(); }
+
 wchar_t &Nostd::WString::back() {
   if (empty())
     throw std::out_of_range("called WString::back on an empty string");
   return v[sz - 2];
 }
+
+const wchar_t &Nostd::WString::back() const { return back(); }
 
 Nostd::WString &Nostd::WString::append(const Nostd::WString &str) {
   return insert(sz - 1, str);

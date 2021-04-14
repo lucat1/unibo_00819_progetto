@@ -40,7 +40,7 @@ private:
   WINDOW *stdscreen, *outer_box, *container;
   // x, y are the offest from the screen (left, top) to start printing inside
   // the game container
-  uint16_t x, y, terminal_cols, terminal_lines;
+  Drawable::szu x, y, terminal_cols, terminal_lines;
   // checks if the terminal window is big enough to make the content fit
   bool can_fit();
 
@@ -49,8 +49,8 @@ private:
   void clear_content();
 
 public:
-  static const uint16_t SCREEN_COLS = 80;
-  static const uint16_t SCREEN_LINES = 25;
+  static const Drawable::szu SCREEN_COLS = 80;
+  static const Drawable::szu SCREEN_LINES = 25;
 
   Screen();
   ~Screen();

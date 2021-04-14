@@ -11,34 +11,30 @@
   interaction with the UI.
 */
 #include "main.hpp"
-#include "../ui/append.hpp"
 #include "../ui/center.hpp"
 
 using Engine::UI::Box;
 
-Engine::UI::Logo *Engine::Menu::Main::append_logo(Box *parent) {
-  auto container = UI::append<UI::Box>(parent);
-  container->props(Box::Property::padding_bottom, 2);
-
-  auto logo = UI::append<UI::Logo>(container);
-  return logo;
-}
-
 Engine::UI::Button *Engine::Menu::Main::append_button(Box *parent,
                                                       const wchar_t *str) {
-  auto btn = UI::append<UI::Button, const wchar_t *>(parent, str);
+  auto center = parent->append<UI::Center>();
+  center->propb(Box::Property::center_horizontal, true);
+  auto btn = center->append<UI::Button, const wchar_t *>(str);
   unfocus(btn);
   return btn;
 }
 
 Box *Engine::Menu::Main::generate() {
-  auto root = new UI::Center(width, height);
-  auto center = UI::append<UI::Center>(root);
-  center->propb(Box::Property::center_horizontal, true);
-  append_logo(center);
+  auto root = new UI::Center();
 
-  auto btn_container = UI::append<UI::Center>(center);
-  btn_container->propb(Box::Property::center_horizontal, true);
+  // logo
+  auto center = root->append<UI::Center>();
+  center->propb(Box::Property::center_horizontal, true);
+  center->props(Box::Property::padding_bottom, 2);
+  center->append<UI::Logo>();
+
+  // buttons
+  auto btn_container = root->append<UI::Box>();
   auto play = append_button(btn_container, L"Play");
   play->props(Box::Property::padding_bottom, 1);
   auto settings = append_button(btn_container, L"Settings");
@@ -53,9 +49,9 @@ Box *Engine::Menu::Main::generate() {
 // `child` calls and a counter would not work in a more complex element tree
 // where the fous items are scattered around and not all contained neatly under
 // the same parent.
-Box *Engine::Menu::Main::focus_start() { return root->child(0)->child(1); }
-
-Box *Engine::Menu::Main::curr_box() { return focus_start()->child(focused); }
+Box *Engine::Menu::Main::curr_box() {
+  return root->child(1)->child(focused)->child(0);
+}
 
 Box *Engine::Menu::Main::next_box() {
   // if we are at the last element go to the top, otherwhise increment
@@ -84,9 +80,14 @@ void Engine::Menu::Main::unfocus(Box *box) {
 
 void Engine::Menu::Main::interact(Box *) { clicked_on = focused; }
 
+// no behaviour defiend for the main menu
+void Engine::Menu::Main::decrement(Box *) {}
+void Engine::Menu::Main::increment(Box *) {}
+
 bool Engine::Menu::Main::is_over() { return clicked_on != -1; }
 
 Engine::Menu::Main::Result Engine::Menu::Main::get_result() {
-  Result actions[] = {Result::play, Result::settings, Result::quit};
-  return actions[clicked_on];
+  Result actions[] = {Result ::none, Result::play, Result::settings,
+                      Result::quit};
+  return actions[clicked_on + 1];
 }
