@@ -2,6 +2,7 @@
 #define NOSTD_VECTOR_HPP
 
 #include "allocator.hpp"
+#include <algorithm>
 #include <iterator>
 #include <stdexcept>
 
@@ -66,7 +67,8 @@ public:
   }
   // it is constructor that creates a vector with size elements and size * 1.5
   // capacity copying size times the ele value into the vector
-  Vector(size_t size, V ele, const allocator_type &alloc = allocator_type()) {
+  Vector(size_t size, const V &ele,
+         const allocator_type &alloc = allocator_type()) {
     all_elems = alloc;
     allocate_v(size);
     construct_v(size, ele);
@@ -164,7 +166,7 @@ public:
 
   // Resize the container so that it contain n elements
   void resize(size_t n, V val = V()) {
-    size_t old_sz = sz, old_cap = cap, n_copies = n < sz ? n : sz;
+    size_t old_sz = sz, old_cap = cap, n_copies = std::min(n, sz);
     sz = n;
     calc_cap();
 

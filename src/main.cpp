@@ -45,6 +45,7 @@ int main() {
         }
       } else if (screen.is_content<Menu::Settings>()) {
         // do something when the settings menu is closed
+        settings = screen.get_content<Menu::Settings>()->get_result();
         screen.set_content<Menu::Main>();
       }
     }

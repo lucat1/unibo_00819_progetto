@@ -25,6 +25,7 @@ Engine::Color settings_button_fg = Engine::Color::red,
 
 void Engine::Menu::Settings::alloc_updated(
     Nostd::Vector<Data::Setting> &settings) {
+  updated.clear();
   for (auto setting : settings)
     updated.push_back(new Data::Setting(setting));
 }
@@ -32,7 +33,7 @@ void Engine::Menu::Settings::alloc_updated(
 Nostd::Vector<Data::Setting> Engine::Menu::Settings::dereference_updated() {
   Nostd::Vector<Data::Setting> res(updated.size());
   for (size_t i = 0; i < updated.size(); i++)
-    res[i] = *updated[i];
+    res[i] = Data::Setting(*updated[i]);
 
   return res;
 }
