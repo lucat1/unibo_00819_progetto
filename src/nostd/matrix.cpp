@@ -253,7 +253,8 @@ Nostd::Matrix<T, Alloc>::Matrix(Matrix &&m)
     : all_elems{m.all_elems}, all_exts{m.all_exts}, ord{m.ord}, exts{m.exts},
       elems{m.elems}, sz{m.sz} {
   m.ord = 0;
-  m.exts = m.elems = nullptr;
+  m.exts = nullptr;
+  m.elems = nullptr;
 }
 
 template <class T, class Alloc>
@@ -277,7 +278,8 @@ auto Nostd::Matrix<T, Alloc>::Matrix::operator=(Matrix &&m) -> Matrix & {
   elems = m.elems;
 
   m.ord = m.sz = 0;
-  m.exts = m.elems = nullptr;
+  m.exts = nullptr;
+  m.elems = nullptr;
   return *this;
 }
 
