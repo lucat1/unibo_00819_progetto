@@ -20,11 +20,11 @@
   Warining: It does not allow duplicates
 
   Notes about Tree::Iterator:
-  Note that the STL implementation of std::map (in which Nostd::TreeMap is based
-  on) uses a bidirectional-iterator. This implementation is complex in terms of
-  time. Going foward to the next element in the worst case has a cost of O(n)
+  Note that the STL implementation of std::map (on which Nostd::TreeMap is based
+  upon) uses a bidirectional-iterator. This implementation is complex in terms
+  of time. Going foward to the next element in the worst case has a cost of O(n)
   where n is the number of elements. This could be avoided using a Red-Black
-  Tree instead of the Binary Search Tree. This choice was made for keeping the
+  Tree instead of the Binary Search Tree. This choice was made to keep the
   complexity of the class low.
 */
 
@@ -63,6 +63,8 @@ private:
         this->right = r;
         this->data = Nostd::Pair<const K, V>(key, value);
       }
+
+      ~TreeNode() { delete data; }
 
       const K get_key() { return this->data->first; }
       V get_value() const { return this->data->second; }
