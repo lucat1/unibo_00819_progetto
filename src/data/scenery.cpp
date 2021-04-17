@@ -23,7 +23,11 @@ std::basic_istream<wchar_t> &Data::operator>>(std::basic_istream<wchar_t> &i,
   i.ignore();
   i >> a.left >> a.center >> a.right;
   i.ignore();
-  return i >> a.bottom_left >> a.bottom >> a.bottom_right;
+  short foreground, background;
+  i >> a.bottom_left >> a.bottom >> a.bottom_right >> foreground >> background;
+  a.foreground = Engine::short_to_color(foreground);
+  a.background = Engine::short_to_color(background);
+  return i;
 }
 
 std::basic_istream<wchar_t> &Data::operator>>(std::basic_istream<wchar_t> &i,

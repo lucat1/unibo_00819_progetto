@@ -25,7 +25,7 @@ namespace Data {
   represented in a neat, visual fashion.
 */
 enum class MapUnit : char {
-  nothing = ' ',
+  nothing = '.',
   ground = '#',
   platform = '=',
   enemy = '!',
