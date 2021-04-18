@@ -145,8 +145,6 @@ std::basic_istream<wchar_t> &Data::operator>>(std::basic_istream<wchar_t> &is,
   int start, stride;
   size_t size, default_index;
   get_CSV_WString(is, label) >> start >> size >> stride >> default_index;
-  while (!(is.eof() || is.get() == Database::newrecord))
-    ;
   s = Setting(label, start, size, stride, default_index);
   return is;
 }

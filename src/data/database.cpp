@@ -50,8 +50,7 @@ const Vector<Scenery> &Database::sceneries() const noexcept { return sce; }
 std::basic_istream<wchar_t> &
 Data::get_CSV_WString(std::basic_istream<wchar_t> &is, Nostd::WString &s) {
   s.clear();
-  wchar_t input;
-  while ((input = is.get()) != separator && input != newrecord) {
+  while (is.peek() != separator && is.peek() != newrecord) {
     s.push_back(is.get());
     if (s.back() == escape)
       is.get(s.back());
@@ -65,7 +64,7 @@ Data::put_CSV_WString(std::basic_ostream<wchar_t> &os,
   for (auto x : s) {
     if (x == separator || x == newrecord)
       os << escape;
-    os << escape;
+    os << x;
   }
   return os;
 }
