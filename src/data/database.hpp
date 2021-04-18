@@ -30,8 +30,7 @@ namespace Data {
 */
 class Database {
 public:
-  constexpr static wchar_t separator{','}, newline{'\n'}, escape{'\\'},
-      newline_escape{'n'};
+  constexpr static wchar_t separator{','}, escape{'\\'}, newline_escape{'n'};
 
   Database() = delete;            // cannot constructs a database from nothing
   Database(const char *filename); // loads from the filesystem
@@ -53,6 +52,12 @@ public:
 
   Nostd::Vector<Scenery> &sceneries() noexcept;
   const Nostd::Vector<Scenery> &sceneries() const noexcept;
+
+private:
+  Nostd::Vector<Result> res;
+  Nostd::Vector<Setting> set;
+  Nostd::Vector<Map> map;
+  Nostd::Vector<Scenery> sce;
 };
 
 std::basic_istream<wchar_t> &get_CSV_WString(std::basic_istream<wchar_t> &,
