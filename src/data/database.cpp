@@ -54,12 +54,11 @@ void Database::load_configuration() { std::ifstream ifs{conf}; }
 std::basic_istream<wchar_t> &
 Data::get_CSV_WString(std::basic_istream<wchar_t> &is, Nostd::WString &s) {
   s.clear();
-  const auto &separator = Database::separator;
-  const auto &newrecord = Database::newrecord;
-  const auto &escape = Database::escape;
-  while (is.peek() != separator && is.peek() != newrecord) {
-    s.push_back(is.get());
-    if (s.back() == escape)
+  wchar_t input;
+  while (!is.eof() && (input = is.get()) != Database::separator &&
+         input != Database::newrecord) {
+    s.push_back(input);
+    if (s.back() == Database::escape)
       is.get(s.back());
   }
   return is;
@@ -68,12 +67,9 @@ Data::get_CSV_WString(std::basic_istream<wchar_t> &is, Nostd::WString &s) {
 std::basic_ostream<wchar_t> &
 Data::put_CSV_WString(std::basic_ostream<wchar_t> &os,
                       const Nostd::WString &s) {
-  const auto &separator = Database::separator;
-  const auto &newrecord = Database::newrecord;
-  const auto &escape = Database::escape;
   for (auto x : s) {
-    if (x == separator || x == newrecord)
-      os << escape;
+    if (x == Database::separator || x == Database::newrecord)
+      os << Database::escape;
     os << x;
   }
   return os;
