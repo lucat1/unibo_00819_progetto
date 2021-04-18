@@ -11,15 +11,17 @@
 
 #include "database.hpp"
 
+#include <cstring>
+#include <fstream>
+
 using namespace Data;
 using Nostd::Vector;
-const auto &separator = Database::separator;
-const auto &newrecord = Database::newrecord;
-const auto &escape = Database::escape;
 
 constexpr wchar_t Database::separator, Database::newrecord, Database::escape;
 
-Database::Database(const char *filename) {
+Database::Database(const char *configuration) {
+  conf = new char[std::strlen(configuration) + 1];
+  std::strcpy(conf, configuration);
   // TODO
 }
 
@@ -47,9 +49,14 @@ Vector<Scenery> &Database::sceneries() noexcept { return sce; }
 
 const Vector<Scenery> &Database::sceneries() const noexcept { return sce; }
 
+void Database::load_configuration() { std::ifstream ifs{conf}; }
+
 std::basic_istream<wchar_t> &
 Data::get_CSV_WString(std::basic_istream<wchar_t> &is, Nostd::WString &s) {
   s.clear();
+  const auto &separator = Database::separator;
+  const auto &newrecord = Database::newrecord;
+  const auto &escape = Database::escape;
   while (is.peek() != separator && is.peek() != newrecord) {
     s.push_back(is.get());
     if (s.back() == escape)
@@ -61,6 +68,9 @@ Data::get_CSV_WString(std::basic_istream<wchar_t> &is, Nostd::WString &s) {
 std::basic_ostream<wchar_t> &
 Data::put_CSV_WString(std::basic_ostream<wchar_t> &os,
                       const Nostd::WString &s) {
+  const auto &separator = Database::separator;
+  const auto &newrecord = Database::newrecord;
+  const auto &escape = Database::escape;
   for (auto x : s) {
     if (x == separator || x == newrecord)
       os << escape;

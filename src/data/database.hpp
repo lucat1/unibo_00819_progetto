@@ -32,8 +32,8 @@ class Database {
 public:
   constexpr static wchar_t separator{','}, newrecord{'\n'}, escape{'\\'};
 
-  Database() = delete;            // cannot constructs a database from nothing
-  Database(const char *filename); // loads from the filesystem
+  Database() = delete; // cannot constructs a database from nothing
+  Database(const char *configuration); // loads .conf file from the filesystem
   Database(Database &&) = default;
   Database &operator=(Database &&) = default;
   Database(const Database &) = default;
@@ -54,10 +54,13 @@ public:
   const Nostd::Vector<Scenery> &sceneries() const noexcept;
 
 private:
+  char *conf, *ass, *scor;
   Nostd::Vector<Result> res;
   Nostd::Vector<Setting> set;
   Nostd::Vector<Map> map;
   Nostd::Vector<Scenery> sce;
+
+  void load_configuration();
 };
 
 std::basic_istream<wchar_t> &get_CSV_WString(std::basic_istream<wchar_t> &,
