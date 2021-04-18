@@ -55,7 +55,7 @@ class Vector {
   }
 
  public:
-  // Constructs an empty container, with no elements.
+  // Constructs an empty container, with no elements
   Vector(const allocator_type& alloc = allocator_type()) {
     all_elems = alloc;
     allocate_v(0);
@@ -65,6 +65,15 @@ class Vector {
     all_elems = alloc;
     allocate_v(size);
   }
+
+  // Returns a reference to the first element in the vector
+  V& front() { return v[0]; }
+  const V& front() const { return v[0]; }
+
+  // Returns a reference to the last element in the vector
+  V& back() { return v[sz - 1]; }
+  const V& back() const { return v[sz - 1]; }
+
   // it is constructor that creates a vector with size elements and size * 1.5
   // capacity copying size times the ele value into the vector
   Vector(size_t size,
