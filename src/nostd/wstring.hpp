@@ -13,10 +13,10 @@
 #ifndef NOSTD_WSTRING_HPP
 #define NOSTD_WSTRING_HPP
 
-#include "vector.hpp"
 #include <cwchar>
 #include <istream>
 #include <ostream>
+#include "vector.hpp"
 
 namespace Nostd {
 
@@ -33,7 +33,7 @@ namespace Nostd {
 class WString : public Vector<wchar_t> {
   using Vector::allocator_type;
 
-public:
+ public:
   // index used to mean two concepts:
   // - run an operation to the end of the string (be it a copy, substring, etc)
   // - no references of the searched substring were found (relative to the found
@@ -41,26 +41,29 @@ public:
   static const size_t npos = -1;
 
   // constructs an empty WString
-  explicit WString(const allocator_type &alloc = allocator_type());
+  explicit WString(const allocator_type& alloc = allocator_type());
   // construct a WString from another WString copying its content
-  WString(const WString &str, const allocator_type &alloc = allocator_type());
+  WString(const WString& str, const allocator_type& alloc = allocator_type());
   // construct a WString from another WString from start to start+len
-  WString(const WString &str, size_t start, size_t len = npos,
-          const allocator_type &alloc = allocator_type());
+  WString(const WString& str,
+          size_t start,
+          size_t len = npos,
+          const allocator_type& alloc = allocator_type());
   // constructs a WString from a c-style string
-  WString(const wchar_t *str, const allocator_type &alloc = allocator_type());
+  WString(const wchar_t* str, const allocator_type& alloc = allocator_type());
   // constructs a WString from a c-style string limiting its length
-  WString(const wchar_t *str, size_t len,
-          const allocator_type &alloc = allocator_type());
+  WString(const wchar_t* str,
+          size_t len,
+          const allocator_type& alloc = allocator_type());
   // construct a WString from another _temporary_ WString copying its content
-  WString(WString &&str, const allocator_type &alloc = allocator_type());
+  WString(WString&& str, const allocator_type& alloc = allocator_type());
 
   // checks whether the WString is empty
   bool empty() const;
   // returns the underlying wchar_t vector
-  wchar_t *c_str() const;
+  wchar_t* c_str() const;
   // returns the underlying wchar_t vector
-  wchar_t *data() const;
+  wchar_t* data() const;
   // returns the length of the stored string
   size_t length() const;
   // returns the maximum length of a string imposed by hardware limitatinos
@@ -70,46 +73,47 @@ public:
   void resize(size_t n);
   // clears the string content
   void clear();
-  // returns the frist char in the string
-  wchar_t &front();
-  const wchar_t &front() const;
-  // returns the last char in the string
-  wchar_t &back();
-  const wchar_t &back() const;
+  // returns a reference to the last character of the string
+  wchar_t& back();
+  const wchar_t& back() const;
   // appends another WString at the end of this instance (copying its contents)
-  WString &append(const WString &str);
+  WString& append(const WString& str);
   // appends a copy of a wchar_t* at the end of this instance
-  WString &append(const wchar_t *str);
+  WString& append(const wchar_t* str);
   // postpends a charter to the string
   void push_back(const wchar_t c);
   // inserts a WString in between the current string instance, copying it
-  WString &insert(size_t start, const WString &str, size_t substart = 0,
+  WString& insert(size_t start,
+                  const WString& str,
+                  size_t substart = 0,
                   size_t subend = npos);
   // inserts the chars of a wchar_t* in between the current string
-  WString &insert(size_t start, const wchar_t *str, size_t len = npos);
+  WString& insert(size_t start, const wchar_t* str, size_t len = npos);
   // inserts the a wchar_t at the given position in the string
-  WString &insert(size_t start, const wchar_t c);
+  WString& insert(size_t start, const wchar_t c);
 
   // compares the two WStrings
-  int compare(WString &str) const;
+  int compare(WString& str) const;
   // compares the two WStrings with an offset and only up to a given length
-  int compare(size_t start, size_t len, WString &str) const;
+  int compare(size_t start, size_t len, WString& str) const;
   // compares this instance with a given string
-  int compare(const wchar_t *str) const;
+  int compare(const wchar_t* str) const;
   // compares this instance with a given string, starting from a start index and
   // only computing n checks
-  int compare(size_t start, size_t len, const wchar_t *str,
+  int compare(size_t start,
+              size_t len,
+              const wchar_t* str,
               size_t n = npos) const;
   // looks for the given WString sequence starting from the given index and
   // returns the position of the subsequence if found, npos otherwhise
-  size_t find(WString &seq, size_t start = 0) const;
+  size_t find(WString& seq, size_t start = 0) const;
   // looks for the given wchar_t* sequence starting from the given index and
   // returns the position of the subsequence if found, npos otherwhise
-  size_t find(const wchar_t *seq, size_t start = 0) const;
+  size_t find(const wchar_t* seq, size_t start = 0) const;
   // looks for the given wchar_t* sequence starting from the given index and
   // returns the position of the subsequence if found, npos otherwhise. It also
   // makes sure to only check n chars from the starting position.
-  size_t find(const wchar_t *seq, size_t start, size_t n) const;
+  size_t find(const wchar_t* seq, size_t start, size_t n) const;
   // looks for the given wchar_t char starting from the given index and returns
   // the position of the first occourence if any, npos otherwhise.
   size_t find(const wchar_t c, size_t start = 0) const;
@@ -123,24 +127,24 @@ public:
 
   // various operators
 
-  WString &operator=(const WString &str);
-  WString &operator=(WString &&str);
-  WString &operator=(const wchar_t *str);
-  WString &operator=(const wchar_t c);
-  WString &operator+=(const WString &str);
-  WString &operator+=(const wchar_t *str);
-  WString &operator+=(const wchar_t c);
+  WString& operator=(const WString& str);
+  WString& operator=(WString&& str);
+  WString& operator=(const wchar_t* str);
+  WString& operator=(const wchar_t c);
+  WString& operator+=(const WString& str);
+  WString& operator+=(const wchar_t* str);
+  WString& operator+=(const wchar_t c);
 };
 
 bool iswspace(wchar_t c);
 
-std::basic_ostream<wchar_t> &operator<<(std::basic_ostream<wchar_t> &os,
-                                        const WString &str);
-std::basic_istream<wchar_t> &operator>>(std::basic_istream<wchar_t> &os,
-                                        WString &str);
-std::basic_istream<wchar_t> &getline(std::basic_istream<wchar_t> &os,
-                                     WString &str);
+std::basic_ostream<wchar_t>& operator<<(std::basic_ostream<wchar_t>& os,
+                                        const WString& str);
+std::basic_istream<wchar_t>& operator>>(std::basic_istream<wchar_t>& os,
+                                        WString& str);
+std::basic_istream<wchar_t>& getline(std::basic_istream<wchar_t>& os,
+                                     WString& str);
 
-} // namespace Nostd
+}  // namespace Nostd
 
-#endif // NOSTD_WSTRING_HPP
+#endif  // NOSTD_WSTRING_HPP
