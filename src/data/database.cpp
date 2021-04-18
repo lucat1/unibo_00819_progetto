@@ -13,9 +13,11 @@
 
 using namespace Data;
 using Nostd::Vector;
+const auto &separator = Database::separator;
+const auto &newrecord = Database::newrecord;
+const auto &escape = Database::escape;
 
-constexpr wchar_t Database::separator, Database::escape,
-    Database::newline_escape;
+constexpr wchar_t Database::separator, Database::newrecord, Database::escape;
 
 Database::Database(const char *filename) {
   // TODO
@@ -47,11 +49,23 @@ const Vector<Scenery> &Database::sceneries() const noexcept { return sce; }
 
 std::basic_istream<wchar_t> &
 Data::get_CSV_WString(std::basic_istream<wchar_t> &is, Nostd::WString &s) {
-  return is; // TODO
+  s.clear();
+  wchar_t input;
+  while ((input = is.get()) != separator && input != newrecord) {
+    s.push_back(is.get());
+    if (s.back() == escape)
+      is.get(s.back());
+  }
+  return is;
 }
 
 std::basic_ostream<wchar_t> &
 Data::put_CSV_WString(std::basic_ostream<wchar_t> &os,
                       const Nostd::WString &s) {
-  return os; // TODO
+  for (auto x : s) {
+    if (x == separator || x == newrecord)
+      os << escape;
+    os << escape;
+  }
+  return os;
 }

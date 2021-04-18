@@ -30,7 +30,7 @@ namespace Data {
 */
 class Database {
 public:
-  constexpr static wchar_t separator{','}, escape{'\\'}, newline_escape{'n'};
+  constexpr static wchar_t separator{','}, newrecord{'\n'}, escape{'\\'};
 
   Database() = delete;            // cannot constructs a database from nothing
   Database(const char *filename); // loads from the filesystem
