@@ -89,9 +89,9 @@ public:
   WString &insert(size_t start, const wchar_t c);
 
   // compares the two WStrings
-  int compare(WString &str) const;
+  int compare(const WString &str) const;
   // compares the two WStrings with an offset and only up to a given length
-  int compare(size_t start, size_t len, WString &str) const;
+  int compare(size_t start, size_t len, const WString &str) const;
   // compares this instance with a given string
   int compare(const wchar_t *str) const;
   // compares this instance with a given string, starting from a start index and

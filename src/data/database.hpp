@@ -15,6 +15,7 @@
 #include <istream>
 #include <ostream>
 
+#include "../nostd/unordered_map.hpp"
 #include "../nostd/vector.hpp"
 #include "../nostd/wstring.hpp"
 #include "map.hpp"
@@ -31,9 +32,11 @@ namespace Data {
 class Database {
 public:
   constexpr static wchar_t separator{','}, newrecord{'\n'}, escape{'\\'};
+  constexpr const static char *const settings_rel_fp{"/csv/settings.csv"};
 
   Database() = delete; // cannot constructs a database from nothing
-  Database(const char *configuration); // loads .conf file from the filesystem
+  Database(const char *configuration, const char *assets,
+           const char *scoreboard);
   Database(Database &&) = default;
   Database &operator=(Database &&) = default;
   Database(const Database &) = default;
@@ -54,13 +57,15 @@ public:
   const Nostd::Vector<Scenery> &sceneries() const noexcept;
 
 private:
-  char *conf, *ass, *scor;
-  Nostd::Vector<Result> res;
-  Nostd::Vector<Setting> set;
-  Nostd::Vector<Map> map;
-  Nostd::Vector<Scenery> sce;
+  char *conf, *scor;
+  Nostd::Vector<Result> res{};
+  Nostd::Vector<Setting> set{};
+  Nostd::Vector<Map> map{};
+  Nostd::Vector<Scenery> sce{};
 
-  void load_configuration();
+  char *newstrcpy(const char *) const;
+  char *newstrcat(const char *, const char *) const;
+  void load_settings(const char *assets_filepath);
 };
 
 std::basic_istream<wchar_t> &get_CSV_WString(std::basic_istream<wchar_t> &,

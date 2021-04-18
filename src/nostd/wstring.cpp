@@ -135,11 +135,11 @@ Nostd::WString &Nostd::WString::insert(size_t start, const wchar_t c) {
   return insert(start, str);
 }
 
-int Nostd::WString::compare(Nostd::WString &str) const {
+int Nostd::WString::compare(const Nostd::WString &str) const {
   return compare(0, str.length(), str.c_str());
 }
 int Nostd::WString::compare(size_t start, size_t len,
-                            Nostd::WString &str) const {
+                            const Nostd::WString &str) const {
   return compare(start, len, str.c_str());
 }
 int Nostd::WString::compare(const wchar_t *str) const {

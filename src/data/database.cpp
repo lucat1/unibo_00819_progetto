@@ -15,13 +15,15 @@
 #include <fstream>
 
 using namespace Data;
+using Nostd::UnorderedMap;
 using Nostd::Vector;
+using Nostd::WString;
 
 constexpr wchar_t Database::separator, Database::newrecord, Database::escape;
 
-Database::Database(const char *configuration) {
-  conf = new char[std::strlen(configuration) + 1];
-  std::strcpy(conf, configuration);
+Database::Database(const char *configuration, const char *assets,
+                   const char *scoreboard)
+    : conf{newstrcpy(configuration)}, scor{newstrcpy(scoreboard)} {
   // TODO
 }
 
@@ -49,11 +51,43 @@ Vector<Scenery> &Database::sceneries() noexcept { return sce; }
 
 const Vector<Scenery> &Database::sceneries() const noexcept { return sce; }
 
-void Database::load_configuration() { std::ifstream ifs{conf}; }
+char *Database::newstrcpy(const char *str) const {
+  return std::strcpy(new char[std::strlen(str) + 1], str);
+}
+
+char *Database::newstrcat(const char *str1, const char *str2) const {
+  return std::strcat(
+      std::strcpy(new char[std::strlen(str1) + std::strlen(str2) + 1], str1),
+      str2);
+}
+
+void Database::load_settings(const char *assets_filepath) {
+  // game settings
+  const char *const settings_fp{newstrcat(assets_filepath, settings_rel_fp)};
+  std::wifstream wifs{settings_fp};
+  Setting s;
+  while (wifs >> s)
+    set.push_back(s);
+  wifs.close();
+  // current values
+  wifs.open(conf);
+  WString key;
+  while (get_CSV_WString(wifs, key)) {
+    for (auto &s : set)
+      if (!key.compare(s.label())) {
+        size_t value;
+        wifs >> value;
+        s.set(s.begin() + value);
+        break;
+      }
+    wifs.ignore(); // \n
+  }
+  wifs.close();
+}
 
 std::basic_istream<wchar_t> &
 Data::get_CSV_WString(std::basic_istream<wchar_t> &is, Nostd::WString &s) {
-  s.clear();
+  s = WString{};
   wchar_t input;
   while (!is.eof() && (input = is.get()) != Database::separator &&
          input != Database::newrecord) {

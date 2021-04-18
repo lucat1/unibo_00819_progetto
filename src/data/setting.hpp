@@ -74,7 +74,7 @@ public:
     size_t pos{0};
   };
 
-  Setting() = delete;
+  Setting() = default; // boolean unnamed setting
   // label: name of the Setting
   // start: lowest possible value
   // size: number of possible values (cannot be 0)
@@ -120,8 +120,8 @@ public:
 
 private:
   Nostd::WString lbl;
-  int strt, strd;
-  size_t sz, def_ind, curr_ind;
+  int strt{0}, strd{1};
+  size_t sz{2}, def_ind{0}, curr_ind{0};
 };
 
 // The two following methods ignore the setting's current value and work with
