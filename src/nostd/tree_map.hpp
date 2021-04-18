@@ -128,22 +128,21 @@ private:
 
   public:
     size_t children;
+    TreeNode *root = nullptr;
 
     Tree() : children(0) {}
 
-    ~Tree() { delete root; }
-
-    TreeNode *root = nullptr;
+    ~Tree() { clear(root); }
 
     void insert(K key, V value) { this->root = insert(root, key, value); }
 
-    // Root's parent will have a "nodo penzolante"
-    void clear(TreeNode *root) {
-      if (root == nullptr)
+    // r's parent will have a "nodo penzolante"
+    void clear(TreeNode *r) {
+      if (r == nullptr)
         return;
-      clear(root->left);
-      clear(root->right);
-      remove_node(root);
+      clear(r->left);
+      clear(r->right);
+      remove_node(r);
     }
 
     // Remove an element from the tree
@@ -204,6 +203,7 @@ private:
         TreeNode *pred = get_predecessor(this->root, key);
         Nostd::Pair<const K, V> *p_data = pred->data;
         remove(pred->data->first);
+        delete ptr->data;
         ptr->data = p_data;
         return;
       }
