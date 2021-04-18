@@ -10,44 +10,41 @@
   Engine::UI::Button element. Most work is done in the show method to create the
   ncurses' window and set its content properly.
 */
+
 #include "button.hpp"
-#include <curses.h>
 
-Engine::UI::Button::Button(uint16_t max_width, uint16_t max_height,
-                           const wchar_t *content)
-    : TextBox(max_width - 2, max_height - 2, content) {}
-Engine::UI::Button::Button(uint16_t max_width, uint16_t max_height,
-                           Nostd::WString &&content)
-    : TextBox(max_width - 2, max_height - 2, content.c_str()) {}
-Engine::UI::Button::~Button() {
-  delwin(button_window);
-  button_window = nullptr;
+Engine::UI::Button::Button(const wchar_t *content) : TextBox(content) {}
+Engine::UI::Button::Button(const Nostd::WString &content) : TextBox(content) {}
+
+Engine::UI::Box::dim Engine::UI::Button::text_size(szu max_width,
+                                                   szu max_height) {
+  szu w = max_width - (2 * side_padding) - pl - pr,
+      h = max_height - (2 * side_padding) - pt - pb;
+  return {w, h};
 }
 
-void Engine::UI::Button::show(WINDOW *window, uint16_t x, uint16_t y) {
-  auto osize = TextBox::size();
-  uint16_t abs_x, abs_y;
-  getbegyx(window, abs_y, abs_x);
+void Engine::UI::Button::show(WINDOW *window, szu x, szu y, szu max_width,
+                              szu max_height) {
+  auto text_max_sz = text_size(max_width, max_height);
 
-  if (button_window != nullptr)
-    mvwin(button_window, abs_y + y, abs_x + x);
-  else
-    button_window =
-        newwin(pt + osize.second + 2, pl + osize.first + 2 * side_padding,
-               abs_y + y, abs_x + x);
+  // draw the button's background
+  auto sz = TextBox::size(text_max_sz.first, text_max_sz.second);
+  start_color(window);
+  for (szu i = 0; i < sz.second + 2; i++)
+    mvwhline(window, y + i + pt, x + pl, ' ', sz.first + 2 * side_padding);
+  end_color(window);
 
-  int color = color_pair();
-  if (color != -1)
-    wbkgd(button_window, color);
-  werase(button_window);
-
-  TextBox::show(button_window, side_padding, 1);
-  wrefresh(button_window);
+  attron(A_BOLD);
+  TextBox::show(window, x + side_padding + pl, y + 1 + pt, text_max_sz.first,
+                text_max_sz.second);
+  attroff(A_BOLD);
 }
 
-Nostd::Pair<uint16_t, uint16_t> Engine::UI::Button::size() {
-  auto osize = TextBox::size();
-  uint16_t width = pl + pr + osize.first + 2 * side_padding,
-           height = pt + pb + osize.second + 2;
+Engine::UI::Box::dim Engine::UI::Button::size(szu max_width, szu max_height) {
+  auto text_max_sz = text_size(max_width, max_height);
+  auto sz = TextBox::size(text_max_sz.first, text_max_sz.second);
+
+  szu width = pl + pr + sz.first + 2 * side_padding,
+      height = pt + pb + sz.second + 2;
   return {width, height};
 }

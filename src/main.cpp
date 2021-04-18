@@ -18,12 +18,12 @@ int main() {
   Screen screen;
   handle(screen.open());
   screen.set_content<Menu::Main>();
-  Nostd::Vector<Data::Setting> settings = {};
-  Nostd::WString t = L"option 1";
-  settings.push_back(Data::Setting(t));
-  settings.push_back(Data::Setting(L"option 2"));
+  Nostd::Vector<Data::Setting> settings;
+  settings.push_back(Data::Setting(L"Sound", 0, 2, 1, 0, 1));
+  settings.push_back(Data::Setting(L"Frames Per Second", 30, 3, 30, 1));
 
-  int key = -1, running = true;
+  int key = -1;
+  bool running = true;
   while (running) {
     // quit if usleep returns an error
     if (usleep(1000000 / 25)) // 25fps
@@ -38,14 +38,15 @@ int main() {
           running = false;
           break;
         case Menu::Main::Result::settings:
-          screen.set_content<Menu::Settings, Nostd::Vector<Data::Setting>>(
-              settings);
+          screen.set_content<Menu::Settings,
+                             const Nostd::Vector<Data::Setting> &>(settings);
           break;
         default:
           break;
         }
       } else if (screen.is_content<Menu::Settings>()) {
         // do something when the settings menu is closed
+        settings = screen.get_content<Menu::Settings>()->get_result();
         screen.set_content<Menu::Main>();
       }
     }
@@ -71,6 +72,16 @@ int main() {
       case 'j':
       case KEY_DOWN:
         screen.send_event(Drawable::Event::move_down);
+        break;
+
+      case 'h':
+      case KEY_LEFT:
+        screen.send_event(Drawable::Event::move_left);
+        break;
+
+      case 'l':
+      case KEY_RIGHT:
+        screen.send_event(Drawable::Event::move_right);
         break;
       };
     }

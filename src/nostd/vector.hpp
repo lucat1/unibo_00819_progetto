@@ -1,6 +1,8 @@
 #ifndef NOSTD_VECTOR_HPP
 #define NOSTD_VECTOR_HPP
 
+#include "allocator.hpp"
+#include <algorithm>
 #include <iterator>
 #include <stdexcept>
 #include "allocator.hpp"
@@ -176,7 +178,7 @@ class Vector {
 
   // Resize the container so that it contain n elements
   void resize(size_t n, V val = V()) {
-    size_t old_sz = sz, old_cap = cap, n_copies = n < sz ? n : sz;
+    size_t old_sz = sz, old_cap = cap, n_copies = std::min(n, sz);
     sz = n;
     calc_cap();
 

@@ -11,7 +11,7 @@
 */
 #include "drawable.hpp"
 
-Engine::Drawable::Drawable(WINDOW *window, uint16_t width, uint16_t height) {
+Engine::Drawable::Drawable(WINDOW *window, szu width, szu height) {
   this->window = window;
   this->width = width;
   this->height = height;
