@@ -1,7 +1,7 @@
-#include <cassert>
 #include "pair.hpp"
 #include "test.hpp"
 #include "vector.hpp"
+#include <cassert>
 
 using namespace Nostd;
 
@@ -95,9 +95,9 @@ int main() {
   });
 
   class A {
-   public:
+  public:
     A() { touched++; }
-    A(const A&) { touched++; }
+    A(const A &) { touched++; }
   };
 
   it("allocates but does not construct elements", [] {
@@ -108,7 +108,7 @@ int main() {
   it("allocates and constructs elements", [] {
     A test;
     Vector<A> v(5, test);
-    assert(touched == 6);  // 5 constructed classes plus the `test` instance
+    assert(touched == 6); // 5 constructed classes plus the `test` instance
   });
 
   it("iterates forward", [] {
