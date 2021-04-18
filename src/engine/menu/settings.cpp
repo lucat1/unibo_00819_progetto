@@ -10,40 +10,89 @@
   series of options in a List element drawing sliders/multi options on the
   right of each line
 */
+
 #include "settings.hpp"
-#include "../ui/append.hpp"
 #include "../ui/button.hpp"
 #include "../ui/center.hpp"
-#include "../ui/list.hpp"
+#include "../ui/choice.hpp"
 #include "../ui/text_box.hpp"
 
 using Engine::UI::Box;
 
-Engine::Menu::Settings::Settings(WINDOW *window,
-                                 Nostd::Vector<Data::Setting> settings)
-    : Menu(window) {
-  original = updated = settings;
-  max_focused =
-      settings.size() + 1; // n of settings + 1 for the save and discard button
+Engine::Color settings_button_fg = Engine::Color::red,
+              settings_button_bg = Engine::Color::grey23,
+              settings_line = Engine::Color::grey23;
+
+void Engine::Menu::Settings::alloc_updated(
+    Nostd::Vector<Data::Setting> &settings) {
+  for (auto setting : settings)
+    updated.push_back(new Data::Setting(setting));
+}
+
+Nostd::Vector<Data::Setting> Engine::Menu::Settings::dereference_updated() {
+  Nostd::Vector<Data::Setting> res(updated.size());
+  for (size_t i = 0; i < updated.size(); i++)
+    res[i] = Data::Setting(*updated[i]);
+
+  return res;
 }
 
 Engine::UI::Button *Engine::Menu::Settings::append_button(Box *parent,
                                                           const wchar_t *str) {
-  auto btn = UI::append<UI::Button, const wchar_t *>(parent, str);
+  auto btn = parent->append<UI::Button, const wchar_t *>(str);
   unfocus(btn);
   return btn;
 }
 
-Box *Engine::Menu::Settings::generate() {
-  auto root = new UI::Box(width, height);
-  auto list = UI::append<UI::List>(root);
+Box *Engine::Menu::Settings::append_line(Box *parent, Data::Setting *setting) {
+  auto line = parent->append<UI::Box>();
+  line->propb(Box::Property::direction_horizontal, true);
+  line->props(Box::Property::padding_left, 2);
+  line->props(Box::Property::padding_right, 2);
+  line->props(Box::Property::padding_top, 1);
+  line->props(Box::Property::padding_bottom, 1);
+
+  line->append<UI::TextBox, const Nostd::WString &>(setting->label());
+  auto choice = line->append<UI::Choice, Data::Setting *>(setting);
+  choice->propb(Box::Property::float_right, true);
+  choice->propc(Box::Property::foreground, settings_button_fg);
+  choice->propc(Box::Property::background, Color::transparent);
+
+  unfocus(line);
+  return line;
+}
+
+Engine::Menu::Settings::Settings(WINDOW *window,
+                                 const Nostd::Vector<Data::Setting> &settings)
+    : Menu(window) {
+  original = settings;
+  alloc_updated(original);
+
+  max_focused =
+      settings.size() + 1; // n of settings + 1 for the save and discard button
+}
+
+Engine::Menu::Settings::~Settings() {
   for (auto setting : updated)
-    UI::append<UI::TextBox, const Nostd::WString &>(list, setting.label());
+    delete setting;
+  updated.clear();
+  original.clear();
+}
+
+Box *Engine::Menu::Settings::generate() {
+  auto root = new UI::Box();
+  auto list = root->append<UI::Box>();
+  list->props(Box::Property::padding_left, 2);
+  list->props(Box::Property::padding_right, 2);
+  list->props(Box::Property::padding_top, 1);
+  list->props(Box::Property::padding_bottom, 2);
+  for (auto setting : updated)
+    append_line(list, setting);
 
   // buttons at the end of the page for closing the menu
-  auto chbox = UI::append<UI::Center>(root);
+  auto chbox = root->append<UI::Center>();
   chbox->propb(Box::Property::center_horizontal, true);
-  auto hbox = UI::append<UI::Box>(chbox);
+  auto hbox = chbox->append<UI::Box>();
   hbox->propb(Box::Property::direction_horizontal, true);
   auto btn1 = append_button(hbox, L"Save");
   btn1->props(Box::Property::padding_right, 8);
@@ -70,9 +119,6 @@ Box *Engine::Menu::Settings::prev_box() {
   return curr_box();
 }
 
-Engine::Color settings_button_fg = Engine::Color::red,
-              settings_button_bg = Engine::Color::grey23;
-
 void Engine::Menu::Settings::focus(Box *box) {
   if (dynamic_cast<Engine::UI::Button *>(box)) {
     // visually focus buttons
@@ -80,6 +126,7 @@ void Engine::Menu::Settings::focus(Box *box) {
     box->propc(Box::Property::foreground, settings_button_bg);
   } else {
     // visually focus boxes (lines of the list)
+    box->propc(Box::Property::background, settings_line);
   }
 }
 
@@ -90,10 +137,33 @@ void Engine::Menu::Settings::unfocus(Box *box) {
     box->propc(Box::Property::foreground, settings_button_fg);
   } else {
     // visually unfocus boxes (lines of the list)
+    box->propc(Box::Property::background, Color::transparent);
   }
 }
 
 void Engine::Menu::Settings::interact(Box *box) { clicked_on = focused; }
+
+void Engine::Menu::Settings::decrement(Box *parent_box) {
+  Box *box = parent_box->child(1);
+  if (!dynamic_cast<Engine::UI::Choice *>(box))
+    return;
+
+  auto choice = static_cast<Engine::UI::Choice *>(box);
+  Data::Setting *setting = choice->get_setting();
+  if (*setting->current_value() != setting->first())
+    setting->set(--setting->current_value());
+}
+
+void Engine::Menu::Settings::increment(Box *parent_box) {
+  Box *box = parent_box->child(1);
+  if (!dynamic_cast<Engine::UI::Choice *>(box))
+    return;
+
+  auto choice = static_cast<Engine::UI::Choice *>(box);
+  Data::Setting *setting = choice->get_setting();
+  if (*setting->current_value() != setting->last())
+    setting->set(++setting->current_value());
+}
 
 bool Engine::Menu::Settings::is_over() { return clicked_on >= max_focused - 1; }
 
@@ -102,5 +172,5 @@ Nostd::Vector<Data::Setting> Engine::Menu::Settings::get_result() {
   if (clicked_on == max_focused)
     return original;
   else
-    return updated;
+    return dereference_updated();
 }

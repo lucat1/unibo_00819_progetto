@@ -30,8 +30,8 @@ void Engine::Menu::Menu::redraw() {
     first_draw = false;
   }
 
-  root->show(window, 1, 1);
-  wrefresh(window);
+  root->show(window, 0, 0, width, height);
+  doupdate();
 }
 
 Engine::Menu::Menu::Menu(WINDOW *window)
@@ -67,10 +67,17 @@ void Engine::Menu::Menu::handle_event(Event e) {
     break;
   }
 
-  // TODO: for more complex menus. to be handeld manually (?)
-  // will close this out when we do the settings menu
   case Event::move_left:
   case Event::move_right:
+    Engine::UI::Box *box;
+    if ((box = curr_box()) != nullptr) {
+      if (e == Event::move_left)
+        decrement(box);
+      else
+        increment(box);
+    }
+
+    redraw();
     break;
   };
 }

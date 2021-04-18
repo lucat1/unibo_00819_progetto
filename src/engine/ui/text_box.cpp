@@ -10,22 +10,26 @@
   algoritm to make a given strign fit inside a max_width large boh. Liens are
   cut, with trailing '-' added where necessary.
 */
+
 #include "text_box.hpp"
+#include <algorithm>
 
-Engine::UI::TextBox::TextBox(uint16_t max_width, uint16_t max_height,
-                             const wchar_t *content)
-    : Box(max_width, max_height) {
+Engine::UI::TextBox::TextBox(const wchar_t *content) : Box() {
   this->content = content;
-  split_content();
 }
-Engine::UI::TextBox::TextBox(uint16_t max_width, uint16_t max_height,
-                             const Nostd::WString &content)
-    : TextBox(max_width, max_height, content.c_str()) {}
+Engine::UI::TextBox::TextBox(const Nostd::WString &content)
+    : TextBox(content.c_str()) {}
 
-// splits the content into various lines to fit into `max_width` and adds
-// '-' where necessary, when splitting a word
-void Engine::UI::TextBox::split_content() {
-  lines.clear();
+void Engine::UI::TextBox::update_lines(szu max_width) {
+  if (max_width != old_max_width)
+    lines = split_content(content, max_width);
+  max_width = old_max_width;
+}
+
+Engine::UI::TextBox::strings
+Engine::UI::TextBox::split_content(const Nostd::WString content,
+                                   szu max_width) {
+  strings lines;
   size_t len = content.length();
   while (len > max_width) {
     size_t ll = len < max_width ? Nostd::WString::npos : max_width - 1;
@@ -47,11 +51,14 @@ void Engine::UI::TextBox::split_content() {
     lines.push_back(sub);
     len -= ll;
   }
-  // TODO: toggle .ltrim
+  // TODO: toggle .ltrim (?)
   lines.push_back(content.substr(content.length() - len, Nostd::WString::npos));
+  return lines;
 }
 
-void Engine::UI::TextBox::show(WINDOW *window, uint16_t x, uint16_t y) {
+void Engine::UI::TextBox::show(WINDOW *window, szu x, szu y, szu max_width,
+                               szu max_height) {
+  update_lines(max_width);
   start_color(window);
 
   for (size_t i = 0; i < lines.size(); i++) {
@@ -61,10 +68,13 @@ void Engine::UI::TextBox::show(WINDOW *window, uint16_t x, uint16_t y) {
   }
 
   end_color(window);
+  wnoutrefresh(window);
 }
 
-Nostd::Pair<uint16_t, uint16_t> Engine::UI::TextBox::size() {
-  uint16_t height = (uint16_t)lines.size();
-  uint16_t width = lines.size() > 0 ? lines.at(0).length() : 0;
+Engine::UI::Box::dim Engine::UI::TextBox::size(szu max_width, szu max_height) {
+  update_lines(max_width);
+  szu height = std::min((szu)lines.size(), max_height);
+  szu width =
+      std::min((szu)(lines.size() > 0 ? lines.at(0).length() : 0), max_width);
   return {width, height};
 }
