@@ -1,7 +1,7 @@
+#include <cassert>
 #include "pair.hpp"
 #include "test.hpp"
 #include "vector.hpp"
-#include <cassert>
 
 using namespace Nostd;
 
@@ -95,9 +95,9 @@ int main() {
   });
 
   class A {
-  public:
+   public:
     A() { touched++; }
-    A(const A &) { touched++; }
+    A(const A&) { touched++; }
   };
 
   it("allocates but does not construct elements", [] {
@@ -108,8 +108,57 @@ int main() {
   it("allocates and constructs elements", [] {
     A test;
     Vector<A> v(5, test);
-    assert(touched == 6); // 5 constructed classes plus the `test` instance
+    assert(touched == 6);  // 5 constructed classes plus the `test` instance
   });
 
-  // TODO: tests on iterators
+  it("iterates forward", [] {
+    Vector<size_t> v;
+    for (size_t i = 0; i < 100; i++)
+      v.push_back(i);
+
+    size_t i = 0;
+    for (auto x : v) {
+      assert(x == i);
+      i++;
+    }
+  });
+
+  it("iterates backwards", [] {
+    Vector<size_t> v;
+    for (size_t i = 0; i < 100; i++)
+      v.push_back(i);
+
+    size_t i = 99;
+    for (auto z = v.rbegin(); z != v.rend(); z++) {
+      auto x = *z;
+      assert(x == i);
+      i--;
+    }
+  });
+
+  it("iterates forward without modifying", [] {
+    Vector<size_t> v;
+    for (size_t i = 0; i < 100; i++)
+      v.push_back(i);
+
+    size_t i = 0;
+    for (auto z = v.cbegin(); z != v.cend(); z++) {
+      auto x = *z;
+      assert(x == i);
+      i++;
+    }
+  });
+
+  it("iterates backward without modifying", [] {
+    Vector<size_t> v;
+    for (size_t i = 0; i < 100; i++)
+      v.push_back(i);
+
+    size_t i = 99;
+    for (auto z = v.crbegin(); z != v.crend(); z++) {
+      auto x = *z;
+      assert(x == i);
+      i--;
+    }
+  });
 }
