@@ -6,9 +6,10 @@
   Luca Tagliavini #971133
   03/22/2021
 
-  button.cpp: Defines Engine::UI::Button visual component, clearly identifiable
+  button.hpp: Defines Engine::UI::Button visual component, clearly identifiable
   by its monochrome background, shrot text and interactable nature.
 */
+
 #ifndef ENGINE_UI_BUTTON_HPP
 #define ENGINE_UI_BUTTON_HPP
 
@@ -16,20 +17,21 @@
 
 namespace Engine {
 namespace UI {
+
+// Button draws a (hopefully) single line text box with big margins
+// (side_padding) and colors it prpoerly to make it resemble a button
 class Button : public TextBox {
 private:
-  static const constexpr uint16_t side_padding = 4;
-  WINDOW *button_window = nullptr;
+  dim text_size(szu max_width, szu max_height);
 
 public:
-  Button(uint16_t max_width, uint16_t max_height,
-         Nostd::WString &&content = L"");
-  Button(uint16_t max_width, uint16_t max_height, const wchar_t *content = L"");
-  ~Button();
-  void prop(Box::Property key, bool value);
+  static const constexpr szu side_padding = 4;
 
-  void show(WINDOW *window, uint16_t x, uint16_t y);
-  Nostd::Pair<uint16_t, uint16_t> size();
+  Button(const Nostd::WString &content = L"");
+  Button(const wchar_t *content = L"");
+
+  void show(WINDOW *window, szu x, szu y, szu max_width, szu max_height);
+  dim size(szu max_width, szu max_height);
 };
 
 } // namespace UI

@@ -57,6 +57,8 @@ protected:
   virtual void focus(UI::Box *box) = 0;
   virtual void unfocus(UI::Box *box) = 0;
   virtual void interact(UI::Box *box) = 0;
+  virtual void increment(UI::Box *box) = 0;
+  virtual void decrement(UI::Box *box) = 0;
 
 public:
   Menu(WINDOW *window);
