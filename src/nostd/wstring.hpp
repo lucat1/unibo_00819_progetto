@@ -89,8 +89,6 @@ public:
 
   // compares the two WStrings
   int compare(const WString &str) const;
-  bool operator==(const WString &str) const;
-  bool operator!=(const WString &str) const;
   // compares the two WStrings with an offset and only up to a given length
   int compare(size_t start, size_t len, const WString &str) const;
   // compares this instance with a given string
@@ -99,6 +97,9 @@ public:
   // only computing n checks
   int compare(size_t start, size_t len, const wchar_t *str,
               size_t n = npos) const;
+  // compare the two WStrings
+  bool operator==(const WString &str) const;
+  bool operator!=(const WString &str) const;
   // looks for the given WString sequence starting from the given index and
   // returns the position of the subsequence if found, npos otherwhise
   size_t find(WString &seq, size_t start = 0) const;
