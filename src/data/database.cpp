@@ -14,25 +14,30 @@
 #include <cstring>
 #include <fstream>
 
+#include "map.hpp"
+#include "result.hpp"
+#include "scenery.hpp"
+#include "setting.hpp"
+
 using namespace Data;
-using Nostd::UnorderedMap;
+using Nostd::List;
 using Nostd::Vector;
 using Nostd::WString;
+using std::wifstream;
 
 constexpr wchar_t Database::separator, Database::newrecord, Database::escape;
 
 Database::Database(const char *configuration, const char *assets,
                    const char *scoreboard)
     : conf{newstrcpy(configuration)}, scor{newstrcpy(scoreboard)} {
+  load_settings(assets);
+  load_maps(assets);
   // TODO
 }
 
-Vector<Result> &Database::results() noexcept { return res; }
-
-const Vector<Result> &Database::results() const noexcept { return res; }
-
-void Database::save_results() const {
-  // TODO
+Database::~Database() {
+  delete conf;
+  delete scor;
 }
 
 Vector<Setting> &Database::settings() noexcept { return set; }
@@ -40,7 +45,10 @@ Vector<Setting> &Database::settings() noexcept { return set; }
 const Vector<Setting> &Database::settings() const noexcept { return set; }
 
 void Database::save_settings() const {
-  // TODO
+  std::wofstream wofs(conf);
+  for (auto x : set)
+    wofs << x << newrecord;
+  wofs.close();
 }
 
 Vector<Map> &Database::maps() noexcept { return map; }
@@ -50,6 +58,14 @@ const Vector<Map> &Database::maps() const noexcept { return map; }
 Vector<Scenery> &Database::sceneries() noexcept { return sce; }
 
 const Vector<Scenery> &Database::sceneries() const noexcept { return sce; }
+
+List<Result> &Database::results() noexcept { return res; }
+
+const List<Result> &Database::results() const noexcept { return res; }
+
+void Database::save_results() const {
+  // TODO
+}
 
 char *Database::newstrcpy(const char *str) const {
   return std::strcpy(new char[std::strlen(str) + 1], str);
@@ -64,7 +80,8 @@ char *Database::newstrcat(const char *str1, const char *str2) const {
 void Database::load_settings(const char *assets_filepath) {
   // game settings
   const char *const settings_fp{newstrcat(assets_filepath, settings_rel_fp)};
-  std::wifstream wifs{settings_fp};
+  wifstream wifs{settings_fp};
+  delete settings_fp;
   Setting s;
   while (wifs >> s)
     set.push_back(s);
@@ -85,8 +102,18 @@ void Database::load_settings(const char *assets_filepath) {
   wifs.close();
 }
 
+void Database::load_maps(const char *assets_filepath) {
+  const char *const maps_fp{newstrcat(assets_filepath, maps_rel_fp)};
+  std::ifstream ifs{maps_fp};
+  delete maps_fp;
+  Map m(0);
+  while (ifs >> m)
+    map.push_back(m);
+  ifs.close();
+}
+
 std::basic_istream<wchar_t> &
-Data::get_CSV_WString(std::basic_istream<wchar_t> &is, Nostd::WString &s) {
+Data::get_CSV_WString(std::basic_istream<wchar_t> &is, WString &s) {
   s = WString{};
   wchar_t input;
   while (!is.eof() && (input = is.get()) != Database::separator &&

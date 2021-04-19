@@ -152,6 +152,5 @@ std::basic_istream<wchar_t> &Data::operator>>(std::basic_istream<wchar_t> &is,
 std::basic_ostream<wchar_t> &Data::operator<<(std::basic_ostream<wchar_t> &os,
                                               const Setting &s) {
   auto &sep = Database::separator;
-  return put_CSV_WString(os, s.label()) << sep << s.strt << sep << s.sz << sep
-                                        << s.def_ind << Database::newrecord;
+  return put_CSV_WString(os, s.label()) << sep << s.curr_ind;
 }

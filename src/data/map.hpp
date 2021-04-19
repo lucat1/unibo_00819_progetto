@@ -32,8 +32,7 @@ enum class MapUnit : char {
   item = '$'
 };
 
-std::basic_istream<wchar_t> &operator>>(std::basic_istream<wchar_t> &,
-                                        MapUnit &);
+std::basic_istream<char> &operator>>(std::basic_istream<char> &, MapUnit &);
 
 /*
   A Map describes the topology of a piece of the game world, but not its

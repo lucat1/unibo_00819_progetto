@@ -15,6 +15,7 @@
 #include <istream>
 #include <ostream>
 
+#include "../nostd/list.hpp"
 #include "../nostd/unordered_map.hpp"
 #include "../nostd/vector.hpp"
 #include "../nostd/wstring.hpp"
@@ -32,7 +33,8 @@ namespace Data {
 class Database {
 public:
   constexpr static wchar_t separator{','}, newrecord{'\n'}, escape{'\\'};
-  constexpr const static char *const settings_rel_fp{"/csv/settings.csv"};
+  constexpr const static char *const settings_rel_fp{"/csv/settings.csv"},
+      *const maps_rel_fp{"/maps.txt"};
 
   Database() = delete; // cannot constructs a database from nothing
   Database(const char *configuration, const char *assets,
@@ -42,9 +44,7 @@ public:
   Database(const Database &) = default;
   Database &operator=(const Database &) = default;
 
-  Nostd::Vector<Result> &results() noexcept;
-  const Nostd::Vector<Result> &results() const noexcept;
-  void save_results() const; // saves current high scores to filesystem
+  ~Database();
 
   Nostd::Vector<Setting> &settings() noexcept;
   const Nostd::Vector<Setting> &settings() const noexcept;
@@ -56,16 +56,21 @@ public:
   Nostd::Vector<Scenery> &sceneries() noexcept;
   const Nostd::Vector<Scenery> &sceneries() const noexcept;
 
+  Nostd::List<Result> &results() noexcept;
+  const Nostd::List<Result> &results() const noexcept;
+  void save_results() const; // saves current high scores to filesystem
+
 private:
   char *conf, *scor;
-  Nostd::Vector<Result> res{};
   Nostd::Vector<Setting> set{};
   Nostd::Vector<Map> map{};
   Nostd::Vector<Scenery> sce{};
+  Nostd::List<Result> res{};
 
   char *newstrcpy(const char *) const;
   char *newstrcat(const char *, const char *) const;
   void load_settings(const char *assets_filepath);
+  void load_maps(const char *assets_filepath);
 };
 
 std::basic_istream<wchar_t> &get_CSV_WString(std::basic_istream<wchar_t> &,
