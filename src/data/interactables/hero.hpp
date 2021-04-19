@@ -12,6 +12,8 @@
 #ifndef DATA_INTERACTABLES_HERO_HPP
 #define DATA_INTERACTABLES_HERO_HPP
 
+#include "../../nostd/wstring.hpp"
+
 namespace Data {
 
 namespace Interactables {
@@ -20,7 +22,10 @@ namespace Interactables {
   A Hero is a playable character: as such, it provides a health and a mana
   gauge, as well as a description.
 */
-class Hero;
+class Hero {
+public:
+  const Nostd::WString &name() const;
+};
 
 } // namespace Interactables
 

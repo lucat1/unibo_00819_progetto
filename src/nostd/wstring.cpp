@@ -129,6 +129,12 @@ Nostd::WString &Nostd::WString::insert(size_t start, const wchar_t c) {
 int Nostd::WString::compare(const Nostd::WString &str) const {
   return compare(0, str.length(), str.c_str());
 }
+bool Nostd::WString::operator==(const WString &str) const {
+  return !compare(str);
+}
+bool Nostd::WString::operator!=(const WString &str) const {
+  return compare(str);
+}
 int Nostd::WString::compare(size_t start, size_t len,
                             const Nostd::WString &str) const {
   return compare(start, len, str.c_str());

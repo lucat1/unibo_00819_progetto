@@ -34,7 +34,8 @@ class Database {
 public:
   constexpr static wchar_t separator{','}, newrecord{'\n'}, escape{'\\'};
   constexpr const static char *const settings_rel_fp{"/csv/settings.csv"},
-      *const maps_rel_fp{"/maps.txt"};
+      *const maps_rel_fp{"/maps.txt"},
+          *const sceneries_rel_fp{"/sceneries.txt"};
 
   Database() = delete; // cannot constructs a database from nothing
   Database(const char *configuration, const char *assets,
@@ -56,6 +57,8 @@ public:
   Nostd::Vector<Scenery> &sceneries() noexcept;
   const Nostd::Vector<Scenery> &sceneries() const noexcept;
 
+  // TODO
+
   Nostd::List<Result> &results() noexcept;
   const Nostd::List<Result> &results() const noexcept;
   void save_results() const; // saves current high scores to filesystem
@@ -65,12 +68,18 @@ private:
   Nostd::Vector<Setting> set{};
   Nostd::Vector<Map> map{};
   Nostd::Vector<Scenery> sce{};
+  // TODO
+  Nostd::UnorderedMap<Nostd::WString, Interactables::Hero> her{};
+  // TODO
   Nostd::List<Result> res{};
 
   char *newstrcpy(const char *) const;
   char *newstrcat(const char *, const char *) const;
   void load_settings(const char *assets_filepath);
   void load_maps(const char *assets_filepath);
+  void load_sceneries(const char *assets_filepath);
+  // TODO
+  void load_results();
 };
 
 std::basic_istream<wchar_t> &get_CSV_WString(std::basic_istream<wchar_t> &,

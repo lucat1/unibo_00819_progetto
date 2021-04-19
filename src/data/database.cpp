@@ -23,6 +23,7 @@ using namespace Data;
 using Nostd::List;
 using Nostd::Vector;
 using Nostd::WString;
+using std::ifstream;
 using std::wifstream;
 
 constexpr wchar_t Database::separator, Database::newrecord, Database::escape;
@@ -32,7 +33,9 @@ Database::Database(const char *configuration, const char *assets,
     : conf{newstrcpy(configuration)}, scor{newstrcpy(scoreboard)} {
   load_settings(assets);
   load_maps(assets);
+  load_sceneries(assets);
   // TODO
+  load_results();
 }
 
 Database::~Database() {
@@ -64,7 +67,13 @@ List<Result> &Database::results() noexcept { return res; }
 const List<Result> &Database::results() const noexcept { return res; }
 
 void Database::save_results() const {
-  // TODO
+  std::wofstream wofs(scor);
+  /* for (auto x : res) {
+    put_CSV_WString(wofs, x.nickname()) >> separator;
+    put_CSV_WString(wofs, x.hero()->name()) >> separator;
+    wofs >> x.score() >> newrecord;
+  } */
+  wofs.close();
 }
 
 char *Database::newstrcpy(const char *str) const {
@@ -97,19 +106,43 @@ void Database::load_settings(const char *assets_filepath) {
         s.set(s.begin() + value);
         break;
       }
-    wifs.ignore(); // \n
+    wifs.ignore(newrecord);
   }
   wifs.close();
 }
 
 void Database::load_maps(const char *assets_filepath) {
   const char *const maps_fp{newstrcat(assets_filepath, maps_rel_fp)};
-  std::ifstream ifs{maps_fp};
+  ifstream ifs{maps_fp};
   delete maps_fp;
   Map m(0);
   while (ifs >> m)
     map.push_back(m);
   ifs.close();
+}
+
+void Database::load_sceneries(const char *assets_filepath) {
+  const char *const sceneries_fp{newstrcat(assets_filepath, sceneries_rel_fp)};
+  wifstream wifs{sceneries_fp};
+  delete sceneries_fp;
+  Scenery s;
+  while (wifs >> s)
+    sce.push_back(s);
+  wifs.close();
+}
+
+void Database::load_results() {
+  wifstream wifs{scor};
+  WString nickname;
+  while (get_CSV_WString(wifs, nickname)) {
+    wifs.ignore(separator);
+    WString hero;
+    int score;
+    get_CSV_WString(wifs, hero) >> score;
+    res.push_back(
+        {nickname, her.contains(nickname) ? &her[nickname] : nullptr, score});
+    wifs.ignore(newrecord);
+  }
 }
 
 std::basic_istream<wchar_t> &
