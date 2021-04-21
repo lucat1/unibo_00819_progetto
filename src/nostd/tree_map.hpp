@@ -64,8 +64,6 @@ private:
         this->data = Nostd::Pair<const K, V>(key, value);
       }
 
-      ~TreeNode() { delete data; }
-
       const K get_key() { return this->data->first; }
       V get_value() const { return this->data->second; }
 
