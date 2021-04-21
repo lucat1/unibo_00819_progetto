@@ -8,10 +8,9 @@ CXX = g++
 ## -MP creates phony targets for headers (deals with deleted headers after
 ##  obj file has been compiled)
 ## -MT specifies the dependency target (path qualified obj file name)
-DEP_FLAGS = -std=c++11 -MT $@ -MMD -MP -MF $(@:.o=.d)
-CXXFLAGS = $(DEP_FLAGS) -Wall -Werror
+CXXFLAGS = -std=c++11 -MT $@ -MMD -MP -MF $(@:.o=.d) -Wall -Werror
 LDFLAGS = -lstdc++
-# conditional linker flags based on OS (Linux, Darwin = MacOS)
+# conditional linker flags based on OS (Linux (tested on Ubuntu, Elementary and void), Darwin = MacOS)
 UNAME := $(shell uname)
 ifeq ($(UNAME), Linux)
 	HAS_CURSESW6 := $(shell command -v ncursesw6-config 2> /dev/null)
@@ -20,9 +19,11 @@ ifeq ($(UNAME), Linux)
 	# use ncursesw6-config utility to find libraries when available
 	# therwhise go for a best guess
 	ifdef HAS_CURSESW6
+	CXXFLAGS += $(shell ncursesw6-config --cflags)
 	LDFLAGS += $(shell ncursesw6-config --libs)
 	else
 		ifdef HAS_CURSESW5
+		CXXFLAGS += $(shell ncursesw5-config --cflags)
 		LDFLAGS += $(shell ncursesw5-config --libs)
 		else
 		LDFLAGS += -lncurses -lncursesw
@@ -32,7 +33,7 @@ endif
 
 ifeq ($(UNAME), Darwin)
 LDFLAGS += -lncurses
-DEP_FLAGS += -D_XOPEN_SOURCE_EXTENDED
+CXXFLAGS += -D_XOPEN_SOURCE_EXTENDED
 endif
 
 # Things to build
