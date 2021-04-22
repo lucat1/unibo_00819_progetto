@@ -70,8 +70,9 @@ int main() {
     TreeMap<int, int> tm;
     tm.put(10, 10);
     tm.put(5, 5);
-    tm.remove(5);
-    assert(tm.size() == 1);
+    tm.put(1, 1);
+    tm.remove(1);
+    assert(tm.size() == 2);
   });
 
   it("removes single childed node", [] {
@@ -109,6 +110,14 @@ int main() {
     tm.put(1, 1);
     tm.remove(5);
     assert(tm.size() == 4);
+
+    tm.clear();
+
+    tm.put(3, 3);
+    tm.put(6, 6);
+    tm.put(1, 1);
+    tm.remove(3);
+    assert(tm.size() == 2);
   });
 
   it("puts elements into tmap", [] {
@@ -127,6 +136,18 @@ int main() {
     tm.put(4, 10);
     tm.put(1, 23);
     assert(tm.as_vector().size() == 3);
+  });
+
+  it("tests tmap's iterators", [] {
+    TreeMap<int, int> tm;
+    tm.put(2, 5);
+    tm.put(4, 10);
+    tm.put(1, 23);
+    int max = -1;
+    for (auto x : tm)
+      if (x->first > max)
+        max = x->first;
+    assert(max == 4);
   });
 
   return 0;
