@@ -27,14 +27,14 @@ struct Scenery {
         top_left, top, top_right,                  // ⎡⎺⎤
         left, center, right,                       // ⎢⩩⎥
         bottom_left, bottom, bottom_right;         // ⎣⎯⎦
-    Engine::Color foreground, background;
+    Engine::Color foreground, background;          // 9 0
   } ground, platform;
   Nostd::Vector<Engine::Color> sky;
 };
 
 // A stream can represent a Scenery using:
-// - six lines for the ground Autotile (as shown above)
-// - six lines for the foreground Autotile (as shown above)
+// - seven lines for the ground Autotile (as shown above)
+// - seven lines for the foreground Autotile (as shown above)
 // - a single line with the number of the color in the sky followed by a single
 //   code for each of them
 std::basic_istream<wchar_t> &operator>>(std::basic_istream<wchar_t> &,

@@ -7,9 +7,8 @@
 namespace Nostd {
 // Lists are sequence containers that allow constant time insert and erase
 // operations anywhere within the sequence, and iteration in both directions.
-template <typename V>
-class List {
- protected:
+template <typename V> class List {
+protected:
   struct Item {
     V val;
     Item *next, *prev;
@@ -17,7 +16,7 @@ class List {
   size_t sz;
   Item *head, *tail;
 
- public:
+public:
   // Costructs a empty list, without elements.
   List() {
     sz = 0;
@@ -28,7 +27,7 @@ class List {
   List(size_t size) {
     sz = size;
     for (size_t i = 0; i < sz; i++) {
-      Item* x = new Item;
+      Item *x = new Item;
       x->next = nullptr;
       x->prev = tail;
       if (i == 0)
@@ -42,7 +41,7 @@ class List {
   List(size_t size, V ele) {
     sz = size;
     for (size_t i = 0; i < sz; i++) {
-      Item* x = new Item;
+      Item *x = new Item;
       x->val = ele;
       x->next = nullptr;
       x->prev = tail;
@@ -55,20 +54,33 @@ class List {
   }
   // Constructs a new list by moving all items of another list. Leaves the
   // previous list in an undefined state.
-  List(List&& list) {
+  List(List &&list) {
+    head = tail = nullptr;
+    sz = 0;
+    *this = list;
+  }
+  List &operator=(List &list) {
+    erase(head, nullptr);
     sz = list.sz;
     head = list.head;
     tail = list.tail;
     list.head = nullptr;
     list.tail = nullptr;
+    return *this;
   }
   // Constructs a new list by copying all items from another list.
-  List(List& list) {
+  List(const List &list) {
+    head = tail = nullptr;
+    sz = 0;
+    *this = list;
+  }
+  List &operator=(const List &list) {
+    erase(head, nullptr);
     sz = list.sz;
-    Item* prev = nullptr;
+    Item *prev = nullptr;
 
-    for (Item* it = list.head; it != nullptr; it = it->next) {
-      Item* x = new Item;
+    for (Item *it = list.head; it != nullptr; it = it->next) {
+      Item *x = new Item;
       x->val = it->val;
 
       if (prev == nullptr)
@@ -78,6 +90,7 @@ class List {
 
     tail = prev;
     tail->next = nullptr;
+    return *this;
   }
 
   // Returns whether the list container is empty
@@ -86,14 +99,14 @@ class List {
   size_t size() { return sz; }
 
   // Returns a reference to the first element in the list container
-  V& front() { return head->val; }
+  V &front() { return head->val; }
   // Returns a reference to the last element in the list container.
-  V& back() { return tail->val; }
+  V &back() { return tail->val; }
 
   // Inserts a new element at the beginning of the list, right before its
   // current first element.
   void push_front(V ele) {
-    Item* x = new Item;
+    Item *x = new Item;
     x->val = ele;
     x->next = head;
     x->prev = nullptr;
@@ -109,7 +122,7 @@ class List {
   // Adds a new element at the end of the list container, after its current last
   // element.
   void push_back(V ele) {
-    Item* x = new Item;
+    Item *x = new Item;
     x->val = ele;
     x->next = nullptr;
     x->prev = tail;
@@ -125,7 +138,7 @@ class List {
   // range of elements ([first,last)).
   // This effectively reduces the container size by the number of elements
   // removed, which are destroyed.
-  Item* erase(Item* first, Item* last) {
+  Item *erase(Item *first, Item *last) {
     if (first == nullptr)
       return nullptr;
 
@@ -139,8 +152,8 @@ class List {
     else
       tail = first->prev;
 
-    for (Item* p = first; p != last;) {
-      Item* del = p;
+    for (Item *p = first; p != last;) {
+      Item *del = p;
       p = p->next;
       delete del;
       sz--;
@@ -163,12 +176,12 @@ class List {
   // inserting at the end as many elements as needed to reach a size of n. If
   // val is specified, the new elements are initialized as copies of val,
   // otherwise, they are value-initialized.
-  void resize(size_t n, V val) {
+  void resize(size_t n, V val = V{}) {
     if (n > sz) {
       List l(n - sz, val);
       splice(nullptr, l);
     } else if (n < sz) {
-      Item* fird = head;
+      Item *fird = head;
 
       for (size_t i = 0; i < n; i++)
         fird = fird->next;
@@ -180,7 +193,7 @@ class List {
   // position(pos).This effectively inserts those elements into the container
   // and removes them from l, altering the sizes of both containers. The
   // operation does not involve the construction or destruction of any element.
-  void splice(Item* pos, List& l) {
+  void splice(Item *pos, List &l) {
     if (pos == head)
       head = l.head;
     else {
@@ -204,13 +217,13 @@ class List {
   // number of elements removed.
   // inefficient implementation
   void remove(V ele) {
-    for (Item* p = head; p != nullptr;)
+    for (Item *p = head; p != nullptr;)
       if (p->val == ele)
         p = erase(p, p->next);
       else
         p = p->next;
   }
 };
-}  // namespace Nostd
+} // namespace Nostd
 
 #endif

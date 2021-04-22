@@ -25,15 +25,14 @@ namespace Data {
   represented in a neat, visual fashion.
 */
 enum class MapUnit : char {
-  nothing = ' ',
+  nothing = '.',
   ground = '#',
   platform = '=',
   enemy = '!',
   item = '$'
 };
 
-std::basic_istream<wchar_t> &operator>>(std::basic_istream<wchar_t> &,
-                                        MapUnit &);
+std::basic_istream<char> &operator>>(std::basic_istream<char> &, MapUnit &);
 
 /*
   A Map describes the topology of a piece of the game world, but not its

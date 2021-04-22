@@ -14,7 +14,8 @@
 using Data::Map;
 using Data::MapUnit;
 
-std::basic_istream<char> &operator>>(std::basic_istream<char> &i, MapUnit &m) {
+std::basic_istream<char> &Data::operator>>(std::basic_istream<char> &i,
+                                           MapUnit &m) {
   m = static_cast<MapUnit>(i.get());
   return i;
 }
@@ -24,7 +25,8 @@ Map::Map(size_t width, MapUnit value)
 
 size_t Map::width() const noexcept { return extent(1); }
 
-std::basic_istream<char> &operator>>(std::basic_istream<char> &i, Map &m) {
+std::basic_istream<char> &Data::operator>>(std::basic_istream<char> &i,
+                                           Map &m) {
   size_t w;
   i >> w;
   m = Map(w);
