@@ -14,6 +14,9 @@
 #include "../screen.hpp"
 #include <exception>
 
+#include <iostream>
+using namespace std;
+
 void Engine::Menu::Menu::redraw() {
   // assert the root is not null by
   // - attempting to generate it for the first time
@@ -30,6 +33,7 @@ void Engine::Menu::Menu::redraw() {
     first_draw = false;
   }
 
+  cout << "redrawing" << endl;
   root->show(window, 0, 0, width, height);
   doupdate();
 }
