@@ -49,14 +49,6 @@ int main() {
     assert(!um.contains(5));
   });
 
-  /*it("removes all element from an umap", [] {
-    UnorderedMap<int, int> um;
-    um.put(4, 5);
-    um.put(10, 15);
-    um.remove(4);
-    assert(um.get_values().size() == 1);
-  });**/
-
   it("clears the umap", [] {
     UnorderedMap<int, int> um;
     um.put(2, 5);

@@ -293,7 +293,7 @@ private:
     // Returns the node with the smallest key
     TreeNode *min() const noexcept {
       TreeNode *ptr = root;
-      while (ptr->left)
+      while (ptr->left != nullptr)
         ptr = ptr->left;
       return ptr;
     }
@@ -355,8 +355,8 @@ private:
   Tree *tree;
 
 public:
-  using Iterator = typename Tree::Iterator;
-  using ConstIterator = const Iterator;
+  using iterator = typename Tree::Iterator;
+  using const_iterator = const iterator;
 
   TreeMap() { this->tree = new Tree(); }
 
@@ -389,13 +389,13 @@ public:
     return this->tree->as_vector();
   }
 
-  Iterator begin() { return Iterator(this->tree->min()); }
+  iterator begin() { return iterator(this->tree->min()); }
 
-  Iterator end() { return Iterator(this->tree->max()->right); }
+  iterator end() { return iterator(this->tree->max()->right); }
 
-  ConstIterator cbegin() const { return Iterator(this->tree->min()); }
+  const_iterator cbegin() const { return iterator(this->tree->min()); }
 
-  ConstIterator cend() const { return Iterator(this->tree->max()->right); }
+  const_iterator cend() const { return iterator(this->tree->max()->right); }
 };
 
 } // namespace Nostd
