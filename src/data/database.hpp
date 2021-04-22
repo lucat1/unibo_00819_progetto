@@ -19,7 +19,7 @@
 #include "../nostd/unordered_map.hpp"
 #include "../nostd/vector.hpp"
 #include "../nostd/wstring.hpp"
-#include "map.hpp"
+#include "map_chunk.hpp"
 #include "result.hpp"
 #include "scenery.hpp"
 #include "setting.hpp"
@@ -51,8 +51,8 @@ public:
   const Nostd::Vector<Setting> &settings() const noexcept;
   void save_settings() const; // saves current setting values to filesystem
 
-  Nostd::Vector<Map> &maps() noexcept;
-  const Nostd::Vector<Map> &maps() const noexcept;
+  Nostd::Vector<MapChunk> &map_chunks() noexcept;
+  const Nostd::Vector<MapChunk> &map_chunks() const noexcept;
 
   Nostd::Vector<Scenery> &sceneries() noexcept;
   const Nostd::Vector<Scenery> &sceneries() const noexcept;
@@ -66,7 +66,7 @@ public:
 private:
   char *conf, *scor;
   Nostd::Vector<Setting> set{};
-  Nostd::Vector<Map> map{};
+  Nostd::Vector<MapChunk> map{};
   Nostd::Vector<Scenery> sce{};
   // TODO
   Nostd::UnorderedMap<Nostd::WString, Interactables::Hero> her{};
@@ -76,7 +76,7 @@ private:
   char *newstrcpy(const char *) const;
   char *newstrcat(const char *, const char *) const;
   void load_settings(const char *assets_filepath);
-  void load_maps(const char *assets_filepath);
+  void load_map_chunks(const char *assets_filepath);
   void load_sceneries(const char *assets_filepath);
   // TODO
   void load_results();
