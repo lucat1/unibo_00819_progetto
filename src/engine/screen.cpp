@@ -90,6 +90,9 @@ bool Engine::Screen::reposition() {
 
   mvwin(container, y + 1, x + 1);
   send_event(Engine::Drawable::Event::redraw);
+  // force redrawing to make the container window stand above the outer box
+  // window
+  redrawwin(container);
 
   // do two refreshes in one
   wnoutrefresh(outer_box);
