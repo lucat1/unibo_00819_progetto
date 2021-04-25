@@ -13,6 +13,7 @@
 
 #include <cstring>
 #include <fstream>
+#include <iostream>
 
 #include "map_chunk.hpp"
 #include "result.hpp"
@@ -99,14 +100,15 @@ void Database::load_settings(const char *assets_filepath) {
   wifs.open(conf);
   WString key;
   while (get_CSV_WString(wifs, key)) {
+    size_t value;
+    wifs >> value;
+    while (wifs && wifs.get() != newrecord)
+      ;
     for (auto &s : set)
       if (!key.compare(s.label())) {
-        size_t value;
-        wifs >> value;
         s.set(s.begin() + value);
         break;
       }
-    wifs.ignore(newrecord);
   }
   wifs.close();
 }

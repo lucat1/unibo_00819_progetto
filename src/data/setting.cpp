@@ -11,6 +11,7 @@
 
 #include "setting.hpp"
 
+#include <iostream>
 #include <iterator>
 #include <stdexcept>
 
@@ -150,10 +151,10 @@ std::basic_istream<wchar_t> &Data::operator>>(std::basic_istream<wchar_t> &is,
   is.ignore();
   is >> stride;
   is.ignore();
-  is >> default_index;
-  is.ignore();
-  s = Setting(label, start, size, stride,
-              default_index); // start, size, stride, default_index);
+  if (is >> default_index) {
+    is.ignore();
+    s = Setting(label, start, size, stride, default_index);
+  }
   return is;
 }
 
