@@ -161,10 +161,10 @@ Data::get_CSV_WString(std::basic_istream<wchar_t> &is, WString &s) {
 std::basic_ostream<wchar_t> &
 Data::put_CSV_WString(std::basic_ostream<wchar_t> &os,
                       const Nostd::WString &s) {
-  for (auto x : s) {
-    if (x == Database::separator || x == Database::newrecord)
+  for (auto x = s.cbegin(); x + 1 != s.end(); ++x) {
+    if (*x == Database::separator || *x == Database::newrecord)
       os << Database::escape;
-    os << x;
+    os << *x;
   }
   return os;
 }
