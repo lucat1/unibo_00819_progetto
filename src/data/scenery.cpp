@@ -37,8 +37,6 @@ std::basic_istream<wchar_t> &Data::operator>>(std::basic_istream<wchar_t> &i,
   return i;
 }
 
-#include <iostream>
-
 std::basic_istream<wchar_t> &Data::operator>>(std::basic_istream<wchar_t> &i,
                                               Scenery &s) {
   if (i >> s.ground) {
