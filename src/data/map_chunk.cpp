@@ -35,6 +35,7 @@ std::basic_istream<char> &Data::operator>>(std::basic_istream<char> &i,
       for (auto &cell : row)
         i >> cell.value();
     }
+    i.ignore();
   }
   return i;
 }

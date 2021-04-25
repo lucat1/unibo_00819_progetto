@@ -24,27 +24,33 @@ std::basic_istream<wchar_t> &Data::operator>>(std::basic_istream<wchar_t> &i,
     i.ignore();
     i >> a.left >> a.center >> a.right;
     i.ignore();
+    i >> a.bottom_left >> a.bottom >> a.bottom_right;
+    i.ignore();
     short foreground, background;
-    i >> a.bottom_left >> a.bottom >> a.bottom_right >> foreground >>
-        background;
+    i >> foreground;
+    i.ignore();
+    i >> background;
     a.foreground = Engine::short_to_color(foreground);
     a.background = Engine::short_to_color(background);
+    i.ignore();
   }
   return i;
 }
 
+#include <iostream>
+
 std::basic_istream<wchar_t> &Data::operator>>(std::basic_istream<wchar_t> &i,
                                               Scenery &s) {
-  if (i) {
-    i >> s.ground;
-    i.ignore();
+  if (i >> s.ground) {
     i >> s.platform;
     size_t sky_colors;
     i >> sky_colors;
+    i.ignore();
     s.sky = Nostd::Vector<Engine::Color>(sky_colors);
     for (auto &x : s.sky) {
       short color_code;
       i >> color_code;
+      i.ignore();
       x = Engine::short_to_color(color_code);
     }
   }

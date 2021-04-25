@@ -13,7 +13,7 @@
 
 #include <cstring>
 #include <fstream>
-#include <iostream>
+#include <utility>
 
 #include "map_chunk.hpp"
 #include "result.hpp"
@@ -37,7 +37,54 @@ Database::Database(const char *configuration, const char *assets,
   load_sceneries(assets);
   // TODO
   load_results();
-  std::cerr << "Yay!\n";
+}
+
+Database::Database(Database &&d) {
+  conf = d.conf;
+  d.conf = nullptr;
+  scor = d.scor;
+  d.scor = nullptr;
+  using std::move;
+  set = move(d.set);
+  map = move(d.map);
+  sce = move(d.sce);
+  // TODO
+  her = move(d.her);
+  // TODO
+  res = move(d.res);
+}
+
+Database &Database::operator=(Database &&d) {
+  delete conf;
+  conf = d.conf;
+  d.conf = nullptr;
+  delete scor;
+  scor = d.scor;
+  d.scor = nullptr;
+  using std::move;
+  set = move(d.set);
+  map = move(d.map);
+  sce = move(d.sce);
+  // TODO
+  her = move(d.her);
+  // TODO
+  res = move(d.res);
+  return *this;
+}
+
+Database::Database(const Database &d) { *this = d; }
+
+Database &Database::operator=(const Database &d) {
+  conf = newstrcpy(d.conf);
+  scor = newstrcpy(d.scor);
+  set = d.set;
+  map = d.map;
+  sce = d.sce;
+  // TODO
+  her = d.her;
+  // TODO
+  res = d.res;
+  return *this;
 }
 
 Database::~Database() {
@@ -70,6 +117,7 @@ const List<Result> &Database::results() const noexcept { return res; }
 
 void Database::save_results() const {
   std::wofstream wofs(scor);
+  // TODO Nostd::List iterators needed
   /* for (auto x : res) {
     put_CSV_WString(wofs, x.nickname()) >> separator;
     put_CSV_WString(wofs, x.hero()->name()) >> separator;
@@ -138,25 +186,25 @@ void Database::load_results() {
   wifstream wifs{scor};
   WString nickname;
   while (get_CSV_WString(wifs, nickname)) {
-    wifs.ignore(separator);
     WString hero;
     int score;
     get_CSV_WString(wifs, hero) >> score;
     res.push_back(
         {nickname, her.contains(nickname) ? &her[nickname] : nullptr, score});
-    wifs.ignore(newrecord);
+    wifs.ignore();
   }
 }
 
 std::basic_istream<wchar_t> &
 Data::get_CSV_WString(std::basic_istream<wchar_t> &is, WString &s) {
   s = WString{};
-  wchar_t input;
-  while (!is.eof() && (input = is.get()) != Database::separator &&
+  wchar_t input = is.get();
+  while (!is.eof() && input != Database::separator &&
          input != Database::newrecord) {
     s.push_back(input);
     if (s.back() == Database::escape)
       is.get(s.back());
+    input = is.get();
   }
   return is;
 }

@@ -11,7 +11,6 @@
 
 #include "setting.hpp"
 
-#include <iostream>
 #include <iterator>
 #include <stdexcept>
 
