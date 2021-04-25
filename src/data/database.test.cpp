@@ -19,7 +19,6 @@ using Nostd::it;
 
 int main() {
   it("loads a database from the filesystem", [] {
-    // Database d("tests/alma.conf.csv", "tests/assets/",
-    // "tests/scoreboard.csv");
+    Database d("tests/alma.conf.csv", "tests/assets/", "tests/scoreboard.csv");
   });
 }

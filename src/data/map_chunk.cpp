@@ -28,12 +28,13 @@ size_t MapChunk::width() const noexcept { return extent(1); }
 std::basic_istream<char> &Data::operator>>(std::basic_istream<char> &i,
                                            MapChunk &m) {
   size_t w;
-  i >> w;
-  m = MapChunk(w);
-  for (auto &row : m) {
-    i.ignore();
-    for (auto &cell : row)
-      i >> cell.value();
+  if (i >> w) {
+    m = MapChunk(w);
+    for (auto &row : m) {
+      i.ignore();
+      for (auto &cell : row)
+        i >> cell.value();
+    }
   }
   return i;
 }

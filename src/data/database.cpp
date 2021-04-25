@@ -37,6 +37,7 @@ Database::Database(const char *configuration, const char *assets,
   load_sceneries(assets);
   // TODO
   load_results();
+  std::cerr << "Yay!\n";
 }
 
 Database::~Database() {
