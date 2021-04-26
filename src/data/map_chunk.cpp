@@ -11,6 +11,8 @@
 
 #include "map_chunk.hpp"
 
+#include <stdexcept>
+
 using Data::MapChunk;
 using Data::MapUnit;
 
@@ -20,16 +22,24 @@ std::basic_istream<char> &Data::operator>>(std::basic_istream<char> &i,
   return i;
 }
 
-MapChunk::MapChunk(size_t width, MapUnit value)
-    : Nostd::Matrix<MapUnit>({height, width}, value) {}
+MapChunk::MapChunk(size_t width, size_t starting_row, MapUnit value)
+    : Nostd::Matrix<MapUnit>({height, width}, value) {
+  if (starting_row >= height) {
+    strt_row = 0;
+    throw std::invalid_argument("starting_row >= height");
+  }
+  strt_row = starting_row;
+}
 
 size_t MapChunk::width() const noexcept { return extent(1); }
 
+size_t MapChunk::starting_row() const noexcept { return strt_row; }
+
 std::basic_istream<char> &Data::operator>>(std::basic_istream<char> &i,
                                            MapChunk &m) {
-  size_t w;
-  if (i >> w) {
-    m = MapChunk(w);
+  size_t w, s;
+  if (i >> w >> s) {
+    m = MapChunk(w, s);
     for (auto &row : m) {
       i.ignore();
       for (auto &cell : row)

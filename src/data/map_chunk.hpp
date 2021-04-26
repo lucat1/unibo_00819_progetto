@@ -45,11 +45,17 @@ public:
   MapChunk() = delete;
   // width is the number of columns of the map, value is the initial value of
   // every MapUnit in it
-  MapChunk(size_t width, MapUnit value = MapUnit::nothing);
+  MapChunk(size_t width, size_t starting_row, MapUnit value = MapUnit::nothing);
 
   // capacity
   size_t width() const noexcept;
   constexpr static size_t height{20};
+
+  // 0-based index of the player's starting row (usually right above floor)
+  size_t starting_row() const noexcept;
+
+private:
+  size_t strt_row;
 };
 
 // A stream can represent a MapChunk using:

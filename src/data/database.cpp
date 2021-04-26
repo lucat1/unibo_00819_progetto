@@ -166,7 +166,7 @@ void Database::load_map_chunks(const char *assets_filepath) {
   const char *const maps_fp{newstrcat(assets_filepath, maps_rel_fp)};
   ifstream ifs{maps_fp};
   delete maps_fp;
-  MapChunk m(0);
+  MapChunk m(0, 0);
   while (ifs >> m)
     map.push_back(m);
   ifs.close();
@@ -199,13 +199,12 @@ std::basic_istream<wchar_t> &
 Data::get_CSV_WString(std::basic_istream<wchar_t> &is, WString &s) {
   if (is) {
     s = WString{};
-    wchar_t input = is.get(); // nasty narrowing conversions
-    while (!is.eof() && input != Database::separator &&
+    wchar_t input;
+    while (is >> input && input != Database::separator &&
            input != Database::newrecord) {
       s.push_back(input);
       if (s.back() == Database::escape)
-        is.get(s.back());
-      input = is.get();
+        is >> s.back();
     }
   }
   return is;
