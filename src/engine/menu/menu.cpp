@@ -10,6 +10,7 @@
   subclasses. This implementation should allow menus not to have any focusable
   item, that's why we take care and check each Box* for nullness.
 */
+
 #include "menu.hpp"
 #include "../screen.hpp"
 #include <exception>
@@ -31,7 +32,6 @@ void Engine::Menu::Menu::redraw() {
   }
 
   root->show(window, 0, 0, width, height);
-  redrawwin(window);
   doupdate();
 }
 

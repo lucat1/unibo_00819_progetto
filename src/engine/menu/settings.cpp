@@ -12,16 +12,20 @@
 */
 
 #include "settings.hpp"
+#include "../../data/palette.hpp"
 #include "../ui/button.hpp"
 #include "../ui/center.hpp"
 #include "../ui/choice.hpp"
 #include "../ui/text_box.hpp"
 
+using Data::Palette::button;
+using Data::Palette::slider;
+using Data::Palette::unfocused;
 using Engine::UI::Box;
 
-Engine::Color settings_button_fg = Engine::Color::red,
-              settings_button_bg = Engine::Color::grey23,
-              settings_line = Engine::Color::grey23;
+/* Engine::Color settings_button_fg = Engine::Color::red, */
+/*               settings_button_bg = Engine::Color::grey23, */
+/*               settings_line = Engine::Color::grey23; */
 
 void Engine::Menu::Settings::alloc_updated(
     Nostd::Vector<Data::Setting> &settings) {
@@ -55,8 +59,8 @@ Box *Engine::Menu::Settings::append_line(Box *parent, Data::Setting *setting) {
   line->append<UI::TextBox, const Nostd::WString &>(setting->label());
   auto choice = line->append<UI::Choice, Data::Setting *>(setting);
   choice->propb(Box::Property::float_right, true);
-  choice->propc(Box::Property::foreground, settings_button_fg);
-  choice->propc(Box::Property::background, Color::transparent);
+  choice->propc(Box::Property::foreground, slider.first);
+  choice->propc(Box::Property::background, slider.second);
 
   unfocus(line);
   return line;
@@ -122,19 +126,19 @@ Box *Engine::Menu::Settings::prev_box() {
 void Engine::Menu::Settings::focus(Box *box) {
   if (dynamic_cast<Engine::UI::Button *>(box)) {
     // visually focus buttons
-    box->propc(Box::Property::background, settings_button_fg);
-    box->propc(Box::Property::foreground, settings_button_bg);
+    box->propc(Box::Property::background, button.first);
+    box->propc(Box::Property::foreground, button.second);
   } else {
     // visually focus boxes (lines of the list)
-    box->propc(Box::Property::background, settings_line);
+    box->propc(Box::Property::background, unfocused);
   }
 }
 
 void Engine::Menu::Settings::unfocus(Box *box) {
   if (dynamic_cast<Engine::UI::Button *>(box)) {
     // visually unfocus buttons
-    box->propc(Box::Property::background, settings_button_bg);
-    box->propc(Box::Property::foreground, settings_button_fg);
+    box->propc(Box::Property::background, button.second);
+    box->propc(Box::Property::foreground, button.first);
   } else {
     // visually unfocus boxes (lines of the list)
     box->propc(Box::Property::background, Color::transparent);
