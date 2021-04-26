@@ -197,14 +197,16 @@ void Database::load_results() {
 
 std::basic_istream<wchar_t> &
 Data::get_CSV_WString(std::basic_istream<wchar_t> &is, WString &s) {
-  s = WString{};
-  wchar_t input = is.get();
-  while (!is.eof() && input != Database::separator &&
-         input != Database::newrecord) {
-    s.push_back(input);
-    if (s.back() == Database::escape)
-      is.get(s.back());
-    input = is.get();
+  if (is) {
+    s = WString{};
+    wchar_t input = is.get(); // nasty narrowing conversions
+    while (!is.eof() && input != Database::separator &&
+           input != Database::newrecord) {
+      s.push_back(input);
+      if (s.back() == Database::escape)
+        is.get(s.back());
+      input = is.get();
+    }
   }
   return is;
 }
