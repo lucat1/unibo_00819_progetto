@@ -6,12 +6,12 @@
   Stefano Volpe #969766
   04/09/2021
 
-  map.cpp: implementation of Data::Map.
+  map_chunk.cpp: implementation of Data::MapChunk.
 */
 
-#include "map.hpp"
+#include "map_chunk.hpp"
 
-using Data::Map;
+using Data::MapChunk;
 using Data::MapUnit;
 
 std::basic_istream<char> &Data::operator>>(std::basic_istream<char> &i,
@@ -20,16 +20,16 @@ std::basic_istream<char> &Data::operator>>(std::basic_istream<char> &i,
   return i;
 }
 
-Map::Map(size_t width, MapUnit value)
+MapChunk::MapChunk(size_t width, MapUnit value)
     : Nostd::Matrix<MapUnit>({height, width}, value) {}
 
-size_t Map::width() const noexcept { return extent(1); }
+size_t MapChunk::width() const noexcept { return extent(1); }
 
 std::basic_istream<char> &Data::operator>>(std::basic_istream<char> &i,
-                                           Map &m) {
+                                           MapChunk &m) {
   size_t w;
   i >> w;
-  m = Map(w);
+  m = MapChunk(w);
   for (auto &row : m) {
     i.ignore();
     for (auto &cell : row)

@@ -14,7 +14,7 @@
 #include <cstring>
 #include <fstream>
 
-#include "map.hpp"
+#include "map_chunk.hpp"
 #include "result.hpp"
 #include "scenery.hpp"
 #include "setting.hpp"
@@ -32,7 +32,7 @@ Database::Database(const char *configuration, const char *assets,
                    const char *scoreboard)
     : conf{newstrcpy(configuration)}, scor{newstrcpy(scoreboard)} {
   load_settings(assets);
-  load_maps(assets);
+  load_map_chunks(assets);
   load_sceneries(assets);
   // TODO
   load_results();
@@ -54,9 +54,9 @@ void Database::save_settings() const {
   wofs.close();
 }
 
-Vector<Map> &Database::maps() noexcept { return map; }
+Vector<MapChunk> &Database::map_chunks() noexcept { return map; }
 
-const Vector<Map> &Database::maps() const noexcept { return map; }
+const Vector<MapChunk> &Database::map_chunks() const noexcept { return map; }
 
 Vector<Scenery> &Database::sceneries() noexcept { return sce; }
 
@@ -111,11 +111,11 @@ void Database::load_settings(const char *assets_filepath) {
   wifs.close();
 }
 
-void Database::load_maps(const char *assets_filepath) {
+void Database::load_map_chunks(const char *assets_filepath) {
   const char *const maps_fp{newstrcat(assets_filepath, maps_rel_fp)};
   ifstream ifs{maps_fp};
   delete maps_fp;
-  Map m(0);
+  MapChunk m(0);
   while (ifs >> m)
     map.push_back(m);
   ifs.close();
