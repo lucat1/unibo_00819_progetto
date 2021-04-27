@@ -7,17 +7,28 @@
 namespace Nostd {
 // Lists are sequence containers that allow constant time insert and erase
 // operations anywhere within the sequence, and iteration in both directions.
-template <typename V>
-class List {
- protected:
+template <typename V> class List {
+public:
   struct Item {
     V val;
     Item *next, *prev;
+    List<V> *list;
   };
+
+  struct iterator {
+    Item *item;
+    bool end = false;
+  };
+  using reverse_iterator = std::reverse_iterator<iterator>;
+  using const_iterator = const iterator;
+  using const_reverse_iterator = std::reverse_iterator<const_iterator>;
+
+protected:
   size_t sz;
   Item *head, *tail;
+  struct Iterator {};
 
- public:
+public:
   // Costructs a empty list, without elements.
   List() {
     sz = 0;
@@ -28,9 +39,10 @@ class List {
   List(size_t size) {
     sz = size;
     for (size_t i = 0; i < sz; i++) {
-      Item* x = new Item;
+      Item *x = new Item;
       x->next = nullptr;
       x->prev = tail;
+      x->list = this;
       if (i == 0)
         head = x;
       if (tail != nullptr)
@@ -42,10 +54,11 @@ class List {
   List(size_t size, V ele) {
     sz = size;
     for (size_t i = 0; i < sz; i++) {
-      Item* x = new Item;
+      Item *x = new Item;
       x->val = ele;
       x->next = nullptr;
       x->prev = tail;
+      x->list = this;
       if (i == 0)
         head = x;
       if (tail != nullptr)
@@ -55,29 +68,49 @@ class List {
   }
   // Constructs a new list by moving all items of another list. Leaves the
   // previous list in an undefined state.
-  List(List&& list) {
-    sz = list.sz;
-    head = list.head;
-    tail = list.tail;
-    list.head = nullptr;
-    list.tail = nullptr;
+  List(List &&list) {
+    head = tail = nullptr;
+    sz = 0;
+    *this = list;
+  }
+  List &operator=(List &&l) {
+    erase(head, nullptr);
+    sz = l.sz;
+    head = l.head;
+    tail = l.tail;
+    l.head = nullptr;
+    l.tail = nullptr;
+
+    for (Item *p = head; p != nullptr; p = p->next)
+      p->list = this;
+
+    return *this;
   }
   // Constructs a new list by copying all items from another list.
-  List(List& list) {
-    sz = list.sz;
-    Item* prev = nullptr;
-
-    for (Item* it = list.head; it != nullptr; it = it->next) {
-      Item* x = new Item;
-      x->val = it->val;
-
+  List(const List &l) {
+    sz = 0;
+    head = tail = nullptr;
+    *this = l;
+  }
+  List &operator=(const List &l) {
+    erase(head, nullptr);
+    sz = l.sz;
+    Item *prev = nullptr;
+    for (Item *p = l.head; p != nullptr; p = p->next) {
+      Item *x = new Item(*p);
+      x->list = this;
+      x->prev = prev;
       if (prev == nullptr)
         head = x;
+      else
+        x->prev->next = x;
+      if (p == l.tail) {
+        tail = x;
+        x->next = nullptr;
+      }
       prev = x;
     }
-
-    tail = prev;
-    tail->next = nullptr;
+    return *this;
   }
 
   // Returns whether the list container is empty
@@ -86,14 +119,15 @@ class List {
   size_t size() { return sz; }
 
   // Returns a reference to the first element in the list container
-  V& front() { return head->val; }
+  V &front() { return head->val; }
   // Returns a reference to the last element in the list container.
-  V& back() { return tail->val; }
+  V &back() { return tail->val; }
 
   // Inserts a new element at the beginning of the list, right before its
   // current first element.
   void push_front(V ele) {
-    Item* x = new Item;
+    Item *x = new Item;
+    x->list = this;
     x->val = ele;
     x->next = head;
     x->prev = nullptr;
@@ -109,7 +143,8 @@ class List {
   // Adds a new element at the end of the list container, after its current last
   // element.
   void push_back(V ele) {
-    Item* x = new Item;
+    Item *x = new Item;
+    x->list = this;
     x->val = ele;
     x->next = nullptr;
     x->prev = tail;
@@ -125,7 +160,7 @@ class List {
   // range of elements ([first,last)).
   // This effectively reduces the container size by the number of elements
   // removed, which are destroyed.
-  Item* erase(Item* first, Item* last) {
+  Item *erase(Item *first, Item *last) {
     if (first == nullptr)
       return nullptr;
 
@@ -139,8 +174,8 @@ class List {
     else
       tail = first->prev;
 
-    for (Item* p = first; p != last;) {
-      Item* del = p;
+    for (Item *p = first; p != last;) {
+      Item *del = p;
       p = p->next;
       delete del;
       sz--;
@@ -163,12 +198,12 @@ class List {
   // inserting at the end as many elements as needed to reach a size of n. If
   // val is specified, the new elements are initialized as copies of val,
   // otherwise, they are value-initialized.
-  void resize(size_t n, V val) {
+  void resize(size_t n, V val = V{}) {
     if (n > sz) {
       List l(n - sz, val);
       splice(nullptr, l);
     } else if (n < sz) {
-      Item* fird = head;
+      Item *fird = head;
 
       for (size_t i = 0; i < n; i++)
         fird = fird->next;
@@ -180,7 +215,10 @@ class List {
   // position(pos).This effectively inserts those elements into the container
   // and removes them from l, altering the sizes of both containers. The
   // operation does not involve the construction or destruction of any element.
-  void splice(Item* pos, List& l) {
+  void splice(Item *pos, List &l) {
+    for (Item *p = l.head; p != nullptr; p = p->next)
+      p->list = this;
+
     if (pos == head)
       head = l.head;
     else {
@@ -204,13 +242,45 @@ class List {
   // number of elements removed.
   // inefficient implementation
   void remove(V ele) {
-    for (Item* p = head; p != nullptr;)
+    for (Item *p = head; p != nullptr;)
       if (p->val == ele)
         p = erase(p, p->next);
       else
         p = p->next;
   }
+  iterator begin() {
+    iterator p;
+    p.item = head;
+    return p;
+  }
+  const_iterator begin() const {
+    iterator p;
+    p.item = head;
+    return p;
+  }
+  iterator end() {
+    iterator p;
+    p.item = tail;
+    p.end = true;
+    return p;
+  }
+  const_iterator end() const {
+    iterator p;
+    p.item = tail;
+    p.end = true;
+    return p;
+  }
+  reverse_iterator rbegin() { return reverse_iterator(end() - 1); }
+  reverse_iterator rend() { return reverse_iterator(begin() - 1); }
+  const_iterator cbegin() const { return begin(); }
+  const_iterator cend() const { return end(); }
+  const_reverse_iterator crbegin() const {
+    return const_reverse_iterator(end() - 1);
+  }
+  const_reverse_iterator crend() const {
+    return const_reverse_iterator(begin() - 1);
+  }
 };
-}  // namespace Nostd
+} // namespace Nostd
 
 #endif
