@@ -14,6 +14,7 @@
 #define ENGINE_MENU_RESULTS_HPP
 
 #include "../../data/result.hpp"
+#include "../../nostd/list.hpp"
 #include "menu.hpp"
 
 namespace Engine {
@@ -21,9 +22,12 @@ namespace Menu {
 
 class Results : public Menu {
 private:
-  Nostd::Vector<Data::Result> results;
-  int focused = 0, max_focused = 0;
-  int clicked_on = -1;
+  const Nostd::List<Data::Result> &results;
+  bool has_interacted = 0;
+  UI::Box *append_line(UI::Box *parent, int rank, int score,
+                       const Nostd::WString &nick);
+  UI::Box *append_line(UI::Box *parent, const Nostd::WString &rank,
+                       const Nostd::WString &score, const Nostd::WString &nick);
 
 protected:
   UI::Box *generate();
@@ -37,7 +41,7 @@ protected:
   void increment(UI::Box *box);
 
 public:
-  Results(WINDOW *window, const Nostd::Vector<Data::Result> &results);
+  Results(WINDOW *window, const Nostd::List<Data::Result> &results);
   bool is_over();
 };
 

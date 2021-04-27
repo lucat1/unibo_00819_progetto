@@ -23,10 +23,6 @@ using Data::Palette::slider;
 using Data::Palette::unfocused;
 using Engine::UI::Box;
 
-/* Engine::Color settings_button_fg = Engine::Color::red, */
-/*               settings_button_bg = Engine::Color::grey23, */
-/*               settings_line = Engine::Color::grey23; */
-
 void Engine::Menu::Settings::alloc_updated(
     Nostd::Vector<Data::Setting> &settings) {
   for (auto setting : settings)
@@ -55,7 +51,6 @@ Box *Engine::Menu::Settings::append_line(Box *parent, Data::Setting *setting) {
   line->props(Box::Property::padding_right, 2);
   line->props(Box::Property::padding_top, 1);
   line->props(Box::Property::padding_bottom, 1);
-
   line->append<UI::TextBox, const Nostd::WString &>(setting->label());
   auto choice = line->append<UI::Choice, Data::Setting *>(setting);
   choice->propb(Box::Property::float_right, true);
@@ -89,7 +84,7 @@ Box *Engine::Menu::Settings::generate() {
   list->props(Box::Property::padding_left, 2);
   list->props(Box::Property::padding_right, 2);
   list->props(Box::Property::padding_top, 1);
-  list->props(Box::Property::padding_bottom, 2);
+  list->props(Box::Property::padding_bottom, 1);
   for (auto setting : updated)
     append_line(list, setting);
 

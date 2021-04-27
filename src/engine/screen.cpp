@@ -10,6 +10,7 @@
   to contain the content and implementing other lifecycle initial/final setps in
   the game engine (screen initialization/clearing/freeing/...)
 */
+
 #include "screen.hpp"
 #include "menu/main.hpp"
 #include <curses.h>
@@ -47,11 +48,11 @@ bool Engine::Screen::can_fit() {
   getmaxyx(stdscreen, terminal_lines, terminal_cols);
 
   // check that the terminal is big enough to fit the game
-  if (terminal_cols < SCREEN_COLS || terminal_lines < SCREEN_LINES)
+  if (terminal_cols < columns || terminal_lines < lines)
     return false;
 
-  x = (terminal_cols - SCREEN_COLS) / 2;
-  y = (terminal_lines - SCREEN_LINES) / 2;
+  x = (terminal_cols - columns) / 2;
+  y = (terminal_lines - lines) / 2;
   return true;
 }
 
@@ -73,8 +74,8 @@ bool Engine::Screen::open() {
   if (container != nullptr)
     delwin(container);
 
-  outer_box = newwin(SCREEN_LINES + 2, SCREEN_COLS + 2, y, x);
-  container = newwin(SCREEN_LINES, SCREEN_COLS, y + 1, x + 1);
+  outer_box = newwin(lines + 2, columns + 2, y, x);
+  container = newwin(lines, columns, y + 1, x + 1);
   return reposition();
 }
 

@@ -36,7 +36,7 @@ void Engine::Menu::Menu::redraw() {
 }
 
 Engine::Menu::Menu::Menu(WINDOW *window)
-    : Drawable(window, Screen::SCREEN_COLS, Screen::SCREEN_LINES) {
+    : Drawable(window, Screen::columns, Screen::lines) {
   this->drawable_kind = Kind::menu;
 }
 

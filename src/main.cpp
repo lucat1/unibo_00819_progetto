@@ -1,4 +1,5 @@
 #include "engine/menu/main.hpp"
+#include "engine/menu/results.hpp"
 #include "engine/menu/settings.hpp"
 #include "engine/screen.hpp"
 #include <iostream>
@@ -22,6 +23,11 @@ int main() {
   settings.push_back(Data::Setting(L"Sound", 0, 2, 1, 0, 1));
   settings.push_back(Data::Setting(L"Frames Per Second", 30, 3, 30, 1));
 
+  // TODO: properly by calling database.results()
+  Nostd::List<Data::Result> results;
+  results.push_back(Data::Result(L"Benito", nullptr, 1001));
+  results.push_back(Data::Result(L"Lienin", nullptr, 789));
+
   int key;
   bool running = true;
   while (running) {
@@ -41,12 +47,19 @@ int main() {
           screen.set_content<Menu::Settings,
                              const Nostd::Vector<Data::Setting> &>(settings);
           break;
+        case Menu::Main::Result::play:
+          // TODO: change me
+          screen.set_content<Menu::Results, const Nostd::List<Data::Result> &>(
+              results);
+          break;
         default:
           break;
         }
-      } else if (screen.is_content<Menu::Settings>()) {
-        // do something when the settings menu is closed
-        settings = screen.get_content<Menu::Settings>()->get_result();
+      } else {
+        if (screen.is_content<Menu::Settings>())
+          settings = screen.get_content<Menu::Settings>()->get_result();
+
+        // always go back to the main menu after some menus close
         screen.set_content<Menu::Main>();
       }
     }
