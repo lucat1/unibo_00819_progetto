@@ -1,6 +1,7 @@
 #ifndef NOSTD_LIST_HPP
 #define NOSTD_LIST_HPP
 
+#include <iterator>
 #include <stddef.h>
 #include <stdexcept>
 
@@ -15,16 +16,26 @@ public:
     List<V> *list;
   };
 
-  struct iterator {
+  struct iterator : public std::iterator<std::bidirectional_iterator_tag, V> {
     Item *item = nullptr;
     bool end = false;
+
+    iterator() {}
+    iterator(const iterator &it) { *this = it; }
+
+    iterator &operator=(const iterator &it) {
+      item = it.item;
+      end = it.end;
+      return *this;
+    }
+
     bool operator==(iterator it) { return item == it.item && end == it.end; }
     bool operator!=(iterator it) { return !(*this == it); }
 
     V &operator*() { return item->val; }
     V *operator->() { return &item->val; }
     iterator &operator++() {
-      if (item == item->list.tail)
+      if (item == item->list->tail)
         end = true;
       else
         item = item->next;
@@ -106,9 +117,9 @@ public:
     erase(head, nullptr);
     sz = l.sz;
     head = l.head;
-    tail = l.tail;
+    tail = l->tail;
     l.head = nullptr;
-    l.tail = nullptr;
+    l->tail = nullptr;
 
     for (Item *p = head; p != nullptr; p = p->next)
       p->list = this;
@@ -133,7 +144,7 @@ public:
         head = x;
       else
         x->prev->next = x;
-      if (p == l.tail) {
+      if (p == l->tail) {
         tail = x;
         x->next = nullptr;
       }
@@ -256,15 +267,15 @@ public:
     }
 
     if (pos == nullptr)
-      tail = l.tail;
+      tail = l->tail;
     else {
-      l.tail->next = pos;
-      pos->prev = l.tail;
+      l->tail->next = pos;
+      pos->prev = l->tail;
     }
     sz += l.sz;
     l.sz = 0;
     l.head = nullptr;
-    l.tail = nullptr;
+    l->tail = nullptr;
   }
   // Removes from the container all the elements that compare equal to ele. This
   // calls the destructor of these objects and reduces the container size by the
@@ -299,15 +310,17 @@ public:
     p.end = true;
     return p;
   }
-  reverse_iterator rbegin() { return reverse_iterator(end() - 1); }
-  reverse_iterator rend() { return reverse_iterator(begin() - 1); }
+  reverse_iterator rbegin() { return reverse_iterator(--end()); }
+  reverse_iterator rend() { return reverse_iterator(--begin()); }
   const_iterator cbegin() const { return begin(); }
   const_iterator cend() const { return end(); }
   const_reverse_iterator crbegin() const {
-    return const_reverse_iterator(end() - 1);
+    iterator it = end();
+    return const_reverse_iterator(--it);
   }
   const_reverse_iterator crend() const {
-    return const_reverse_iterator(begin() - 1);
+    iterator it = end();
+    return const_reverse_iterator(--it);
   }
 };
 } // namespace Nostd
