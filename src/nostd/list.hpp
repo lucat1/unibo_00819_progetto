@@ -114,9 +114,9 @@ public:
   }
 
   // Returns whether the list container is empty
-  bool empty() { return sz == 0; }
+  bool empty() const { return sz == 0; }
   // Returns the number of elements in the list container
-  size_t size() { return sz; }
+  size_t size() const { return sz; }
 
   // Returns a reference to the first element in the list container
   V &front() { return head->val; }

@@ -88,7 +88,8 @@ Box *Engine::Menu::Results::generate() {
   /*     break; */
   /*   i++; */
   /* } */
-  append_line(list, 1, 1083941, L"Luca");
+  for (size_t i = 0; i < results.size(); i++)
+    append_line(list, i + 1, 1083941, L"Luca");
 
   // buttons at the end of the page for closing the menu
   auto center = root->append<UI::Center>();
