@@ -150,7 +150,8 @@ void Database::load_settings(const char *assets_filepath) {
   while (get_CSV_WString(wifs, key)) {
     size_t value;
     wifs >> value;
-    while (wifs && wifs.get() != newrecord)
+    wchar_t input;
+    while (wifs >> input && input != newrecord)
       ;
     for (auto &s : set)
       if (!key.compare(s.label())) {
