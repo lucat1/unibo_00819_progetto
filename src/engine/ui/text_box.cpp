@@ -36,7 +36,7 @@ Engine::UI::TextBox::split_content(const Nostd::WString content,
 
     // TODO: toggle .ltrim
     Nostd::WString sub = content.substr(content.length() - len, ll + 1);
-    if (!Nostd::iswspace(sub[ll]) && ll != Nostd::WString::npos) {
+    if (ll != Nostd::WString::npos && !Nostd::iswspace(sub[ll])) {
       // when we have two ending chars that are not whitespace we consider this
       // as a word and we add the - charter. Otherwhise we consider this the
       // beginning of a new word and leave it for the next line.

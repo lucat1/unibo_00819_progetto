@@ -48,17 +48,15 @@ Box *Engine::Menu::Results::append_line(Box *parent, const Nostd::WString &rank,
                                         const Nostd::WString &nick) {
   Nostd::WString padded_rank = rank, padded_score = score, padded_nick = nick;
   padstr(pad_dir, rank_size, padded_rank);
+  padded_rank.append(L" ");
   padstr(pad_dir, score_size, padded_score);
+  padded_score.append(L" ");
   padstr(pad_dir, nick_size, padded_nick);
 
   auto line = parent->append<UI::Box>();
   line->propb(Box::Property::direction_horizontal, true);
-  auto rank_text =
-      line->append<UI::TextBox, const Nostd::WString &>(padded_rank);
-  rank_text->props(Box::Property::padding_right, 1);
-  auto score_text =
-      line->append<UI::TextBox, const Nostd::WString &>(padded_score);
-  score_text->props(Box::Property::padding_right, 1);
+  line->append<UI::TextBox, const Nostd::WString &>(padded_rank);
+  line->append<UI::TextBox, const Nostd::WString &>(padded_score);
   line->append<UI::TextBox, const Nostd::WString &>(padded_nick);
   return line;
 }
@@ -79,6 +77,8 @@ Box *Engine::Menu::Results::generate() {
 
   // append a fake table header as another line
   append_line(list, L"Rank", L"Score", L"Nick");
+  append_line(list, L"Rank", L"Score", L"Nick");
+  /* append_line(list, L"Rank", L"Score", L"Nick"); */
 
   // TODO: when we have list iterators
   /* int i = 1; */
@@ -88,8 +88,8 @@ Box *Engine::Menu::Results::generate() {
   /*     break; */
   /*   i++; */
   /* } */
-  for (size_t i = 0; i < results.size(); i++)
-    append_line(list, i + 1, 1083941, L"Luca");
+  /* for (size_t i = 0; i < results.size(); i++) */
+  /*   append_line(list, i + 1, 941, L"Luca"); */
 
   // buttons at the end of the page for closing the menu
   auto center = root->append<UI::Center>();
