@@ -63,12 +63,12 @@ bool Engine::Screen::open() {
   // NOTE: look at man curses(3) for documentation on these functions
   use_default_colors(); // allows to use -1 as a background neutral color
   noecho(); // prevents user-inputted charters to be displayed on the stdscreen
-  raw();    // intercept all keystrokes and prevent ^C from quitting the game
+  nodelay(stdscreen, true); // makes getch non-blocking
+  raw();       // ncurses will report any keystrokes with getch immediately
   curs_set(0); // hide the cursor by default
   keypad(
       stdscreen,
       true); // `true` is used to caputre arrow keys and other special sequences
-  nodelay(stdscreen, true); // makes getch non-blocking
 
   if (container != nullptr)
     delwin(container);
@@ -90,6 +90,9 @@ bool Engine::Screen::reposition() {
 
   mvwin(container, y + 1, x + 1);
   send_event(Engine::Drawable::Event::redraw);
+  // force redrawing to make the container window stand above the outer box
+  // window
+  redrawwin(container);
 
   // do two refreshes in one
   wnoutrefresh(outer_box);
