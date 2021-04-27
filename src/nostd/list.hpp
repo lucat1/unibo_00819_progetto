@@ -16,8 +16,37 @@ public:
   };
 
   struct iterator {
-    Item *item;
+    Item *item = nullptr;
     bool end = false;
+    bool operator==(iterator it) { return item == it.item && end == it.end; }
+    bool operator!=(iterator it) { return !(*this == it); }
+
+    V &operator*() { return item->val; }
+    V *operator->() { return &item->val; }
+    iterator &operator++() {
+      if (item == item->list.tail)
+        end = true;
+      else
+        item = item->next;
+      return *this;
+    }
+    iterator operator++(int) {
+      iterator backup = *this;
+      ++*this;
+      return backup;
+    }
+    iterator &operator--() {
+      if (end)
+        end = false;
+      else
+        item = item->prev;
+      return *this;
+    }
+    iterator operator--(int) {
+      iterator backup = *this;
+      --*this;
+      return backup;
+    }
   };
   using reverse_iterator = std::reverse_iterator<iterator>;
   using const_iterator = const iterator;
