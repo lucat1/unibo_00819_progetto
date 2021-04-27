@@ -20,14 +20,15 @@ using Nostd::it;
 
 int main() {
   it("constructs a Map", [] {
-    MapChunk m(2, 10, MapUnit::ground);
+    MapChunk m(2, 10, 11, MapUnit::ground);
     for (auto &row : m)
       for (auto &cell : row)
         assert(cell.value() == MapUnit::ground);
   });
-  it("returns the right width and starting row", [] {
-    MapChunk m(33, 15);
+  it("returns the right width and starting/ending rows", [] {
+    MapChunk m(33, 15, 5);
     assert(m.width() == 33);
     assert(m.starting_row() == 15);
+    assert(m.ending_row() == 5);
   });
 }
