@@ -90,4 +90,54 @@ int main() {
     assert(l.front() == m.front());
     assert(l.back() == m.back());
   });
+  it("iterates forward", [] {
+    List<size_t> l;
+    for (size_t i = 0; i < 100; i++)
+      l.push_back(i);
+
+    size_t i = 0;
+    for (auto x : l) {
+      assert(x == i);
+      i++;
+    }
+  });
+
+  it("iterates backwards", [] {
+    List<size_t> l;
+    for (size_t i = 0; i < 100; i++)
+      l.push_back(i);
+
+    size_t i = 99;
+    for (auto z = l.rbegin(); z != l.rend(); z++) {
+      auto x = *z;
+      assert(x == i);
+      i--;
+    }
+  });
+
+  it("iterates forward without modifying", [] {
+    List<size_t> l;
+    for (size_t i = 0; i < 100; i++)
+      l.push_back(i);
+
+    size_t i = 0;
+    for (auto z = l.cbegin(); z != l.cend(); z++) {
+      auto x = *z;
+      assert(x == i);
+      i++;
+    }
+  });
+
+  it("iterates backward without modifying", [] {
+    List<size_t> l;
+    for (size_t i = 0; i < 100; i++)
+      l.push_back(i);
+
+    size_t i = 99;
+    for (auto z = l.crbegin(); z != l.crend(); z++) {
+      auto x = *z;
+      assert(x == i);
+      i--;
+    }
+  });
 }
