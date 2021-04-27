@@ -117,12 +117,11 @@ const List<Result> &Database::results() const noexcept { return res; }
 
 void Database::save_results() const {
   std::wofstream wofs(scor);
-  // TODO Nostd::List iterators needed
-  /* for (auto x : res) {
-    put_CSV_WString(wofs, x.nickname()) >> separator;
-    put_CSV_WString(wofs, x.hero()->name()) >> separator;
-    wofs >> x.score() >> newrecord;
-  } */
+  for (auto x : res) {
+    put_CSV_WString(wofs, x.nickname()) << separator;
+    put_CSV_WString(wofs, x.hero()->name()) << separator;
+    wofs << x.score() << newrecord;
+  }
   wofs.close();
 }
 

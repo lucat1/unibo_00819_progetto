@@ -24,7 +24,12 @@ namespace Interactables {
 */
 class Hero {
 public:
-  const Nostd::WString &name() const;
+  const Nostd::WString &name() const noexcept;
+  wchar_t sprite() const noexcept;
+
+private:
+  Nostd::WString nm{L""};
+  wchar_t sprt{'\0'};
 };
 
 } // namespace Interactables
