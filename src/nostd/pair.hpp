@@ -27,6 +27,14 @@ public:
     return cmp.first == this->first && cmp.second == this->second;
   }
   bool operator!=(Pair<A, B> cmp) const { return !operator==(cmp); }
+
+  Pair<A, B> &operator=(const Pair<A, B> &other) {
+    if (this == &other)
+      return *this;
+    this->first = other.first;
+    this->second = other.second;
+    return *this;
+  }
 };
 
 template <typename A, typename B>

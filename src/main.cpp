@@ -22,12 +22,12 @@ int main() {
   settings.push_back(Data::Setting(L"Sound", 0, 2, 1, 0, 1));
   settings.push_back(Data::Setting(L"Frames Per Second", 30, 3, 30, 1));
 
-  int key = -1;
+  int key;
   bool running = true;
   while (running) {
-    // quit if usleep returns an error
-    if (usleep(1000000 / 25)) // 25fps
-      break;
+    // quit if usleep is blocked by an interrupt and the key is an ERR
+    if (usleep(1000000 / 25) == EINTR) // 25fps
+      running = false;
 
     if (screen.get_content()->is_over()) {
       if (screen.is_content<Menu::Main>()) {
@@ -53,38 +53,39 @@ int main() {
 
     // keyboard handling
     key = getch();
-    if (key != ERR) {
-      switch (key) {
-      case KEY_RESIZE:
-        handle(screen.reposition());
-        break;
+    switch (key) {
+    case KEY_RESIZE:
+      handle(screen.reposition());
+      break;
 
-      case '\n':
-      case KEY_ENTER: // enter key for the numpad
-        screen.send_event(Drawable::Event::interact);
-        break;
+    case '\n':
+    case KEY_ENTER: // enter key for the numpad
+      screen.send_event(Drawable::Event::interact);
+      break;
 
-      case 'k':
-      case KEY_UP:
-        screen.send_event(Drawable::Event::move_up);
-        break;
+    case 'k':
+    case KEY_UP:
+      screen.send_event(Drawable::Event::move_up);
+      break;
 
-      case 'j':
-      case KEY_DOWN:
-        screen.send_event(Drawable::Event::move_down);
-        break;
+    case 'j':
+    case KEY_DOWN:
+      screen.send_event(Drawable::Event::move_down);
+      break;
 
-      case 'h':
-      case KEY_LEFT:
-        screen.send_event(Drawable::Event::move_left);
-        break;
+    case 'h':
+    case KEY_LEFT:
+      screen.send_event(Drawable::Event::move_left);
+      break;
 
-      case 'l':
-      case KEY_RIGHT:
-        screen.send_event(Drawable::Event::move_right);
-        break;
-      };
-    }
+    case 'l':
+    case KEY_RIGHT:
+      screen.send_event(Drawable::Event::move_right);
+      break;
+    case ERR:
+      // ignore ncurses's getch errors
+      break;
+    };
   }
 
   return 0;

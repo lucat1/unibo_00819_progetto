@@ -7,9 +7,25 @@
   04/01/2021
 
   tree_map.cpp: implementation of Nostd::TreeMap built using an BST.
+  In this file you'll find the implementation of:
+    - struct TreeNode: The BST's kernel.
+    - class Tree: A class delegate used by TreeMap to use the BST.
+    - class Tree::Iterator: A foward-iterator for Tree class.
+    - class TreeMap<K, V>: Extending Nostd::Map this class provides all the
+  methods for the end user.
+
   Please refere to Nostd::Map for method's documentation.
 
+  Warning: Key types must have '<', '>', '==' and '!=' operator defined
   Warining: It does not allow duplicates
+
+  Notes about Tree::Iterator:
+  Note that the STL implementation of std::map (on which Nostd::TreeMap is based
+  upon) uses a bidirectional-iterator. This implementation is complex in terms
+  of time. Going foward to the next element in the worst case has a cost of O(n)
+  where n is the number of elements. This could be avoided using a Red-Black
+  Tree instead of the Binary Search Tree. This choice was made to keep the
+  complexity of the class low.
 */
 
 #ifndef NOSTD_TREEMAP_HPP
@@ -21,6 +37,7 @@
 #include <cstddef>
 #include <cstdio>
 #include <exception>
+#include <iterator>
 
 namespace Nostd {
 
@@ -28,36 +45,41 @@ template <class K, class V> class TreeMap : public virtual Map<K, V> {
 private:
   class Tree {
   private:
-    class TreeNode {
-    public:
-      K key;
-      V value;
+    struct TreeNode {
+      Nostd::Pair<const K, V> *data;
       TreeNode *parent = nullptr;
       TreeNode *left = nullptr;
       TreeNode *right = nullptr;
-      explicit TreeNode(K key, V value, TreeNode *f) {
+
+      explicit TreeNode(const K key, V value, TreeNode *f) {
+        this->data = new Nostd::Pair<const K, V>(key, value);
         this->parent = f;
-        this->key = key;
-        this->value = value;
       }
 
-      explicit TreeNode(K key, V value, TreeNode *p, TreeNode *l, TreeNode *r) {
+      explicit TreeNode(const K key, V value, TreeNode *p, TreeNode *l,
+                        TreeNode *r) {
         this->parent = p;
         this->left = l;
         this->right = r;
-        this->key = key;
-        this->value = value;
+        this->data = Nostd::Pair<const K, V>(key, value);
       }
 
-      bool operator==(TreeNode other) { return other->key == this->key; }
+      const K get_key() { return this->data->first; }
+      V get_value() const { return this->data->second; }
+
+      void set_value(V v) { this->data->second = v; }
+
+      bool operator==(TreeNode other) {
+        return other->data->first == this->get_key();
+      }
     };
 
-    Nostd::Vector<V> get_elements(const TreeNode *current) {
+    Nostd::Vector<V> get_elements(const TreeNode *current) const {
       Nostd::Vector<V> vec;
       if (current == nullptr)
         return vec;
       Nostd::Vector<V> lv = get_elements(current->left);
-      vec.push_back(current->value);
+      vec.push_back(current->data->second);
       Nostd::Vector<V> rv = get_elements(current->right);
       for (size_t i = 0; i < lv.size(); i++)
         vec.push_back(lv[i]);
@@ -71,9 +93,9 @@ private:
         children++;
         return new TreeNode(key, value, nullptr);
       }
-      if (key == node->key) {
-        node->value = value;
-      } else if (key < node->key) {
+      if (key == node->data->first) {
+        node->set_value(value);
+      } else if (key < node->data->first) {
         node->left = insert(node->left, key, value);
         node->left->parent = node;
       } else {
@@ -92,39 +114,40 @@ private:
     }
 
     // Returns an in-order visit of a subtree
-    void in_order(TreeNode *node, Nostd::Vector<Nostd::Pair<K, V>> &res) {
+    void in_order(TreeNode *node,
+                  Nostd::Vector<Nostd::Pair<const K, V> *> &res) {
       if (node == nullptr)
         return;
       in_order(node->left, res);
-      res.push_back(Pair<K, V>(node->key, node->value));
+      res.push_back(
+          new Nostd::Pair<const K, V>(node->data->first, node->data->second));
       in_order(node->right, res);
     }
 
   public:
     size_t children;
+    TreeNode *root = nullptr;
 
     Tree() : children(0) {}
 
-    ~Tree() { delete root; }
-
-    TreeNode *root = nullptr;
+    ~Tree() { clear(root); }
 
     void insert(K key, V value) { this->root = insert(root, key, value); }
 
-    // Root's parent will have a "nodo penzolante"
-    void clear(TreeNode *root) {
-      if (root == nullptr)
+    // r's parent will have a "nodo penzolante"
+    void clear(TreeNode *r) {
+      if (r == nullptr)
         return;
-      clear(root->left);
-      clear(root->right);
-      remove_node(root);
+      clear(r->left);
+      clear(r->right);
+      remove_node(r);
     }
 
     // Remove an element from the tree
     void remove(K key) {
       TreeNode *ptr = this->root;
-      while (ptr != nullptr && ptr->key != key) {
-        if (ptr->key >= key)
+      while (ptr != nullptr && ptr->data->first != key) {
+        if (ptr->data->first >= key)
           ptr = ptr->left;
         else
           ptr = ptr->right;
@@ -175,25 +198,33 @@ private:
         // a. Find predecessor
         // b. Replace node to delete predecessor
         // c. Delete old predecessor
-        TreeNode *pred = get_predecessor(key);
-        K pkey = pred->key;
-        V pvalue = pred->value;
-        remove(pred->key);
-        ptr->key = pkey;
-        ptr->value = pvalue;
+        TreeNode *pred = get_predecessor(this->root, key);
+        Nostd::Pair<const K, V> *p_data = pred->data;
+        remove(pred->data->first);
+        delete ptr->data;
+        ptr->data = p_data;
         return;
       }
     }
 
+    static TreeNode *get_root(TreeNode *node) {
+      if (node == nullptr)
+        return nullptr;
+      while (node->parent != nullptr)
+        node = node->parent;
+      return node;
+    }
+
     // Return nullptr if there is no predecessor
-    TreeNode *get_predecessor(K key) {
+    static TreeNode *get_predecessor(TreeNode *root, K key) {
       TreeNode *res = nullptr;
-      TreeNode *ptr = this->root;
+      TreeNode *ptr = root;
       while (ptr != nullptr) {
-        if (ptr->key < key && (res == nullptr || ptr->key > res->key)) {
+        if (ptr->data->first < key &&
+            (res == nullptr || ptr->data->first > res->get_key())) {
           res = ptr;
         }
-        if (key <= ptr->key) {
+        if (key <= ptr->data->first) {
           ptr = ptr->left;
         } else {
           ptr = ptr->right;
@@ -202,11 +233,29 @@ private:
       return res;
     }
 
-    V &get(K key) {
+    // Return nullptr if there is no successor
+    static TreeNode *get_successor(TreeNode *root, K key) {
+      TreeNode *res = nullptr;
+      TreeNode *ptr = root;
+      while (ptr != nullptr) {
+        if (ptr->data->first > key &&
+            (res == nullptr || ptr->data->first < res->get_key())) {
+          res = ptr;
+        }
+        if (key < ptr->data->first) {
+          ptr = ptr->left;
+        } else {
+          ptr = ptr->right;
+        }
+      }
+      return res;
+    }
+
+    V &get(K key) const {
       TreeNode *ptr = this->root;
 
-      while (ptr != nullptr && ptr->key != key) {
-        if (ptr->key >= key) {
+      while (ptr != nullptr && ptr->data->first != key) {
+        if (ptr->data->first >= key) {
           ptr = ptr->left;
         } else {
           ptr = ptr->right;
@@ -217,14 +266,14 @@ private:
         throw std::invalid_argument("Treemap: No value found for the key " +
                                     std::to_string(key));
       }
-      return ptr->value;
+      return ptr->data->second;
     }
 
     bool find(const K &key) {
       TreeNode *ptr = this->root;
 
-      while (ptr != nullptr && ptr->key != key) {
-        if (ptr->key >= key) {
+      while (ptr != nullptr && ptr->data->first != key) {
+        if (ptr->data->first >= key) {
           ptr = ptr->left;
         } else {
           ptr = ptr->right;
@@ -235,16 +284,80 @@ private:
 
     Nostd::Vector<V> get_values() { return get_elements(this->root); }
 
-    Nostd::Vector<Nostd::Pair<K, V>> as_vector() {
-      Nostd::Vector<Nostd::Pair<K, V>> res;
+    Nostd::Vector<Nostd::Pair<const K, V> *> as_vector() {
+      Nostd::Vector<Nostd::Pair<const K, V> *> res;
       in_order(this->root, res);
       return res;
     }
+
+    // Returns the node with the smallest key
+    TreeNode *min() const noexcept {
+      TreeNode *ptr = root;
+      while (ptr->left != nullptr)
+        ptr = ptr->left;
+      return ptr;
+    }
+
+    // Returns the node with the greatest key
+    TreeNode *max() const noexcept {
+      TreeNode *ptr = root;
+      while (ptr->right != nullptr)
+        ptr = ptr->right;
+      return ptr;
+    }
+
+    /* Built following guidelines from:
+       https://en.cppreference.com/w/cpp/iterator/iterator
+    */
+    class Iterator : public std::iterator<std::forward_iterator_tag,
+                                          Nostd::Pair<const K, V>, long,
+                                          TreeNode *, TreeNode> {
+    private:
+      TreeNode *ptr;
+
+    public:
+      Iterator(TreeNode *node) noexcept : ptr(node) {}
+
+      Nostd::Pair<const K, V> begin() noexcept {
+        TreeNode *t = min();
+        return t->data;
+      }
+
+      Nostd::Pair<const K, V> end() noexcept { return nullptr; }
+
+      Iterator &operator=(TreeNode *node) {
+        this->ptr = node;
+        return *this;
+      }
+
+      Iterator &operator++() {
+        if (ptr) {
+          TreeNode *r = get_root(ptr);
+          ptr = get_successor(r, ptr->get_key());
+        }
+        return *this;
+      }
+
+      Iterator operator++(int) {
+        Iterator retVal = *this;
+        ++(*this);
+        return retVal;
+      }
+
+      bool operator!=(Iterator &iterator) { return this->ptr != iterator.ptr; }
+
+      Nostd::Pair<const K, V> *operator*() { return this->ptr->data; }
+
+      bool operator==(Iterator it) { return this->ptr == it.ptr; }
+    };
   };
 
   Tree *tree;
 
 public:
+  using iterator = typename Tree::Iterator;
+  using const_iterator = const iterator;
+
   TreeMap() { this->tree = new Tree(); }
 
   ~TreeMap() { delete tree; }
@@ -272,9 +385,17 @@ public:
     this->tree->root = nullptr;
   }
 
-  Nostd::Vector<Nostd::Pair<K, V>> as_vector() const override {
+  Nostd::Vector<Nostd::Pair<const K, V> *> as_vector() const override {
     return this->tree->as_vector();
   }
+
+  iterator begin() { return iterator(this->tree->min()); }
+
+  iterator end() { return iterator(this->tree->max()->right); }
+
+  const_iterator cbegin() const { return iterator(this->tree->min()); }
+
+  const_iterator cend() const { return iterator(this->tree->max()->right); }
 };
 
 } // namespace Nostd
