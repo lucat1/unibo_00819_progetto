@@ -25,7 +25,7 @@ $ make test
 Made by Mattia Girolimetto, Andreea Scrob, Luca Tagliavini, and Stefano Volpe.
 
 
-## Created using:
+## Supported by
 <p float="left">
 <img src="os_logos/macos.png" height="40" width="40"/>  
 
@@ -33,10 +33,6 @@ Made by Mattia Girolimetto, Andreea Scrob, Luca Tagliavini, and Stefano Volpe.
 
 <img src="os_logos/arch.png" height="40" width="40"/>  
 
-<img src="os_logos/ubuntu.png" height="40" width="40"/>  
-
-<img src="os_logos/elementary.png" height="40" width="40"/>  
-
-<img src="os_logos/parrot.png" height="40" width="40"/>  
+<img src="os_logos/debian.png" height="40" width="40"/>  
 
 </p>
