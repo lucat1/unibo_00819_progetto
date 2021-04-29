@@ -22,7 +22,7 @@
 #include "../utils.hpp"
 
 using Engine::UI::Box;
-using Engine::Utils::padstr;
+using Engine::Utils::leftpad;
 
 Engine::Menu::Results::Results(WINDOW *window,
                                const Nostd::List<Data::Result> &results)
@@ -33,25 +33,24 @@ Box *Engine::Menu::Results::append_line(Box *parent, int rank, int score,
   Nostd::WString score_str, rank_str;
   Utils::stringify(rank, rank_str);
   Utils::stringify(score, score_str);
-  return append_line(parent, nick, score_str, rank_str);
+  return append_line(parent, score_str, rank_str, nick);
 }
 
 Box::szu menu_padding = 12;
 Box::szu rank_size = 4;
-Box::szu nick_size = 10;
+Box::szu nick_size = 14;
 Box::szu score_size =
     Engine::Screen::columns - (2 * menu_padding) - rank_size - nick_size - 2;
-Engine::Utils::Pad pad_dir = Engine::Utils::Pad::left;
 
 Box *Engine::Menu::Results::append_line(Box *parent, const Nostd::WString &rank,
                                         const Nostd::WString &score,
                                         const Nostd::WString &nick) {
   Nostd::WString padded_rank = rank, padded_score = score, padded_nick = nick;
-  padstr(pad_dir, rank_size, padded_rank);
+  leftpad(rank_size, padded_rank);
   padded_rank.append(L" ");
-  padstr(pad_dir, score_size, padded_score);
+  leftpad(score_size, padded_score);
   padded_score.append(L" ");
-  padstr(pad_dir, nick_size, padded_nick);
+  leftpad(nick_size, padded_nick);
 
   auto line = parent->append<UI::Box>();
   line->propb(Box::Property::direction_horizontal, true);
@@ -77,19 +76,14 @@ Box *Engine::Menu::Results::generate() {
 
   // append a fake table header as another line
   append_line(list, L"Rank", L"Score", L"Nick");
-  append_line(list, L"Rank", L"Score", L"Nick");
-  /* append_line(list, L"Rank", L"Score", L"Nick"); */
 
-  // TODO: when we have list iterators
-  /* int i = 1; */
-  /* for (auto result : results) { */
-  /*   append_line(list, result.nick(), result.score(), i % 2); */
-  /*   if (i == n_of_results) */
-  /*     break; */
-  /*   i++; */
-  /* } */
-  /* for (size_t i = 0; i < results.size(); i++) */
-  /*   append_line(list, i + 1, 941, L"Luca"); */
+  int i = 1;
+  for (auto result : results) {
+    append_line(list, result.score(), i, result.nickname());
+    if (i == n_of_results)
+      break;
+    i++;
+  }
 
   // buttons at the end of the page for closing the menu
   auto center = root->append<UI::Center>();

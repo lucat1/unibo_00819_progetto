@@ -45,11 +45,10 @@ void Engine::Utils::stringify(int n, Nostd::WString &str) {
   }
 }
 
-void Engine::Utils::padstr(Pad direction, size_t n, Nostd::WString &str) {
+void Engine::Utils::leftpad(size_t n, Nostd::WString &str) {
   size_t len = str.length();
   if (len > n) {
-    str = str.substr(direction == Pad::left ? 0 : len - n,
-                     direction == Pad::left ? n - 1 : len - 1);
+    str = str.substr(0, n - 1);
   } else if (len != n) {
     size_t amount = n - len;
     wchar_t space[amount + 1];
@@ -58,7 +57,6 @@ void Engine::Utils::padstr(Pad direction, size_t n, Nostd::WString &str) {
       space[i] = L' ';
     space[amount] = '\0';
 
-    size_t pos = direction == Pad::left ? 0 : len - 1;
-    str.insert(pos, space, amount);
+    str.insert(0, space, amount);
   }
 }

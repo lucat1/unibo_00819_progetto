@@ -26,11 +26,10 @@ wchar_t digitize(int n);
 // puts the given number in digits inside the provided WString
 void stringify(int n, Nostd::WString &str);
 
-enum class Pad { left, right };
-// adds left or right padding (as spaces) to the given string in order to make
+// adds left padding (as spaces) to the given string in order to make
 // it fill `n` charters.
 // NOTE: it can also trim the string if the string's length is greather tha `n`
-void padstr(Pad direction, size_t n, Nostd::WString &str);
+void leftpad(size_t n, Nostd::WString &str);
 
 } // namespace Utils
 } // namespace Engine

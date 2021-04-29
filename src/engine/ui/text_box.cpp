@@ -29,6 +29,7 @@ void Engine::UI::TextBox::update_lines(szu max_width) {
 Engine::UI::TextBox::strings
 Engine::UI::TextBox::split_content(const Nostd::WString content,
                                    szu max_width) {
+  /*
   strings lines;
   size_t len = content.length();
   while (len > max_width) {
@@ -53,6 +54,10 @@ Engine::UI::TextBox::split_content(const Nostd::WString content,
   }
   // TODO: toggle .ltrim (?)
   lines.push_back(content.substr(content.length() - len, Nostd::WString::npos));
+  return lines;
+  */
+  strings lines;
+  lines.push_back(content);
   return lines;
 }
 
