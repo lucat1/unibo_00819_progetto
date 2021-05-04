@@ -77,7 +77,7 @@ Box *Engine::Menu::Results::generate() {
   // append a fake table header as another line
   append_line(list, L"Rank", L"Score", L"Nick");
 
-  int i = 1;
+  Box::szu i = 1;
   for (auto result : results) {
     append_line(list, result.score(), i, result.nickname());
     if (i == n_of_results)

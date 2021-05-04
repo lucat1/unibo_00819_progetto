@@ -25,8 +25,9 @@ int main() {
 
   // TODO: properly by calling database.results()
   Nostd::List<Data::Result> results;
-  results.push_back(Data::Result(L"Benito", nullptr, 1001));
-  results.push_back(Data::Result(L"Lienin", nullptr, 789));
+  results.push_back(Data::Result(L"Lienin", nullptr, 100293));
+  results.push_back(Data::Result(L"Adolf", nullptr, 98666));
+  results.push_back(Data::Result(L"Benito", nullptr, 20034));
 
   int key;
   bool running = true;
