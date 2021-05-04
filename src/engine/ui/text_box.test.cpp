@@ -31,4 +31,12 @@ int main() {
     assert(lines.size() == 2);
     assert(lines[0].compare(L"this is a ") == 0);
   });
+
+  it("splits the line across a word", [t] {
+    Nostd::WString str = L"this is a test line";
+    auto lines = t.split_content(str, 12);
+    assert(lines.size() == 2);
+    assert(lines[0].compare(L"this is a te-") == 0);
+    assert(lines[1].compare(L"st line") == 0);
+  });
 }
