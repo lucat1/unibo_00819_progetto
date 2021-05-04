@@ -27,7 +27,8 @@ private:
   UI::Box *append_line(UI::Box *parent, int rank, int score,
                        const Nostd::WString &nick);
   UI::Box *append_line(UI::Box *parent, const Nostd::WString &rank,
-                       const Nostd::WString &score, const Nostd::WString &nick);
+                       const Nostd::WString &score, const Nostd::WString &nick,
+                       bool color = false);
 
 protected:
   UI::Box *generate();

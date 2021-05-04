@@ -21,6 +21,8 @@
 #include "../ui/center.hpp"
 #include "../utils.hpp"
 
+using Data::Palette::button;
+using Data::Palette::primary;
 using Engine::UI::Box;
 using Engine::Utils::leftpad;
 
@@ -44,7 +46,8 @@ Box::szu score_size =
 
 Box *Engine::Menu::Results::append_line(Box *parent, const Nostd::WString &rank,
                                         const Nostd::WString &score,
-                                        const Nostd::WString &nick) {
+                                        const Nostd::WString &nick,
+                                        bool color) {
   Nostd::WString padded_rank = rank, padded_score = score, padded_nick = nick;
   leftpad(rank_size, padded_rank);
   padded_rank.append(L" ");
@@ -54,15 +57,20 @@ Box *Engine::Menu::Results::append_line(Box *parent, const Nostd::WString &rank,
 
   auto line = parent->append<UI::Box>();
   line->propb(Box::Property::direction_horizontal, true);
-  line->append<UI::TextBox, const Nostd::WString &>(padded_rank);
-  line->append<UI::TextBox, const Nostd::WString &>(padded_score);
-  line->append<UI::TextBox, const Nostd::WString &>(padded_nick);
+  auto r = line->append<UI::TextBox, const Nostd::WString &>(padded_rank);
+  auto s = line->append<UI::TextBox, const Nostd::WString &>(padded_score);
+  auto n = line->append<UI::TextBox, const Nostd::WString &>(padded_nick);
+  if (color) {
+    r->propc(Box::Property::foreground, primary);
+    s->propc(Box::Property::foreground, primary);
+    n->propc(Box::Property::foreground, primary);
+  }
   return line;
 }
 
-// n (number of displayable results) = screen_height - 2 (padding) - 3 (button)
-// - 3 for the header) / 3 (height of each result)
-Box::szu n_of_results = Engine::Screen::lines - 5;
+// n (number of displayable results) = screen_height - 2 for window padding - 2
+// for button padding - 3 for button's height - 1 for table header
+Box::szu n_of_results = Engine::Screen::lines - 8;
 
 // highly similar to the settings menu page with a
 // vertical list and a closing button
@@ -75,7 +83,7 @@ Box *Engine::Menu::Results::generate() {
   list->props(Box::Property::padding_bottom, 1);
 
   // append a fake table header as another line
-  append_line(list, L"Rank", L"Score", L"Nick");
+  append_line(list, L"Rank", L"Score", L"Nick", true);
 
   Box::szu i = 1;
   for (auto result : results) {
@@ -88,9 +96,11 @@ Box *Engine::Menu::Results::generate() {
   // buttons at the end of the page for closing the menu
   auto center = root->append<UI::Center>();
   center->propb(Box::Property::center_horizontal, true);
-  auto button = center->append<UI::Button, const wchar_t *>(L"Back");
-  button->propc(Box::Property::foreground, Data::Palette::button.second);
-  button->propc(Box::Property::background, Data::Palette::button.first);
+  auto btn = center->append<UI::Button, const wchar_t *>(L"Back");
+  btn->props(Box::Property::padding_top, 1);
+  btn->props(Box::Property::padding_bottom, 1);
+  btn->propc(Box::Property::foreground, button.second);
+  btn->propc(Box::Property::background, button.first);
   return root;
 }
 
