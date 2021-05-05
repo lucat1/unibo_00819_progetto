@@ -9,6 +9,7 @@
   screen.hpp: provides the public api for the Engine::Screen class, which
   manages what and how content is displayed on the screen.
 */
+
 #ifndef ENGINE_SCREEN_HPP
 #define ENGINE_SCREEN_HPP
 
@@ -49,8 +50,8 @@ private:
   void clear_content();
 
 public:
-  static const Drawable::szu SCREEN_COLS = 80;
-  static const Drawable::szu SCREEN_LINES = 25;
+  static const Drawable::szu columns = 80;
+  static const Drawable::szu lines = 25;
 
   Screen();
   ~Screen();

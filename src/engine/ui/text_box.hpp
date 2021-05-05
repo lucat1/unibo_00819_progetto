@@ -38,7 +38,7 @@ protected:
 public:
   // splits the content into various lines to fit into `max_width` and adds
   // '-' where necessary, when splitting a word
-  strings split_content(const Nostd::WString content, szu max_width);
+  static strings split_content(const Nostd::WString content, szu max_width);
 
   static constexpr const wchar_t *append_default_value = L"";
   TextBox(const Nostd::WString &content = L"");

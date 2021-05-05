@@ -11,35 +11,11 @@
 */
 
 #include "choice.hpp"
+#include "../utils.hpp"
 #include <curses.h>
 
-// returns the amount of digits needed to display an integer
-inline int digits(int n) {
-  int k = 0;
-  while (n > 0) {
-    k++;
-    n /= 10;
-  }
-
-  return k;
-}
-
-// converts a number between 0 and 9 (inclusive) to a wchar_t charter
-wchar_t digitize(int n) {
-  if (n > 9)
-    return L'-'; // undefined behaviour
-
-  return L'0' + n;
-}
-
-// puts the given number in digits inside the provided WString
-void stringify(int n, Nostd::WString &str) {
-  int last = str.length();
-  while (n > 0) {
-    str.insert(last, digitize(n % 10));
-    n /= 10;
-  }
-}
+using Engine::Utils::digits;
+using Engine::Utils::stringify;
 
 Engine::UI::Choice::Choice(Data::Setting *setting) : Box() {
   if (setting->first() == 0 && setting->last() == 1 && setting->stride() == 1)
