@@ -17,6 +17,11 @@
 using namespace World;
 using namespace Nostd;
 
+ChunkAssembler::ChunkAssembler(Nostd::Vector<Data::MapChunk> chunks) {
+  this->chunks = chunks;
+}
+
+// TODO That's a mock
 ChunkAssembler::ChunkAssembler() {
   adjacency_list = new Vector<ChunkData>[4];
   fill_list();
@@ -60,5 +65,5 @@ void ChunkAssembler::print_list() const noexcept {
 
 ChunkAssembler::ChunkData ChunkAssembler::next() noexcept {
   // TODO
-  size_t n = this->random_obj.get_rand();
+  size_t n = this->random_obj.get_rand(4);
 }

@@ -12,7 +12,7 @@
 #ifndef WORLD_CHUNK_ASSEMBLER_HPP
 #define WORLD_CHUNK_ASSEMBLER_HPP
 
-#include "../data/map.hpp"
+#include "../data/map_chunk.hpp"
 #include "../nostd/vector.hpp"
 #include "random_object.hpp"
 #include <cstddef>
@@ -26,17 +26,23 @@ private:
     const size_t id;
     const size_t begin;
     const size_t end;
-    const Data::Map *map;
+    const Data::MapChunk *map;
   };
 
+  Nostd::Vector<Data::MapChunk> chunks;
   Nostd::Vector<ChunkData> *adjacency_list = nullptr;
   World::RandomObject random_obj;
+  Data::MapChunk *current = nullptr;
 
+  // Create the adjacency list. Called from the constractor.
   void fill_list() noexcept;
+  // Returns the next Data::MapChunk to draw
   ChunkData next() noexcept;
 
 public:
   ChunkAssembler();
+
+  ChunkAssembler(Nostd::Vector<Data::MapChunk>);
 
   void print_list() const noexcept;
 };

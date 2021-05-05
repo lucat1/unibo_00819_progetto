@@ -17,7 +17,8 @@
 namespace World {
 class RandomObject {
 public:
-  inline size_t get_rand(const size_t &) const noexcept;
+  // Generates a random number in the range 0:max
+  inline size_t get_rand(const size_t &max) const noexcept;
 };
 } // namespace World
 
