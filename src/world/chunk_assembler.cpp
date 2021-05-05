@@ -65,5 +65,5 @@ void ChunkAssembler::print_list() const noexcept {
 
 ChunkAssembler::ChunkData ChunkAssembler::next() noexcept {
   // TODO
-  size_t n = this->random_obj.get_rand(4);
+  size_t n = this->random_gen.next(4);
 }

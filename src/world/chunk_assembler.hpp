@@ -14,7 +14,7 @@
 
 #include "../data/map_chunk.hpp"
 #include "../nostd/vector.hpp"
-#include "random_object.hpp"
+#include "random_generator.hpp"
 #include <cstddef>
 
 namespace World {
@@ -31,7 +31,7 @@ private:
 
   Nostd::Vector<Data::MapChunk> chunks;
   Nostd::Vector<ChunkData> *adjacency_list = nullptr;
-  World::RandomObject random_obj;
+  World::RandomGenerator random_gen;
   Data::MapChunk *current = nullptr;
 
   // Create the adjacency list. Called from the constractor.
