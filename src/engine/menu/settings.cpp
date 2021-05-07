@@ -39,7 +39,9 @@ Nostd::Vector<Data::Setting> Engine::Menu::Settings::dereference_updated() {
 
 Engine::UI::Button *Engine::Menu::Settings::append_button(Box *parent,
                                                           const wchar_t *str) {
-  auto btn = parent->append<UI::Button, const wchar_t *>(str);
+  auto wrapper = parent->append<UI::Center>();
+  wrapper->propb(Box::Property::center_horizontal, true);
+  auto btn = wrapper->append<UI::Button, const wchar_t *>(str);
   unfocus(btn);
   return btn;
 }
@@ -91,17 +93,16 @@ Box *Engine::Menu::Settings::generate() {
   // buttons at the end of the page for closing the menu
   auto chbox = root->append<UI::Center>();
   chbox->propb(Box::Property::center_horizontal, true);
-  auto hbox = chbox->append<UI::Box>();
-  hbox->propb(Box::Property::direction_horizontal, true);
-  auto btn1 = append_button(hbox, L"Save");
-  btn1->props(Box::Property::padding_right, 8);
-  append_button(hbox, L"Discard");
+  auto btn_parent = chbox->append<UI::Box>();
+  auto btn1 = append_button(btn_parent, L"Save");
+  btn1->props(Box::Property::padding_bottom, 1);
+  append_button(btn_parent, L"Cancel");
   return root;
 }
 
 Box *Engine::Menu::Settings::curr_box() {
   if (focused >= max_focused - 1)
-    return root->child(1)->child(0)->child(focused == max_focused ? 1 : 0);
+    return root->child(1)->child(0)->child(focused == max_focused ? 1 : 0)->child(0);
   else
     return root->child(0)->child(focused);
 }
