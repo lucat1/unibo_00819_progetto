@@ -37,4 +37,16 @@ int main() {
     s2.set(s2.begin() + 1);
     d.save_settings();
   });
+  it("saves user results on filesystem", [] {
+    Database d("tests/alma.conf.csv", "tests/assets/", "tests/scoreboard.csv");
+    using Data::Interactables::Hero;
+    assert(!d.results().empty());
+    d.results().push_back(d.results().front());
+    d.save_results();
+    d = Database("tests/alma.conf.csv", "tests/assets/",
+                 "tests/scoreboard.csv");
+    assert(d.results().front().score() == d.results().back().score());
+    d.results().pop_back();
+    d.save_results();
+  });
 }

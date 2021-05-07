@@ -119,7 +119,9 @@ void Database::save_results() const {
   std::wofstream wofs(scor);
   for (auto x : res) {
     put_CSV_WString(wofs, x.nickname()) << separator;
-    put_CSV_WString(wofs, x.hero()->name()) << separator;
+    if (x.hero())
+      put_CSV_WString(wofs, x.hero()->name());
+    wofs << separator;
     wofs << x.score() << newrecord;
   }
   wofs.close();
