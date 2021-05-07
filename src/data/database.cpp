@@ -13,6 +13,7 @@
 
 #include <cstring>
 #include <fstream>
+#include <utility>
 
 #include "map_chunk.hpp"
 #include "result.hpp"
@@ -36,6 +37,54 @@ Database::Database(const char *configuration, const char *assets,
   load_sceneries(assets);
   // TODO
   load_results();
+}
+
+Database::Database(Database &&d) {
+  conf = d.conf;
+  d.conf = nullptr;
+  scor = d.scor;
+  d.scor = nullptr;
+  using std::move;
+  set = move(d.set);
+  map = move(d.map);
+  sce = move(d.sce);
+  // TODO
+  her = move(d.her);
+  // TODO
+  res = move(d.res);
+}
+
+Database &Database::operator=(Database &&d) {
+  delete conf;
+  conf = d.conf;
+  d.conf = nullptr;
+  delete scor;
+  scor = d.scor;
+  d.scor = nullptr;
+  using std::move;
+  set = move(d.set);
+  map = move(d.map);
+  sce = move(d.sce);
+  // TODO
+  her = move(d.her);
+  // TODO
+  res = move(d.res);
+  return *this;
+}
+
+Database::Database(const Database &d) { *this = d; }
+
+Database &Database::operator=(const Database &d) {
+  conf = newstrcpy(d.conf);
+  scor = newstrcpy(d.scor);
+  set = d.set;
+  map = d.map;
+  sce = d.sce;
+  // TODO
+  her = d.her;
+  // TODO
+  res = d.res;
+  return *this;
 }
 
 Database::~Database() {
@@ -68,11 +117,13 @@ const List<Result> &Database::results() const noexcept { return res; }
 
 void Database::save_results() const {
   std::wofstream wofs(scor);
-  /* for (auto x : res) {
-    put_CSV_WString(wofs, x.nickname()) >> separator;
-    put_CSV_WString(wofs, x.hero()->name()) >> separator;
-    wofs >> x.score() >> newrecord;
-  } */
+  for (auto x : res) {
+    put_CSV_WString(wofs, x.nickname()) << separator;
+    if (x.hero())
+      put_CSV_WString(wofs, x.hero()->name());
+    wofs << separator;
+    wofs << x.score() << newrecord;
+  }
   wofs.close();
 }
 
@@ -99,14 +150,16 @@ void Database::load_settings(const char *assets_filepath) {
   wifs.open(conf);
   WString key;
   while (get_CSV_WString(wifs, key)) {
+    size_t value;
+    wifs >> value;
+    wchar_t input;
+    while (wifs >> input && input != newrecord)
+      ;
     for (auto &s : set)
       if (!key.compare(s.label())) {
-        size_t value;
-        wifs >> value;
         s.set(s.begin() + value);
         break;
       }
-    wifs.ignore(newrecord);
   }
   wifs.close();
 }
@@ -115,7 +168,7 @@ void Database::load_map_chunks(const char *assets_filepath) {
   const char *const maps_fp{newstrcat(assets_filepath, maps_rel_fp)};
   ifstream ifs{maps_fp};
   delete maps_fp;
-  MapChunk m(0);
+  MapChunk m(0, 0, 0);
   while (ifs >> m)
     map.push_back(m);
   ifs.close();
@@ -135,25 +188,26 @@ void Database::load_results() {
   wifstream wifs{scor};
   WString nickname;
   while (get_CSV_WString(wifs, nickname)) {
-    wifs.ignore(separator);
     WString hero;
     int score;
     get_CSV_WString(wifs, hero) >> score;
     res.push_back(
         {nickname, her.contains(nickname) ? &her[nickname] : nullptr, score});
-    wifs.ignore(newrecord);
+    wifs.ignore();
   }
 }
 
 std::basic_istream<wchar_t> &
 Data::get_CSV_WString(std::basic_istream<wchar_t> &is, WString &s) {
-  s = WString{};
-  wchar_t input;
-  while (!is.eof() && (input = is.get()) != Database::separator &&
-         input != Database::newrecord) {
-    s.push_back(input);
-    if (s.back() == Database::escape)
-      is.get(s.back());
+  if (is) {
+    s = WString{};
+    wchar_t input;
+    while (is >> input && input != Database::separator &&
+           input != Database::newrecord) {
+      s.push_back(input);
+      if (s.back() == Database::escape)
+        is >> s.back();
+    }
   }
   return is;
 }
@@ -161,10 +215,10 @@ Data::get_CSV_WString(std::basic_istream<wchar_t> &is, WString &s) {
 std::basic_ostream<wchar_t> &
 Data::put_CSV_WString(std::basic_ostream<wchar_t> &os,
                       const Nostd::WString &s) {
-  for (auto x : s) {
-    if (x == Database::separator || x == Database::newrecord)
+  for (auto x = s.cbegin(); x + 1 != s.end(); ++x) {
+    if (*x == Database::separator || *x == Database::newrecord)
       os << Database::escape;
-    os << x;
+    os << *x;
   }
   return os;
 }

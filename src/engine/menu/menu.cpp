@@ -31,6 +31,7 @@ void Engine::Menu::Menu::redraw() {
   }
 
   root->show(window, 0, 0, width, height);
+  redrawwin(window);
   doupdate();
 }
 

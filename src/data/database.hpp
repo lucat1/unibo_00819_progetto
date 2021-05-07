@@ -34,16 +34,16 @@ class Database {
 public:
   constexpr static wchar_t separator{','}, newrecord{'\n'}, escape{'\\'};
   constexpr const static char *const settings_rel_fp{"/csv/settings.csv"},
-      *const maps_rel_fp{"/maps.txt"},
-          *const sceneries_rel_fp{"/sceneries.txt"};
+      *const maps_rel_fp{"img/maps.txt"},
+          *const sceneries_rel_fp{"img/sceneries.txt"};
 
   Database() = delete; // cannot constructs a database from nothing
   Database(const char *configuration, const char *assets,
            const char *scoreboard);
-  Database(Database &&) = default;
-  Database &operator=(Database &&) = default;
-  Database(const Database &) = default;
-  Database &operator=(const Database &) = default;
+  Database(Database &&);
+  Database &operator=(Database &&);
+  Database(const Database &);
+  Database &operator=(const Database &);
 
   ~Database();
 
