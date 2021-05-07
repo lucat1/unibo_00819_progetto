@@ -19,6 +19,8 @@ using namespace Nostd;
 
 ChunkAssembler::ChunkAssembler(Nostd::Vector<Data::MapChunk> chunks) {
   this->chunks = chunks;
+  adjacency_list = new Vector<ChunkData>[4];
+  fill_list();
 }
 
 // TODO That's a mock
@@ -28,16 +30,22 @@ ChunkAssembler::ChunkAssembler() {
 }
 
 // TODO that's a mock
-void ChunkAssembler::fill_list() noexcept {
+void ChunkAssembler::fill_list(bool is_mock = false) noexcept {
   if (adjacency_list == nullptr)
     return;
 
-  Vector<ChunkData> chunks;
-  for (size_t i = 0; i < 4; i++) {
-    const size_t b = rand() % 4;
-    const size_t e = rand() % 4;
-    ChunkData c = {i, b, e, nullptr};
-    chunks.push_back(c);
+  Vector<ChunkData> chunk_data;
+  if (is_mock) {
+    for (size_t i = 0; i < 4; i++) {
+      const size_t b = rand() % 4;
+      const size_t e = rand() % 4;
+      ChunkData c = {i, b, e, nullptr};
+      chunks.push_back(c);
+    }
+  } else {
+    for (size_t i = 0; i < chunks.size(); i++) {
+      ChunkData c = {i, chunks.at(i).};
+    }
   }
 
   for (ChunkData first : chunks) {
@@ -65,5 +73,11 @@ void ChunkAssembler::print_list() const noexcept {
 
 ChunkAssembler::ChunkData ChunkAssembler::next() noexcept {
   // TODO
-  size_t n = this->random_gen.next(4);
+  /*
+  if current is null then
+      > current = first(adj_list)
+   else
+      let rand = this->random_gen->next(len(adj_list[current->id]))
+      > current = adj_list[current->id][rand]
+  */
 }

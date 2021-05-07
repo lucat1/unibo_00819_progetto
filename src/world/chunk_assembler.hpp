@@ -21,7 +21,6 @@ namespace World {
 
 class ChunkAssembler {
 private:
-  // TODO
   struct ChunkData {
     const size_t id;
     const size_t begin;
