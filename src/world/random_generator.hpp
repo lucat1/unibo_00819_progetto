@@ -18,7 +18,7 @@ public:
   RandomGenerator();
 
   // Get random number between 0 and bound parameter
-  uint next(uint bound);
+  uint get_random(uint bound);
 
   // Seed filed getter
   time_t get_seed();

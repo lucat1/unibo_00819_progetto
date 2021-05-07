@@ -8,7 +8,7 @@ RandomGenerator::RandomGenerator() {
   srand(this->seed);
 }
 
-RandomGenerator::uint RandomGenerator::next(uint bound) {
+RandomGenerator::uint RandomGenerator::get_random(uint bound) {
   return rand() % bound;
 }
 

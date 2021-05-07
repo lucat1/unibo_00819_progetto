@@ -21,25 +21,25 @@ namespace World {
 
 class ChunkAssembler {
 private:
-  struct ChunkData {
-    const size_t id;
-    const size_t begin;
-    const size_t end;
-    const Data::MapChunk *map;
+  // TODO
+  struct ChunkInfo {
+    size_t id;
+    Data::MapChunk *chunk;
   };
 
   Nostd::Vector<Data::MapChunk> chunks;
-  Nostd::Vector<ChunkData> *adjacency_list = nullptr;
+  Nostd::Vector<ChunkInfo> *adjacency_list = nullptr;
   World::RandomGenerator random_gen;
-  Data::MapChunk *current = nullptr;
+  ChunkInfo *current = nullptr;
 
   // Create the adjacency list. Called from the constractor.
   void fill_list() noexcept;
+
   // Returns the next Data::MapChunk to draw
-  ChunkData next() noexcept;
+  Data::MapChunk *next() noexcept;
 
 public:
-  ChunkAssembler();
+  ChunkAssembler() = delete;
 
   ChunkAssembler(Nostd::Vector<Data::MapChunk>);
 
