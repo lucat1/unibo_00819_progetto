@@ -10,6 +10,7 @@
 */
 
 #include <cassert>
+#include <sstream>
 
 #include "../nostd/test.hpp"
 #include "setting.hpp"
@@ -46,5 +47,21 @@ int main() {
     Setting s(L"", 1, 10, 1, 4);
     assert(s.first() == 1);
     assert(s.last() == 10);
+  });
+  it("reads from streams", [] {
+    std::wstringstream stream(L"Label,5,10,10,5");
+    Setting setting;
+    stream >> setting;
+    assert(!setting.label().compare(L"Label"));
+    assert(setting.first() == 5);
+    assert(setting.size() == 10);
+    assert(setting.stride() == 10);
+    assert(setting.default_value() == setting.begin() + 5);
+    assert(setting.current_value() == setting.begin() + 5);
+  });
+  it("writes onto streams", [] {
+    std::wstringstream stream{};
+    stream << Setting(L"Label", 5, 10, 10, 5);
+    assert(!stream.str().compare(L"Label,5"));
   });
 }

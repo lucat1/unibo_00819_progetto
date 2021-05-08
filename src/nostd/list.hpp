@@ -130,9 +130,9 @@ public:
     erase(head, nullptr);
     sz = l.sz;
     head = l.head;
-    tail = l->tail;
+    tail = l.tail;
     l.head = nullptr;
-    l->tail = nullptr;
+    l.tail = nullptr;
 
     for (Item *p = head; p != nullptr; p = p->next)
       p->list = this;

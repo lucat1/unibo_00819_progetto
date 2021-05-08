@@ -144,16 +144,20 @@ std::basic_istream<wchar_t> &Data::operator>>(std::basic_istream<wchar_t> &is,
   Nostd::WString label;
   int start, stride;
   size_t size, default_index;
-  get_CSV_WString(is, label) >> start >> size >> stride >> default_index;
-  while (!(is.eof() || is.get() == Database::newline))
-    ;
-  s = Setting(label, start, size, stride, default_index);
+  get_CSV_WString(is, label) >> start;
+  is.ignore();
+  is >> size;
+  is.ignore();
+  is >> stride;
+  is.ignore();
+  if (is >> default_index) {
+    is.ignore();
+    s = Setting(label, start, size, stride, default_index);
+  }
   return is;
 }
 
 std::basic_ostream<wchar_t> &Data::operator<<(std::basic_ostream<wchar_t> &os,
                                               const Setting &s) {
-  auto &sep = Database::separator;
-  return put_CSV_WString(os, s.label()) << sep << s.strt << sep << s.sz << sep
-                                        << s.def_ind << Database::newline;
+  return put_CSV_WString(os, s.label()) << Database::separator << s.curr_ind;
 }

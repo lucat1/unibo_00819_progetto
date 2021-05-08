@@ -23,9 +23,10 @@
 #include "concepts.hpp"
 
 template <class T, class Alloc>
-template <class U>
-Nostd::Matrix<T, Alloc>::Iterator<U>::Iterator(Matrix *matrix, std::slice slice,
-                                               size_t position, size_t order)
+Nostd::Matrix<T, Alloc>::ConstIterator::ConstIterator(const Matrix *matrix,
+                                                      std::slice slice,
+                                                      size_t position,
+                                                      size_t order)
     : m{matrix}, slc{slice}, pstn{position}, ord{order} {
   if (m) {
     const size_t start{slc.start()}, matrix_size{m->size()};
@@ -42,7 +43,7 @@ Nostd::Matrix<T, Alloc>::Iterator<U>::Iterator(Matrix *matrix, std::slice slice,
     if (order > matrix_order)
       throw std::out_of_range("order > matrix_order");
     dim = 1;
-    for (size_t i{matrix_order - ord}; i < matrix_order; ++i)
+    for (size_t i{matrix_order - ord + 1}; i < matrix_order; ++i)
       dim *= m->extent(i);
     if (slice_size && start + (slice_size - 1) * stride + dim > matrix_size)
       throw std::out_of_range("slice_size && start + (slice_size - 1) * stride "
@@ -51,65 +52,58 @@ Nostd::Matrix<T, Alloc>::Iterator<U>::Iterator(Matrix *matrix, std::slice slice,
 }
 
 template <class T, class Alloc>
-template <class U>
-auto Nostd::Matrix<T, Alloc>::Iterator<U>::begin() const noexcept -> Iterator {
+auto Nostd::Matrix<T, Alloc>::ConstIterator::begin() const noexcept
+    -> ConstIterator {
   return (*this).at(0);
 }
 
 template <class T, class Alloc>
-template <class U>
-auto Nostd::Matrix<T, Alloc>::Iterator<U>::end() const noexcept -> Iterator {
-  return (*this).at(m->extent(m->order() - ord));
+auto Nostd::Matrix<T, Alloc>::ConstIterator::end() const noexcept
+    -> ConstIterator {
+  return (*this).at(m->extent(m->order() - ord + 1));
 }
 
 template <class T, class Alloc>
-template <class U>
-auto Nostd::Matrix<T, Alloc>::Iterator<U>::operator++() -> Iterator & {
+auto Nostd::Matrix<T, Alloc>::ConstIterator::operator++() -> ConstIterator & {
   return *this += 1;
 }
 
 template <class T, class Alloc>
-template <class U>
-auto Nostd::Matrix<T, Alloc>::Iterator<U>::operator++(int) -> Iterator {
+auto Nostd::Matrix<T, Alloc>::ConstIterator::operator++(int) -> ConstIterator {
   Iterator t{*this};
   ++*this;
   return t;
 }
 
 template <class T, class Alloc>
-template <class U>
-auto Nostd::Matrix<T, Alloc>::Iterator<U>::operator--() -> Iterator & {
+auto Nostd::Matrix<T, Alloc>::ConstIterator::operator--() -> ConstIterator & {
   return *this -= 1;
 }
 
 template <class T, class Alloc>
-template <class U>
-auto Nostd::Matrix<T, Alloc>::Iterator<U>::operator--(int) -> Iterator {
+auto Nostd::Matrix<T, Alloc>::ConstIterator::operator--(int) -> ConstIterator {
   Iterator t{*this};
   --*this;
   return t;
 }
 
 template <class T, class Alloc>
-template <class U>
-auto Nostd::Matrix<T, Alloc>::Iterator<U>::operator+(difference_type n) const
-    -> Iterator {
+auto Nostd::Matrix<T, Alloc>::ConstIterator::operator+(difference_type n) const
+    -> ConstIterator {
   const size_t stride{slc.stride()};
   if (n < 0 && -n * stride > pstn)
     throw std::out_of_range("n < 0 && -n * stride > pstn");
-  return Iterator(m, slc, pstn + n * stride, ord);
+  return ConstIterator(m, slc, pstn + n * stride, ord);
 }
 
 template <class T, class Alloc>
-template <class U>
-auto Nostd::Matrix<T, Alloc>::Iterator<U>::operator-(difference_type n) const
-    -> Iterator {
+auto Nostd::Matrix<T, Alloc>::ConstIterator::operator-(difference_type n) const
+    -> ConstIterator {
   return *this + (-n);
 }
 
 template <class T, class Alloc>
-template <class U>
-auto Nostd::Matrix<T, Alloc>::Iterator<U>::operator-(Iterator p) const
+auto Nostd::Matrix<T, Alloc>::ConstIterator::operator-(ConstIterator p) const
     -> difference_type {
   if (m != p.m || slc.start() != p.slc.start() || slc.size() != p.slc.size() ||
       slc.stride() != p.slc.stride() || ord != p.ord)
@@ -118,9 +112,8 @@ auto Nostd::Matrix<T, Alloc>::Iterator<U>::operator-(Iterator p) const
 }
 
 template <class T, class Alloc>
-template <class U>
-auto Nostd::Matrix<T, Alloc>::Iterator<U>::operator+=(difference_type n)
-    -> Iterator & {
+auto Nostd::Matrix<T, Alloc>::ConstIterator::operator+=(difference_type n)
+    -> ConstIterator & {
   pstn = pstn + n * slc.stride();
   const size_t start{slc.start()}, size{slc.size()}, stride{slc.stride()};
   if (pstn < start)
@@ -131,16 +124,14 @@ auto Nostd::Matrix<T, Alloc>::Iterator<U>::operator+=(difference_type n)
 }
 
 template <class T, class Alloc>
-template <class U>
-auto Nostd::Matrix<T, Alloc>::Iterator<U>::operator-=(difference_type n)
-    -> Iterator & {
+auto Nostd::Matrix<T, Alloc>::ConstIterator::operator-=(difference_type n)
+    -> ConstIterator & {
   return *this += -n;
 }
 
 template <class T, class Alloc>
-template <class U>
-bool Nostd::Matrix<T, Alloc>::Iterator<U>::operator==(
-    const Iterator &p) const noexcept {
+bool Nostd::Matrix<T, Alloc>::ConstIterator::operator==(
+    const ConstIterator &p) const noexcept {
   // every field is compared, so this is actually a memberwise comparison
   return m == p.m && slc.start() == p.slc.start() &&
          slc.size() == p.slc.size() && slc.stride() == p.slc.stride() &&
@@ -148,79 +139,179 @@ bool Nostd::Matrix<T, Alloc>::Iterator<U>::operator==(
 }
 
 template <class T, class Alloc>
-template <class U>
-bool Nostd::Matrix<T, Alloc>::Iterator<U>::operator!=(
-    const Iterator &p) const noexcept {
+bool Nostd::Matrix<T, Alloc>::ConstIterator::operator!=(
+    const ConstIterator &p) const noexcept {
   return !(*this == p);
 }
 
 template <class T, class Alloc>
-template <class U>
-bool Nostd::Matrix<T, Alloc>::Iterator<U>::operator<(const Iterator &p) const {
+bool Nostd::Matrix<T, Alloc>::ConstIterator::operator<(
+    const ConstIterator &p) const {
   return *this - p < 0;
 }
 
 template <class T, class Alloc>
-template <class U>
-bool Nostd::Matrix<T, Alloc>::Iterator<U>::operator>(const Iterator &p) const {
+bool Nostd::Matrix<T, Alloc>::ConstIterator::operator>(
+    const ConstIterator &p) const {
   return *this - p > 0;
 }
 
 template <class T, class Alloc>
-template <class U>
-bool Nostd::Matrix<T, Alloc>::Iterator<U>::operator<=(const Iterator &p) const {
+bool Nostd::Matrix<T, Alloc>::ConstIterator::operator<=(
+    const ConstIterator &p) const {
   return !(*this > p);
 }
 
 template <class T, class Alloc>
-template <class U>
-bool Nostd::Matrix<T, Alloc>::Iterator<U>::operator>=(const Iterator &p) const {
+bool Nostd::Matrix<T, Alloc>::ConstIterator::operator>=(
+    const ConstIterator &p) const {
   return !(*this < p);
 }
 
 template <class T, class Alloc>
-template <class U>
-auto Nostd::Matrix<T, Alloc>::Iterator<U>::operator*() -> Iterator & {
+auto Nostd::Matrix<T, Alloc>::ConstIterator::operator*() -> ConstIterator & {
   if (pstn == slc.start() + slc.size() * slc.stride())
     throw std::out_of_range("can't dereference end of sequence");
   return *this;
 }
 
 template <class T, class Alloc>
-template <class U>
-U *Nostd::Matrix<T, Alloc>::Iterator<U>::operator->() const {
+auto Nostd::Matrix<T, Alloc>::ConstIterator::operator->() -> ConstIterator * {
   if (pstn == slc.start() + slc.size() * slc.stride())
     throw std::out_of_range("can't dereference end of sequence");
-  return m;
+  return this;
 }
 
 template <class T, class Alloc>
-template <class U>
-auto Nostd::Matrix<T, Alloc>::Iterator<U>::operator[](size_t n) const noexcept
-    -> Iterator {
-  const size_t new_ord{ord - 1}, new_size{m->extent(m->order() - new_ord - 1)},
-      new_stride{dim / m->extent(m->order() - ord)},
+auto Nostd::Matrix<T, Alloc>::ConstIterator::operator[](size_t n) const noexcept
+    -> ConstIterator {
+  const size_t new_ord{ord - 1}, new_size{m->extent(m->order() - new_ord)},
+      new_stride{slc.stride() / m->extent(m->order() - new_ord)},
       new_pstn{pstn + n * new_stride};
-  return Iterator(m, std::slice(pstn, new_size, new_stride), new_pstn, new_ord);
+  return ConstIterator(m, std::slice(pstn, new_size, new_stride), new_pstn,
+                       new_ord);
 }
 
 template <class T, class Alloc>
-template <class U>
-auto Nostd::Matrix<T, Alloc>::Iterator<U>::at(size_t n) const -> Iterator {
+auto Nostd::Matrix<T, Alloc>::ConstIterator::at(size_t n) const
+    -> ConstIterator {
   if (!ord)
     throw std::invalid_argument("using at() on a 0-order matrix");
-  const size_t size{m->extent(m->order() - ord)};
+  const size_t size{m->extent(m->order() - ord + 1)};
   if (n > size)
     throw std::out_of_range("n > size");
   return (*this)[n];
 }
 
 template <class T, class Alloc>
-template <class U>
-auto Nostd::Matrix<T, Alloc>::Iterator<U>::value() const -> value_type & {
+auto Nostd::Matrix<T, Alloc>::ConstIterator::value() const -> const_reference {
   if (pstn == slc.start() + slc.size() * slc.stride())
     throw std::out_of_range("can't dereference end of sequence");
   return *(m->data() + pstn);
+}
+
+template <class T, class Alloc>
+Nostd::Matrix<T, Alloc>::Iterator::Iterator(Matrix *matrix, std::slice slice,
+                                            size_t position, size_t order)
+    : ConstIterator{matrix, slice, position, order}, m_{matrix} {}
+
+template <class T, class Alloc>
+auto Nostd::Matrix<T, Alloc>::Iterator::begin() const noexcept -> Iterator {
+  return (*this).at(0);
+}
+
+template <class T, class Alloc>
+auto Nostd::Matrix<T, Alloc>::Iterator::end() const noexcept -> Iterator {
+  auto &m = ConstIterator::m;
+  return (*this).at(m->extent(m->order() - ConstIterator::ord + 1));
+}
+
+template <class T, class Alloc>
+auto Nostd::Matrix<T, Alloc>::Iterator::operator++() -> Iterator & {
+  return *this += 1;
+}
+
+template <class T, class Alloc>
+auto Nostd::Matrix<T, Alloc>::Iterator::operator++(int) -> Iterator {
+  Iterator t{*this};
+  ++*this;
+  return t;
+}
+
+template <class T, class Alloc>
+auto Nostd::Matrix<T, Alloc>::Iterator::operator--() -> Iterator & {
+  return *this -= 1;
+}
+
+template <class T, class Alloc>
+auto Nostd::Matrix<T, Alloc>::Iterator::operator--(int) -> Iterator {
+  Iterator t{*this};
+  --*this;
+  return t;
+}
+
+template <class T, class Alloc>
+auto Nostd::Matrix<T, Alloc>::Iterator::operator+(difference_type n) const
+    -> Iterator {
+  ConstIterator::operator+(n);
+  auto &slc = ConstIterator::slc;
+  return Iterator(m_, slc, ConstIterator::pstn + n * slc.stride(),
+                  ConstIterator::ord);
+}
+
+template <class T, class Alloc>
+auto Nostd::Matrix<T, Alloc>::Iterator::operator-(difference_type n) const
+    -> Iterator {
+  return *this + (-n);
+}
+
+template <class T, class Alloc>
+auto Nostd::Matrix<T, Alloc>::Iterator::operator+=(difference_type n)
+    -> Iterator & {
+  ConstIterator::operator+=(n);
+  return *this;
+}
+
+template <class T, class Alloc>
+auto Nostd::Matrix<T, Alloc>::Iterator::operator-=(difference_type n)
+    -> Iterator & {
+  return *this += -n;
+}
+
+template <class T, class Alloc>
+auto Nostd::Matrix<T, Alloc>::Iterator::operator*() -> Iterator & {
+  ConstIterator::operator*();
+  return *this;
+}
+
+template <class T, class Alloc>
+auto Nostd::Matrix<T, Alloc>::Iterator::operator->() -> Iterator * {
+  ConstIterator::operator->();
+  return this;
+}
+
+template <class T, class Alloc>
+auto Nostd::Matrix<T, Alloc>::Iterator::operator[](size_t n) const noexcept
+    -> Iterator {
+  auto &pstn = ConstIterator::pstn;
+  const size_t new_ord{ConstIterator::ord - 1},
+      new_size{m_->extent(m_->order() - new_ord)},
+      new_stride{ConstIterator::dim / m_->extent(m_->order() - new_ord)},
+      new_pstn{pstn + n * new_stride};
+  return Iterator(m_, std::slice(pstn, new_size, new_stride), new_pstn,
+                  new_ord);
+}
+
+template <class T, class Alloc>
+auto Nostd::Matrix<T, Alloc>::Iterator::at(size_t n) const -> Iterator {
+  ConstIterator::at(n);
+  return (*this)[n];
+}
+
+template <class T, class Alloc>
+auto Nostd::Matrix<T, Alloc>::Iterator::value() const -> reference {
+  ConstIterator::value();
+  return *(m_->data() + ConstIterator::pstn);
 }
 
 template <class T, class Alloc>
@@ -337,7 +428,7 @@ template <class T, class Alloc> Nostd::Matrix<T, Alloc>::Matrix::~Matrix() {
 
 template <class T, class Alloc>
 auto Nostd::Matrix<T, Alloc>::Matrix::begin() noexcept -> iterator {
-  return iterator(this, std::slice(0, exts[0], sz / exts[0]), 0, ord - 1);
+  return Iterator(this, std::slice(0, exts[0], sz / exts[0]), 0, ord);
 }
 
 template <class T, class Alloc>
@@ -347,7 +438,7 @@ auto Nostd::Matrix<T, Alloc>::Matrix::begin() const noexcept -> const_iterator {
 
 template <class T, class Alloc>
 auto Nostd::Matrix<T, Alloc>::Matrix::end() noexcept -> iterator {
-  return iterator(this, std::slice(0, exts[0], sz / exts[0]), sz, ord - 1);
+  return Iterator(this, std::slice(0, exts[0], sz / exts[0]), sz, ord);
 }
 
 template <class T, class Alloc>
@@ -380,13 +471,12 @@ auto Nostd::Matrix<T, Alloc>::Matrix::rend() const noexcept
 template <class T, class Alloc>
 auto Nostd::Matrix<T, Alloc>::Matrix::cbegin() const noexcept
     -> const_iterator {
-  return const_iterator(this, std::slice(0, exts[0], sz / exts[0]), 0, ord);
+  return ConstIterator(this, std::slice(0, exts[0], sz / exts[0]), 0, ord);
 }
 
 template <class T, class Alloc>
 auto Nostd::Matrix<T, Alloc>::Matrix::cend() const noexcept -> const_iterator {
-  return const_iterator(this, std::slice(0, exts[0], sz / exts[0]), exts[0],
-                        ord);
+  return ConstIterator(this, std::slice(0, exts[0], sz / exts[0]), sz, ord);
 }
 
 template <class T, class Alloc>
