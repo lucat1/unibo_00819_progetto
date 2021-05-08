@@ -41,7 +41,10 @@ int main() {
     assert(sc.at(0).sky.size() == 2);
     assert(sc.at(0).sky.at(1) == Engine::Color::blue3_1);
     // Results
-    assert(d.results().size() == 4);
+    const auto &r = d.results();
+    assert(r.size() == 4);
+    assert(r.cbegin()->score() == 8000000);
+    assert(r.cend()->nickname() == L"Stefano");
   });
   it("saves user settings on filesystem", [] {
     Database d("tests/alma.conf.csv", "tests/assets/", "tests/scoreboard.csv");
