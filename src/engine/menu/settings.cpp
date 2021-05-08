@@ -12,16 +12,16 @@
 */
 
 #include "settings.hpp"
+#include "../../data/palette.hpp"
 #include "../ui/button.hpp"
 #include "../ui/center.hpp"
 #include "../ui/choice.hpp"
 #include "../ui/text_box.hpp"
 
+using Data::Palette::button;
+using Data::Palette::slider;
+using Data::Palette::unfocused;
 using Engine::UI::Box;
-
-Engine::Color settings_button_fg = Engine::Color::red,
-              settings_button_bg = Engine::Color::grey23,
-              settings_line = Engine::Color::grey23;
 
 void Engine::Menu::Settings::alloc_updated(
     Nostd::Vector<Data::Setting> &settings) {
@@ -39,7 +39,9 @@ Nostd::Vector<Data::Setting> Engine::Menu::Settings::dereference_updated() {
 
 Engine::UI::Button *Engine::Menu::Settings::append_button(Box *parent,
                                                           const wchar_t *str) {
-  auto btn = parent->append<UI::Button, const wchar_t *>(str);
+  auto wrapper = parent->append<UI::Center>();
+  wrapper->propb(Box::Property::center_horizontal, true);
+  auto btn = wrapper->append<UI::Button, const wchar_t *>(str);
   unfocus(btn);
   return btn;
 }
@@ -51,12 +53,11 @@ Box *Engine::Menu::Settings::append_line(Box *parent, Data::Setting *setting) {
   line->props(Box::Property::padding_right, 2);
   line->props(Box::Property::padding_top, 1);
   line->props(Box::Property::padding_bottom, 1);
-
   line->append<UI::TextBox, const Nostd::WString &>(setting->label());
   auto choice = line->append<UI::Choice, Data::Setting *>(setting);
   choice->propb(Box::Property::float_right, true);
-  choice->propc(Box::Property::foreground, settings_button_fg);
-  choice->propc(Box::Property::background, Color::transparent);
+  choice->propc(Box::Property::foreground, slider.first);
+  choice->propc(Box::Property::background, slider.second);
 
   unfocus(line);
   return line;
@@ -85,24 +86,23 @@ Box *Engine::Menu::Settings::generate() {
   list->props(Box::Property::padding_left, 2);
   list->props(Box::Property::padding_right, 2);
   list->props(Box::Property::padding_top, 1);
-  list->props(Box::Property::padding_bottom, 2);
+  list->props(Box::Property::padding_bottom, 1);
   for (auto setting : updated)
     append_line(list, setting);
 
   // buttons at the end of the page for closing the menu
   auto chbox = root->append<UI::Center>();
   chbox->propb(Box::Property::center_horizontal, true);
-  auto hbox = chbox->append<UI::Box>();
-  hbox->propb(Box::Property::direction_horizontal, true);
-  auto btn1 = append_button(hbox, L"Save");
-  btn1->props(Box::Property::padding_right, 8);
-  append_button(hbox, L"Discard");
+  auto btn_parent = chbox->append<UI::Box>();
+  auto btn1 = append_button(btn_parent, L"Save");
+  btn1->props(Box::Property::padding_bottom, 1);
+  append_button(btn_parent, L"Cancel");
   return root;
 }
 
 Box *Engine::Menu::Settings::curr_box() {
   if (focused >= max_focused - 1)
-    return root->child(1)->child(0)->child(focused == max_focused ? 1 : 0);
+    return root->child(1)->child(0)->child(focused == max_focused ? 1 : 0)->child(0);
   else
     return root->child(0)->child(focused);
 }
@@ -122,19 +122,19 @@ Box *Engine::Menu::Settings::prev_box() {
 void Engine::Menu::Settings::focus(Box *box) {
   if (dynamic_cast<Engine::UI::Button *>(box)) {
     // visually focus buttons
-    box->propc(Box::Property::background, settings_button_fg);
-    box->propc(Box::Property::foreground, settings_button_bg);
+    box->propc(Box::Property::background, button.first);
+    box->propc(Box::Property::foreground, button.second);
   } else {
     // visually focus boxes (lines of the list)
-    box->propc(Box::Property::background, settings_line);
+    box->propc(Box::Property::background, unfocused);
   }
 }
 
 void Engine::Menu::Settings::unfocus(Box *box) {
   if (dynamic_cast<Engine::UI::Button *>(box)) {
     // visually unfocus buttons
-    box->propc(Box::Property::background, settings_button_bg);
-    box->propc(Box::Property::foreground, settings_button_fg);
+    box->propc(Box::Property::background, button.second);
+    box->propc(Box::Property::foreground, button.first);
   } else {
     // visually unfocus boxes (lines of the list)
     box->propc(Box::Property::background, Color::transparent);

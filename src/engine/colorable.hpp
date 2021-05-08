@@ -6,6 +6,9 @@
   Luca Tagliavini #971133
   03/20/2021
 
+  Stefano Volpe #969766
+  03/21/2021
+
   colorable.hpp: Defines the Engine::Colorable interface used to describe any
   class which can be drawn and therefore has a foreground and background
   attribute.

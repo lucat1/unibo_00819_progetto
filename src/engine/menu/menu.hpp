@@ -11,6 +11,7 @@
   about the mechanic of menus so that we can share more functionality acorss
   them.
 */
+
 #ifndef ENGINE_MENU_MENU_HPP
 #define ENGINE_MENU_MENU_HPP
 

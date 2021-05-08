@@ -12,11 +12,13 @@
 */
 
 #include "logo.hpp"
+#include "../../data/palette.hpp"
 
 constexpr const wchar_t *Engine::UI::Logo::logo[];
 
 Engine::UI::Logo::Logo() : TextBox(L"") {
-  propc(Box::Property::foreground, Color::red);
+  propc(Box::Property::foreground, Data::Palette::logo.first);
+  propc(Box::Property::background, Data::Palette::logo.second);
 }
 
 Engine::UI::TextBox::strings
