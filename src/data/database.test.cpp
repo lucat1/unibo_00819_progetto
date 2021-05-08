@@ -10,6 +10,7 @@
 */
 
 #include <cassert>
+#include <iostream> // TODO remove this
 
 #include "../nostd/test.hpp"
 #include "database.hpp"
@@ -20,8 +21,16 @@ using Nostd::it;
 int main() {
   it("loads a database from the filesystem", [] {
     Database d("tests/alma.conf.csv", "tests/assets/", "tests/scoreboard.csv");
-    assert(d.settings().size() == 2);
-    assert(d.map_chunks().size() == 2);
+    const auto &s = d.settings();
+    assert(s.size() == 2);
+    assert(!s.at(0).label().compare(L"Sounds"));
+    assert(s.at(1).size() == 3);
+    const auto &m = d.map_chunks();
+    assert(m.size() == 2);
+    assert(m.at(0).ending_row() == 16);
+    assert(m.at(0).at(19).at(30).value() == Data::MapUnit::ground);
+    assert(m.at(1).starting_row() == 17);
+    assert(m.at(1).at(5).at(69).value() == Data::MapUnit::item);
     assert(d.sceneries().size() == 1);
     assert(d.results().size() == 4);
   });
