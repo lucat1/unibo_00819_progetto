@@ -11,7 +11,6 @@
 
 #include "map_chunk.hpp"
 
-#include <iostream> // TODO remove this
 #include <stdexcept>
 
 using Data::MapChunk;

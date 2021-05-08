@@ -10,7 +10,6 @@
 */
 
 #include <cassert>
-#include <iostream> // TODO remove this
 
 #include "../nostd/test.hpp"
 #include "database.hpp"
