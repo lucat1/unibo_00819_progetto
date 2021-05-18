@@ -23,36 +23,41 @@ Engine::UI::TextBox::TextBox(const Nostd::WString &content)
 void Engine::UI::TextBox::update_lines(szu max_width) {
   if (max_width != old_max_width)
     lines = split_content(content, max_width);
-  max_width = old_max_width;
+  old_max_width = max_width;
 }
 
+// TODO: consider max_height?
 Engine::UI::TextBox::strings
 Engine::UI::TextBox::split_content(const Nostd::WString content,
                                    szu max_width) {
   strings lines;
-  size_t len = content.length();
-  while (len > max_width) {
-    size_t ll = len < max_width ? Nostd::WString::npos : max_width - 1;
+  if (max_width == 0)
+    return lines;
 
-    // TODO: toggle .ltrim
-    Nostd::WString sub = content.substr(content.length() - len, ll + 1);
-    if (!Nostd::iswspace(sub[ll]) && ll != Nostd::WString::npos) {
+  size_t len = content.length(), start = 0;
+  while (len > max_width) {
+    size_t wrote = std::min(len - start, (size_t)max_width);
+    auto sub = content.substr(start, wrote);
+    if (!Nostd::iswspace(sub[wrote - 1])) {
       // when we have two ending chars that are not whitespace we consider this
       // as a word and we add the - charter. Otherwhise we consider this the
       // beginning of a new word and leave it for the next line.
-      if (!Nostd::iswspace(sub[ll - 1]))
+      if (!Nostd::iswspace(sub[wrote - 2]))
         sub.back() = L'-';
       else {
-        ll--; // leave the new word in the next line
+        wrote--; // leave the new word in the next line
         sub.back() = L' ';
       }
     }
 
-    lines.push_back(sub);
-    len -= ll;
+    lines.push_back(content.substr(start, wrote));
+    start += wrote;
+    len -= wrote;
   }
-  // TODO: toggle .ltrim (?)
-  lines.push_back(content.substr(content.length() - len, Nostd::WString::npos));
+
+  // append remaining if we have any
+  if (start != len - 1)
+    lines.push_back(content.substr(start));
   return lines;
 }
 

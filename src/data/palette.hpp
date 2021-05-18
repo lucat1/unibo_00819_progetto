@@ -6,6 +6,9 @@
   Stefano Volpe #969766
   04/06/2021
 
+  Luca Tagliavini #971133
+  04/26/2021
+
   palette.hpp: constants defined in Data::Palette.
 */
 
@@ -15,17 +18,17 @@
 #include "../engine/colorable.hpp"
 #include "../nostd/pair.hpp"
 
+using Engine::Color;
+
 namespace Data {
 namespace Palette {
 
-using Color = Engine::Color;
 using Subpalette = Nostd::Pair<Color, Color>;
 
-constexpr Subpalette logo(Color::red, Color::black),
-    frame(Color::grey23, Color::black), button(Color::red, Color::grey23),
-    slider(Color::grey50, Color::white),
-    message(Color::navajo_white1, Color::grey23),
-    gauge(Color::red, Color::grey50);
+constexpr Color primary = Color::red, secondary = Color::aqua,
+                unfocused = Color::grey23;
+constexpr Subpalette logo(primary, Color::transparent),
+    button(secondary, unfocused), slider(secondary, Color::transparent);
 
 } // namespace Palette
 } // namespace Data

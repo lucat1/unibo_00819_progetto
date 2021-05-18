@@ -11,8 +11,10 @@
   interaction with the UI.
 */
 #include "main.hpp"
+#include "../../data/palette.hpp"
 #include "../ui/center.hpp"
 
+using Data::Palette::button;
 using Engine::UI::Box;
 
 Engine::UI::Button *Engine::Menu::Main::append_button(Box *parent,
@@ -65,17 +67,14 @@ Box *Engine::Menu::Main::prev_box() {
   return curr_box();
 }
 
-Engine::Color main_button_fg = Engine::Color::red,
-              main_button_bg = Engine::Color::grey23;
-
 void Engine::Menu::Main::focus(Box *box) {
-  box->propc(Box::Property::background, main_button_fg);
-  box->propc(Box::Property::foreground, main_button_bg);
+  box->propc(Box::Property::background, button.first);
+  box->propc(Box::Property::foreground, button.second);
 }
 
 void Engine::Menu::Main::unfocus(Box *box) {
-  box->propc(Box::Property::background, main_button_bg);
-  box->propc(Box::Property::foreground, main_button_fg);
+  box->propc(Box::Property::background, button.second);
+  box->propc(Box::Property::foreground, button.first);
 }
 
 void Engine::Menu::Main::interact(Box *) { clicked_on = focused; }

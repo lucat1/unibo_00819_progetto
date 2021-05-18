@@ -18,7 +18,9 @@ using Data::MapUnit;
 
 std::basic_istream<char> &Data::operator>>(std::basic_istream<char> &i,
                                            MapUnit &m) {
-  m = static_cast<MapUnit>(i.get());
+  char c;
+  if (i >> c)
+    m = static_cast<MapUnit>(c);
   return i;
 }
 

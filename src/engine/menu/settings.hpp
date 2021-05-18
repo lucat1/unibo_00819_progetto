@@ -30,7 +30,7 @@ private:
   void alloc_updated(Nostd::Vector<Data::Setting> &settings);
   Nostd::Vector<Data::Setting> dereference_updated();
   UI::Button *append_button(UI::Box *parent, const wchar_t *str);
-  UI::Box *append_line(UI::Box *parent, Data::Setting *str);
+  UI::Box *append_line(UI::Box *parent, Data::Setting *setting);
 
 protected:
   UI::Box *generate();

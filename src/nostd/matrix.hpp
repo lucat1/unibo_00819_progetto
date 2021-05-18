@@ -31,7 +31,8 @@ template <class T, class Alloc = Allocator<T>> class Matrix {
   static_assert(Regular<T>(), "Matrix's cell type is not regular");
 
 public:
-  template <class U> class Iterator;
+  class Iterator;
+  class ConstIterator;
 
   using value_type = T;
   using allocator_type = Alloc;
@@ -39,10 +40,10 @@ public:
   using const_reference = const value_type &;
   using pointer = value_type *;
   using const_pointer = const value_type *;
-  using iterator = Iterator<value_type>;
-  using const_iterator = Iterator<const value_type>;
-  using reverse_iterator = std::reverse_iterator<Iterator<value_type>>;
-  using const_reverse_iterator = std::reverse_iterator<const value_type>;
+  using iterator = Iterator;
+  using const_iterator = ConstIterator;
+  using reverse_iterator = std::reverse_iterator<iterator>;
+  using const_reverse_iterator = std::reverse_iterator<const_iterator>;
   using size_type = size_t;
   using difference_type = ptrdiff_t;
 
@@ -50,18 +51,68 @@ public:
     A random access iterator able to point to any splice of a given Matrix. It
     can be used to access either a submatrix or a cell.
   */
-  template <class U>
-  class Iterator : public std::iterator<std::random_access_iterator_tag, U> {
-    static_assert(Regular<U>(), "Matrix's cell type is not regular");
+  class ConstIterator
+      : public std::iterator<std::random_access_iterator_tag, value_type> {
 
+  public:
+    ConstIterator() = default;
+    ConstIterator(const Matrix *, std::slice, size_t position,
+                  size_t order = 1);
+    ConstIterator(const ConstIterator &) = default;
+    ConstIterator &operator=(const ConstIterator &) = default;
+    ~ConstIterator() = default;
+
+    // iterators
+    ConstIterator begin() const noexcept; // iterator to the first row
+    ConstIterator end() const noexcept;   // iterator to the row after the last
+
+    ConstIterator &operator++();
+    ConstIterator operator++(int);
+    ConstIterator &operator--();
+    ConstIterator operator--(int);
+    ConstIterator operator+(difference_type) const;
+    ConstIterator operator-(difference_type) const;
+    difference_type operator-(ConstIterator) const;
+    ConstIterator &operator+=(difference_type);
+    ConstIterator &operator-=(difference_type);
+
+    bool operator==(const ConstIterator &) const noexcept;
+    bool operator!=(const ConstIterator &) const noexcept;
+    // the following operators throw a std::domain_error when comparing
+    // submatrixes represented by different splices (for example, the ones
+    // which do not have the same order). The same goes when calculating the
+    // difference between two iterators.
+    bool operator<(const ConstIterator &) const;
+    bool operator>(const ConstIterator &) const;
+    bool operator<=(const ConstIterator &) const;
+    bool operator>=(const ConstIterator &) const;
+
+    // As a submatrix cannot be dereferenced to a single value, *p must return
+    // p itself. This is still useful in for-each loops, but please remember:
+    // if you work with a copy of the iterator, you are still working on the
+    // same matrix.
+    ConstIterator &operator*();
+    ConstIterator *operator->();
+    // p[n] is *not* the same as *(p + n): it returns an iterator pointing to
+    // a submatrix of the one originally pointed. An at() method is also
+    // available: it throws std::out_of_range on invalid submatrix indexes and
+    // std::domain_error when used on an iterator pointing to a single cell.
+    ConstIterator operator[](size_t) const noexcept;
+    ConstIterator at(size_t) const;
+
+    const_reference value() const;
+
+  protected: // very bad
+    const Matrix *m{nullptr};
+    std::slice slc;
+    size_t pstn, ord, dim;
+  };
+
+  class Iterator : public ConstIterator {
   public:
     Iterator() = default;
     Iterator(Matrix *, std::slice, size_t position, size_t order = 1);
-    Iterator(const Iterator &) = default;
-    Iterator &operator=(const Iterator &) = default;
-    ~Iterator() = default;
 
-    // iterators
     Iterator begin() const noexcept; // iterator to the first row
     Iterator end() const noexcept;   // iterator to the row after the last
 
@@ -71,40 +122,18 @@ public:
     Iterator operator--(int);
     Iterator operator+(difference_type) const;
     Iterator operator-(difference_type) const;
-    difference_type operator-(Iterator) const;
     Iterator &operator+=(difference_type);
     Iterator &operator-=(difference_type);
 
-    bool operator==(const Iterator &) const noexcept;
-    bool operator!=(const Iterator &) const noexcept;
-    // the following operators throw a std::domain_error when comparing
-    // submatrixes represented by different splices (for example, the ones
-    // which do not have the same order). The same goes when calculating the
-    // difference between two iterators.
-    bool operator<(const Iterator &) const;
-    bool operator>(const Iterator &) const;
-    bool operator<=(const Iterator &) const;
-    bool operator>=(const Iterator &) const;
-
-    // As a submatrix cannot be dereferenced to a single value, *p must return
-    // p itself. This is still useful in for-each loops, but please remember:
-    // if you work with a copy of the iterator, you are still working on the
-    // same matrix.
     Iterator &operator*();
-    U *operator->() const;
-    // p[n] is *not* the same as *(p + n): it returns an iterator pointing to
-    // a submatrix of the one originally pointed. An at() method is also
-    // available: it throws std::out_of_range on invalid submatrix indexes and
-    // std::domain_error when used on an iterator pointing to a single cell.
+    Iterator *operator->();
     Iterator operator[](size_t) const noexcept;
     Iterator at(size_t) const;
 
-    value_type &value() const;
+    reference value() const;
 
   private:
-    Matrix *m{nullptr};
-    std::slice slc;
-    size_t pstn, ord, dim;
+    Matrix *m_{nullptr};
   };
 
   // extents are mandatory
@@ -153,12 +182,12 @@ public:
   const_iterator operator[](size_t) const;
   iterator at(size_type);
   const_iterator at(size_type) const;
-  value_type *data() noexcept; // access to the C-style array
-  const value_type *data() const noexcept;
+  pointer data() noexcept; // access to the C-style array
+  const_pointer data() const noexcept;
 
   // modifiers
-  void fill(const value_type &); // sets every element to the given value
-  void swap(Matrix &) noexcept;  // this will invalid pre-swap iterators
+  void fill(const_reference);   // sets every element to the given value
+  void swap(Matrix &) noexcept; // this will invalid pre-swap iterators
 
   // Two matrixes are said to be equal when they have same extents and elements.
   typename std::enable_if<Has_equal<T>(), bool>::type
