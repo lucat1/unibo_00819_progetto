@@ -6,6 +6,9 @@
   Luca Tagliavini #971133
   03/20/2021
 
+  Stefano Volpe #969766
+  03/20/2021
+
   colorable.cpp: Implements the default methods for the pure virtual class
   Engine::Colorable.
 */
