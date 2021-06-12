@@ -198,15 +198,16 @@ std::basic_istream<wchar_t> &
 Data::get_CSV_WString(std::basic_istream<wchar_t> &is, WString &s) {
   if (is) {
     s = WString{};
-    for (wchar_t input; is >> input && input != Database::separator &&
+    for (wchar_t input; is.get(input) && input != Database::separator &&
         input != Database::newrecord;) {
       if (input == Database::escape) {
         if (is)
-          is >> input;
+          is.get(input);
         else
           break; // escape character + EOF
       }
       s.push_back(input);
+      std::wcerr << input;
     }
   }
   return is;
