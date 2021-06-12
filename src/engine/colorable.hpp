@@ -17,7 +17,7 @@
 #define ENGINE_COLORABLE_HPP
 
 namespace Engine {
-// copied, edited with vim and by hand to compy with our naming convetion, from
+// copied, edited with vim and by hand to comply with our naming convetion, from
 // https://jonasjacek.github.io/colors/
 enum class Color : short {
   transparent = -1,
