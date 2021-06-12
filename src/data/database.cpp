@@ -140,28 +140,25 @@ char *Database::newstrcat(const char *str1, const char *str2) const {
 void Database::load_settings(const char *assets_filepath) {
   // game settings
   const char *const settings_fp{newstrcat(assets_filepath, settings_rel_fp)};
-  wifstream wifs{settings_fp};
+  wifstream settings_wifs{settings_fp};
   delete settings_fp;
   Setting s;
-  while (wifs >> s)
+  while (settings_wifs >> s)
     set.push_back(s);
-  wifs.close();
+  settings_wifs.close();
   // current values
-  wifs.open(conf);
+  wifstream conf_wifs(conf);
   WString key;
-  while (get_CSV_WString(wifs, key)) {
+  while (get_CSV_WString(conf_wifs, key)) {
     size_t value;
-    wifs >> value;
-    wchar_t input;
-    while (wifs >> input && input != newrecord)
-      ;
+    conf_wifs >> value;
     for (auto &s : set)
       if (!key.compare(s.label())) {
         s.set(s.begin() + value);
         break;
       }
   }
-  wifs.close();
+  conf_wifs.close();
 }
 
 void Database::load_map_chunks(const char *assets_filepath) {
@@ -201,12 +198,15 @@ std::basic_istream<wchar_t> &
 Data::get_CSV_WString(std::basic_istream<wchar_t> &is, WString &s) {
   if (is) {
     s = WString{};
-    wchar_t input;
-    while (is >> input && input != Database::separator &&
-           input != Database::newrecord) {
+    for (wchar_t input; is >> input && input != Database::separator &&
+        input != Database::newrecord;) {
+      if (input == Database::escape) {
+        if (is)
+          is >> input;
+        else
+          break; // escape character + EOF
+      }
       s.push_back(input);
-      if (s.back() == Database::escape)
-        is >> s.back();
     }
   }
   return is;
