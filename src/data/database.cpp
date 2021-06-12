@@ -207,7 +207,6 @@ Data::get_CSV_WString(std::basic_istream<wchar_t> &is, WString &s) {
           break; // escape character + EOF
       }
       s.push_back(input);
-      std::wcerr << input;
     }
   }
   return is;
