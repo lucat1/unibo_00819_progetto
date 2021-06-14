@@ -12,6 +12,8 @@
 #ifndef DATA_PAWNS_PAWN_HPP
 #define DATA_PAWNS_PAWN_HPP
 
+#include <istream>
+
 #include "../../engine/tile.hpp"
 #include "../../nostd/wstring.hpp"
 
@@ -23,14 +25,8 @@ namespace Pawns {
   map which deserves a name of their own is a Pawn.
 */
 class Pawn : public Engine::Tile {
-protected:
-  Pawn(const Nostd::WString &);
-
 public:
-  const Nostd::WString &name() const;
-
-private:
-  Nostd::WString n;
+  virtual const Nostd::WString &name() const = 0;
 };
 
 } // namespace Pawns
