@@ -6,7 +6,7 @@
   Stefano Volpe #969766
   04/06/2021
 
-  map_chunk.hpp: user interface of Data::MapChunk.
+  map_chunk.hpp: user interface of Data::MapChunk and its helper entities.
 */
 
 #ifndef DATA_MAP_CHUNK_HPP

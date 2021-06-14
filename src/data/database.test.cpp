@@ -6,7 +6,7 @@
   Stefano Volpe #969766
   04/25/2021
 
-  database.test.cpp: tests for Nostd::Database and its helper entities.
+  database.test.cpp: tests for Data::Database and its helper entities.
 */
 
 #include <cassert>

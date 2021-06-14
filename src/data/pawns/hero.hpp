@@ -6,17 +6,17 @@
   Stefano Volpe #969766
   04/02/2021
 
-  hero.hpp: user interface of Data::Interactables::Hero and its helper entities.
+  hero.hpp: user interface of Data::Pawns::Hero.
 */
 
-#ifndef DATA_INTERACTABLES_HERO_HPP
-#define DATA_INTERACTABLES_HERO_HPP
+#ifndef DATA_PAWNS_HERO_HPP
+#define DATA_PAWNS_HERO_HPP
 
 #include "../../nostd/wstring.hpp"
 
 namespace Data {
 
-namespace Interactables {
+namespace Pawns {
 
 /*
   A Hero is a playable character: as such, it provides a health and a mana
@@ -32,7 +32,7 @@ private:
   wchar_t sprt{'\0'};
 };
 
-} // namespace Interactables
+} // namespace Pawns
 
 } // namespace Data
 

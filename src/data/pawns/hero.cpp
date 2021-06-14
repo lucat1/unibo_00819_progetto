@@ -11,7 +11,7 @@
 
 #include "hero.hpp"
 
-using Data::Interactables::Hero;
+using Data::Pawns::Hero;
 
 const Nostd::WString &Hero::name() const noexcept { return nm; }
 

@@ -18,6 +18,7 @@
 #include "../../nostd/wstring.hpp"
 
 namespace Data {
+
 namespace Pawns {
 
 /*
@@ -30,6 +31,7 @@ public:
 };
 
 } // namespace Pawns
+
 } // namespace Data
 
 #endif

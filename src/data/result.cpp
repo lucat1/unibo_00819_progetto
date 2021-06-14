@@ -14,7 +14,7 @@
 #include <stdexcept>
 
 using Data::Result;
-using Data::Interactables::Hero;
+using Data::Pawns::Hero;
 using Nostd::WString;
 
 Result::Result(const WString &nickname, const Hero *hero, int score)

@@ -6,7 +6,7 @@
   Stefano Volpe #969766
   04/09/2021
 
-  map_chunk.cpp: implementation of Data::MapChunk.
+  map_chunk.cpp: implementation of Data::MapChunk and its helper entities.
 */
 
 #include "map_chunk.hpp"

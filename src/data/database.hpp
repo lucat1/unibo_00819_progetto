@@ -69,7 +69,7 @@ private:
   Nostd::Vector<MapChunk> map{};
   Nostd::Vector<Scenery> sce{};
   // TODO
-  Nostd::UnorderedMap<Nostd::WString, Interactables::Hero> her{};
+  Nostd::UnorderedMap<Nostd::WString, Pawns::Hero> her{};
   // TODO
   Nostd::List<Result> res{};
 

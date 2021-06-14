@@ -25,8 +25,7 @@ namespace Data {
 class Result {
 public:
   Result() = default;
-  Result(const Nostd::WString &nickname, const Interactables::Hero *hero,
-         int score);
+  Result(const Nostd::WString &nickname, const Pawns::Hero *hero, int score);
   Result(Result &&) = default;
   Result &operator=(Result &&) = default;
   Result(const Result &) = default;
@@ -36,14 +35,14 @@ public:
 
   // getters
   const Nostd::WString &nickname() const noexcept;
-  const Interactables::Hero *hero() const noexcept;
+  const Pawns::Hero *hero() const noexcept;
   int score() const noexcept;
 
   operator int() const; // converts results to scores (so they can be compared)
 
 private:
   Nostd::WString nick{};
-  const Interactables::Hero *hr{nullptr};
+  const Pawns::Hero *hr{nullptr};
   int scr{0};
 };
 
