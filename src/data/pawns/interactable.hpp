@@ -14,8 +14,6 @@
 
 #include "pawn.hpp"
 
-#include "hero.hpp"
-
 namespace Data {
 
 namespace Pawns {
@@ -27,12 +25,18 @@ namespace Pawns {
 */
 class Interactable : public Pawn {
 public:
-  Hero interact(Hero) const;
+  // These methods validate their argument and return the new stats after the
+  // interaction.
+  int healthEffect(int currentHealth, int maxHealth);
+  int manaEffect(int currentMana, int maxMana);
+  int scoreEffect(int currentScore);
 
 protected:
-  virtual int healthEffect(int currentHealth, int maxHealth);
-  virtual int manaEffect(int currentMana, int maxMana);
-  virtual int scoreEffect(int currentScore);
+  // These methods do not validare their argument and return the new stats after
+  // the interaction.
+  virtual int uncheckedHealthEffect(int currentHealth, int maxHealth);
+  virtual int uncheckedManaEffect(int currentMana, int maxMana);
+  virtual int uncheckedScoreEffect(int currentScore);
 };
 
 } // namespace Pawns
