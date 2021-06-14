@@ -13,6 +13,7 @@
 #define DATA_PAWNS_HERO_HPP
 
 #include "../../nostd/wstring.hpp"
+#include "character.hpp"
 
 namespace Data {
 
@@ -20,9 +21,9 @@ namespace Pawns {
 
 /*
   A Hero is a playable character: as such, it provides a health and a mana
-  gauge, as well as a description.
+  gauges, as well as a description and an additional skill.
 */
-class Hero {
+class Hero : Character {
 public:
   const Nostd::WString &name() const noexcept;
   wchar_t sprite() const noexcept;

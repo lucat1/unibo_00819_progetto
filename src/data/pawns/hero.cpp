@@ -6,7 +6,7 @@
   Stefano Volpe #969766
   04/28/2021
 
-  hero.cpp: implementation of Data::Interactables::Hero and its helper entities.
+  hero.cpp: implementation of Data::Pawns::Hero.
 */
 
 #include "hero.hpp"
