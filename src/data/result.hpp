@@ -13,7 +13,7 @@
 #define DATA_RESULT_HPP
 
 #include "../nostd/wstring.hpp"
-#include "interactables/hero.hpp"
+#include "pawns/hero.hpp"
 
 namespace Data {
 
