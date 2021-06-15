@@ -10,7 +10,10 @@
 */
 
 #include <cassert>
+<<<<<<< HEAD
 #include <sstream>
+=======
+>>>>>>> 0e542d4 (Hero tests)
 
 #include "../../engine/colorable.hpp"
 #include "../../nostd/test.hpp"
@@ -39,6 +42,7 @@ int main() {
     assert(!foxy.isDead());
     assert(!foxy.attemptSuperSkill());
   });
+<<<<<<< HEAD
   it("reads a Hero from a stream", [] {
     Hero foxy{Engine::Color::transparent, L' ', L"", L"", {}, {}, 1, 1};
     std::wistringstream wiss{L"6,🦊,Foxy,Neat guy.,,,5,10\n"};
@@ -53,4 +57,6 @@ int main() {
     assert(foxy.maxMana() == 10);
     assert(!foxy.score());
   });
+=======
+>>>>>>> 0e542d4 (Hero tests)
 }
