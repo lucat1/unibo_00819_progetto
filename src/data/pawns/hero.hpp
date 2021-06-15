@@ -46,7 +46,7 @@ public:
   void rename(const Nostd::WString &);
   const Nostd::WString &description() const noexcept;
   Skill superSkill() const noexcept;
-  void interact(Interactable);
+  void interact(Interactable &);
   int currentHealth() const noexcept;
   int maxHealth() const noexcept;
   bool isDead() const noexcept;

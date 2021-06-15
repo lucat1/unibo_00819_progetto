@@ -43,7 +43,7 @@ const Nostd::WString &Hero::description() const noexcept { return dsc; }
 
 Skill Hero::superSkill() const noexcept { return ssk; }
 
-void Hero::interact(Interactable i) {
+void Hero::interact(Interactable &i) {
   curH = i.healthEffect(curH, maxH);
   curM = i.manaEffect(curM, maxM);
   scr = i.scoreEffect(scr);

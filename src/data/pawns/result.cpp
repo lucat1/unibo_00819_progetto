@@ -17,7 +17,7 @@ using Data::Pawns::Result;
 using Nostd::WString;
 
 Result::Result(const WString &name, int score, Engine::Color foreground,
-               wchat_t character)
+               wchar_t character)
     : nm{name}, scr{score}, fg{foreground}, chr{character} {
   if (score < 0)
     throw std::invalid_argument("score < 0");

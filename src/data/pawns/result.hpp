@@ -27,6 +27,7 @@ namespace Pawns {
 */
 class Result : public Pawn {
 public:
+  Result() = default;
   Result(const Nostd::WString &, int, Engine::Color, wchar_t);
   Result(Result &&) = default;
   Result &operator=(Result &&) = default;

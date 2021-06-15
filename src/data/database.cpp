@@ -15,12 +15,14 @@
 #include <fstream>
 #include <utility>
 
+#include "../engine/colorable.hpp"
 #include "map_chunk.hpp"
-#include "result.hpp"
+#include "pawns/result.hpp"
 #include "scenery.hpp"
 #include "setting.hpp"
 
 using namespace Data;
+using namespace Data::Pawns;
 using Nostd::List;
 using Nostd::Vector;
 using Nostd::WString;
@@ -117,13 +119,10 @@ const List<Result> &Database::results() const noexcept { return res; }
 
 void Database::save_results() const {
   std::wofstream wofs(scor);
-  for (auto x : res) {
-    put_CSV_WString(wofs, x.nickname()) << separator;
-    if (x.hero())
-      put_CSV_WString(wofs, x.hero()->name());
-    wofs << separator;
-    wofs << x.score() << newrecord;
-  }
+  for (auto x : res)
+    put_CSV_WString(wofs, x.name()) << separator << x.score() << separator
+                                    << Engine::color_to_short(x.foreground())
+                                    << separator << x.character() << newrecord;
   wofs.close();
 }
 
@@ -183,13 +182,14 @@ void Database::load_sceneries(const char *assets_filepath) {
 
 void Database::load_results() {
   wifstream wifs{scor};
-  WString nickname;
-  while (get_CSV_WString(wifs, nickname)) {
-    WString hero;
+  WString name;
+  while (get_CSV_WString(wifs, name)) {
     int score;
-    get_CSV_WString(wifs, hero) >> score;
-    res.push_back(
-        {nickname, her.contains(nickname) ? &her[nickname] : nullptr, score});
+    short foreground;
+    (wifs >> score >> foreground).ignore();
+    wchar_t character;
+    (wifs >> character).ignore();
+    res.push_back({name, score, Engine::short_to_color(foreground), character});
     wifs.ignore();
   }
 }
@@ -199,7 +199,7 @@ Data::get_CSV_WString(std::basic_istream<wchar_t> &is, WString &s) {
   if (is) {
     s = WString{};
     for (wchar_t input; is.get(input) && input != Database::separator &&
-        input != Database::newrecord;) {
+                        input != Database::newrecord;) {
       if (input == Database::escape) {
         if (is)
           is.get(input);

@@ -26,11 +26,9 @@ int main() {
 
   // TODO: properly by calling database.results()
   Nostd::List<Data::Pawns::Result> results;
-  results.push_back(
-      Data::Pawns::Result(L"Lienin", 100293, Color::red, L'❤️'));
-  results.push_back(Data::Pawns::Result(L"Adolf", 98666, Color::yellow, L'⭐'));
-  results.push_back(
-      Data::Pawns::Result(L"Benito", 20034, Color::green, L'✔️'));
+  results.push_back(Data::Pawns::Result(L"Lienin", 100293, Color::red, L'='));
+  results.push_back(Data::Pawns::Result(L"Adolf", 98666, Color::yellow, L'/'));
+  results.push_back(Data::Pawns::Result(L"Benito", 20034, Color::green, L'!'));
 
   int key;
   bool running = true;
@@ -53,8 +51,8 @@ int main() {
           break;
         case Menu::Main::Result::play:
           // TODO: change me
-          screen.set_content<Menu::Results, const Nostd::List<Data::Result> &>(
-              results);
+          screen.set_content<Menu::Results,
+                             const Nostd::List<Data::Pawns::Result> &>(results);
           break;
         default:
           break;
