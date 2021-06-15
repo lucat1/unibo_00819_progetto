@@ -186,11 +186,11 @@ void Database::load_results() {
   while (get_CSV_WString(wifs, name)) {
     int score;
     short foreground;
-    (wifs >> score >> foreground).ignore();
+    (wifs >> score).ignore();
     wchar_t character;
+    (wifs >> foreground).ignore();
     (wifs >> character).ignore();
     res.push_back({name, score, Engine::short_to_color(foreground), character});
-    wifs.ignore();
   }
 }
 
