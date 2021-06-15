@@ -75,8 +75,8 @@ int Hero::score() const noexcept { return scr; }
 
 Hero::operator Result() const { return Result(nm, scr, fg, chr); }
 
-std::basic_istream<wchar_t> &operator>>(std::basic_istream<wchar_t> &is,
-                                        Hero &h) {
+std::basic_istream<wchar_t> &
+Data::Pawns::operator>>(std::basic_istream<wchar_t> &is, Hero &h) {
   short foreground;
   (is >> foreground).ignore();
   wchar_t character;
