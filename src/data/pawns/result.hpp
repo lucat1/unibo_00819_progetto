@@ -14,6 +14,7 @@
 
 #include "../../engine/colorable.hpp"
 #include "../../nostd/wstring.hpp"
+#include "hero.hpp"
 #include "pawn.hpp"
 
 namespace Data {
@@ -29,11 +30,12 @@ class Result : public Pawn {
 public:
   Result() = default;
   Result(const Nostd::WString &, int, Engine::Color, wchar_t);
+
   Result(Result &&) = default;
   Result &operator=(Result &&) = default;
   Result(const Result &) = default;
   Result &operator=(const Result &) = default;
-
+  Result(Hero);
   ~Result() = default;
 
   // getters

@@ -23,6 +23,9 @@ Result::Result(const WString &name, int score, Engine::Color foreground,
     throw std::invalid_argument("score < 0");
 }
 
+Result::Result(Data::Pawns::Hero h)
+    : Result(h.name(), h.score(), h.foreground(), h.character()) {}
+
 const WString &Result::name() const noexcept { return nm; }
 
 int Result::score() const noexcept { return scr; }
