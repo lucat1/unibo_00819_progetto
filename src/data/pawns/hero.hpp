@@ -12,6 +12,8 @@
 #ifndef DATA_PAWNS_HERO_HPP
 #define DATA_PAWNS_HERO_HPP
 
+#include <istream>
+
 #include "../../engine/colorable.hpp"
 #include "../../nostd/wstring.hpp"
 #include "character.hpp"
@@ -58,6 +60,9 @@ public:
 
   operator Result() const; // converts heroes to their current result
 
+  friend std::basic_ostream<wchar_t> &operator>>(std::basic_ostream<wchar_t> &,
+                                                 const Hero &);
+
 private:
   Engine::Color fg;
   wchar_t chr;
@@ -65,6 +70,8 @@ private:
   Skill sk, ssk;
   int curH, maxH, curM, maxM, scr;
 };
+
+std::basic_istream<wchar_t> &operator>>(std::basic_istream<wchar_t> &, Hero &);
 
 } // namespace Pawns
 

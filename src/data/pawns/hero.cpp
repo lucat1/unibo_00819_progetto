@@ -13,6 +13,11 @@
 
 #include <stdexcept>
 
+#include "../../engine/colorable.hpp"
+#include "../../nostd/wstring.hpp"
+#include "../database.hpp"
+#include "skill.hpp"
+
 using Data::Pawns::Hero;
 using Data::Pawns::Interactable;
 using Data::Pawns::Result;
@@ -69,3 +74,24 @@ bool Hero::attemptSuperSkill() noexcept {
 int Hero::score() const noexcept { return scr; }
 
 Hero::operator Result() const { return Result(nm, scr, fg, chr); }
+
+std::basic_istream<wchar_t> &operator>>(std::basic_istream<wchar_t> &is,
+                                        Hero &h) {
+  short foreground;
+  (is >> foreground).ignore();
+  wchar_t character;
+  (is >> character).ignore();
+  Nostd::WString name, description;
+  Data::get_CSV_WString(is, name);
+  Data::get_CSV_WString(is, description);
+  Skill skill, superSkill;
+  (is >> skill).ignore();
+  (is >> superSkill).ignore();
+  int maxHealth, maxMana;
+  is >> maxHealth >> maxMana;
+  is.ignore();
+  if (is)
+    h = Hero(Engine::short_to_color(foreground), character, name, description,
+             skill, superSkill, maxHealth, maxMana);
+  return is;
+}

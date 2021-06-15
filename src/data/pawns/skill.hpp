@@ -12,11 +12,15 @@
 #ifndef DATA_PAWNS_SKILL_HPP
 #define DATA_PAWNS_SKILL_HPP
 
+#include <istream>
+
 namespace Data {
 
 namespace Pawns {
 
 class Skill {};
+
+std::basic_istream<wchar_t> &operator>>(std::basic_istream<wchar_t> &, Skill &);
 
 } // namespace Pawns
 
