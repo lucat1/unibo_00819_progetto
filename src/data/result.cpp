@@ -17,13 +17,10 @@ using Data::Result;
 using Data::Pawns::Hero;
 using Nostd::WString;
 
-Result::Result(const WString &nickname, const Hero *hero, int score)
-    : nick{nickname}, hr{hero}, scr{score} {
+Result::Result(const Hero *hero, int score) : hr{hero}, scr{score} {
   if (score < 0)
     throw std::invalid_argument("score < 0");
 }
-
-const WString &Result::nickname() const noexcept { return nick; }
 
 const Hero *Result::hero() const noexcept { return hr; }
 

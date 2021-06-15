@@ -20,12 +20,11 @@ namespace Data {
 namespace Pawns {
 
 /*
-  A Character is a Pawn able to move and fight. It may be able to fly and can
-  count on a basic skill to use.
+  A Character is a Pawn able to move and fight. A generic character only has one
+  skill though.
 */
 class Character : public Pawn {
 public:
-  virtual bool canFly() const;
   virtual Skill skill() const = 0;
 };
 

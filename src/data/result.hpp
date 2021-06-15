@@ -13,9 +13,12 @@
 #define DATA_RESULT_HPP
 
 #include "../nostd/wstring.hpp"
-#include "pawns/hero.hpp"
 
 namespace Data {
+
+namespace Pawns {
+class Hero;
+}
 
 /*
   A Result describes the aftermath of a single game. It stores the
@@ -25,7 +28,7 @@ namespace Data {
 class Result {
 public:
   Result() = default;
-  Result(const Nostd::WString &nickname, const Pawns::Hero *hero, int score);
+  Result(const Pawns::Hero *hero, int score);
   Result(Result &&) = default;
   Result &operator=(Result &&) = default;
   Result(const Result &) = default;
@@ -34,14 +37,12 @@ public:
   ~Result() = default;
 
   // getters
-  const Nostd::WString &nickname() const noexcept;
   const Pawns::Hero *hero() const noexcept;
   int score() const noexcept;
 
   operator int() const; // converts results to scores (so they can be compared)
 
 private:
-  Nostd::WString nick{};
   const Pawns::Hero *hr{nullptr};
   int scr{0};
 };

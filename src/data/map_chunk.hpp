@@ -47,6 +47,12 @@ public:
   // every MapUnit in it
   MapChunk(size_t width, size_t starting_row, size_t ending_row,
            MapUnit value = MapUnit::nothing);
+  MapChunk(MapChunk &&) = default;
+  MapChunk &operator=(MapChunk &&) = default;
+  MapChunk(const MapChunk &) = default;
+  MapChunk &operator=(const MapChunk &) = default;
+
+  ~MapChunk() = default;
 
   // capacity
   size_t width() const noexcept;
