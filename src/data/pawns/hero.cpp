@@ -11,6 +11,7 @@
 
 #include "hero.hpp"
 
+#include <iostream> // TODO remove me
 #include <stdexcept>
 
 #include "../../engine/colorable.hpp"
