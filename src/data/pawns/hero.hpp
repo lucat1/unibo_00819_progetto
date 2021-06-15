@@ -14,9 +14,9 @@
 
 #include "../../engine/colorable.hpp"
 #include "../../nostd/wstring.hpp"
-#include "../result.hpp"
 #include "character.hpp"
 #include "interactable.hpp"
+#include "result.hpp"
 
 namespace Data {
 

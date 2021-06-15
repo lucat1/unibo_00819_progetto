@@ -13,7 +13,7 @@
 #ifndef ENGINE_MENU_RESULTS_HPP
 #define ENGINE_MENU_RESULTS_HPP
 
-#include "../../data/result.hpp"
+#include "../../data/pawns/result.hpp"
 #include "../../nostd/list.hpp"
 #include "menu.hpp"
 
@@ -22,7 +22,7 @@ namespace Menu {
 
 class Results : public Menu {
 private:
-  const Nostd::List<Data::Result> &results;
+  const Nostd::List<Data::Pawns::Result> &results;
   bool has_interacted = 0;
   UI::Box *append_line(UI::Box *parent, int rank, int score,
                        const Nostd::WString &nick);
@@ -42,7 +42,7 @@ protected:
   void increment(UI::Box *box);
 
 public:
-  Results(WINDOW *window, const Nostd::List<Data::Result> &results);
+  Results(WINDOW *window, const Nostd::List<Data::Pawns::Result> &results);
   bool is_over();
 };
 

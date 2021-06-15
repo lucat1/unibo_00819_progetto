@@ -27,7 +27,7 @@ using Engine::UI::Box;
 using Engine::Utils::leftpad;
 
 Engine::Menu::Results::Results(WINDOW *window,
-                               const Nostd::List<Data::Result> &results)
+                               const Nostd::List<Data::Pawns::Result> &results)
     : Menu(window), results{results} {}
 
 Box *Engine::Menu::Results::append_line(Box *parent, int rank, int score,
@@ -87,7 +87,7 @@ Box *Engine::Menu::Results::generate() {
 
   Box::szu i = 1;
   for (auto result : results) {
-    append_line(list, result.score(), i, result.nickname());
+    append_line(list, result.score(), i, result.name());
     if (i == n_of_results)
       break;
     i++;

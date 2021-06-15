@@ -13,9 +13,9 @@
 
 #include <stdexcept>
 
-using Data::Result;
 using Data::Pawns::Hero;
 using Data::Pawns::Interactable;
+using Data::Pawns::Result;
 using Data::Pawns::Skill;
 
 Hero::Hero(Engine::Color foreground, wchar_t character, Nostd::WString name,
