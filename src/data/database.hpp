@@ -20,7 +20,8 @@
 #include "../nostd/vector.hpp"
 #include "../nostd/wstring.hpp"
 #include "map_chunk.hpp"
-#include "result.hpp"
+#include "pawns/hero.hpp"
+#include "pawns/result.hpp"
 #include "scenery.hpp"
 #include "setting.hpp"
 
@@ -59,8 +60,8 @@ public:
 
   // TODO
 
-  Nostd::List<Result> &results() noexcept;
-  const Nostd::List<Result> &results() const noexcept;
+  Nostd::List<Pawns::Result> &results() noexcept;
+  const Nostd::List<Pawns::Result> &results() const noexcept;
   void save_results() const; // saves current high scores to filesystem
 
 private:
@@ -69,9 +70,9 @@ private:
   Nostd::Vector<MapChunk> map{};
   Nostd::Vector<Scenery> sce{};
   // TODO
-  Nostd::UnorderedMap<Nostd::WString, Interactables::Hero> her{};
+  Nostd::UnorderedMap<Nostd::WString, Pawns::Hero> her{};
   // TODO
-  Nostd::List<Result> res{};
+  Nostd::List<Pawns::Result> res{};
 
   char *newstrcpy(const char *) const;
   char *newstrcat(const char *, const char *) const;

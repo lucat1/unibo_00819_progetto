@@ -6,7 +6,7 @@
   Stefano Volpe #969766
   04/06/2021
 
-  scenery.hpp: user interface of Data::Scenery.
+  scenery.hpp: user interface of Data::Scenery and its helper entities.
 */
 
 #ifndef DATA_SCENERY_HPP

@@ -6,7 +6,7 @@
   Stefano Volpe #969766
   04/25/2021
 
-  database.test.cpp: tests for Nostd::Database and its helper entities.
+  database.test.cpp: tests for Data::Database and its helper entities.
 */
 
 #include <cassert>
@@ -44,7 +44,7 @@ int main() {
     const auto &r = d.results();
     assert(r.size() == 4);
     assert(r.cbegin()->score() == 8000000);
-    assert(r.cend()->nickname() == L"Stefano");
+    assert(r.cend()->name() == L"Stefano");
   });
   it("saves user settings on filesystem", [] {
     Database d("tests/alma.conf.csv", "tests/assets/", "tests/scoreboard.csv");
@@ -60,7 +60,7 @@ int main() {
   });
   it("saves user results on filesystem", [] {
     Database d("tests/alma.conf.csv", "tests/assets/", "tests/scoreboard.csv");
-    using Data::Interactables::Hero;
+    using Data::Pawns::Hero;
     assert(!d.results().empty());
     d.results().push_back(d.results().front());
     d.save_results();
