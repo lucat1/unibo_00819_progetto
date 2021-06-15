@@ -10,6 +10,7 @@
 */
 
 #include <cassert>
+#include <sstream>
 
 #include "../../engine/colorable.hpp"
 #include "../../nostd/test.hpp"
@@ -37,5 +38,19 @@ int main() {
         Engine::Color::aqua, L'🦊', L"Foxy", L"Neat guy.", {}, {}, 5, 10};
     assert(!foxy.isDead());
     assert(!foxy.attemptSuperSkill());
+  });
+  it("reads a Hero from a stream", [] {
+    Hero foxy{Engine::Color::transparent, L' ', L"", L"", {}, {}, 1, 1};
+    std::wistringstream wiss{L"6,🦊,Foxy,Neat guy.,,,5,10\n"};
+    wiss >> foxy;
+    assert(foxy.foreground() == Engine::Color::teal);
+    assert(foxy.character() == L'🦊');
+    assert(foxy.name() == L"Foxy");
+    assert(foxy.description() == L"Neat guy.");
+    assert(foxy.currentHealth() == 5);
+    assert(foxy.maxHealth() == 5);
+    assert(!foxy.currentMana());
+    assert(foxy.maxMana() == 10);
+    assert(!foxy.score());
   });
 }

@@ -18,7 +18,6 @@
 #include "../../nostd/wstring.hpp"
 #include "character.hpp"
 #include "interactable.hpp"
-#include "result.hpp"
 
 namespace Data {
 
@@ -57,8 +56,6 @@ public:
   // if mana is full, sets it to zero and returns true
   bool attemptSuperSkill() noexcept;
   int score() const noexcept;
-
-  operator Result() const; // converts heroes to their current result
 
   friend std::basic_ostream<wchar_t> &operator>>(std::basic_ostream<wchar_t> &,
                                                  const Hero &);

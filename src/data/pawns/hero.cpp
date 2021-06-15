@@ -11,6 +11,7 @@
 
 #include "hero.hpp"
 
+#include <iostream> // TODO remove me
 #include <stdexcept>
 
 #include "../../engine/colorable.hpp"
@@ -73,8 +74,6 @@ bool Hero::attemptSuperSkill() noexcept {
 
 int Hero::score() const noexcept { return scr; }
 
-Hero::operator Result() const { return Result(nm, scr, fg, chr); }
-
 std::basic_istream<wchar_t> &
 Data::Pawns::operator>>(std::basic_istream<wchar_t> &is, Hero &h) {
   short foreground;
@@ -88,10 +87,11 @@ Data::Pawns::operator>>(std::basic_istream<wchar_t> &is, Hero &h) {
   (is >> skill).ignore();
   (is >> superSkill).ignore();
   int maxHealth, maxMana;
-  is >> maxHealth >> maxMana;
-  is.ignore();
-  if (is)
+  (is >> maxHealth).ignore();
+  if (is >> maxMana) {
     h = Hero(Engine::short_to_color(foreground), character, name, description,
              skill, superSkill, maxHealth, maxMana);
+    is.ignore();
+  }
   return is;
 }
