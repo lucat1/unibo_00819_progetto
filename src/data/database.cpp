@@ -17,6 +17,7 @@
 
 #include "../engine/colorable.hpp"
 #include "map_chunk.hpp"
+#include "pawns/hero.hpp"
 #include "pawns/result.hpp"
 #include "scenery.hpp"
 #include "setting.hpp"
@@ -37,8 +38,9 @@ Database::Database(const char *configuration, const char *assets,
   load_settings(assets);
   load_map_chunks(assets);
   load_sceneries(assets);
-  // TODO
   load_results();
+  load_heroes(assets);
+  // TODO
 }
 
 Database::Database(Database &&d) {
@@ -50,10 +52,9 @@ Database::Database(Database &&d) {
   set = move(d.set);
   map = move(d.map);
   sce = move(d.sce);
-  // TODO
+  res = move(d.res);
   her = move(d.her);
   // TODO
-  res = move(d.res);
 }
 
 Database &Database::operator=(Database &&d) {
@@ -67,10 +68,9 @@ Database &Database::operator=(Database &&d) {
   set = move(d.set);
   map = move(d.map);
   sce = move(d.sce);
-  // TODO
   her = move(d.her);
-  // TODO
   res = move(d.res);
+  // TODO
   return *this;
 }
 
@@ -82,10 +82,9 @@ Database &Database::operator=(const Database &d) {
   set = d.set;
   map = d.map;
   sce = d.sce;
-  // TODO
+  res = d.res;
   her = d.her;
   // TODO
-  res = d.res;
   return *this;
 }
 
@@ -124,6 +123,15 @@ void Database::save_results() const {
                                     << Engine::color_to_short(x.foreground())
                                     << separator << x.character() << newrecord;
   wofs.close();
+}
+
+Nostd::UnorderedMap<Nostd::WString, Pawns::Hero> &Database::heroes() noexcept {
+  return her;
+}
+
+const Nostd::UnorderedMap<Nostd::WString, Pawns::Hero> &
+Database::heroes() const noexcept {
+  return her;
 }
 
 char *Database::newstrcpy(const char *str) const {
@@ -192,6 +200,17 @@ void Database::load_results() {
     (wifs >> character).ignore();
     res.push_back({name, score, Engine::short_to_color(foreground), character});
   }
+}
+
+void Database::load_heroes(const char *assets_filepath) {
+  const char *const heroes_fp{newstrcat(assets_filepath, heroes_rel_fp)};
+  wifstream wifs{heroes_fp};
+  delete heroes_fp;
+  Hero h{Engine::Color::transparent, L' ', L"", L"", {}, {}, 1, 1};
+  while (wifs >> h) {
+    her.put(h.name(), h);
+  }
+  wifs.close();
 }
 
 std::basic_istream<wchar_t> &

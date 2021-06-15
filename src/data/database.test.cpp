@@ -45,6 +45,13 @@ int main() {
     assert(r.size() == 4);
     assert(r.cbegin()->score() == 8000000);
     assert(r.cend()->name() == L"Stefano");
+    // Heroes
+    const auto &h = d.heroes();
+    assert(h.size() == 4);
+    assert(h.contains(L"Luca"));
+    assert(h.contains(L"Andreea"));
+    assert(h.contains(L"Mattia"));
+    assert(h.contains(L"Stefano"));
   });
   it("saves user settings on filesystem", [] {
     Database d("tests/alma.conf.csv", "tests/assets/", "tests/scoreboard.csv");
