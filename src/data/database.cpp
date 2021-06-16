@@ -17,6 +17,7 @@
 
 #include "../engine/colorable.hpp"
 #include "map_chunk.hpp"
+#include "pawns/hero.hpp"
 #include "pawns/result.hpp"
 #include "scenery.hpp"
 #include "setting.hpp"
@@ -202,7 +203,13 @@ void Database::load_results() {
 }
 
 void Database::load_heroes(const char *assets_filepath) {
-  // TODO
+  const char *const heroes_fp{newstrcat(assets_filepath, heroes_rel_fp)};
+  wifstream wifs{heroes_fp};
+  delete heroes_fp;
+  Hero h{Engine::Color::transparent, L' ', L"", L"", {}, {}, 1, 1};
+  while (wifs >> h)
+    her.put(h.name(), h);
+  wifs.close();
 }
 
 std::basic_istream<wchar_t> &
