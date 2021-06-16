@@ -203,13 +203,13 @@ void Database::load_results() {
 }
 
 void Database::load_heroes(const char *assets_filepath) {
-  const char *const heroes_fp{newstrcat(assets_filepath, heroes_rel_fp)};
+  /*const char *const heroes_fp{newstrcat(assets_filepath, heroes_rel_fp)};
   wifstream wifs{heroes_fp};
   delete heroes_fp;
   Hero h{Engine::Color::transparent, L' ', L"", L"", {}, {}, 1, 1};
   while (wifs >> h)
     her.put(h.name(), h);
-  wifs.close();
+  wifs.close();*/
 }
 
 std::basic_istream<wchar_t> &

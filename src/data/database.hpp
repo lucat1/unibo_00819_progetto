@@ -35,9 +35,9 @@ class Database {
 public:
   constexpr static wchar_t separator{','}, newrecord{'\n'}, escape{'\\'};
   constexpr const static char *const settings_rel_fp{"/csv/settings.csv"},
-      *const maps_rel_fp{"img/maps.txt"},
-          *const sceneries_rel_fp{"img/sceneries.txt"},
-              *const heroes_rel_fp{"img/heroes.txt"};
+      *const maps_rel_fp{"/img/maps.txt"},
+          *const sceneries_rel_fp{"/img/sceneries.txt"},
+              *const heroes_rel_fp{"/csv/heroes.csv"};
 
   Database() = delete; // cannot constructs a database from nothing
   Database(const char *configuration, const char *assets,
