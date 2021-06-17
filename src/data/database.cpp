@@ -17,7 +17,9 @@
 
 #include "../engine/colorable.hpp"
 #include "map_chunk.hpp"
+#include "pawns/enemy.hpp"
 #include "pawns/hero.hpp"
+#include "pawns/item.hpp"
 #include "pawns/result.hpp"
 #include "scenery.hpp"
 #include "setting.hpp"
@@ -41,6 +43,7 @@ Database::Database(const char *configuration, const char *assets,
   load_results();
   load_heroes(assets);
   load_enemies(assets);
+  load_items(assets);
   // TODO
 }
 
@@ -56,6 +59,7 @@ Database::Database(Database &&d) {
   res = move(d.res);
   her = move(d.her);
   ene = move(d.ene);
+  ite = move(d.ite);
   // TODO
 }
 
@@ -73,6 +77,7 @@ Database &Database::operator=(Database &&d) {
   res = move(d.res);
   her = move(d.her);
   ene = move(d.ene);
+  ite = move(d.ite);
   // TODO
   return *this;
 }
@@ -88,6 +93,7 @@ Database &Database::operator=(const Database &d) {
   res = d.res;
   her = d.her;
   ene = d.ene;
+  ite = d.ite;
   // TODO
   return *this;
 }
@@ -146,6 +152,15 @@ Database::enemies() noexcept {
 const Nostd::UnorderedMap<Nostd::WString, Pawns::Enemy> &
 Database::enemies() const noexcept {
   return ene;
+}
+
+Nostd::UnorderedMap<Nostd::WString, Pawns::Item> &Database::items() noexcept {
+  return ite;
+}
+
+const Nostd::UnorderedMap<Nostd::WString, Pawns::Item> &
+Database::items() const noexcept {
+  return ite;
 }
 
 char *Database::newstrcpy(const char *str) const {
@@ -230,9 +245,19 @@ void Database::load_enemies(const char *assets_filepath) {
   /*const char *const enemies_fp{newstrcat(assets_filepath, enemies_rel_fp)};
   wifstream wifs{enemies_fp};
   delete enemies_fp;
-  Enemy eoomba{Engine::Color::transparent, L' ', L"", {}, 0, 0, 0, 1};
+  Enemy e{Engine::Color::transparent, L' ', L"", {}, 0, 0, 0, 1};
   while (wifs >> e)
     ene.put(e.name(), e);
+  wifs.close();*/
+}
+
+void Database::load_items(const char *assets_filepath) {
+  /*const char *const items_fp{newstrcat(assets_filepath, items_rel_fp)};
+  wifstream wifs{items_fp};
+  delete items_fp;
+  Item i{Engine::Color::transparent, L' ', L"", 0, false, 0, false, 0};
+  while (wifs >> i)
+    ite.put(i.name(), i);
   wifs.close();*/
 }
 
