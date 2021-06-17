@@ -20,8 +20,8 @@ using Data::Pawns::Item;
 Item::Item(Engine::Color foreground, wchar_t character,
            const Nostd::WString &name, int healthBonus, bool healthMode,
            int manaBonus, bool manaMode, int scoreBonus)
-    : fg{foreground}, chr{character}, nm{name}, hB{healthBonus}, hM{healthMode},
-      mB{manaBonus}, mM{manaMode}, sB{scoreBonus} {
+    : fg{foreground}, chr{character}, nm{name}, hB{healthBonus}, mB{manaBonus},
+      sB{scoreBonus}, hM{healthMode}, mM{manaMode} {
   if (hB < 0)
     throw std::invalid_argument("Health bonus must be non-negative.");
   if (hM && hB > 100)
