@@ -40,6 +40,7 @@ Database::Database(const char *configuration, const char *assets,
   load_sceneries(assets);
   load_results();
   load_heroes(assets);
+  load_enemies(assets);
   // TODO
 }
 
@@ -54,6 +55,7 @@ Database::Database(Database &&d) {
   sce = move(d.sce);
   res = move(d.res);
   her = move(d.her);
+  ene = move(d.ene);
   // TODO
 }
 
@@ -70,6 +72,7 @@ Database &Database::operator=(Database &&d) {
   sce = move(d.sce);
   res = move(d.res);
   her = move(d.her);
+  ene = move(d.ene);
   // TODO
   return *this;
 }
@@ -84,6 +87,7 @@ Database &Database::operator=(const Database &d) {
   sce = d.sce;
   res = d.res;
   her = d.her;
+  ene = d.ene;
   // TODO
   return *this;
 }
@@ -132,6 +136,16 @@ Nostd::UnorderedMap<Nostd::WString, Pawns::Hero> &Database::heroes() noexcept {
 const Nostd::UnorderedMap<Nostd::WString, Pawns::Hero> &
 Database::heroes() const noexcept {
   return her;
+}
+
+Nostd::UnorderedMap<Nostd::WString, Pawns::Enemy> &
+Database::enemies() noexcept {
+  return ene;
+}
+
+const Nostd::UnorderedMap<Nostd::WString, Pawns::Enemy> &
+Database::enemies() const noexcept {
+  return ene;
 }
 
 char *Database::newstrcpy(const char *str) const {
@@ -209,6 +223,16 @@ void Database::load_heroes(const char *assets_filepath) {
   Hero h{Engine::Color::transparent, L' ', L"", L"", {}, {}, 1, 1};
   while (wifs >> h)
     her.put(h.name(), h);
+  wifs.close();*/
+}
+
+void Database::load_enemies(const char *assets_filepath) {
+  /*const char *const enemies_fp{newstrcat(assets_filepath, enemies_rel_fp)};
+  wifstream wifs{enemies_fp};
+  delete enemies_fp;
+  Enemy eoomba{Engine::Color::transparent, L' ', L"", {}, 0, 0, 0, 1};
+  while (wifs >> e)
+    ene.put(e.name(), e);
   wifs.close();*/
 }
 
