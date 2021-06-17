@@ -64,7 +64,6 @@ Data::Pawns::operator>>(std::basic_istream<wchar_t> &is, Item &i) {
   (is >> healthMode).ignore();
   (is >> manaBonus).ignore();
   (is >> manaMode).ignore();
-  (is >> scoreBonus).ignore();
   if (is >> scoreBonus) {
     i = Item(Engine::short_to_color(foreground), character, name, healthBonus,
              healthMode, manaBonus, manaMode, scoreBonus);
