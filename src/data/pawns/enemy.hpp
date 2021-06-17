@@ -30,7 +30,8 @@ namespace Pawns {
 class Enemy : Character, Interactable {
 public:
   Enemy(Engine::Color foreground, wchar_t character, Nostd::WString name,
-        Skill skill, int healthDamage, int manaDamage, int scoreDamage);
+        Skill skill, int healthDamage, int manaDamage, int scoreDamage,
+        int behavior);
   Enemy(Enemy &&) = default;
   Enemy &operator=(Enemy &&) = default;
   Enemy(const Enemy &) = default;
@@ -45,7 +46,7 @@ public:
 
   enum class Behavior {
     none = 0,
-    walking = 1,
+    moving = 1,
     gap_aware = 2,
     flying = 4,
     vertical = 8
@@ -67,7 +68,7 @@ private:
   Nostd::WString nm{};
   Skill sk;
   int hD, mD, sD;
-  Behavior bhvr;
+  int bhv;
 };
 
 constexpr Enemy::Behavior operator|(Enemy::Behavior a, Enemy::Behavior b);
