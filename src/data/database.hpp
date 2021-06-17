@@ -20,6 +20,7 @@
 #include "../nostd/vector.hpp"
 #include "../nostd/wstring.hpp"
 #include "map_chunk.hpp"
+#include "pawns/enemy.hpp"
 #include "pawns/hero.hpp"
 #include "pawns/result.hpp"
 #include "scenery.hpp"
@@ -37,7 +38,8 @@ public:
   constexpr const static char *const settings_rel_fp{"/csv/settings.csv"},
       *const maps_rel_fp{"/img/maps.txt"},
           *const sceneries_rel_fp{"/img/sceneries.txt"},
-              *const heroes_rel_fp{"/csv/heroes.csv"};
+              *const heroes_rel_fp{"/csv/heroes.csv"},
+                  *const enemies_rel_fp{"/csv/enemies.csv"};
 
   Database() = delete; // cannot constructs a database from nothing
   Database(const char *configuration, const char *assets,
@@ -67,6 +69,10 @@ public:
   const Nostd::UnorderedMap<Nostd::WString, Pawns::Hero> &
   heroes() const noexcept;
 
+  Nostd::UnorderedMap<Nostd::WString, Pawns::Enemy> &enemies() noexcept;
+  const Nostd::UnorderedMap<Nostd::WString, Pawns::Enemy> &
+  enemies() const noexcept;
+
   // TODO
 
 private:
@@ -76,6 +82,7 @@ private:
   Nostd::Vector<Scenery> sce{};
   Nostd::List<Pawns::Result> res{};
   Nostd::UnorderedMap<Nostd::WString, Pawns::Hero> her{};
+  Nostd::UnorderedMap<Nostd::WString, Pawns::Enemy> ene{};
   // TODO
 
   char *newstrcpy(const char *) const;
@@ -85,6 +92,7 @@ private:
   void load_sceneries(const char *assets_filepath);
   void load_results();
   void load_heroes(const char *assets_filepath);
+  void load_enemies(const char *assets_filepath);
   // TODO
 };
 
