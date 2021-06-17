@@ -6,7 +6,7 @@
   Stefano Volpe #969766
   06/16/2021
 
-  enemy.hpp: user interface of Data::Pawns::Enemy.
+  enemy.hpp: user interface of Data::Pawns::Enemy and its helper entities.
 */
 
 #ifndef DATA_PAWNS_ENEMY_HPP
@@ -29,7 +29,7 @@ namespace Pawns {
 */
 class Enemy : Character, Interactable {
 public:
-  Enemy(Engine::Color foreground, wchar_t character, Nostd::WString name,
+  Enemy(Engine::Color foreground, wchar_t character, const Nostd::WString &name,
         Skill skill, int healthDamage, int manaDamage, int scoreDamage,
         int behavior);
   Enemy(Enemy &&) = default;
@@ -39,10 +39,10 @@ public:
 
   ~Enemy() = default;
 
-  Engine::Color foreground() const noexcept override;
-  wchar_t character() const noexcept override;
-  const Nostd::WString &name() const noexcept override;
-  Skill skill() const noexcept override;
+  Engine::Color foreground() const noexcept override final;
+  wchar_t character() const noexcept override final;
+  const Nostd::WString &name() const noexcept override final;
+  Skill skill() const noexcept override final;
 
   enum class Behavior {
     none = 0,
@@ -58,9 +58,9 @@ public:
                                                  const Enemy &);
 
 protected:
-  int uncheckedHealthEffect(int currentHealth, int maxHealth) override;
-  int uncheckedManaEffect(int currentMana, int maxMana) override;
-  int uncheckedScoreEffect(int currentScore) override;
+  int uncheckedHealthEffect(int currentHealth, int maxHealth) override final;
+  int uncheckedManaEffect(int currentMana, int maxMana) override final;
+  int uncheckedScoreEffect(int currentScore) override final;
 
 private:
   Engine::Color fg;
