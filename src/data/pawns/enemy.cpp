@@ -19,9 +19,9 @@
 
 using Data::Pawns::Enemy;
 
-Enemy::Enemy(Engine::Color foreground, wchar_t character, Nostd::WString name,
-             Skill skill, int healthDamage, int manaDamage, int scoreDamage,
-             int behavior)
+Enemy::Enemy(Engine::Color foreground, wchar_t character,
+             const Nostd::WString &name, Skill skill, int healthDamage,
+             int manaDamage, int scoreDamage, int behavior)
     : fg{foreground}, chr{character}, nm{name}, sk{skill}, hD{healthDamage},
       mD{manaDamage}, sD{scoreDamage}, bhv{behavior} {
   if (hD < 0)
@@ -45,15 +45,15 @@ bool Enemy::has_behavior(Behavior b) const noexcept {
 }
 
 int Enemy::uncheckedHealthEffect(int currentHealth, int) {
-  return std::min(0, currentHealth - hD);
+  return std::max(0, currentHealth - hD);
 }
 
 int Enemy::uncheckedManaEffect(int currentMana, int) {
-  return std::min(0, currentMana - mD);
+  return std::max(0, currentMana - mD);
 }
 
 int Enemy::uncheckedScoreEffect(int currentScore) {
-  return std::min(0, currentScore - sD);
+  return std::max(0, currentScore - sD);
 }
 
 std::basic_istream<wchar_t> &

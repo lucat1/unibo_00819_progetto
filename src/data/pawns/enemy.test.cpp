@@ -31,7 +31,7 @@ int main() {
     assert(goomba.has_behavior(Enemy::Behavior::moving));
     assert(!goomba.has_behavior(Enemy::Behavior::flying));
   });
-  it("reads a Hero from a stream", [] {
+  it("reads an Enemy from a stream", [] {
     Enemy goomba{Engine::Color::transparent, L' ', L"", {}, 0, 0, 0, 1};
     std::wistringstream wiss{L"1,🍄,Goomba,,1,0,50,1\n"};
     wiss >> goomba;

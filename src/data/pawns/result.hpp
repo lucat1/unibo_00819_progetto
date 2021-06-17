@@ -39,10 +39,10 @@ public:
   ~Result() = default;
 
   // getters
-  const Nostd::WString &name() const noexcept override;
+  const Nostd::WString &name() const noexcept override final;
   int score() const noexcept;
-  Engine::Color foreground() const noexcept override;
-  wchar_t character() const noexcept override;
+  Engine::Color foreground() const noexcept override final;
+  wchar_t character() const noexcept override final;
 
   operator int() const; // converts results to scores (so they can be compared)
 

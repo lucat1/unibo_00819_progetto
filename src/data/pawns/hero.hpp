@@ -29,9 +29,9 @@ namespace Pawns {
 */
 class Hero : Character {
 public:
-  Hero(Engine::Color foreground, wchar_t character, Nostd::WString name,
-       Nostd::WString description, Skill skill, Skill superSkill, int maxHealth,
-       int maxMana);
+  Hero(Engine::Color foreground, wchar_t character, const Nostd::WString &name,
+       const Nostd::WString &description, Skill skill, Skill superSkill,
+       int maxHealth, int maxMana);
   Hero(Hero &&) = default;
   Hero &operator=(Hero &&) = default;
   Hero(const Hero &) = default;
@@ -39,10 +39,10 @@ public:
 
   ~Hero() = default;
 
-  Engine::Color foreground() const noexcept override;
-  wchar_t character() const noexcept override;
-  const Nostd::WString &name() const noexcept override;
-  Skill skill() const noexcept override;
+  Engine::Color foreground() const noexcept override final;
+  wchar_t character() const noexcept override final;
+  const Nostd::WString &name() const noexcept override final;
+  Skill skill() const noexcept override final;
 
   void rename(const Nostd::WString &);
   const Nostd::WString &description() const noexcept;

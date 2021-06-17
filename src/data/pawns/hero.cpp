@@ -22,9 +22,9 @@ using Data::Pawns::Hero;
 using Data::Pawns::Interactable;
 using Data::Pawns::Skill;
 
-Hero::Hero(Engine::Color foreground, wchar_t character, Nostd::WString name,
-           Nostd::WString description, Skill skill, Skill superSkill,
-           int health, int mana)
+Hero::Hero(Engine::Color foreground, wchar_t character,
+           const Nostd::WString &name, const Nostd::WString &description,
+           Skill skill, Skill superSkill, int health, int mana)
     : fg{foreground}, chr{character}, nm{name}, dsc{description}, sk{skill},
       ssk{superSkill}, curH{health}, maxH{health}, curM{0}, maxM{mana}, scr{0} {
   if (maxH <= 0)
