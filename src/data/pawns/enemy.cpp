@@ -12,7 +12,6 @@
 #include "enemy.hpp"
 
 #include <algorithm>
-#include <istream>
 
 #include "../../engine/colorable.hpp"
 #include "../database.hpp"
