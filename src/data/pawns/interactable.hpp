@@ -23,7 +23,7 @@ namespace Pawns {
   player when they come in contact. The effect caused by this interaction may be
   either positive, or negative.
 */
-class Interactable : public Pawn {
+class Interactable {
 public:
   // These methods validate their argument and return the new stats after the
   // interaction.

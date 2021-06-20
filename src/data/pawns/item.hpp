@@ -27,7 +27,7 @@ namespace Pawns {
   and score. "Modes" are false when their respective bonuses are absolute
   values, and true when their respective bonuses are percentages.
 */
-class Item : Interactable {
+class Item : Interactable, Pawn {
 public:
   Item(Engine::Color foreground, wchar_t character, const Nostd::WString &name,
        int healthBonus, bool healthMode, int manaBonus, bool manaMode,

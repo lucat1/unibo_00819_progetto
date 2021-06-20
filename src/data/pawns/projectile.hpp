@@ -25,7 +25,7 @@ namespace Pawns {
 /*
   A Projectile can be thrown by a Skill in order to inflict indirect damage.
 */
-class Projectile : Interactable {
+class Projectile : Interactable, Pawn {
 public:
   Projectile(Engine::Color foreground, wchar_t character,
              const Nostd::WString &name, int healthDamage, int manaDamage,

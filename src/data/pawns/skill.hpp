@@ -4,7 +4,7 @@
   00819 - Programmazione
 
   Stefano Volpe #969766
-  06/14/2021
+  06/20/2021
 
   skill.hpp: user interface of Data::Pawns::Skill.
 */
@@ -14,11 +14,44 @@
 
 #include <istream>
 
+#include "../../nostd/pair.hpp"
+#include "../../nostd/unordered_map.hpp"
+#include "interactable.hpp"
+#include "projectile.hpp"
+
 namespace Data {
 
 namespace Pawns {
 
-class Skill {};
+/*
+  A Skill specifies the way Projectiles can be spawned and their effects on the
+  agent spawning them.
+*/
+class Skill : Interactable {
+public:
+  Skill() = default; // uneffective skill: does nothing at all
+  Skill(Nostd::UnorderedMap<Nostd::Pair<int, int>, Projectile *> projectiles,
+        int healthEffect, bool healthMode);
+  Skill(Skill &&) = default;
+  Skill &operator=(Skill &&) = default;
+  Skill(const Skill &) = default;
+  Skill &operator=(const Skill &) = default;
+
+  ~Skill() = default;
+
+  const Nostd::UnorderedMap<Nostd::Pair<int, int>, Projectile *> &
+  projectiles() const noexcept;
+
+  friend std::basic_istream<wchar_t> &operator>>(std::basic_istream<wchar_t> &,
+                                                 Skill &);
+
+protected:
+  int uncheckedHealthEffect(int currentHealth, int maxHealth) override final;
+
+private:
+  Nostd::UnorderedMap<Nostd::Pair<int, int>, Projectile *> p{};
+  int hE{0}, hM{false};
+};
 
 std::basic_istream<wchar_t> &operator>>(std::basic_istream<wchar_t> &, Skill &);
 
