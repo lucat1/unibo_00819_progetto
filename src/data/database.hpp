@@ -24,6 +24,7 @@
 #include "pawns/hero.hpp"
 #include "pawns/item.hpp"
 #include "pawns/result.hpp"
+#include "pawns/skill.hpp"
 #include "scenery.hpp"
 #include "setting.hpp"
 
@@ -79,8 +80,6 @@ public:
   const Nostd::UnorderedMap<Nostd::WString, Pawns::Item> &
   items() const noexcept;
 
-  // TODO
-
 private:
   char *conf, *scor;
   Nostd::Vector<Setting> set{};
@@ -90,7 +89,6 @@ private:
   Nostd::UnorderedMap<Nostd::WString, Pawns::Hero> her{};
   Nostd::UnorderedMap<Nostd::WString, Pawns::Enemy> ene{};
   Nostd::UnorderedMap<Nostd::WString, Pawns::Item> ite{};
-  // TODO
 
   char *newstrcpy(const char *) const;
   char *newstrcat(const char *, const char *) const;
@@ -101,7 +99,6 @@ private:
   void load_heroes(const char *assets_filepath);
   void load_enemies(const char *assets_filepath);
   void load_items(const char *assets_filepath);
-  // TODO
 };
 
 std::basic_istream<wchar_t> &get_CSV_WString(std::basic_istream<wchar_t> &,
