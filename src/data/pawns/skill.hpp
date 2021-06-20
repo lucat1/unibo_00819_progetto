@@ -30,7 +30,7 @@ namespace Pawns {
 class Skill : Interactable {
 public:
   Skill() = default; // uneffective skill: does nothing at all
-  Skill(Nostd::UnorderedMap<Nostd::Pair<int, int>, Projectile *> projectiles,
+  Skill(Nostd::UnorderedMap<Nostd::Pair<int, int>, Projectile> projectiles,
         int healthEffect, bool healthMode);
   Skill(Skill &&) = default;
   Skill &operator=(Skill &&) = default;
@@ -39,16 +39,18 @@ public:
 
   ~Skill() = default;
 
-  const Nostd::UnorderedMap<Nostd::Pair<int, int>, Projectile *> &
+  const Nostd::UnorderedMap<Nostd::Pair<int, int>, Projectile> &
   projectiles() const noexcept;
 
 protected:
   int uncheckedHealthEffect(int currentHealth, int maxHealth) override final;
 
 private:
-  Nostd::UnorderedMap<Nostd::Pair<int, int>, Projectile *> p{};
+  Nostd::UnorderedMap<Nostd::Pair<int, int>, Projectile> p{};
   int hE{0}, hM{false};
 };
+
+std::basic_istream<wchar_t> &operator>>(std::basic_istream<wchar_t> &, Skill &);
 
 } // namespace Pawns
 
