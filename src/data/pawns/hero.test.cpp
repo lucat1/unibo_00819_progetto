@@ -41,7 +41,7 @@ int main() {
   });
   it("reads a Hero from a stream", [] {
     Hero foxy{Engine::Color::transparent, L' ', L"", L"", {}, {}, 1, 1};
-    std::wistringstream wiss{L"6,🦊,Foxy,Neat guy.,,,5,10\n"};
+    std::wistringstream wiss{L"6,🦊,Foxy,Neat guy.,0,0,0,0,0,0,5,10\n"};
     wiss >> foxy;
     assert(foxy.foreground() == Engine::Color::teal);
     assert(foxy.character() == L'🦊');

@@ -33,7 +33,7 @@ int main() {
   });
   it("reads an Enemy from a stream", [] {
     Enemy goomba{Engine::Color::transparent, L' ', L"", {}, 0, 0, 0, 1};
-    std::wistringstream wiss{L"1,🍄,Goomba,,1,0,50,1\n"};
+    std::wistringstream wiss{L"1,🍄,Goomba,0,0,0,1,0,50,1\n"};
     wiss >> goomba;
     assert(goomba.foreground() == Engine::Color::maroon);
     assert(goomba.character() == L'🍄');

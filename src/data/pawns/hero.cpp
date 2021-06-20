@@ -82,8 +82,7 @@ Data::Pawns::operator>>(std::basic_istream<wchar_t> &is, Hero &h) {
   Data::get_CSV_WString(is, name);
   Data::get_CSV_WString(is, description);
   Skill skill, superSkill;
-  (is >> skill).ignore();
-  (is >> superSkill).ignore();
+  is >> skill >> superSkill;
   int maxHealth, maxMana;
   (is >> maxHealth).ignore();
   if (is >> maxMana) {
