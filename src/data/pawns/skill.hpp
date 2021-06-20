@@ -42,9 +42,6 @@ public:
   const Nostd::UnorderedMap<Nostd::Pair<int, int>, Projectile *> &
   projectiles() const noexcept;
 
-  friend std::basic_istream<wchar_t> &operator>>(std::basic_istream<wchar_t> &,
-                                                 Skill &);
-
 protected:
   int uncheckedHealthEffect(int currentHealth, int maxHealth) override final;
 
@@ -52,8 +49,6 @@ private:
   Nostd::UnorderedMap<Nostd::Pair<int, int>, Projectile *> p{};
   int hE{0}, hM{false};
 };
-
-std::basic_istream<wchar_t> &operator>>(std::basic_istream<wchar_t> &, Skill &);
 
 } // namespace Pawns
 
