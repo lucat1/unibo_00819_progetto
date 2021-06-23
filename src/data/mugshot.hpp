@@ -26,6 +26,8 @@ namespace Data {
 */
 class MugshotTile : Engine::Tile {
 public:
+  MugshotTile(Engine::Color foreground, Engine::Color background,
+              wchar_t character);
   MugshotTile() = default;
   MugshotTile(MugshotTile &&) = default;
   MugshotTile &operator=(MugshotTile &&) = default;
@@ -46,8 +48,10 @@ private:
   wchar_t chr{L' '};
 };
 
-std::istream &operator>>(std::istream &is, MugshotTile &);
-std::ostream &operator<<(std::ostream &os, const MugshotTile &);
+std::basic_istream<wchar_t> &operator>>(std::basic_istream<wchar_t> &,
+                                        MugshotTile &);
+std::basic_istream<wchar_t> &operator<<(std::basic_istream<wchar_t> &,
+                                        MugshotTile);
 
 /*
   A Mugshot works as a detailed sprite to be shown during the game. It is
