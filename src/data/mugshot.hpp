@@ -50,15 +50,26 @@ private:
 
 std::basic_istream<wchar_t> &operator>>(std::basic_istream<wchar_t> &,
                                         MugshotTile &);
-std::basic_istream<wchar_t> &operator<<(std::basic_istream<wchar_t> &,
+std::basic_ostream<wchar_t> &operator<<(std::basic_ostream<wchar_t> &,
                                         MugshotTile);
 
 /*
   A Mugshot works as a detailed sprite to be shown during the game. It is
   represented as a Matrix of MugshotTiles.
 */
-class Mugshot : Nostd::Matrix<MugshotTile> {};
+class Mugshot : Nostd::Matrix<MugshotTile> {
+public:
+  Mugshot();
+  Mugshot(Mugshot &&) = default;
+  Mugshot &operator=(Mugshot &&) = default;
+  Mugshot(const Mugshot &) = default;
+  Mugshot &operator=(const Mugshot &) = default;
+
+  constexpr static size_t side{12};
+};
 
 } // namespace Data
+
+#include "../nostd/matrix.cpp"
 
 #endif

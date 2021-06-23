@@ -11,7 +11,6 @@
 
 #include "mugshot.hpp"
 
-using Data::Mugshot;
 using Data::MugshotTile;
 
 MugshotTile::MugshotTile(Engine::Color foreground, Engine::Color background,
@@ -46,3 +45,6 @@ std::basic_ostream<wchar_t> &operator<<(std::basic_ostream<wchar_t> &os,
                                         MugshotTile m) {
   return os << m.character();
 }
+
+Data::Mugshot::Mugshot()
+    : Nostd::Matrix<MugshotTile>({side, side}, MugshotTile{}) {}
