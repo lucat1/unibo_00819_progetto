@@ -6,7 +6,7 @@
   Stefano Volpe #969766
   04/09/2021
 
-  map_chunk.test.cpp: tests for Data::MapChunk.
+  map_chunk.test.cpp: tests for Data::MapChunk and its helper entities.
 */
 
 #include <cassert>

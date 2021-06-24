@@ -17,9 +17,9 @@
 using namespace Nostd;
 
 int main() {
-  it("constructs/copies a Matrix", [] {
-    Matrix<int> m1({5, 2, 2}, 1), m2(m1), m3 = m2;
-    assert(m1 == m3);
+  it("constructs/copies/moves a Matrix", [] {
+    Matrix<int> m1({5, 2, 2}, 1), m2(m1), m3 = m2, m4 = Matrix<int>(m3);
+    assert(m1 == m4);
   });
   it("iterates through a Matrix", [] {
     Matrix<int> m({5, 6}, 1);

@@ -20,7 +20,10 @@
 #include "../nostd/vector.hpp"
 #include "../nostd/wstring.hpp"
 #include "map_chunk.hpp"
-#include "result.hpp"
+#include "pawns/enemy.hpp"
+#include "pawns/hero.hpp"
+#include "pawns/item.hpp"
+#include "pawns/result.hpp"
 #include "scenery.hpp"
 #include "setting.hpp"
 
@@ -34,8 +37,11 @@ class Database {
 public:
   constexpr static wchar_t separator{','}, newrecord{'\n'}, escape{'\\'};
   constexpr const static char *const settings_rel_fp{"/csv/settings.csv"},
-      *const maps_rel_fp{"img/maps.txt"},
-          *const sceneries_rel_fp{"img/sceneries.txt"};
+      *const maps_rel_fp{"/img/maps.txt"},
+          *const sceneries_rel_fp{"/img/sceneries.txt"},
+              *const heroes_rel_fp{"/csv/heroes.csv"},
+                  *const enemies_rel_fp{"/csv/enemies.csv"},
+                      *const items_rel_fp{"/csv/items.csv"};
 
   Database() = delete; // cannot constructs a database from nothing
   Database(const char *configuration, const char *assets,
@@ -57,29 +63,45 @@ public:
   Nostd::Vector<Scenery> &sceneries() noexcept;
   const Nostd::Vector<Scenery> &sceneries() const noexcept;
 
-  // TODO
-
-  Nostd::List<Result> &results() noexcept;
-  const Nostd::List<Result> &results() const noexcept;
+  Nostd::List<Pawns::Result> &results() noexcept;
+  const Nostd::List<Pawns::Result> &results() const noexcept;
   void save_results() const; // saves current high scores to filesystem
+
+  Nostd::UnorderedMap<Nostd::WString, Pawns::Hero> &heroes() noexcept;
+  const Nostd::UnorderedMap<Nostd::WString, Pawns::Hero> &
+  heroes() const noexcept;
+
+  Nostd::UnorderedMap<Nostd::WString, Pawns::Enemy> &enemies() noexcept;
+  const Nostd::UnorderedMap<Nostd::WString, Pawns::Enemy> &
+  enemies() const noexcept;
+
+  Nostd::UnorderedMap<Nostd::WString, Pawns::Item> &items() noexcept;
+  const Nostd::UnorderedMap<Nostd::WString, Pawns::Item> &
+  items() const noexcept;
+
+  // TODO
 
 private:
   char *conf, *scor;
   Nostd::Vector<Setting> set{};
   Nostd::Vector<MapChunk> map{};
   Nostd::Vector<Scenery> sce{};
+  Nostd::List<Pawns::Result> res{};
+  Nostd::UnorderedMap<Nostd::WString, Pawns::Hero> her{};
+  Nostd::UnorderedMap<Nostd::WString, Pawns::Enemy> ene{};
+  Nostd::UnorderedMap<Nostd::WString, Pawns::Item> ite{};
   // TODO
-  Nostd::UnorderedMap<Nostd::WString, Interactables::Hero> her{};
-  // TODO
-  Nostd::List<Result> res{};
 
   char *newstrcpy(const char *) const;
   char *newstrcat(const char *, const char *) const;
   void load_settings(const char *assets_filepath);
   void load_map_chunks(const char *assets_filepath);
   void load_sceneries(const char *assets_filepath);
-  // TODO
   void load_results();
+  void load_heroes(const char *assets_filepath);
+  void load_enemies(const char *assets_filepath);
+  void load_items(const char *assets_filepath);
+  // TODO
 };
 
 std::basic_istream<wchar_t> &get_CSV_WString(std::basic_istream<wchar_t> &,

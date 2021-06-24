@@ -1,4 +1,5 @@
 #include "engine/menu/main.hpp"
+#include "engine/colorable.hpp"
 #include "engine/menu/results.hpp"
 #include "engine/menu/settings.hpp"
 #include "engine/screen.hpp"
@@ -24,10 +25,10 @@ int main() {
   settings.push_back(Data::Setting(L"Frames Per Second", 30, 3, 30, 1));
 
   // TODO: properly by calling database.results()
-  Nostd::List<Data::Result> results;
-  results.push_back(Data::Result(L"Lienin", nullptr, 100293));
-  results.push_back(Data::Result(L"Adolf", nullptr, 98666));
-  results.push_back(Data::Result(L"Benito", nullptr, 20034));
+  Nostd::List<Data::Pawns::Result> results;
+  results.push_back(Data::Pawns::Result(L"Lienin", 100293, Color::red, L'='));
+  results.push_back(Data::Pawns::Result(L"Adolf", 98666, Color::yellow, L'/'));
+  results.push_back(Data::Pawns::Result(L"Benito", 20034, Color::green, L'!'));
 
   int key;
   bool running = true;
@@ -50,8 +51,8 @@ int main() {
           break;
         case Menu::Main::Result::play:
           // TODO: change me
-          screen.set_content<Menu::Results, const Nostd::List<Data::Result> &>(
-              results);
+          screen.set_content<Menu::Results,
+                             const Nostd::List<Data::Pawns::Result> &>(results);
           break;
         default:
           break;

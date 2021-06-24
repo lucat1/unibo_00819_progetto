@@ -342,7 +342,7 @@ Nostd::Matrix<T, Alloc>::Matrix(std::initializer_list<size_t> extents,
 template <class T, class Alloc>
 Nostd::Matrix<T, Alloc>::Matrix(Matrix &&m)
     : all_elems{m.all_elems}, all_exts{m.all_exts}, ord{m.ord}, exts{m.exts},
-      elems{m.elems}, sz{m.sz} {
+      sz{m.sz}, elems{m.elems} {
   m.ord = 0;
   m.exts = nullptr;
   m.elems = nullptr;

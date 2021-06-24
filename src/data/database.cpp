@@ -15,12 +15,17 @@
 #include <fstream>
 #include <utility>
 
+#include "../engine/colorable.hpp"
 #include "map_chunk.hpp"
-#include "result.hpp"
+#include "pawns/enemy.hpp"
+#include "pawns/hero.hpp"
+#include "pawns/item.hpp"
+#include "pawns/result.hpp"
 #include "scenery.hpp"
 #include "setting.hpp"
 
 using namespace Data;
+using namespace Data::Pawns;
 using Nostd::List;
 using Nostd::Vector;
 using Nostd::WString;
@@ -35,8 +40,11 @@ Database::Database(const char *configuration, const char *assets,
   load_settings(assets);
   load_map_chunks(assets);
   load_sceneries(assets);
-  // TODO
   load_results();
+  load_heroes(assets);
+  load_enemies(assets);
+  load_items(assets);
+  // TODO
 }
 
 Database::Database(Database &&d) {
@@ -48,10 +56,11 @@ Database::Database(Database &&d) {
   set = move(d.set);
   map = move(d.map);
   sce = move(d.sce);
-  // TODO
-  her = move(d.her);
-  // TODO
   res = move(d.res);
+  her = move(d.her);
+  ene = move(d.ene);
+  ite = move(d.ite);
+  // TODO
 }
 
 Database &Database::operator=(Database &&d) {
@@ -65,10 +74,11 @@ Database &Database::operator=(Database &&d) {
   set = move(d.set);
   map = move(d.map);
   sce = move(d.sce);
-  // TODO
-  her = move(d.her);
-  // TODO
   res = move(d.res);
+  her = move(d.her);
+  ene = move(d.ene);
+  ite = move(d.ite);
+  // TODO
   return *this;
 }
 
@@ -80,10 +90,11 @@ Database &Database::operator=(const Database &d) {
   set = d.set;
   map = d.map;
   sce = d.sce;
-  // TODO
-  her = d.her;
-  // TODO
   res = d.res;
+  her = d.her;
+  ene = d.ene;
+  ite = d.ite;
+  // TODO
   return *this;
 }
 
@@ -117,14 +128,39 @@ const List<Result> &Database::results() const noexcept { return res; }
 
 void Database::save_results() const {
   std::wofstream wofs(scor);
-  for (auto x : res) {
-    put_CSV_WString(wofs, x.nickname()) << separator;
-    if (x.hero())
-      put_CSV_WString(wofs, x.hero()->name());
-    wofs << separator;
-    wofs << x.score() << newrecord;
-  }
+  for (auto x : res)
+    put_CSV_WString(wofs, x.name()) << separator << x.score() << separator
+                                    << Engine::color_to_short(x.foreground())
+                                    << separator << x.character() << newrecord;
   wofs.close();
+}
+
+Nostd::UnorderedMap<Nostd::WString, Pawns::Hero> &Database::heroes() noexcept {
+  return her;
+}
+
+const Nostd::UnorderedMap<Nostd::WString, Pawns::Hero> &
+Database::heroes() const noexcept {
+  return her;
+}
+
+Nostd::UnorderedMap<Nostd::WString, Pawns::Enemy> &
+Database::enemies() noexcept {
+  return ene;
+}
+
+const Nostd::UnorderedMap<Nostd::WString, Pawns::Enemy> &
+Database::enemies() const noexcept {
+  return ene;
+}
+
+Nostd::UnorderedMap<Nostd::WString, Pawns::Item> &Database::items() noexcept {
+  return ite;
+}
+
+const Nostd::UnorderedMap<Nostd::WString, Pawns::Item> &
+Database::items() const noexcept {
+  return ite;
 }
 
 char *Database::newstrcpy(const char *str) const {
@@ -140,28 +176,25 @@ char *Database::newstrcat(const char *str1, const char *str2) const {
 void Database::load_settings(const char *assets_filepath) {
   // game settings
   const char *const settings_fp{newstrcat(assets_filepath, settings_rel_fp)};
-  wifstream wifs{settings_fp};
+  wifstream settings_wifs{settings_fp};
   delete settings_fp;
   Setting s;
-  while (wifs >> s)
+  while (settings_wifs >> s)
     set.push_back(s);
-  wifs.close();
+  settings_wifs.close();
   // current values
-  wifs.open(conf);
+  wifstream conf_wifs(conf);
   WString key;
-  while (get_CSV_WString(wifs, key)) {
+  while (get_CSV_WString(conf_wifs, key)) {
     size_t value;
-    wifs >> value;
-    wchar_t input;
-    while (wifs >> input && input != newrecord)
-      ;
+    conf_wifs >> value;
     for (auto &s : set)
       if (!key.compare(s.label())) {
         s.set(s.begin() + value);
         break;
       }
   }
-  wifs.close();
+  conf_wifs.close();
 }
 
 void Database::load_map_chunks(const char *assets_filepath) {
@@ -186,27 +219,61 @@ void Database::load_sceneries(const char *assets_filepath) {
 
 void Database::load_results() {
   wifstream wifs{scor};
-  WString nickname;
-  while (get_CSV_WString(wifs, nickname)) {
-    WString hero;
+  WString name;
+  while (get_CSV_WString(wifs, name)) {
     int score;
-    get_CSV_WString(wifs, hero) >> score;
-    res.push_back(
-        {nickname, her.contains(nickname) ? &her[nickname] : nullptr, score});
-    wifs.ignore();
+    short foreground;
+    (wifs >> score).ignore();
+    wchar_t character;
+    (wifs >> foreground).ignore();
+    (wifs >> character).ignore();
+    res.push_back({name, score, Engine::short_to_color(foreground), character});
   }
+}
+
+void Database::load_heroes(const char *assets_filepath) {
+  /*const char *const heroes_fp{newstrcat(assets_filepath, heroes_rel_fp)};
+  wifstream wifs{heroes_fp};
+  delete heroes_fp;
+  Hero h{Engine::Color::transparent, L' ', L"", L"", {}, {}, 1, 1};
+  while (wifs >> h)
+    her.put(h.name(), h);
+  wifs.close();*/
+}
+
+void Database::load_enemies(const char *assets_filepath) {
+  /*const char *const enemies_fp{newstrcat(assets_filepath, enemies_rel_fp)};
+  wifstream wifs{enemies_fp};
+  delete enemies_fp;
+  Enemy e{Engine::Color::transparent, L' ', L"", {}, 0, 0, 0, 1};
+  while (wifs >> e)
+    ene.put(e.name(), e);
+  wifs.close();*/
+}
+
+void Database::load_items(const char *assets_filepath) {
+  /*const char *const items_fp{newstrcat(assets_filepath, items_rel_fp)};
+  wifstream wifs{items_fp};
+  delete items_fp;
+  Item i{Engine::Color::transparent, L' ', L"", 0, false, 0, false, 0};
+  while (wifs >> i)
+    ite.put(i.name(), i);
+  wifs.close();*/
 }
 
 std::basic_istream<wchar_t> &
 Data::get_CSV_WString(std::basic_istream<wchar_t> &is, WString &s) {
   if (is) {
     s = WString{};
-    wchar_t input;
-    while (is >> input && input != Database::separator &&
-           input != Database::newrecord) {
+    for (wchar_t input; is.get(input) && input != Database::separator &&
+                        input != Database::newrecord;) {
+      if (input == Database::escape) {
+        if (is)
+          is.get(input);
+        else
+          break; // escape character + EOF
+      }
       s.push_back(input);
-      if (s.back() == Database::escape)
-        is >> s.back();
     }
   }
   return is;

@@ -6,7 +6,7 @@
   Stefano Volpe #969766
   04/09/2021
 
-  scenery.cpp: implementation of Data::Scenery.
+  scenery.cpp: implementation of Data::Scenery and its helper entities.
 */
 
 #include "scenery.hpp"
