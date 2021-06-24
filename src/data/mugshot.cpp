@@ -31,8 +31,8 @@ bool MugshotTile::operator!=(MugshotTile m) const noexcept {
   return !(*this == m);
 }
 
-std::basic_istream<wchar_t> &operator>>(std::basic_istream<wchar_t> &is,
-                                        MugshotTile &m) {
+std::basic_istream<wchar_t> &Data::operator>>(std::basic_istream<wchar_t> &is,
+                                              MugshotTile &m) {
   short foreground, background;
   wchar_t character;
   if (is >> foreground >> background >> character)
@@ -48,3 +48,13 @@ std::basic_ostream<wchar_t> &operator<<(std::basic_ostream<wchar_t> &os,
 
 Data::Mugshot::Mugshot()
     : Nostd::Matrix<MugshotTile>({side, side}, MugshotTile{}) {}
+
+std::basic_istream<wchar_t> &Data::operator>>(std::basic_istream<wchar_t> &is,
+                                              Data::Mugshot &m) {
+  for (auto &row : m) {
+    for (auto &cell : row)
+      is >> cell.value();
+    is.ignore();
+  }
+  return is;
+}

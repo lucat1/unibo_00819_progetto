@@ -24,7 +24,7 @@ namespace Data {
   A MugshotTile, as its name suggests, is the basic unit of a Mugshot.
   MugshotTile is a simple implementation of Tile.
 */
-class MugshotTile : Engine::Tile {
+class MugshotTile : public Engine::Tile {
 public:
   MugshotTile(Engine::Color foreground, Engine::Color background,
               wchar_t character);
@@ -57,7 +57,7 @@ std::basic_ostream<wchar_t> &operator<<(std::basic_ostream<wchar_t> &,
   A Mugshot works as a detailed sprite to be shown during the game. It is
   represented as a Matrix of MugshotTiles.
 */
-class Mugshot : Nostd::Matrix<MugshotTile> {
+class Mugshot : public Nostd::Matrix<MugshotTile> {
 public:
   Mugshot();
   Mugshot(Mugshot &&) = default;
@@ -67,6 +67,9 @@ public:
 
   constexpr static size_t side{12};
 };
+
+std::basic_istream<wchar_t> &operator>>(std::basic_istream<wchar_t> &,
+                                        Mugshot &);
 
 } // namespace Data
 
