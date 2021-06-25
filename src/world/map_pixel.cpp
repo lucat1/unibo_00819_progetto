@@ -6,7 +6,7 @@
   Mattia Girolimetto #977478
   04/01/2021
 
-  tree_map.test.cpp: tests for Nostd::TreeMap.
+  map_pixel.cpp: Metohds implementation for World::MapPixel.
 */
 #include "map_pixel.hpp"
 
@@ -22,4 +22,5 @@ MapPixel::MapPixel(wchar_t icon, Color fg, Color bg) noexcept {
 Color MapPixel::foreground() const { return fg; }
 Color MapPixel::background() const { return bg; }
 
-bool MapPixel::operator==(MapPixel m) { return m.icon == icon; }
+bool MapPixel::operator==(MapPixel m) const { return m.icon == icon; }
+bool MapPixel::operator!=(MapPixel m) const { return m.icon != icon; }

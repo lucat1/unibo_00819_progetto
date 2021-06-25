@@ -30,7 +30,7 @@ int main() {
     assert(m.size() == 2);
     assert(m.at(0).ending_row() == 16);
     assert(m.at(0).at(19).at(30).value() == Data::MapUnit::ground);
-    assert(m.at(1).starting_row() == 17);
+    assert(m.at(1).starting_row() == 16);
     assert(m.at(1).at(5).at(69).value() == Data::MapUnit::item);
     // Sceneries
     const auto &sc = d.sceneries();

@@ -8,9 +8,9 @@
 
   chunck_assembler.test.cpp: tests for World::ChunckAssembler.
 */
+#include "chunk_assembler.hpp"
 #include "../data/database.hpp"
 #include "../nostd/test.hpp"
-#include "chunk_assembler.hpp"
 #include <cassert>
 
 using namespace World;
@@ -21,8 +21,9 @@ int main() {
   it("does something better no ask", [] {
     Database d("tests/alma.conf.csv", "tests/assets/", "tests/scoreboard.csv");
     assert(d.map_chunks().size() == 2);
-    ChunkAssembler assembler(d.map_chunks());
-    assembler.print_list();
+    ChunkAssembler assembler(d.map_chunks(), d.sceneries());
+    // assembler.print_list();
+    Matrix<MapPixel> m = assembler.get();
   });
   return 0;
 }

@@ -10,6 +10,8 @@
 */
 
 #include "chunk_assembler.hpp"
+#include "../nostd/matrix.hpp"
+#include "map_pixel.hpp"
 #include <cstddef>
 #include <cstdlib>
 #include <iostream>
@@ -17,10 +19,14 @@
 using namespace World;
 using namespace Nostd;
 using namespace Data;
+using namespace Engine;
 
-ChunkAssembler::ChunkAssembler(Vector<MapChunk> chunks) {
+ChunkAssembler::ChunkAssembler(Vector<MapChunk> chunks,
+                               Vector<Scenery> sceneries) {
   this->chunks = chunks;
-  adjacency_list = new Vector<ChunkInfo>[chunks.size()];
+  this->sceneries = sceneries;
+  this->adjacency_list = new Vector<ChunkInfo>[chunks.size()];
+  this->current_scenery = sceneries[0];
   fill_list();
 }
 
@@ -64,7 +70,7 @@ void ChunkAssembler::print_list() const noexcept {
 
 // Generate a random number i between 0 and the number of nodes liked to Current
 // and take the i-esim linked node.
-MapChunk *ChunkAssembler::next() noexcept {
+MapChunk *ChunkAssembler::next_chunk() noexcept {
   if (current == nullptr) {
     current = new ChunkInfo;
     current->id = 0;
@@ -75,3 +81,47 @@ MapChunk *ChunkAssembler::next() noexcept {
   }
   return current->chunk;
 }
+
+// Combine a Data::MapChunk with a Data::Scenery to make a
+// Nostd::Matrix<World::MapPixel>.
+Matrix<MapPixel>
+ChunkAssembler::assemble_scenery(const MapChunk *chunk,
+                                 const Scenery scenery) const noexcept {
+  MapPixel nullPixel('?', Color::transparent, Color::transparent);
+  Matrix<MapPixel> res({chunk->height, chunk->width()}, nullPixel);
+  for (size_t i{0}; i < chunk->height; i++) {
+    for (size_t j{0}; j < chunk->width(); j++) {
+      MapUnit map_unit = chunk->at(i).at(j).value();
+      if (map_unit == MapUnit::nothing)
+        res.at(i).at(j).value() =
+            MapPixel('x', Color::transparent, scenery.sky[0]);
+      else if (map_unit == MapUnit::ground)
+        res.at(i).at(j).value() =
+            MapPixel(scenery.ground.singlet, scenery.ground.foreground,
+                     scenery.ground.background);
+      else if (map_unit == MapUnit::platform)
+        res.at(i).at(j).value() =
+            MapPixel(scenery.platform.singlet, scenery.platform.foreground,
+                     scenery.ground.background);
+    }
+  }
+  return res;
+}
+
+Matrix<MapPixel> ChunkAssembler::get() noexcept {
+  MapChunk *c = next_chunk();
+  return assemble_scenery(c, this->current_scenery);
+}
+
+// Debug only
+void ChunkAssembler::print_scenery(Scenery s) noexcept {
+  MapChunk *c = next_chunk();
+  Matrix<MapPixel> a = assemble_scenery(c, s);
+  std::cout << "Printing scenery" << std::endl;
+  for (auto row : a) {
+    for (auto x : row)
+      std::cout << x.value().icon;
+    std::cout << std::endl;
+  }
+}
+#include "../nostd/matrix.cpp"

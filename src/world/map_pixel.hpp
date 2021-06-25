@@ -22,13 +22,16 @@ private:
 public:
   wchar_t icon;
 
+  MapPixel() = default;
   MapPixel(wchar_t icon, Engine::Color fg, Engine::Color bg) noexcept;
 
   Engine::Color background() const override;
   Engine::Color foreground() const override;
 
   // Required for being Regular
-  bool operator==(MapPixel);
+  bool operator==(MapPixel) const;
+  // Required for being Regular
+  bool operator!=(MapPixel) const;
 };
 } // namespace World
 
