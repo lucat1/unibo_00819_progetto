@@ -120,7 +120,7 @@ void ChunkAssembler::print_scenery(Scenery s) noexcept {
   std::cout << "Printing scenery" << std::endl;
   for (auto row : a) {
     for (auto x : row)
-      std::cout << x.value().icon;
+      std::cout << x.value().character();
     std::cout << std::endl;
   }
 }

@@ -11,22 +11,22 @@
 #ifndef WORLD_MAP_PIXEL_HPP
 #define WORLD_MAP_PIXEL_HPP
 
-#include "../engine/colorable.hpp"
+#include "../engine/tile.hpp"
 
 namespace World {
-class MapPixel : public Engine::Colorable {
+class MapPixel : public Engine::Tile {
 private:
-  Engine::Color fg;
+  wchar_t c;
   Engine::Color bg;
+  Engine::Color fg;
 
 public:
-  wchar_t icon;
-
   MapPixel() = default;
   MapPixel(wchar_t icon, Engine::Color fg, Engine::Color bg) noexcept;
 
   Engine::Color background() const override;
   Engine::Color foreground() const override;
+  wchar_t character() const override;
 
   // Required for being Regular
   bool operator==(MapPixel) const;
