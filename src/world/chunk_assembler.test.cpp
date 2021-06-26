@@ -24,6 +24,7 @@ int main() {
     ChunkAssembler assembler(d.map_chunks(), d.sceneries());
     // assembler.print_list();
     Matrix<MapPixel> m = assembler.get();
+    assembler.print_scenery(d.sceneries()[0]);
   });
   return 0;
 }

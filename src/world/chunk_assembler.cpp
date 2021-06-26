@@ -94,7 +94,7 @@ ChunkAssembler::assemble_scenery(const MapChunk *chunk,
       MapUnit map_unit = chunk->at(i).at(j).value();
       if (map_unit == MapUnit::nothing)
         res.at(i).at(j).value() =
-            MapPixel('x', Color::transparent, scenery.sky[0]);
+            MapPixel(' ', Color::transparent, scenery.sky[0]);
       else if (map_unit == MapUnit::ground)
         res.at(i).at(j).value() =
             MapPixel(scenery.ground.singlet, scenery.ground.foreground,
@@ -120,8 +120,8 @@ void ChunkAssembler::print_scenery(Scenery s) noexcept {
   std::cout << "Printing scenery" << std::endl;
   for (auto row : a) {
     for (auto x : row)
-      std::cout << x.value().character();
-    std::cout << std::endl;
+      std::wcout << x.value().character();
+    std::wcout << std::endl;
   }
 }
 #include "../nostd/matrix.cpp"
