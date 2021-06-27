@@ -11,7 +11,6 @@
 
 #include "result.hpp"
 
-#include <iostream>
 #include <stdexcept>
 
 using Data::Pawns::Result;
