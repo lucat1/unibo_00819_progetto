@@ -24,10 +24,13 @@ namespace Engine {
   single character.
 */
 class Tile : public Colorable {
-protected:
-  Tile() = default;
-
 public:
+  Tile() = default;
+  Tile(Tile &&) = default;
+  Tile &operator=(Tile &&) = default;
+  Tile(const Tile &) = default;
+  Tile &operator=(const Tile &) = default;
+
   virtual wchar_t character() const;
   virtual ~Tile() = default;
 

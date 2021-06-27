@@ -23,7 +23,7 @@ namespace Engine {
 class BlockTile : public virtual EntityTile {
 public:
   BlockTile() = default;
-  BlockTile(wchar_t, Engine::Color = Engine::Color::transparent,
+  BlockTile(wchar_t, Engine::Color foreground = Engine::Color::transparent,
             Engine::Color background = Engine::Color::transparent);
   BlockTile(BlockTile &&) = default;
   BlockTile &operator=(BlockTile &&) = default;
