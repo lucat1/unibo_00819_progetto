@@ -10,8 +10,8 @@
   unordered_map.test.cpp: tests for Nostd::UnorderedMap.
 */
 
-#include "test.hpp"
 #include "unordered_map.hpp"
+#include "test.hpp"
 #include <cassert>
 
 using namespace Nostd;

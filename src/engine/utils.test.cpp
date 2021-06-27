@@ -9,9 +9,9 @@
   utils.test.cpp: Unit tests for Engine::*'s utilities
 */
 
+#include "utils.hpp"
 #include "../nostd/test.hpp"
 #include "../nostd/wstring.hpp"
-#include "utils.hpp"
 #include <cassert>
 
 using Engine::Utils::leftpad;

@@ -9,8 +9,8 @@
   text_box.test..cpp: Tests for TextBox::split_content
 */
 
-#include "../../nostd/test.hpp"
 #include "text_box.hpp"
+#include "../../nostd/test.hpp"
 #include <cassert>
 
 using Engine::UI::TextBox;

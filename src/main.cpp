@@ -20,6 +20,17 @@ void handle(bool can_display) {
 }
 
 int main() {
+  // Sample Hero
+  Data::Pawns::Hero leo{
+      Engine::Color::red, L'🦁', L"Leo", L"Neat guy.", {}, {}, 9, 4};
+  wifstream wifs{"tests/assets/img/heroes.txt"};
+  wifs.ignore();
+  wifs.ignore();
+  Data::Mugshot m{};
+  wifs >> m;
+  wifs.close();
+  leo.setMugshot(m);
+
   Screen screen;
   handle(screen.open());
   screen.set_content<Menu::Main>();
@@ -32,17 +43,6 @@ int main() {
   results.push_back(Data::Pawns::Result(L"Lienin", 100293, Color::red, L'='));
   results.push_back(Data::Pawns::Result(L"Adolf", 98666, Color::yellow, L'/'));
   results.push_back(Data::Pawns::Result(L"Benito", 20034, Color::green, L'!'));
-
-  // Sample Hero
-  /*Data::Pawns::Hero leo{
-      Engine::Color::red, L'🦁', L"Leo", L"Neat guy.", {}, {}, 9, 4};
-  wifstream wifs{"tests/assets/img/heroes.txt"};
-  wifs.ignore();
-  wifs.ignore();
-  Data::Mugshot m{};
-  wifs >> m;
-  wifs.close();
-  leo.setMugshot(m);*/
 
   int key;
   bool running = true;
