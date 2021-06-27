@@ -3,9 +3,6 @@
   First cicle degree in Computer Science
   00819 - Programmazione
 
-  Luca Tagliavini #971133
-  06/26/2021
-
   Stefano Volpe #969766
   06/26/2021
 

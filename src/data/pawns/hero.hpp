@@ -27,7 +27,7 @@ namespace Pawns {
   A Hero is a playable character: as such, it provides a health and a mana
   gauges, as well as a description and an additional skill.
 */
-class Hero : Character {
+class Hero : public Character {
 public:
   Hero(Engine::Color foreground, wchar_t character, const Nostd::WString &name,
        const Nostd::WString &description, Skill skill, Skill superSkill,
@@ -37,12 +37,7 @@ public:
   Hero(const Hero &) = default;
   Hero &operator=(const Hero &) = default;
 
-  ~Hero() = default;
-
-  Engine::Color foreground() const noexcept override final;
-  wchar_t character() const noexcept override final;
-  const Nostd::WString &name() const noexcept override final;
-  Skill skill() const noexcept override final;
+  virtual ~Hero() = default;
 
   void rename(const Nostd::WString &);
   const Nostd::WString &description() const noexcept;
@@ -61,10 +56,8 @@ public:
                                                  const Hero &);
 
 private:
-  Engine::Color fg;
-  wchar_t chr;
-  Nostd::WString nm{}, dsc{};
-  Skill sk, ssk;
+  Nostd::WString dsc{};
+  Skill ssk;
   int curH, maxH, curM, maxM, scr;
 };
 

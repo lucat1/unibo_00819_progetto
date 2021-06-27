@@ -3,9 +3,6 @@
   First cicle degree in Computer Science
   00819 - Programmazione
 
-  Luca Tagliavini #971133
-  06/26/2021
-
   Stefano Volpe #969766
   06/26/2021
 
@@ -38,7 +35,7 @@ public:
   wchar_t character() const noexcept override final;
   Color foreground() const noexcept override final;
 
-protected:
+private:
   wchar_t chr{L' '};
   Engine::Color fg{Engine::Color::transparent};
 };

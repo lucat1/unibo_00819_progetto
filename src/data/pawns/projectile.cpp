@@ -21,8 +21,9 @@ using Data::Pawns::Projectile;
 Projectile::Projectile(Engine::Color foreground, wchar_t character,
                        const Nostd::WString &name, int healthDamage,
                        int manaDamage, int scoreDamage)
-    : fg{foreground}, chr{character}, nm{name}, hD{healthDamage},
-      mD{manaDamage}, sD{scoreDamage} {
+    : Engine::EntityTile{character, foreground}, Pawn{name, character,
+                                                      foreground},
+      hD{healthDamage}, mD{manaDamage}, sD{scoreDamage} {
   if (hD < 0)
     throw std::invalid_argument("Health damage must be positive.");
   if (mD < 0)
@@ -30,12 +31,6 @@ Projectile::Projectile(Engine::Color foreground, wchar_t character,
   if (sD < 0)
     throw std::invalid_argument("Score damage must be positive.");
 }
-
-Engine::Color Projectile::foreground() const noexcept { return fg; }
-
-wchar_t Projectile::character() const noexcept { return chr; }
-
-const Nostd::WString &Projectile::name() const noexcept { return nm; }
 
 int Projectile::uncheckedHealthEffect(int currentHealth, int) {
   return std::max(0, currentHealth - hD);

@@ -3,9 +3,6 @@
   First cicle degree in Computer Science
   00819 - Programmazione
 
-  Luca Tagliavini #971133
-  06/26/2021
-
   Stefano Volpe #969766
   06/26/2021
 
@@ -23,7 +20,7 @@ namespace Engine {
 /*
   A BlockTile stores its character and colors in three different variables,
 */
-class BlockTile : public EntityTile {
+class BlockTile : public virtual EntityTile {
 public:
   BlockTile() = default;
   BlockTile(wchar_t, Engine::Color = Engine::Color::transparent,
@@ -37,7 +34,7 @@ public:
 
   Color background() const noexcept override final;
 
-protected:
+private:
   Engine::Color bg{Engine::Color::transparent};
 };
 
