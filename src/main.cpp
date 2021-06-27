@@ -1,8 +1,11 @@
 #include "engine/menu/main.hpp"
+#include "data/mugshot.hpp"
+#include "data/pawns/hero.hpp"
 #include "engine/colorable.hpp"
 #include "engine/menu/results.hpp"
 #include "engine/menu/settings.hpp"
 #include "engine/screen.hpp"
+#include <fstream>
 #include <iostream>
 #include <unistd.h>
 using namespace std;
@@ -17,6 +20,17 @@ void handle(bool can_display) {
 }
 
 int main() {
+  // Sample Hero
+  Data::Pawns::Hero leo{
+      Engine::Color::red, L'🦁', L"Leo", L"Neat guy.", {}, {}, 9, 4};
+  wifstream wifs{"tests/assets/img/heroes.txt"};
+  wifs.ignore();
+  wifs.ignore();
+  Data::Mugshot m{};
+  wifs >> m;
+  wifs.close();
+  // leo.setMugshot(m);
+
   Screen screen;
   handle(screen.open());
   screen.set_content<Menu::Main>();

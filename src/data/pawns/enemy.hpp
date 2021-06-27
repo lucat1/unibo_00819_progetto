@@ -27,7 +27,7 @@ namespace Pawns {
   An Enemy is an ostile NPC. It is controlled by an AI and is both a Character
   and an Interactable at the same time.
 */
-class Enemy : Character, Interactable {
+class Enemy : public Character, public Interactable {
 public:
   Enemy(Engine::Color foreground, wchar_t character, const Nostd::WString &name,
         Skill skill, int healthDamage, int manaDamage, int scoreDamage,
@@ -38,11 +38,6 @@ public:
   Enemy &operator=(const Enemy &) = default;
 
   ~Enemy() = default;
-
-  Engine::Color foreground() const noexcept override final;
-  wchar_t character() const noexcept override final;
-  const Nostd::WString &name() const noexcept override final;
-  Skill skill() const noexcept override final;
 
   enum class Behavior {
     none = 0,
@@ -63,10 +58,6 @@ protected:
   int uncheckedScoreEffect(int currentScore) override final;
 
 private:
-  Engine::Color fg;
-  wchar_t chr;
-  Nostd::WString nm{};
-  Skill sk;
   int hD, mD, sD;
   int bhv;
 };

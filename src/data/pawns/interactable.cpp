@@ -15,6 +15,11 @@
 
 using Data::Pawns::Interactable;
 
+Interactable &Interactable::operator=(Interactable &&i) {
+  Pawn::operator=(i);
+  return *this;
+}
+
 int Interactable::healthEffect(int currentHealth, int maxHealth) {
   if (maxHealth <= 0)
     throw std::invalid_argument("Maximum health must be positive.");

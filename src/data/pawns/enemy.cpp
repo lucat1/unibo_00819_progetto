@@ -21,8 +21,9 @@ using Data::Pawns::Enemy;
 Enemy::Enemy(Engine::Color foreground, wchar_t character,
              const Nostd::WString &name, Skill skill, int healthDamage,
              int manaDamage, int scoreDamage, int behavior)
-    : fg{foreground}, chr{character}, nm{name}, sk{skill}, hD{healthDamage},
-      mD{manaDamage}, sD{scoreDamage}, bhv{behavior} {
+    : Engine::EntityTile{character, foreground}, Character{name, character,
+                                                           foreground, skill},
+      hD{healthDamage}, mD{manaDamage}, sD{scoreDamage}, bhv{behavior} {
   if (hD < 0)
     throw std::invalid_argument("Health damage must be positive.");
   if (mD < 0)
@@ -30,14 +31,6 @@ Enemy::Enemy(Engine::Color foreground, wchar_t character,
   if (sD < 0)
     throw std::invalid_argument("Score damage must be positive.");
 }
-
-Engine::Color Enemy::foreground() const noexcept { return fg; }
-
-wchar_t Enemy::character() const noexcept { return chr; }
-
-const Nostd::WString &Enemy::name() const noexcept { return nm; }
-
-auto Enemy::skill() const noexcept -> Skill { return sk; }
 
 bool Enemy::has_behavior(Behavior b) const noexcept {
   return bhv & static_cast<int>(b);

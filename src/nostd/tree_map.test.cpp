@@ -9,8 +9,8 @@
   tree_map.test.cpp: tests for Nostd::TreeMap.
 */
 
-#include "test.hpp"
 #include "tree_map.hpp"
+#include "test.hpp"
 #include <cassert>
 
 using namespace Nostd;

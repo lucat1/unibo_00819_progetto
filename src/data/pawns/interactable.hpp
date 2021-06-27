@@ -19,12 +19,18 @@ namespace Data {
 namespace Pawns {
 
 /*
-  An Interactable is a Pawn which affects the one directly contolled by the
-  player when they come in contact. The effect caused by this interaction may be
-  either positive, or negative.
+  An Interactable affects the Hero directly contolled by the player when they
+  come in contact. The effect caused by this interaction may be either positive,
+  or negative.
 */
-class Interactable {
+class Interactable : public virtual Pawn {
 public:
+  Interactable() = default;
+  Interactable(Interactable &&) = default;
+  Interactable &operator=(Interactable &&);
+  Interactable(const Interactable &) = default;
+  Interactable &operator=(const Interactable &) = default;
+
   // These methods validate their argument and return the new stats after the
   // interaction.
   int healthEffect(int currentHealth, int maxHealth);

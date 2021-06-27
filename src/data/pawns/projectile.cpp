@@ -21,8 +21,9 @@ using Data::Pawns::Projectile;
 Projectile::Projectile(Engine::Color foreground, wchar_t character,
                        const Nostd::WString &name, int healthDamage,
                        int manaDamage, int scoreDamage, int range)
-    : fg{foreground}, chr{character}, nm{name}, hD{healthDamage},
-      mD{manaDamage}, sD{scoreDamage}, rng{range} {
+    : Engine::EntityTile{character, foreground}, Pawn{name, character,
+                                                      foreground},
+      hD{healthDamage}, mD{manaDamage}, sD{scoreDamage}, rng{range} {
   if (hD < 0)
     throw std::invalid_argument("Health damage must be positive or zero.");
   if (mD < 0)
@@ -32,12 +33,6 @@ Projectile::Projectile(Engine::Color foreground, wchar_t character,
   if (range < 0)
     throw std::invalid_argument("Range must be positive or zero.");
 }
-
-Engine::Color Projectile::foreground() const noexcept { return fg; }
-
-wchar_t Projectile::character() const noexcept { return chr; }
-
-const Nostd::WString &Projectile::name() const noexcept { return nm; }
 
 void Projectile::countMovement() {
   if (isExpired())
