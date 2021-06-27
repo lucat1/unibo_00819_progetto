@@ -29,7 +29,7 @@ int main() {
   Data::Mugshot m{};
   wifs >> m;
   wifs.close();
-  leo.setMugshot(m);
+  // leo.setMugshot(m);
 
   Screen screen;
   handle(screen.open());
