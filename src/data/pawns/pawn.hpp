@@ -14,7 +14,7 @@
 
 #include <istream>
 
-#include "../../engine/tile.hpp"
+#include "../../engine/entity_tile.hpp"
 #include "../../nostd/wstring.hpp"
 
 namespace Data {
@@ -22,12 +22,34 @@ namespace Data {
 namespace Pawns {
 
 /*
-  A Pawn is simply a named Tile. In other words, every single-cell entity on the
-  map which deserves a name of their own is a Pawn.
+  A Pawn is simply a named EntityTile. In other words, every single-cell entity
+  on the map which deserves a name of their own is a Pawn.
 */
-class Pawn : public Engine::Tile {
+class Pawn : public virtual Engine::EntityTile {
 public:
-  virtual const Nostd::WString &name() const = 0;
+  Pawn() = default;
+  Pawn(Nostd::WString, wchar_t = L' ',
+       Engine::Color = Engine::Color::transparent);
+  Pawn(Pawn &&) = default;
+  Pawn &operator=(Pawn &&);
+  Pawn(const Pawn &) = default;
+  Pawn &operator=(const Pawn &) = default;
+
+  virtual ~Pawn() override = default;
+
+  const Nostd::WString &name() const noexcept;
+
+protected:
+  /*
+    "Members declared protected are far more open to abuse than members declared
+    private. In particular, declaring data members protected is usually a design
+    error." B. Stroustrup, The C++ Programming Language, 4th ed., Pearson 2013,
+    p. 604f.
+    In this case, though, we want child classes to have unrestricted write
+    privileges to a data member, and the general user to have none.
+  */
+  Nostd::WString nm{};
+  bool movedFrom{false};
 };
 
 } // namespace Pawns

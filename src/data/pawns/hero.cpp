@@ -25,7 +25,8 @@ using Data::Pawns::Skill;
 Hero::Hero(Engine::Color foreground, wchar_t character,
            const Nostd::WString &name, const Nostd::WString &description,
            Skill skill, Skill superSkill, int health, int mana)
-    : fg{foreground}, chr{character}, nm{name}, dsc{description}, sk{skill},
+    : Engine::EntityTile{character, foreground},
+      Character{name, character, foreground, skill}, dsc{description},
       ssk{superSkill}, curH{health}, maxH{health}, curM{0}, maxM{mana}, scr{0} {
   if (maxH <= 0)
     throw std::invalid_argument("Health must be positive.");
@@ -33,15 +34,7 @@ Hero::Hero(Engine::Color foreground, wchar_t character,
     throw std::invalid_argument("Mana must be positive.");
 }
 
-Engine::Color Hero::foreground() const noexcept { return fg; }
-
-wchar_t Hero::character() const noexcept { return chr; }
-
-const Nostd::WString &Hero::name() const noexcept { return nm; }
-
-Skill Hero::skill() const noexcept { return sk; }
-
-void Hero::rename(const Nostd::WString &s) { nm = s; }
+void Hero::rename(const Nostd::WString &s) { Pawn::nm = s; }
 
 const Nostd::WString &Hero::description() const noexcept { return dsc; }
 

@@ -17,6 +17,7 @@
 #include "../../engine/colorable.hpp"
 #include "../../nostd/wstring.hpp"
 #include "interactable.hpp"
+#include "pawn.hpp"
 
 namespace Data {
 
@@ -27,7 +28,7 @@ namespace Pawns {
   and score. "Modes" are false when their respective bonuses are absolute
   values, and true when their respective bonuses are percentages.
 */
-class Item : Interactable {
+class Item : public Interactable {
 public:
   Item(Engine::Color foreground, wchar_t character, const Nostd::WString &name,
        int healthBonus, bool healthMode, int manaBonus, bool manaMode,
@@ -39,10 +40,6 @@ public:
 
   ~Item() = default;
 
-  Engine::Color foreground() const noexcept override final;
-  wchar_t character() const noexcept override final;
-  const Nostd::WString &name() const noexcept override final;
-
   friend std::basic_ostream<wchar_t> &operator>>(std::basic_ostream<wchar_t> &,
                                                  const Item &);
 
@@ -52,9 +49,6 @@ protected:
   int uncheckedScoreEffect(int currentScore) override final;
 
 private:
-  Engine::Color fg;
-  wchar_t chr;
-  Nostd::WString nm{};
   int hB, mB, sB;
   bool hM, mM;
 };

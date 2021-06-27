@@ -25,7 +25,7 @@ namespace Pawns {
 /*
   A Projectile can be thrown by a Skill in order to inflict indirect damage.
 */
-class Projectile : Interactable {
+class Projectile : public Interactable {
 public:
   Projectile(Engine::Color foreground, wchar_t character,
              const Nostd::WString &name, int healthDamage, int manaDamage,
@@ -37,10 +37,6 @@ public:
 
   ~Projectile() = default;
 
-  Engine::Color foreground() const noexcept override final;
-  wchar_t character() const noexcept override final;
-  const Nostd::WString &name() const noexcept override final;
-
   friend std::basic_ostream<wchar_t> &operator>>(std::basic_ostream<wchar_t> &,
                                                  const Projectile &);
 
@@ -50,9 +46,6 @@ protected:
   int uncheckedScoreEffect(int currentScore) override final;
 
 private:
-  Engine::Color fg;
-  wchar_t chr;
-  Nostd::WString nm{};
   int hD, mD, sD;
 };
 

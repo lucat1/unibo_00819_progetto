@@ -222,12 +222,15 @@ void Database::load_results() {
   WString name;
   while (get_CSV_WString(wifs, name)) {
     int score;
-    short foreground;
     (wifs >> score).ignore();
+    short foreground;
     wchar_t character;
     (wifs >> foreground).ignore();
-    (wifs >> character).ignore();
-    res.push_back({name, score, Engine::short_to_color(foreground), character});
+    if (wifs >> character) {
+      res.push_back(
+          {name, character, Engine::short_to_color(foreground), score});
+      wifs.ignore();
+    }
   }
 }
 

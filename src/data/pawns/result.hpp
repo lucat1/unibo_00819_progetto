@@ -29,28 +29,21 @@ namespace Pawns {
 class Result : public Pawn {
 public:
   Result() = default;
-  Result(const Nostd::WString &, int, Engine::Color, wchar_t);
-
+  Result(const Nostd::WString &, wchar_t = L' ',
+         Engine::Color = Engine::Color::transparent, int = 0);
+  Result(Hero);
   Result(Result &&) = default;
   Result &operator=(Result &&) = default;
   Result(const Result &) = default;
   Result &operator=(const Result &) = default;
-  Result(Hero);
-  ~Result() = default;
 
-  // getters
-  const Nostd::WString &name() const noexcept override final;
+  virtual ~Result() = default;
+
   int score() const noexcept;
-  Engine::Color foreground() const noexcept override final;
-  wchar_t character() const noexcept override final;
-
   operator int() const; // converts results to scores (so they can be compared)
 
 private:
-  Nostd::WString nm{};
   int scr{0};
-  Engine::Color fg{Engine::Color::transparent};
-  wchar_t chr{L' '};
 };
 
 } // namespace Pawns
