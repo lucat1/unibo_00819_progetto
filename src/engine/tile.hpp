@@ -3,11 +3,11 @@
   First cicle degree in Computer Science
   00819 - Programmazione
 
-  Luca Tagliavini #971133
-  06/12/2021
-
   Stefano Volpe #969766
   06/12/2021
+
+  Mattia Girolimetto #977478
+  06/26/21
 
   tile.hpp: user interface of Engine::Tile.
 */
@@ -30,6 +30,9 @@ protected:
 public:
   virtual wchar_t character() const;
   virtual ~Tile() = default;
+
+  bool operator==(const Tile &) const;
+  bool operator!=(const Tile &) const;
 };
 
 } // namespace Engine
