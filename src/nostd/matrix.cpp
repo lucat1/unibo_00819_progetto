@@ -414,6 +414,7 @@ auto Nostd::Matrix<T, Alloc>::Matrix::operator=(const Matrix &m) -> Matrix & {
     exts = nullptr;
     elems = nullptr;
   }
+  return *this;
 }
 
 template <class T, class Alloc> Nostd::Matrix<T, Alloc>::Matrix::~Matrix() {

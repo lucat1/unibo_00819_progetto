@@ -19,7 +19,16 @@
 
 namespace Data {
 
+/*
+  A Scenery expresses an aesthetic which can be applied to any portion of the
+  game world. It specifies characters and colors.
+*/
 struct Scenery {
+
+  /*
+    An Autotile provides a set of tiles picked to be automatically arranged to
+    form any kind of shape.
+  */
   struct Autotile {
     wchar_t singlet,                               // ▢
         concave_top_left, concave_top_right,       // ⌟⌞

@@ -16,6 +16,7 @@
 
 #include "../../engine/colorable.hpp"
 #include "../../nostd/wstring.hpp"
+#include "../mugshot.hpp"
 #include "character.hpp"
 #include "interactable.hpp"
 
@@ -41,6 +42,8 @@ public:
 
   void rename(const Nostd::WString &);
   const Nostd::WString &description() const noexcept;
+  const Mugshot &getMugshot() const noexcept;
+  void setMugshot(const Mugshot &);
   Skill superSkill() const noexcept;
   void interact(Interactable &);
   int currentHealth() const noexcept;
@@ -57,6 +60,7 @@ public:
 
 private:
   Nostd::WString dsc{};
+  Mugshot mug{};
   Skill ssk;
   int curH, maxH, curM, maxM, scr;
 };

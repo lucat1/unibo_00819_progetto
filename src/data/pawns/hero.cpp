@@ -18,6 +18,7 @@
 #include "../database.hpp"
 #include "skill.hpp"
 
+using Data::Mugshot;
 using Data::Pawns::Hero;
 using Data::Pawns::Interactable;
 using Data::Pawns::Skill;
@@ -37,6 +38,10 @@ Hero::Hero(Engine::Color foreground, wchar_t character,
 void Hero::rename(const Nostd::WString &s) { Pawn::nm = s; }
 
 const Nostd::WString &Hero::description() const noexcept { return dsc; }
+
+const Mugshot &Hero::getMugshot() const noexcept { return mug; }
+
+void Hero::setMugshot(const Mugshot &mugshot) { mug = mugshot; }
 
 Skill Hero::superSkill() const noexcept { return ssk; }
 
