@@ -1,5 +1,5 @@
-#include "test.hpp"
 #include "wstring.hpp"
+#include "test.hpp"
 #include <cassert>
 #include <sstream>
 

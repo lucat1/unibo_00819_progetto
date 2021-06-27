@@ -102,7 +102,10 @@ Box *Engine::Menu::Settings::generate() {
 
 Box *Engine::Menu::Settings::curr_box() {
   if (focused >= max_focused - 1)
-    return root->child(1)->child(0)->child(focused == max_focused ? 1 : 0)->child(0);
+    return root->child(1)
+        ->child(0)
+        ->child(focused == max_focused ? 1 : 0)
+        ->child(0);
   else
     return root->child(0)->child(focused);
 }

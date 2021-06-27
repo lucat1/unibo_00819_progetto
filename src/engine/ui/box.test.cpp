@@ -10,8 +10,8 @@
   Engine::UI::Box class
 */
 
-#include "../../nostd/test.hpp"
 #include "box.hpp"
+#include "../../nostd/test.hpp"
 #include "text_box.hpp"
 #include <algorithm>
 #include <cassert>

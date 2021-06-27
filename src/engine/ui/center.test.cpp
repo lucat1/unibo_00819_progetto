@@ -10,8 +10,8 @@
   Engine::UI::Center class
 */
 
-#include "../../nostd/test.hpp"
 #include "center.hpp"
+#include "../../nostd/test.hpp"
 #include <cassert>
 
 using Engine::UI::Box;
