@@ -1,5 +1,5 @@
-#include "../nostd/test.hpp"
 #include "colorable.hpp"
+#include "../nostd/test.hpp"
 #include <cassert>
 #include <iostream>
 #include <ncurses.h>

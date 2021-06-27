@@ -1,6 +1,6 @@
+#include "vector.hpp"
 #include "pair.hpp"
 #include "test.hpp"
-#include "vector.hpp"
 #include <cassert>
 
 using namespace Nostd;

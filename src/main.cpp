@@ -2,7 +2,8 @@
 #include "data/mugshot.hpp"
 #include "data/pawns/hero.hpp"
 #include "engine/colorable.hpp"
-#include "engine/menu/results.hpp"
+// #include "engine/menu/results.hpp"
+#include "engine/menu/select.hpp"
 #include "engine/menu/settings.hpp"
 #include "engine/screen.hpp"
 #include <fstream>
@@ -28,13 +29,16 @@ int main() {
   settings.push_back(Data::Setting(L"Frames Per Second", 30, 3, 30, 1));
 
   // TODO: properly by calling database.results()
-  Nostd::List<Data::Pawns::Result> results;
-  results.push_back(Data::Pawns::Result(L"Lienin", 100293, Color::red, L'='));
-  results.push_back(Data::Pawns::Result(L"Adolf", 98666, Color::yellow, L'/'));
-  results.push_back(Data::Pawns::Result(L"Benito", 20034, Color::green, L'!'));
+  /* Nostd::List<Data::Pawns::Result> results; */
+  /* results.push_back(Data::Pawns::Result(L"Lienin", 100293, Color::red,
+   * L'=')); */
+  /* results.push_back(Data::Pawns::Result(L"Adolf", 98666, Color::yellow,
+   * L'/')); */
+  /* results.push_back(Data::Pawns::Result(L"Benito", 20034, Color::green,
+   * L'!')); */
 
   // Sample Hero
-  /*Data::Pawns::Hero leo{
+  Data::Pawns::Hero leo{
       Engine::Color::red, L'🦁', L"Leo", L"Neat guy.", {}, {}, 9, 4};
   wifstream wifs{"tests/assets/img/heroes.txt"};
   wifs.ignore();
@@ -42,7 +46,9 @@ int main() {
   Data::Mugshot m{};
   wifs >> m;
   wifs.close();
-  leo.setMugshot(m);*/
+  leo.setMugshot(m);
+  Nostd::Vector<Data::Pawns::Hero> heroes;
+  heroes.push_back(leo);
 
   int key;
   bool running = true;
@@ -65,8 +71,11 @@ int main() {
           break;
         case Menu::Main::Result::play:
           // TODO: change me
-          screen.set_content<Menu::Results,
+          /*screen.set_content<Menu::Results,
                              const Nostd::List<Data::Pawns::Result> &>(results);
+                             */
+          screen.set_content<Menu::Select,
+                             const Nostd::Vector<Data::Pawns::Hero> &>(heroes);
           break;
         default:
           break;
