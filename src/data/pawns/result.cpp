@@ -11,27 +11,23 @@
 
 #include "result.hpp"
 
+#include <iostream>
 #include <stdexcept>
 
 using Data::Pawns::Result;
 using Nostd::WString;
 
-Result::Result(const WString &name, int score, Engine::Color foreground,
-               wchar_t character)
-    : nm{name}, scr{score}, fg{foreground}, chr{character} {
+Result::Result(const WString &name, wchar_t character, Engine::Color foreground,
+               int score)
+    : Engine::EntityTile{character, foreground},
+      Pawn{name, character, foreground}, scr{score} {
   if (score < 0)
     throw std::invalid_argument("score < 0");
 }
 
 Result::Result(Data::Pawns::Hero h)
-    : Result(h.name(), h.score(), h.foreground(), h.character()) {}
-
-const WString &Result::name() const noexcept { return nm; }
+    : Result(h.name(), h.character(), h.foreground(), h.score()) {}
 
 int Result::score() const noexcept { return scr; }
-
-Engine::Color Result::foreground() const noexcept { return fg; }
-
-wchar_t Result::character() const noexcept { return chr; }
 
 Result::operator int() const { return scr; }

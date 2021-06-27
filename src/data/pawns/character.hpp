@@ -20,12 +20,25 @@ namespace Data {
 namespace Pawns {
 
 /*
-  A Character is a Pawn able to move and fight. A generic character only has one
+  A Character is a Pawn able to move and fight. A generic Character only has one
   skill though.
 */
-class Character : public Pawn {
+class Character : public virtual Pawn {
 public:
-  virtual Skill skill() const = 0;
+  Character() = default;
+  Character(const Nostd::WString &, wchar_t = L' ',
+            Engine::Color = Engine::Color::transparent, Skill = {});
+  Character(Character &&) = default;
+  Character &operator=(Character &&);
+  Character(const Character &) = default;
+  Character &operator=(const Character &) = default;
+
+  virtual ~Character() = default;
+
+  Skill skill() const noexcept;
+
+private:
+  Skill sk{};
 };
 
 } // namespace Pawns

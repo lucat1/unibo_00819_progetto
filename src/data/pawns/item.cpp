@@ -20,7 +20,8 @@ using Data::Pawns::Item;
 Item::Item(Engine::Color foreground, wchar_t character,
            const Nostd::WString &name, int healthBonus, bool healthMode,
            int manaBonus, bool manaMode, int scoreBonus)
-    : fg{foreground}, chr{character}, nm{name}, hB{healthBonus}, mB{manaBonus},
+    : Engine::EntityTile{character, foreground},
+      Pawn{name, character, foreground}, hB{healthBonus}, mB{manaBonus},
       sB{scoreBonus}, hM{healthMode}, mM{manaMode} {
   if (hB < 0)
     throw std::invalid_argument("Health bonus must be non-negative.");
@@ -33,12 +34,6 @@ Item::Item(Engine::Color foreground, wchar_t character,
   if (sB < 0)
     throw std::invalid_argument("Score bonus must be non-negative.");
 }
-
-Engine::Color Item::foreground() const noexcept { return fg; }
-
-wchar_t Item::character() const noexcept { return chr; }
-
-const Nostd::WString &Item::name() const noexcept { return nm; }
 
 int Item::uncheckedHealthEffect(int currentHealth, int maxHealth) {
   return std::min(maxHealth, currentHealth + (hM ? maxHealth * hB / 100 : hB));
