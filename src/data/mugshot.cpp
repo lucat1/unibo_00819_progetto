@@ -14,9 +14,38 @@
 #include "../engine/block_tile.hpp"
 
 using namespace Engine;
+using Data::Mugshot;
 using Nostd::Matrix;
 
-Data::Mugshot::Mugshot() : Matrix<Tile>({side, side}, BlockTile{}) {}
+Mugshot::Mugshot() : Matrix<const Tile *>({side, side}, nullptr) {}
+
+Mugshot::Mugshot(const Mugshot &m) : Matrix<const Tile *>(m) {
+  for (auto row : *this)
+    for (auto cell : row) {
+      auto &v = cell.value();
+      v = new BlockTile{v->character(), v->foreground(), v->background()};
+    }
+}
+
+Mugshot &Mugshot::operator=(const Mugshot &m) {
+  Matrix<const Tile *>::operator=(m);
+  for (auto row : *this)
+    for (auto cell : row) {
+      auto &v = cell.value();
+      delete v;
+      v = new BlockTile{v->character(), v->foreground(), v->background()};
+    }
+  return *this;
+}
+
+Mugshot::~Mugshot() {
+  if (Matrix<const Tile *>::size())
+    for (auto row : *this)
+      for (auto cell : row) {
+        delete cell.value();
+        cell.value() = nullptr;
+      }
+}
 
 std::basic_istream<wchar_t> &Data::operator>>(std::basic_istream<wchar_t> &is,
                                               Mugshot &m) {
@@ -37,9 +66,9 @@ std::basic_istream<wchar_t> &Data::operator>>(std::basic_istream<wchar_t> &is,
   // Put everything together
   for (size_t i{0}; i < m.side; ++i)
     for (size_t j{0}; j < m.side; ++j)
-      m.at(i).at(j).value() =
-          BlockTile(characters.at(i).at(j).value(),
-                    Engine::short_to_color(foregrounds.at(i).at(j).value()),
-                    Engine::short_to_color(backgrounds.at(i).at(j).value()));
+      m.at(i).at(j).value() = new BlockTile(
+          characters.at(i).at(j).value(),
+          Engine::short_to_color(foregrounds.at(i).at(j).value()),
+          Engine::short_to_color(backgrounds.at(i).at(j).value()));
   return is;
 }

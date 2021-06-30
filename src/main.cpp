@@ -20,17 +20,6 @@ void handle(bool can_display) {
 }
 
 int main() {
-  // Sample Hero
-  Data::Pawns::Hero leo{
-      Engine::Color::red, L'🦁', L"Leo", L"Neat guy.", {}, {}, 9, 4};
-  wifstream wifs{"tests/assets/img/heroes.txt"};
-  wifs.ignore();
-  wifs.ignore();
-  Data::Mugshot m{};
-  wifs >> m;
-  wifs.close();
-  // leo.setMugshot(m);
-
   Screen screen;
   handle(screen.open());
   screen.set_content<Menu::Main>();
@@ -117,5 +106,18 @@ int main() {
     };
   }
 
+  // Sample Hero
+  Data::Pawns::Hero leo{
+      Engine::Color::red, L'🦁', L"Leo", L"Neat guy.", {}, {}, 9, 4};
+  wifstream wifs{"tests/assets/img/heroes.txt"};
+  wifs.ignore();
+  wifs.ignore();
+  wifs >> leo.mugshot();
+  for (auto &row : leo.mugshot()) {
+    for (auto &cell : row)
+      std::wcerr << cell.value()->character();
+    std::wcerr << L'\n';
+  }
+  wifs.close();
   return 0;
 }
