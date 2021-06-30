@@ -11,7 +11,6 @@
 
 #include "chunk_assembler.hpp"
 #include "../nostd/matrix.hpp"
-#include "map_pixel.hpp"
 #include <cstddef>
 #include <cstdlib>
 #include <iostream>
@@ -84,31 +83,31 @@ MapChunk *ChunkAssembler::next_chunk() noexcept {
 
 // Combine a Data::MapChunk with a Data::Scenery to make a
 // Nostd::Matrix<World::MapPixel>.
-Matrix<MapPixel>
+Matrix<BlockTile>
 ChunkAssembler::assemble_scenery(const MapChunk *chunk,
                                  const Scenery scenery) const noexcept {
-  MapPixel nullPixel('?', Color::transparent, Color::transparent);
-  Matrix<MapPixel> res({chunk->height, chunk->width()}, nullPixel);
+  BlockTile nullPixel('?', Color::transparent, Color::transparent);
+  Matrix<BlockTile> res({chunk->height, chunk->width()}, nullPixel);
   for (size_t i{0}; i < chunk->height; i++) {
     for (size_t j{0}; j < chunk->width(); j++) {
       MapUnit map_unit = chunk->at(i).at(j).value();
       if (map_unit == MapUnit::nothing)
         res.at(i).at(j).value() =
-            MapPixel(' ', Color::transparent, scenery.sky[0]);
+            BlockTile(' ', Color::transparent, scenery.sky[0]);
       else if (map_unit == MapUnit::ground)
         res.at(i).at(j).value() =
-            MapPixel(scenery.ground.singlet, scenery.ground.foreground,
-                     scenery.ground.background);
+            BlockTile(scenery.ground.singlet, scenery.ground.foreground,
+                      scenery.ground.background);
       else if (map_unit == MapUnit::platform)
         res.at(i).at(j).value() =
-            MapPixel(scenery.platform.singlet, scenery.platform.foreground,
-                     scenery.ground.background);
+            BlockTile(scenery.platform.singlet, scenery.platform.foreground,
+                      scenery.ground.background);
     }
   }
   return res;
 }
 
-Matrix<MapPixel> ChunkAssembler::get() noexcept {
+Matrix<BlockTile> ChunkAssembler::get() noexcept {
   MapChunk *c = next_chunk();
   return assemble_scenery(c, this->current_scenery);
 }
@@ -116,7 +115,7 @@ Matrix<MapPixel> ChunkAssembler::get() noexcept {
 // Debug only
 void ChunkAssembler::print_scenery(Scenery s) noexcept {
   MapChunk *c = next_chunk();
-  Matrix<MapPixel> a = assemble_scenery(c, s);
+  Matrix<BlockTile> a = assemble_scenery(c, s);
   std::cout << "Printing scenery" << std::endl;
   for (auto row : a) {
     for (auto x : row)

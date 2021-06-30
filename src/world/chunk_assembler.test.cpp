@@ -16,14 +16,16 @@
 using namespace World;
 using namespace Nostd;
 using namespace Data;
+using namespace Engine;
 
 int main() {
   it("does something better no ask", [] {
     Database d("tests/alma.conf.csv", "tests/assets/", "tests/scoreboard.csv");
     assert(d.map_chunks().size() == 2);
     ChunkAssembler assembler(d.map_chunks(), d.sceneries());
-    // assembler.print_list();
-    Matrix<MapPixel> m = assembler.get();
+    Matrix<BlockTile> m = assembler.get();
+    // per Luca: a te interessa solo il codice qua sopra, in particolare
+    // l'ultima riga. ignora i commenti qua sotto assembler.print_list();
     // assembler.print_scenery(d.sceneries()[0]);
   });
   return 0;

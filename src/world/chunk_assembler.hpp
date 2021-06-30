@@ -14,9 +14,9 @@
 
 #include "../data/map_chunk.hpp"
 #include "../data/scenery.hpp"
+#include "../engine/block_tile.hpp"
 #include "../nostd/matrix.hpp"
 #include "../nostd/vector.hpp"
-#include "map_pixel.hpp"
 #include "random_generator.hpp"
 #include <cstddef>
 
@@ -42,15 +42,15 @@ private:
   // Returns the next Data::MapChunk to draw
   Data::MapChunk *next_chunk() noexcept;
 
-  Nostd::Matrix<MapPixel> assemble_scenery(const Data::MapChunk *,
-                                           const Data::Scenery) const noexcept;
+  Nostd::Matrix<Engine::BlockTile>
+  assemble_scenery(const Data::MapChunk *, const Data::Scenery) const noexcept;
 
 public:
   ChunkAssembler() = delete;
 
   ChunkAssembler(Nostd::Vector<Data::MapChunk>, Nostd::Vector<Data::Scenery>);
 
-  Nostd::Matrix<MapPixel> get() noexcept;
+  Nostd::Matrix<Engine::BlockTile> get() noexcept;
 
   void print_list() const noexcept;
   void print_scenery(Data::Scenery) noexcept;
