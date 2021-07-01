@@ -38,7 +38,7 @@ int main() {
    * L'!')); */
 
   // Sample Hero
-    Data::Pawns::Hero leo{
+  Data::Pawns::Hero leo{
       Engine::Color::red, L'🦁', L"Leo", L"Neat guy.", {}, {}, 9, 4};
   wifstream wifs{"tests/assets/img/heroes.txt"};
   wifs.ignore();
@@ -72,6 +72,7 @@ int main() {
           /*screen.set_content<Menu::Results,
                              const Nostd::List<Data::Pawns::Result> &>(results);
                              */
+          cout << heroes.size() << endl;
           screen.set_content<Menu::Select,
                              const Nostd::Vector<Data::Pawns::Hero> &>(heroes);
           break;

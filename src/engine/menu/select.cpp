@@ -16,12 +16,11 @@
 #include "../screen.hpp"
 #include "../ui/button.hpp"
 #include "../ui/center.hpp"
+#include "../ui/mugshot.hpp"
 #include "../utils.hpp"
 
-/* using Data::Palette::button; */
-/* using Data::Palette::primary; */
+using Data::Palette::primary;
 using Engine::UI::Box;
-/* using Engine::Utils::leftpad; */
 
 Engine::Menu::Select::Select(WINDOW *window,
                              const Nostd::Vector<Data::Pawns::Hero> &heroes)
@@ -29,22 +28,37 @@ Engine::Menu::Select::Select(WINDOW *window,
   max_focused = heroes.size() - 1;
 }
 
-Box *Engine::Menu::Select::generate() { return nullptr; }
+Box *Engine::Menu::Select::generate() {
+  auto root = new UI::Box();
+  auto title = root->append<UI::Center>();
+  title->propb(Box::Property::center_horizontal, true);
+  title->props(Box::Property::padding_top, 1);
+  title->props(Box::Property::padding_bottom, 1);
+  title->append<Engine::UI::TextBox, const wchar_t *>(L"Pick your hero:");
+  title->propc(Box::Property::foreground, primary);
 
-Box *Engine::Menu::Select::curr_box() { return root->child(1)->child(0); }
+  auto c1 = root->append<UI::Center>();
+  auto c2 = c1->append<UI::Center>();
+  c2->propb(Box::Property::center_horizontal, true);
+  for (auto hero : heroes) {
+    c2->append<Engine::UI::Mugshot, const Data::Mugshot &>(hero.mugshot());
+  }
+
+  return root;
+}
+
+Box *Engine::Menu::Select::curr_box() { return root; }
 
 Box *Engine::Menu::Select::next_box() { return curr_box(); }
 
 Box *Engine::Menu::Select::prev_box() { return curr_box(); }
 
-// we have only one button, we moved the whole focusing mechanic to the generate
-// function and leave the tree untouched every update
 void Engine::Menu::Select::focus(Box *box) {}
 void Engine::Menu::Select::unfocus(Box *box) {}
 
 // at the first interaction we close the menu
 void Engine::Menu::Select::interact(Box *box) { clicked_on = focused; }
-bool Engine::Menu::Select::is_over() { return clicked_on != 1; }
+bool Engine::Menu::Select::is_over() { return clicked_on != -1; }
 Data::Pawns::Hero Engine::Menu::Select::get_result() {
   return heroes[clicked_on];
 }
