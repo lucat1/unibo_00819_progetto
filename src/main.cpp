@@ -47,6 +47,8 @@ int main() {
   wifs.close();
   Nostd::Vector<Data::Pawns::Hero> heroes;
   heroes.push_back(leo);
+  heroes.push_back(leo);
+  heroes.push_back(leo);
 
   int key;
   bool running = true;
