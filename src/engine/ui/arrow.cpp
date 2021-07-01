@@ -19,10 +19,12 @@ void Engine::UI::Arrow::show(WINDOW *window, szu x, szu y, szu max_width,
   start_color(window);
   // first half of the arrow
   for (size_t i = 0; i < width; i++) {
-    mvwaddch(window, y + i, x +(left ? width-i-1 : i), left ? L'/' : L'\\');
+    mvwaddch(window, y + i, x + (left ? width - i - 1 : i),
+             left ? L'/' : L'\\');
   }
   for (size_t i = 0; i < width; i++) {
-    mvwaddch(window, y + width + i, x + (left ? i :width - i - 1), left ? L'\\' : L'/');
+    mvwaddch(window, y + width + i, x + (left ? i : width - i - 1),
+             left ? L'\\' : L'/');
   }
   end_color(window);
 }

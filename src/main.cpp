@@ -37,16 +37,23 @@ int main() {
   /* results.push_back(Data::Pawns::Result(L"Benito", 20034, Color::green,
    * L'!')); */
 
-  // Sample Hero
-  Data::Pawns::Hero leo{
-      Engine::Color::red, L'l', L"Leo", L"Neat guy.", {}, {}, 9, 4};
+  Data::Pawns::Hero luca{
+      Engine::Color::grey,
+      L'i',
+      L"Luca",
+      L"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vitae "
+      L"libero congue, molestie lacus ac, tempus ex. Sed eget ultricies lorem.",
+      {},
+      {},
+      10,
+      6};
   wifstream wifs{"tests/assets/img/heroes.txt"};
   wifs.ignore();
   wifs.ignore();
-  wifs >> leo.mugshot();
+  wifs >> luca.mugshot();
   wifs.close();
   Nostd::Vector<Data::Pawns::Hero> heroes;
-  heroes.push_back(leo);
+  heroes.push_back(luca);
 
   int key;
   bool running = true;

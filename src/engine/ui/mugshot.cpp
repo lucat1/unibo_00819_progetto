@@ -28,9 +28,8 @@ void Engine::UI::Mugshot::show(WINDOW *window, szu x, szu y, szu max_width,
       if (x_inc > max_width)
         break;
 
-      int color =
-          Engine::UI::color_pair(color_to_short(cell.value()->foreground()),
-                                 color_to_short(cell.value()->background()));
+      short pixel_color = color_to_short(cell.value());
+      int color = Engine::UI::color_pair(pixel_color, pixel_color);
       Engine::UI::start_color(window, color);
       mvwaddch(window, y + y_inc, x + x_inc, L' ');
       Engine::UI::end_color(window, color);
@@ -42,5 +41,5 @@ void Engine::UI::Mugshot::show(WINDOW *window, szu x, szu y, szu max_width,
 }
 
 Engine::UI::Box::dim Engine::UI::Mugshot::size(szu max_width, szu max_height) {
-  return {(szu)mugshot.side, (szu)mugshot.side};
+  return {(szu)mugshot.width, (szu)mugshot.height};
 }
