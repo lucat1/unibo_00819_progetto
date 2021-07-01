@@ -107,17 +107,18 @@ int main() {
   }
 
   // Sample Hero
-  Data::Pawns::Hero leo{
-      Engine::Color::red, L'🦁', L"Leo", L"Neat guy.", {}, {}, 9, 4};
+  Data::Pawns::Hero luca{Engine::Color::grey,
+                         L'i',
+                         L"Luca",
+                         L"A fearless warrior.",
+                         {},
+                         {},
+                         10,
+                         6};
   wifstream wifs{"tests/assets/img/heroes.txt"};
   wifs.ignore();
   wifs.ignore();
-  wifs >> leo.mugshot();
-  for (auto &row : leo.mugshot()) {
-    for (auto &cell : row)
-      std::wcerr << cell.value()->character();
-    std::wcerr << L'\n';
-  }
+  wifs >> luca.mugshot();
   wifs.close();
   return 0;
 }

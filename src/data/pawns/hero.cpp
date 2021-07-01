@@ -26,7 +26,8 @@ using Data::Pawns::Skill;
 Hero::Hero(Engine::Color foreground, wchar_t character,
            const Nostd::WString &name, const Nostd::WString &description,
            Skill skill, Skill superSkill, int health, int mana)
-    : Engine::EntityTile{character, foreground},
+    : Engine::EntityTile{character, foreground}, Pawn{name, character,
+                                                      foreground},
       Character{name, character, foreground, skill}, dsc{description},
       ssk{superSkill}, curH{health}, maxH{health}, curM{0}, maxM{mana}, scr{0} {
   if (maxH <= 0)

@@ -48,7 +48,7 @@ protected:
     In this case, though, we want child classes to have unrestricted write
     privileges to a data member, and the general user to have none.
   */
-  Nostd::WString nm{};
+  Nostd::WString nm{L"???"};
   bool movedFrom{false};
 };
 

@@ -21,9 +21,10 @@ using Data::Pawns::Enemy;
 Enemy::Enemy(Engine::Color foreground, wchar_t character,
              const Nostd::WString &name, Skill skill, int healthDamage,
              int manaDamage, int scoreDamage, int behavior)
-    : Engine::EntityTile{character, foreground}, Character{name, character,
-                                                           foreground, skill},
-      hD{healthDamage}, mD{manaDamage}, sD{scoreDamage}, bhv{behavior} {
+    : Engine::EntityTile{character, foreground}, Pawn{name, character,
+                                                      foreground},
+      Character{name, character, foreground, skill}, hD{healthDamage},
+      mD{manaDamage}, sD{scoreDamage}, bhv{behavior} {
   if (hD < 0)
     throw std::invalid_argument("Health damage must be positive.");
   if (mD < 0)
