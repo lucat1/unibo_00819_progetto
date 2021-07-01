@@ -28,12 +28,11 @@ void Engine::UI::Mugshot::show(WINDOW *window, szu x, szu y, szu max_width,
       if (x_inc > max_width)
         break;
 
-      wchar_t ch = cell.value()->character();
       int color =
           Engine::UI::color_pair(color_to_short(cell.value()->foreground()),
                                  color_to_short(cell.value()->background()));
       Engine::UI::start_color(window, color);
-      mvwaddch(window, y + y_inc, x + x_inc, ch);
+      mvwaddch(window, y + y_inc, x + x_inc, L' ');
       Engine::UI::end_color(window, color);
       x_inc++;
     }

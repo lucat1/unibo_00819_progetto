@@ -28,7 +28,7 @@ private:
 
 public:
   Mugshot(const Data::Mugshot &mugshot);
-  // overwrite as a noop in this class, colors are defined by mugshot's tiles
+  // overwrite as a noop in this class, colors are defined by mugshot's cells
   void propc(Box::Property key, Color color);
 
   void show(WINDOW *window, szu x, szu y, szu max_width, szu max_height);

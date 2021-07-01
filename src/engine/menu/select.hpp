@@ -25,7 +25,8 @@ private:
   const Nostd::Vector<Data::Pawns::Hero> &heroes;
   int focused = 0, max_focused;
   int clicked_on = -1;
-  void add_arrow(UI::Box *root, bool left);
+  void append_arrow(UI::Box *root, bool left);
+  void append_title(UI::Box *root);
 
 protected:
   UI::Box *generate();
