@@ -39,21 +39,40 @@ int main() {
 
   Data::Pawns::Hero luca{
       Engine::Color::grey,
-      L'i',
+      L'l',
       L"Luca",
       L"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vitae "
       L"libero congue, molestie lacus ac, tempus ex. Sed eget ultricies lorem.",
       {},
       {},
-      10,
-      6};
+      3200,
+      1800};
   wifstream wifs{"tests/assets/img/heroes.txt"};
   wifs.ignore();
   wifs.ignore();
   wifs >> luca.mugshot();
   wifs.close();
+
+  Data::Pawns::Hero stefano{
+      Engine::Color::grey,
+      L's',
+      L"Stef",
+      L"Fusce efficitur quis arcu et efficitur. Aenean justo libero, ultricies "
+      L"nec elementum sed, molestie id tellus. Pellentesque aliquam diam eget "
+      L"urna lacinia euismod. Proin non erat interdum augue faucibus pulvinar "
+      L"ut vel libero.",
+      {},
+      {},
+      1337,
+      1337};
+  wifstream wifs2{"tests/assets/img/heroes.txt"};
+  wifs2.ignore();
+  wifs2.ignore();
+  wifs2 >> stefano.mugshot();
+  wifs2.close();
   Nostd::Vector<Data::Pawns::Hero> heroes;
   heroes.push_back(luca);
+  heroes.push_back(stefano);
 
   int key;
   bool running = true;

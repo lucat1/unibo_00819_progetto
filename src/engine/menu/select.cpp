@@ -15,10 +15,10 @@
 #include "../../data/palette.hpp"
 #include "../screen.hpp"
 #include "../ui/arrow.hpp"
-#include "../ui/button.hpp"
 #include "../ui/center.hpp"
 #include "../ui/mugshot.hpp"
 #include "../ui/strict_box.hpp"
+#include "../ui/text_box.hpp"
 #include "../utils.hpp"
 
 using Engine::UI::Box;
@@ -37,7 +37,11 @@ void Engine::Menu::Select::append_arrow(UI::Box *root, bool left) {
   wrapper->props(left ? Box::Property::padding_left
                       : Box::Property::padding_right,
                  arrow_padding);
-  wrapper->append<UI::Arrow>(left);
+  auto arrow = wrapper->append<UI::Arrow>(left);
+  if (heroes.size() > 1)
+    arrow->propc(Box::Property::foreground, Data::Palette::button.first);
+  else
+    arrow->propc(Box::Property::foreground, Data::Palette::button.second);
 }
 
 void Engine::Menu::Select::append_title(UI::Box *root) {
@@ -107,14 +111,21 @@ Box *Engine::Menu::Select::generate() {
   return root;
 }
 
-Box *Engine::Menu::Select::curr_box() { return root; }
+void Engine::Menu::Select::increment(Box *parent_box) {
+  focused = focused == max_focused ? 0 : focused + 1;
+  root = generate();
+}
+void Engine::Menu::Select::decrement(Box *parent_box) {
+  focused = focused == 0 ? max_focused : focused - 1;
+  root = generate();
+}
 
-Box *Engine::Menu::Select::next_box() { return curr_box(); }
-
-Box *Engine::Menu::Select::prev_box() { return curr_box(); }
-
+// noops
 void Engine::Menu::Select::focus(Box *box) {}
 void Engine::Menu::Select::unfocus(Box *box) {}
+Box *Engine::Menu::Select::curr_box() { return root; }
+Box *Engine::Menu::Select::next_box() { return root; }
+Box *Engine::Menu::Select::prev_box() { return root; }
 
 // at the first interaction we close the menu
 void Engine::Menu::Select::interact(Box *box) { clicked_on = focused; }
@@ -122,7 +133,3 @@ bool Engine::Menu::Select::is_over() { return clicked_on != -1; }
 Data::Pawns::Hero Engine::Menu::Select::get_result() {
   return heroes[clicked_on];
 }
-
-// no behaviour defiend for the results menu
-void Engine::Menu::Select::decrement(Box *) {}
-void Engine::Menu::Select::increment(Box *) {}
