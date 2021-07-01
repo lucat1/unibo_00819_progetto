@@ -20,7 +20,7 @@ void handle(bool can_display) {
 }
 
 int main() {
-  /*Screen screen;
+  Screen screen;
   handle(screen.open());
   screen.set_content<Menu::Main>();
   Nostd::Vector<Data::Setting> settings;
@@ -104,7 +104,7 @@ int main() {
       // ignore ncurses's getch errors
       break;
     };
-  }*/
+  }
 
   // Sample Hero
   Data::Pawns::Hero luca{Engine::Color::grey,
