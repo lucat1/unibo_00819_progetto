@@ -39,9 +39,9 @@ void Hero::rename(const Nostd::WString &s) { Pawn::nm = s; }
 
 const Nostd::WString &Hero::description() const noexcept { return dsc; }
 
-const Mugshot &Hero::getMugshot() const noexcept { return mug; }
+Mugshot &Hero::mugshot() noexcept { return mug; }
 
-void Hero::setMugshot(const Mugshot &mugshot) { mug = mugshot; }
+const Mugshot &Hero::mugshot() const noexcept { return mug; }
 
 Skill Hero::superSkill() const noexcept { return ssk; }
 

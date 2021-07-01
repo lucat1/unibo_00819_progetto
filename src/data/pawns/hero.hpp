@@ -42,8 +42,8 @@ public:
 
   void rename(const Nostd::WString &);
   const Nostd::WString &description() const noexcept;
-  const Mugshot &getMugshot() const noexcept;
-  void setMugshot(const Mugshot &);
+  Mugshot &mugshot() noexcept;
+  const Mugshot &mugshot() const noexcept;
   Skill superSkill() const noexcept;
   void interact(Interactable &);
   int currentHealth() const noexcept;

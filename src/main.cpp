@@ -38,15 +38,13 @@ int main() {
    * L'!')); */
 
   // Sample Hero
-  Data::Pawns::Hero leo{
+    Data::Pawns::Hero leo{
       Engine::Color::red, L'🦁', L"Leo", L"Neat guy.", {}, {}, 9, 4};
   wifstream wifs{"tests/assets/img/heroes.txt"};
   wifs.ignore();
   wifs.ignore();
-  Data::Mugshot m{};
-  wifs >> m;
+  wifs >> leo.mugshot();
   wifs.close();
-  leo.setMugshot(m);
   Nostd::Vector<Data::Pawns::Hero> heroes;
   heroes.push_back(leo);
 
@@ -125,6 +123,5 @@ int main() {
       break;
     };
   }
-
   return 0;
 }
