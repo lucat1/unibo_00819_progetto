@@ -26,7 +26,6 @@ void Engine::UI::TextBox::update_lines(szu max_width) {
   old_max_width = max_width;
 }
 
-// TODO: consider max_height?
 Engine::UI::TextBox::strings
 Engine::UI::TextBox::split_content(const Nostd::WString content,
                                    szu max_width) {
@@ -66,7 +65,10 @@ void Engine::UI::TextBox::show(WINDOW *window, szu x, szu y, szu max_width,
   update_lines(max_width);
   start_color(window);
 
-  for (size_t i = 0; i < lines.size(); i++) {
+  // max_height is respected, maybe we could add trialing dots as a proper
+  // termination to the string. Right now it's quite rough but respecitng the
+  // size is the first priority.
+  for (size_t i = 0; i < std::min(max_height, (szu)lines.size()); i++) {
     auto line = lines[i];
     mvwaddwstr(window, y + i, x + (fr ? max_width - line.length() : 0),
                line.c_str());
@@ -79,7 +81,8 @@ void Engine::UI::TextBox::show(WINDOW *window, szu x, szu y, szu max_width,
 Engine::UI::Box::dim Engine::UI::TextBox::size(szu max_width, szu max_height) {
   update_lines(max_width);
   szu height = std::min((szu)lines.size(), max_height);
-  szu width =
-      std::min((szu)(lines.size() > 0 ? lines.at(0).length() : 0), max_width);
+  szu width = fr ? max_width
+                 : std::min((szu)(lines.size() > 0 ? lines.at(0).length() : 0),
+                            max_width);
   return {width, height};
 }
