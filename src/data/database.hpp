@@ -16,7 +16,6 @@
 #include <ostream>
 
 #include "../nostd/list.hpp"
-#include "../nostd/unordered_map.hpp"
 #include "../nostd/vector.hpp"
 #include "../nostd/wstring.hpp"
 #include "map_chunk.hpp"
@@ -69,17 +68,14 @@ public:
   const Nostd::List<Pawns::Result> &results() const noexcept;
   void save_results() const; // saves current high scores to filesystem
 
-  Nostd::UnorderedMap<Nostd::WString, Pawns::Hero> &heroes() noexcept;
-  const Nostd::UnorderedMap<Nostd::WString, Pawns::Hero> &
-  heroes() const noexcept;
+  Nostd::Vector<Pawns::Hero> &heroes() noexcept;
+  const Nostd::Vector<Pawns::Hero> &heroes() const noexcept;
 
-  Nostd::UnorderedMap<Nostd::WString, Pawns::Enemy> &enemies() noexcept;
-  const Nostd::UnorderedMap<Nostd::WString, Pawns::Enemy> &
-  enemies() const noexcept;
+  Nostd::Vector<Pawns::Enemy> &enemies() noexcept;
+  const Nostd::Vector<Pawns::Enemy> &enemies() const noexcept;
 
-  Nostd::UnorderedMap<Nostd::WString, Pawns::Item> &items() noexcept;
-  const Nostd::UnorderedMap<Nostd::WString, Pawns::Item> &
-  items() const noexcept;
+  Nostd::Vector<Pawns::Item> &items() noexcept;
+  const Nostd::Vector<Pawns::Item> &items() const noexcept;
 
 private:
   char *conf, *scor;
@@ -87,9 +83,9 @@ private:
   Nostd::Vector<MapChunk> map{};
   Nostd::Vector<Scenery> sce{};
   Nostd::List<Pawns::Result> res{};
-  Nostd::UnorderedMap<Nostd::WString, Pawns::Hero> her{};
-  Nostd::UnorderedMap<Nostd::WString, Pawns::Enemy> ene{};
-  Nostd::UnorderedMap<Nostd::WString, Pawns::Item> ite{};
+  Nostd::Vector<Pawns::Hero> her{};
+  Nostd::Vector<Pawns::Enemy> ene{};
+  Nostd::Vector<Pawns::Item> ite{};
 
   char *newstrcpy(const char *) const;
   char *newstrcat(const char *, const char *) const;

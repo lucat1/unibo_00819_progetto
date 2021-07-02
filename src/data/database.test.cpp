@@ -48,21 +48,21 @@ int main() {
     // Heroes
     const auto &h = d.heroes();
     assert(h.size() == 4);
-    assert(h.contains(L"Luca"));
-    assert(h.contains(L"Andreea"));
-    assert(h.contains(L"Mattia"));
-    assert(h.contains(L"Stefano"));
+    assert(h.at(0).name() == L"Luca");
+    assert(h.at(1).name() == L"Andreea");
+    assert(h.at(2).name() == L"Mattia");
+    assert(h.at(3).name() == L"Stefano");
     // Enemies
     const auto &e = d.enemies();
     assert(e.size() == 3);
-    assert(e.contains(L"Goomba"));
-    assert(e.contains(L"Neko"));
-    assert(e.contains(L"Unicorn"));
+    assert(e.at(0).name() == L"Goomba");
+    assert(e.at(1).name() == L"Neko");
+    assert(e.at(2).name() == L"Unicorn");
     // Items
     const auto &i = d.items();
     assert(i.size() == 2);
-    assert(i.contains(L"Mushroom"));
-    assert(i.contains(L"Star"));
+    assert(i.at(0).name() == L"Mushroom");
+    assert(i.at(1).name() == L"Star");
   });
   it("saves user settings on filesystem", [] {
     Database d("tests/alma.conf.csv", "tests/assets/", "tests/scoreboard.csv");

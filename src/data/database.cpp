@@ -133,31 +133,21 @@ void Database::save_results() const {
   wofs.close();
 }
 
-Nostd::UnorderedMap<Nostd::WString, Pawns::Hero> &Database::heroes() noexcept {
+Nostd::Vector<Pawns::Hero> &Database::heroes() noexcept { return her; }
+
+const Nostd::Vector<Pawns::Hero> &Database::heroes() const noexcept {
   return her;
 }
 
-const Nostd::UnorderedMap<Nostd::WString, Pawns::Hero> &
-Database::heroes() const noexcept {
-  return her;
-}
+Nostd::Vector<Pawns::Enemy> &Database::enemies() noexcept { return ene; }
 
-Nostd::UnorderedMap<Nostd::WString, Pawns::Enemy> &
-Database::enemies() noexcept {
+const Nostd::Vector<Pawns::Enemy> &Database::enemies() const noexcept {
   return ene;
 }
 
-const Nostd::UnorderedMap<Nostd::WString, Pawns::Enemy> &
-Database::enemies() const noexcept {
-  return ene;
-}
+Nostd::Vector<Pawns::Item> &Database::items() noexcept { return ite; }
 
-Nostd::UnorderedMap<Nostd::WString, Pawns::Item> &Database::items() noexcept {
-  return ite;
-}
-
-const Nostd::UnorderedMap<Nostd::WString, Pawns::Item> &
-Database::items() const noexcept {
+const Nostd::Vector<Pawns::Item> &Database::items() const noexcept {
   return ite;
 }
 
@@ -238,7 +228,7 @@ void Database::load_heroes(const char *assets_filepath) {
   delete heroes_fp;
   Hero h{Engine::Color::transparent, L' ', L"", L"", {}, {}, 1, 1};
   while (wifs >> h)
-    her.put(h.name(), h);
+    her.push_back(h);
   wifs.close();
 }
 
@@ -249,7 +239,7 @@ void Database::load_mugshots(const char *assets_filepath) {
   for (auto &x : her) {
     if (!ifs)
       throw std::length_error("Not enough mugshots.");
-    ifs >> x->second.mugshot();
+    ifs >> x.mugshot();
   }
   ifs.close();
 }
@@ -260,7 +250,7 @@ void Database::load_enemies(const char *assets_filepath) {
   delete enemies_fp;
   Enemy e{Engine::Color::transparent, L' ', L"", {}, 0, 0, 0, 1};
   while (wifs >> e)
-    ene.put(e.name(), e);
+    ene.push_back(e);
   wifs.close();
 }
 
@@ -270,7 +260,7 @@ void Database::load_items(const char *assets_filepath) {
   delete items_fp;
   Item i{Engine::Color::transparent, L' ', L"", 0, false, 0, false, 0};
   while (wifs >> i)
-    ite.put(i.name(), i);
+    ite.push_back(i);
   wifs.close();
 }
 

@@ -52,14 +52,9 @@ int main() {
                              const Nostd::List<Data::Pawns::Result>
              &>(d.results());
                              */
-          {
-            Nostd::Vector<Data::Pawns::Hero> heroes(d.heroes().size());
-            for (size_t i{0}; i < d.heroes().size(); ++i)
-              heroes.at(i) = d.heroes().as_vector().at(i)->second;
-            screen.set_content<Menu::Select,
-                               const Nostd::Vector<Data::Pawns::Hero> &>(
-                heroes);
-          }
+          screen.set_content<Menu::Select,
+                             const Nostd::Vector<Data::Pawns::Hero> &>(
+              d.heroes());
           break;
         default:
           break;
