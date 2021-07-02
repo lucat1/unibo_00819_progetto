@@ -45,7 +45,7 @@ int main() {
     assert(r.size() == 4);
     assert(r.cbegin()->score() == 8000000);
     assert(r.cend()->name() == L"Stefano");
-    /*// Heroes
+    // Heroes
     const auto &h = d.heroes();
     assert(h.size() == 4);
     assert(h.contains(L"Luca"));
@@ -53,16 +53,16 @@ int main() {
     assert(h.contains(L"Mattia"));
     assert(h.contains(L"Stefano"));
     // Enemies
-    const auto &h = d.enemies();
+    const auto &e = d.enemies();
     assert(e.size() == 3);
     assert(e.contains(L"Goomba"));
     assert(e.contains(L"Neko"));
     assert(e.contains(L"Unicorn"));
     // Items
-    const auto &e = d.items();
+    const auto &i = d.items();
     assert(i.size() == 2);
     assert(i.contains(L"Mushroom"));
-    assert(i.contains(L"Star"));*/
+    assert(i.contains(L"Star"));
   });
   it("saves user settings on filesystem", [] {
     Database d("tests/alma.conf.csv", "tests/assets/", "tests/scoreboard.csv");

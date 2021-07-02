@@ -52,16 +52,14 @@ Data::Pawns::operator>>(std::basic_istream<wchar_t> &is, Skill &s) {
     (is >> x).ignore();
     (is >> y).ignore();
     Projectile p{Engine::Color::transparent, L' ', L"", 0, 0, 0, 0};
-    is >> p;
+    (is >> p).ignore();
     projectiles.put({x, y}, p);
   }
   int healthEffect;
   (is >> healthEffect).ignore();
   bool healthMode;
-  if (is >> healthMode) {
+  if (is >> healthMode)
     s = Skill(projectiles, healthEffect, healthMode);
-    is.ignore();
-  }
   return is;
 }
 

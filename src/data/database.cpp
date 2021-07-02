@@ -13,7 +13,6 @@
 
 #include <cstring>
 #include <fstream>
-#include <iostream>
 #include <utility>
 
 #include "../engine/colorable.hpp"
@@ -45,7 +44,6 @@ Database::Database(const char *configuration, const char *assets,
   load_heroes(assets);
   load_enemies(assets);
   load_items(assets);
-  // TODO
 }
 
 Database::Database(Database &&d) {
@@ -61,7 +59,6 @@ Database::Database(Database &&d) {
   her = move(d.her);
   ene = move(d.ene);
   ite = move(d.ite);
-  // TODO
 }
 
 Database &Database::operator=(Database &&d) {
@@ -79,7 +76,6 @@ Database &Database::operator=(Database &&d) {
   her = move(d.her);
   ene = move(d.ene);
   ite = move(d.ite);
-  // TODO
   return *this;
 }
 
@@ -95,7 +91,6 @@ Database &Database::operator=(const Database &d) {
   her = d.her;
   ene = d.ene;
   ite = d.ite;
-  // TODO
   return *this;
 }
 
@@ -236,33 +231,33 @@ void Database::load_results() {
 }
 
 void Database::load_heroes(const char *assets_filepath) {
-  /*const char *const heroes_fp{newstrcat(assets_filepath, heroes_rel_fp)};
+  const char *const heroes_fp{newstrcat(assets_filepath, heroes_rel_fp)};
   wifstream wifs{heroes_fp};
   delete heroes_fp;
   Hero h{Engine::Color::transparent, L' ', L"", L"", {}, {}, 1, 1};
   while (wifs >> h)
     her.put(h.name(), h);
-  wifs.close();*/
+  wifs.close();
 }
 
 void Database::load_enemies(const char *assets_filepath) {
-  /*const char *const enemies_fp{newstrcat(assets_filepath, enemies_rel_fp)};
+  const char *const enemies_fp{newstrcat(assets_filepath, enemies_rel_fp)};
   wifstream wifs{enemies_fp};
   delete enemies_fp;
   Enemy e{Engine::Color::transparent, L' ', L"", {}, 0, 0, 0, 1};
   while (wifs >> e)
     ene.put(e.name(), e);
-  wifs.close();*/
+  wifs.close();
 }
 
 void Database::load_items(const char *assets_filepath) {
-  /*const char *const items_fp{newstrcat(assets_filepath, items_rel_fp)};
+  const char *const items_fp{newstrcat(assets_filepath, items_rel_fp)};
   wifstream wifs{items_fp};
   delete items_fp;
   Item i{Engine::Color::transparent, L' ', L"", 0, false, 0, false, 0};
   while (wifs >> i)
     ite.put(i.name(), i);
-  wifs.close();*/
+  wifs.close();
 }
 
 std::basic_istream<wchar_t> &
