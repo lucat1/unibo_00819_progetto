@@ -29,13 +29,16 @@ class Projectile : public Interactable {
 public:
   Projectile(Engine::Color foreground, wchar_t character,
              const Nostd::WString &name, int healthDamage, int manaDamage,
-             int scoreDamage);
+             int scoreDamage, int range);
   Projectile(Projectile &&) = default;
   Projectile &operator=(Projectile &&) = default;
   Projectile(const Projectile &) = default;
   Projectile &operator=(const Projectile &) = default;
 
   ~Projectile() = default;
+
+  void countMovement();
+  bool isExpired() const noexcept;
 
   friend std::basic_ostream<wchar_t> &operator>>(std::basic_ostream<wchar_t> &,
                                                  const Projectile &);
@@ -46,7 +49,7 @@ protected:
   int uncheckedScoreEffect(int currentScore) override final;
 
 private:
-  int hD, mD, sD;
+  int hD, mD, sD, rng;
 };
 
 std::basic_istream<wchar_t> &operator>>(std::basic_istream<wchar_t> &,

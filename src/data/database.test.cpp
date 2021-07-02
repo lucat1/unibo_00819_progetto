@@ -27,19 +27,19 @@ int main() {
     assert(s.at(1).size() == 3);
     // Map chunks
     const auto &m = d.map_chunks();
-    assert(m.size() == 2);
+    assert(m.size() == 10);
     assert(m.at(0).ending_row() == 16);
     assert(m.at(0).at(19).at(30).value() == Data::MapUnit::ground);
-    assert(m.at(1).starting_row() == 16);
-    assert(m.at(1).at(5).at(69).value() == Data::MapUnit::item);
+    assert(m.at(4).starting_row() == 16);
+    assert(m.at(4).at(5).at(69).value() == Data::MapUnit::item);
     // Sceneries
     const auto &sc = d.sceneries();
-    assert(sc.size() == 1);
-    assert(sc.at(0).ground.foreground == Engine::Color::red);
+    assert(sc.size() == 3);
+    assert(sc.at(0).ground.foreground == Engine::Color::grey7);
     assert(sc.at(0).ground.center == L'#');
-    assert(sc.at(0).platform.background == Engine::Color::maroon);
-    assert(sc.at(0).sky.size() == 2);
-    assert(sc.at(0).sky.at(1) == Engine::Color::blue3_1);
+    assert(sc.at(0).platform.background == Engine::Color::grey7);
+    assert(sc.at(0).sky.size() == 3);
+    assert(sc.at(0).sky.at(1) == Engine::Color::dodger_blue3);
     // Results
     const auto &r = d.results();
     assert(r.size() == 4);

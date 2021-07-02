@@ -39,10 +39,6 @@ public:
 
   UnorderedMap() {}
 
-  ~UnorderedMap() {
-    for (size_t i{0}; i < data.size(); i++)
-      delete data[i];
-  }
   // Add new key and value to the map
   void put(K key, V value) override {
     for (size_t i = 0; i < data.size(); i++) {

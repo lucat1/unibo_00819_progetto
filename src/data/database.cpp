@@ -13,6 +13,7 @@
 
 #include <cstring>
 #include <fstream>
+#include <iostream>
 #include <utility>
 
 #include "../engine/colorable.hpp"
