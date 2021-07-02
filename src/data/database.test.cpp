@@ -54,15 +54,14 @@ int main() {
     assert(h.at(3).name() == L"Stefano");
     // Enemies
     const auto &e = d.enemies();
-    assert(e.size() == 3);
-    assert(e.at(0).name() == L"Goomba");
-    assert(e.at(1).name() == L"Neko");
-    assert(e.at(2).name() == L"Unicorn");
+    assert(e.size() == 7);
+    assert(e.at(0).name() == L"boulder");
+    assert(e.at(1).name() == L"snake");
     // Items
     const auto &i = d.items();
-    assert(i.size() == 2);
-    assert(i.at(0).name() == L"Mushroom");
-    assert(i.at(1).name() == L"Star");
+    assert(i.size() == 7);
+    assert(i.at(0).name() == L"small mushroom");
+    assert(i.at(1).name() == L"mushroom");
   });
   it("saves user settings on filesystem", [] {
     Database d("tests/alma.conf.csv", "tests/assets/", "tests/scoreboard.csv");
