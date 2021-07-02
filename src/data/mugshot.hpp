@@ -36,8 +36,7 @@ public:
   constexpr static size_t width{24}, height{12};
 };
 
-std::basic_istream<wchar_t> &operator>>(std::basic_istream<wchar_t> &,
-                                        Mugshot &);
+std::istream &operator>>(std::istream &, Mugshot &);
 
 } // namespace Data
 

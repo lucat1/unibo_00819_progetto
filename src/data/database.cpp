@@ -13,6 +13,7 @@
 
 #include <cstring>
 #include <fstream>
+#include <stdexcept>
 #include <utility>
 
 #include "../engine/colorable.hpp"
@@ -42,6 +43,7 @@ Database::Database(const char *configuration, const char *assets,
   load_sceneries(assets);
   load_results();
   load_heroes(assets);
+  load_mugshots(assets);
   load_enemies(assets);
   load_items(assets);
 }
@@ -238,6 +240,18 @@ void Database::load_heroes(const char *assets_filepath) {
   while (wifs >> h)
     her.put(h.name(), h);
   wifs.close();
+}
+
+void Database::load_mugshots(const char *assets_filepath) {
+  const char *const mugshots_fp{newstrcat(assets_filepath, mugshots_rel_fp)};
+  ifstream ifs{mugshots_fp};
+  delete mugshots_fp;
+  for (auto &x : her) {
+    if (!ifs)
+      throw std::length_error("Not enough mugshots.");
+    ifs >> x->second.mugshot();
+  }
+  ifs.close();
 }
 
 void Database::load_enemies(const char *assets_filepath) {

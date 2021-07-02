@@ -41,8 +41,9 @@ public:
       *const maps_rel_fp{"/img/maps.txt"},
           *const sceneries_rel_fp{"/img/sceneries.txt"},
               *const heroes_rel_fp{"/csv/heroes.csv"},
-                  *const enemies_rel_fp{"/csv/enemies.csv"},
-                      *const items_rel_fp{"/csv/items.csv"};
+                  *const mugshots_rel_fp{"/img/heroes.txt"},
+                      *const enemies_rel_fp{"/csv/enemies.csv"},
+                          *const items_rel_fp{"/csv/items.csv"};
 
   Database() = delete; // cannot constructs a database from nothing
   Database(const char *configuration, const char *assets,
@@ -97,6 +98,7 @@ private:
   void load_sceneries(const char *assets_filepath);
   void load_results();
   void load_heroes(const char *assets_filepath);
+  void load_mugshots(const char *assets_filepath);
   void load_enemies(const char *assets_filepath);
   void load_items(const char *assets_filepath);
 };
