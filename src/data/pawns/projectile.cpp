@@ -66,10 +66,8 @@ Data::Pawns::operator>>(std::basic_istream<wchar_t> &is, Projectile &p) {
   (is >> healthDamage).ignore();
   (is >> manaDamage).ignore();
   (is >> scoreDamage).ignore();
-  if (is >> range) {
+  if (is >> range)
     p = Projectile(Engine::short_to_color(foreground), character, name,
                    healthDamage, manaDamage, scoreDamage, range);
-    is.ignore();
-  }
   return is;
 }

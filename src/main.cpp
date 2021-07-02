@@ -1,8 +1,6 @@
 #include "engine/menu/main.hpp"
-#include "data/mugshot.hpp"
-#include "data/pawns/hero.hpp"
+#include "data/database.hpp"
 #include "engine/colorable.hpp"
-// #include "engine/menu/results.hpp"
 #include "engine/menu/select.hpp"
 #include "engine/menu/settings.hpp"
 #include "engine/screen.hpp"
@@ -21,58 +19,12 @@ void handle(bool can_display) {
 }
 
 int main() {
+  Data::Database d("tests/alma.conf.csv", "tests/assets/",
+                   "tests/scoreboard.csv");
+
   Screen screen;
   handle(screen.open());
   screen.set_content<Menu::Main>();
-  Nostd::Vector<Data::Setting> settings;
-  settings.push_back(Data::Setting(L"Sound", 0, 2, 1, 0, 1));
-  settings.push_back(Data::Setting(L"Frames Per Second", 30, 3, 30, 1));
-
-  // TODO: properly by calling database.results()
-  /* Nostd::List<Data::Pawns::Result> results; */
-  /* results.push_back(Data::Pawns::Result(L"Lienin", 100293, Color::red,
-   * L'=')); */
-  /* results.push_back(Data::Pawns::Result(L"Adolf", 98666, Color::yellow,
-   * L'/')); */
-  /* results.push_back(Data::Pawns::Result(L"Benito", 20034, Color::green,
-   * L'!')); */
-
-  Data::Pawns::Hero luca{
-      Engine::Color::grey,
-      L'l',
-      L"Luca",
-      L"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vitae "
-      L"libero congue, molestie lacus ac, tempus ex. Sed eget ultricies lorem.",
-      {},
-      {},
-      3200,
-      1800};
-  wifstream wifs{"tests/assets/img/heroes.txt"};
-  wifs.ignore();
-  wifs.ignore();
-  wifs >> luca.mugshot();
-  wifs.close();
-
-  Data::Pawns::Hero stefano{
-      Engine::Color::grey,
-      L's',
-      L"Stef",
-      L"Fusce efficitur quis arcu et efficitur. Aenean justo libero, ultricies "
-      L"nec elementum sed, molestie id tellus. Pellentesque aliquam diam eget "
-      L"urna lacinia euismod. Proin non erat interdum augue faucibus pulvinar "
-      L"ut vel libero.",
-      {},
-      {},
-      1337,
-      1337};
-  wifstream wifs2{"tests/assets/img/heroes.txt"};
-  wifs2.ignore();
-  wifs2.ignore();
-  wifs2 >> stefano.mugshot();
-  wifs2.close();
-  Nostd::Vector<Data::Pawns::Hero> heroes;
-  heroes.push_back(luca);
-  heroes.push_back(stefano);
 
   int key;
   bool running = true;
@@ -91,23 +43,25 @@ int main() {
           break;
         case Menu::Main::Result::settings:
           screen.set_content<Menu::Settings,
-                             const Nostd::Vector<Data::Setting> &>(settings);
+                             const Nostd::Vector<Data::Setting> &>(
+              d.settings());
           break;
         case Menu::Main::Result::play:
           // TODO: change me
           /*screen.set_content<Menu::Results,
-                             const Nostd::List<Data::Pawns::Result> &>(results);
+                             const Nostd::List<Data::Pawns::Result>
+             &>(d.results());
                              */
-          cout << heroes.size() << endl;
           screen.set_content<Menu::Select,
-                             const Nostd::Vector<Data::Pawns::Hero> &>(heroes);
+                             const Nostd::Vector<Data::Pawns::Hero> &>(
+              d.heroes());
           break;
         default:
           break;
         }
       } else {
         if (screen.is_content<Menu::Settings>())
-          settings = screen.get_content<Menu::Settings>()->get_result();
+          d.settings() = screen.get_content<Menu::Settings>()->get_result();
 
         // always go back to the main menu after some menus close
         screen.set_content<Menu::Main>();

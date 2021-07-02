@@ -13,7 +13,7 @@
 
 #include <cstring>
 #include <fstream>
-#include <iostream>
+#include <stdexcept>
 #include <utility>
 
 #include "../engine/colorable.hpp"
@@ -43,9 +43,9 @@ Database::Database(const char *configuration, const char *assets,
   load_sceneries(assets);
   load_results();
   load_heroes(assets);
+  load_mugshots(assets);
   load_enemies(assets);
   load_items(assets);
-  // TODO
 }
 
 Database::Database(Database &&d) {
@@ -61,7 +61,6 @@ Database::Database(Database &&d) {
   her = move(d.her);
   ene = move(d.ene);
   ite = move(d.ite);
-  // TODO
 }
 
 Database &Database::operator=(Database &&d) {
@@ -79,7 +78,6 @@ Database &Database::operator=(Database &&d) {
   her = move(d.her);
   ene = move(d.ene);
   ite = move(d.ite);
-  // TODO
   return *this;
 }
 
@@ -95,7 +93,6 @@ Database &Database::operator=(const Database &d) {
   her = d.her;
   ene = d.ene;
   ite = d.ite;
-  // TODO
   return *this;
 }
 
@@ -136,31 +133,21 @@ void Database::save_results() const {
   wofs.close();
 }
 
-Nostd::UnorderedMap<Nostd::WString, Pawns::Hero> &Database::heroes() noexcept {
+Nostd::Vector<Pawns::Hero> &Database::heroes() noexcept { return her; }
+
+const Nostd::Vector<Pawns::Hero> &Database::heroes() const noexcept {
   return her;
 }
 
-const Nostd::UnorderedMap<Nostd::WString, Pawns::Hero> &
-Database::heroes() const noexcept {
-  return her;
-}
+Nostd::Vector<Pawns::Enemy> &Database::enemies() noexcept { return ene; }
 
-Nostd::UnorderedMap<Nostd::WString, Pawns::Enemy> &
-Database::enemies() noexcept {
+const Nostd::Vector<Pawns::Enemy> &Database::enemies() const noexcept {
   return ene;
 }
 
-const Nostd::UnorderedMap<Nostd::WString, Pawns::Enemy> &
-Database::enemies() const noexcept {
-  return ene;
-}
+Nostd::Vector<Pawns::Item> &Database::items() noexcept { return ite; }
 
-Nostd::UnorderedMap<Nostd::WString, Pawns::Item> &Database::items() noexcept {
-  return ite;
-}
-
-const Nostd::UnorderedMap<Nostd::WString, Pawns::Item> &
-Database::items() const noexcept {
+const Nostd::Vector<Pawns::Item> &Database::items() const noexcept {
   return ite;
 }
 
@@ -236,33 +223,45 @@ void Database::load_results() {
 }
 
 void Database::load_heroes(const char *assets_filepath) {
-  /*const char *const heroes_fp{newstrcat(assets_filepath, heroes_rel_fp)};
+  const char *const heroes_fp{newstrcat(assets_filepath, heroes_rel_fp)};
   wifstream wifs{heroes_fp};
   delete heroes_fp;
   Hero h{Engine::Color::transparent, L' ', L"", L"", {}, {}, 1, 1};
   while (wifs >> h)
-    her.put(h.name(), h);
-  wifs.close();*/
+    her.push_back(h);
+  wifs.close();
+}
+
+void Database::load_mugshots(const char *assets_filepath) {
+  const char *const mugshots_fp{newstrcat(assets_filepath, mugshots_rel_fp)};
+  ifstream ifs{mugshots_fp};
+  delete mugshots_fp;
+  for (auto &x : her) {
+    if (!ifs)
+      throw std::length_error("Not enough mugshots.");
+    ifs >> x.mugshot();
+  }
+  ifs.close();
 }
 
 void Database::load_enemies(const char *assets_filepath) {
-  /*const char *const enemies_fp{newstrcat(assets_filepath, enemies_rel_fp)};
+  const char *const enemies_fp{newstrcat(assets_filepath, enemies_rel_fp)};
   wifstream wifs{enemies_fp};
   delete enemies_fp;
   Enemy e{Engine::Color::transparent, L' ', L"", {}, 0, 0, 0, 1};
   while (wifs >> e)
-    ene.put(e.name(), e);
-  wifs.close();*/
+    ene.push_back(e);
+  wifs.close();
 }
 
 void Database::load_items(const char *assets_filepath) {
-  /*const char *const items_fp{newstrcat(assets_filepath, items_rel_fp)};
+  const char *const items_fp{newstrcat(assets_filepath, items_rel_fp)};
   wifstream wifs{items_fp};
   delete items_fp;
   Item i{Engine::Color::transparent, L' ', L"", 0, false, 0, false, 0};
   while (wifs >> i)
-    ite.put(i.name(), i);
-  wifs.close();*/
+    ite.push_back(i);
+  wifs.close();
 }
 
 std::basic_istream<wchar_t> &

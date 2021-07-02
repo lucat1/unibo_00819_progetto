@@ -59,7 +59,8 @@ Data::Pawns::operator>>(std::basic_istream<wchar_t> &is, Enemy &e) {
   Data::get_CSV_WString(is, name);
   Skill skill;
   int healthDamage, manaDamage, scoreDamage, behavior;
-  (is >> skill >> healthDamage).ignore();
+  (is >> skill).ignore();
+  (is >> healthDamage).ignore();
   (is >> manaDamage).ignore();
   (is >> scoreDamage).ignore();
   if (is >> behavior) {
