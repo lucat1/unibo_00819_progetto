@@ -42,6 +42,10 @@ Engine::Menu::Menu::Menu(WINDOW *window)
 
 Engine::Menu::Menu::~Menu() { delete root; }
 
+Engine::Drawable::Kind Engine::Menu::Menu::kind() const {
+  return Drawable::Kind::menu;
+}
+
 void Engine::Menu::Menu::handle_event(Event e) {
   switch (e) {
   case Event::redraw:

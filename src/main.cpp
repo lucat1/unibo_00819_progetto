@@ -5,6 +5,7 @@
 // #include "engine/menu/results.hpp"
 #include "engine/menu/select.hpp"
 #include "engine/menu/settings.hpp"
+#include "engine/scene/scene.hpp"
 #include "engine/screen.hpp"
 #include <fstream>
 #include <iostream>
@@ -45,8 +46,8 @@ int main() {
       L"libero congue, molestie lacus ac, tempus ex. Sed eget ultricies lorem.",
       {},
       {},
-      3200,
-      1800};
+      10,
+      6};
   wifstream wifs{"tests/assets/img/heroes.txt"};
   wifs.ignore();
   wifs.ignore();
@@ -63,8 +64,8 @@ int main() {
       L"ut vel libero.",
       {},
       {},
-      1337,
-      1337};
+      10,
+      6};
   wifstream wifs2{"tests/assets/img/heroes.txt"};
   wifs2.ignore();
   wifs2.ignore();
@@ -109,8 +110,12 @@ int main() {
         if (screen.is_content<Menu::Settings>())
           settings = screen.get_content<Menu::Settings>()->get_result();
 
-        // always go back to the main menu after some menus close
-        screen.set_content<Menu::Main>();
+        if (!screen.is_content<Menu::Select>())
+          // go back to the main menu
+          screen.set_content<Menu::Main>();
+        else
+          // otherwhise start a game
+          screen.set_content<Scene::Scene>();
       }
     }
 
