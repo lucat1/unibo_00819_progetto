@@ -19,7 +19,7 @@
 using Data::Pawns::Projectile;
 
 Projectile::Projectile(Engine::Color foreground, char character,
-                       const Nostd::WString &name, int healthDamage,
+                       const Nostd::String &name, int healthDamage,
                        int manaDamage, int scoreDamage, int range)
     : Engine::EntityTile{character, foreground}, Pawn{name, character,
                                                       foreground},
@@ -60,8 +60,8 @@ Data::Pawns::operator>>(std::basic_istream<char> &is, Projectile &p) {
   (is >> foreground).ignore();
   char character;
   (is >> character).ignore();
-  Nostd::WString name;
-  Data::get_CSV_WString(is, name);
+  Nostd::String name;
+  Data::get_CSV_String(is, name);
   int healthDamage, manaDamage, scoreDamage, range;
   (is >> healthDamage).ignore();
   (is >> manaDamage).ignore();

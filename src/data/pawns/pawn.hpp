@@ -15,7 +15,7 @@
 #include <istream>
 
 #include "../../engine/entity_tile.hpp"
-#include "../../nostd/wstring.hpp"
+#include "../../nostd/string.hpp"
 
 namespace Data {
 
@@ -28,7 +28,7 @@ namespace Pawns {
 class Pawn : public virtual Engine::EntityTile {
 public:
   Pawn() = default;
-  Pawn(Nostd::WString, char = u' ',
+  Pawn(Nostd::String, char = u' ',
        Engine::Color = Engine::Color::transparent);
   Pawn(Pawn &&) = default;
   Pawn &operator=(Pawn &&);
@@ -37,7 +37,7 @@ public:
 
   virtual ~Pawn() override = default;
 
-  const Nostd::WString &name() const noexcept;
+  const Nostd::String &name() const noexcept;
 
 protected:
   /*
@@ -48,7 +48,7 @@ protected:
     In this case, though, we want child classes to have unrestricted write
     privileges to a data member, and the general user to have none.
   */
-  Nostd::WString nm{"???"};
+  Nostd::String nm{"???"};
   bool movedFrom{false};
 };
 

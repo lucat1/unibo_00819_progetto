@@ -53,7 +53,7 @@ Box *Engine::Menu::Settings::append_line(Box *parent, Data::Setting *setting) {
   line->props(Box::Property::padding_right, 2);
   line->props(Box::Property::padding_top, 1);
   line->props(Box::Property::padding_bottom, 1);
-  line->append<UI::TextBox, const Nostd::WString &>(setting->label());
+  line->append<UI::TextBox, const Nostd::String &>(setting->label());
   auto choice = line->append<UI::Choice, Data::Setting *>(setting);
   choice->propb(Box::Property::float_right, true);
   choice->propc(Box::Property::foreground, slider.first);

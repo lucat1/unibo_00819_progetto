@@ -85,11 +85,11 @@ int Iterator::operator*() const { return (*s)[pos]; }
 
 int Iterator::operator[](size_t n) const { return *(*this + n); }
 
-Setting::Setting(Nostd::WString label, int start, size_t size, int stride,
+Setting::Setting(Nostd::String label, int start, size_t size, int stride,
                  size_t default_index)
     : Setting(label, start, size, stride, default_index, default_index){};
 
-Setting::Setting(Nostd::WString label, int start, size_t size, int stride,
+Setting::Setting(Nostd::String label, int start, size_t size, int stride,
                  size_t default_index, size_t current_index)
     : lbl{label}, strt{start}, strd{stride}, sz{size}, def_ind{default_index},
       curr_ind{current_index} {
@@ -121,7 +121,7 @@ int Setting::set(const iterator &i) {
   return at(curr_ind = i - begin());
 }
 
-const Nostd::WString &Setting::label() const noexcept { return lbl; }
+const Nostd::String &Setting::label() const noexcept { return lbl; }
 
 auto Setting::size() const noexcept -> size_type { return sz; }
 
@@ -141,10 +141,10 @@ int Setting::at(size_type n) const {
 
 std::basic_istream<char> &Data::operator>>(std::basic_istream<char> &is,
                                               Setting &s) {
-  Nostd::WString label;
+  Nostd::String label;
   int start, stride;
   size_t size, default_index;
-  get_CSV_WString(is, label) >> start;
+  get_CSV_String(is, label) >> start;
   is.ignore();
   is >> size;
   is.ignore();
@@ -159,5 +159,5 @@ std::basic_istream<char> &Data::operator>>(std::basic_istream<char> &is,
 
 std::basic_ostream<char> &Data::operator<<(std::basic_ostream<char> &os,
                                               const Setting &s) {
-  return put_CSV_WString(os, s.label()) << Database::separator << s.curr_ind;
+  return put_CSV_String(os, s.label()) << Database::separator << s.curr_ind;
 }

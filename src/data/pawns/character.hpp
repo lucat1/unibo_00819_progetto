@@ -26,7 +26,7 @@ namespace Pawns {
 class Character : public virtual Pawn {
 public:
   Character() = default;
-  Character(const Nostd::WString &, char = u' ',
+  Character(const Nostd::String &, char = u' ',
             Engine::Color = Engine::Color::transparent, Skill = {});
   Character(Character &&) = default;
   Character &operator=(Character &&);

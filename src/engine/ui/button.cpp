@@ -14,7 +14,7 @@
 #include "button.hpp"
 
 Engine::UI::Button::Button(const char *content) : TextBox(content) {}
-Engine::UI::Button::Button(const Nostd::WString &content) : TextBox(content) {}
+Engine::UI::Button::Button(const Nostd::String &content) : TextBox(content) {}
 
 Engine::UI::Box::dim Engine::UI::Button::text_size(szu max_width,
                                                    szu max_height) {

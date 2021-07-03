@@ -17,7 +17,7 @@
 
 #include "../nostd/list.hpp"
 #include "../nostd/vector.hpp"
-#include "../nostd/wstring.hpp"
+#include "../nostd/string.hpp"
 #include "map_chunk.hpp"
 #include "pawns/enemy.hpp"
 #include "pawns/hero.hpp"
@@ -99,11 +99,11 @@ private:
   void load_items(const char *assets_filepath);
 };
 
-std::basic_istream<char> &get_CSV_WString(std::basic_istream<char> &,
-                                             Nostd::WString &);
+std::basic_istream<char> &get_CSV_String(std::basic_istream<char> &,
+                                             Nostd::String &);
 
-std::basic_ostream<char> &put_CSV_WString(std::basic_ostream<char> &,
-                                             const Nostd::WString &);
+std::basic_ostream<char> &put_CSV_String(std::basic_ostream<char> &,
+                                             const Nostd::String &);
 
 } // namespace Data
 

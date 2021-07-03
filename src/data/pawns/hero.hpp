@@ -15,7 +15,7 @@
 #include <istream>
 
 #include "../../engine/colorable.hpp"
-#include "../../nostd/wstring.hpp"
+#include "../../nostd/string.hpp"
 #include "../mugshot.hpp"
 #include "character.hpp"
 #include "interactable.hpp"
@@ -30,8 +30,8 @@ namespace Pawns {
 */
 class Hero : public Character {
 public:
-  Hero(Engine::Color foreground, char character, const Nostd::WString &name,
-       const Nostd::WString &description, Skill skill, Skill superSkill,
+  Hero(Engine::Color foreground, char character, const Nostd::String &name,
+       const Nostd::String &description, Skill skill, Skill superSkill,
        int maxHealth, int maxMana);
   Hero(Hero &&) = default;
   Hero &operator=(Hero &&) = default;
@@ -40,8 +40,8 @@ public:
 
   virtual ~Hero() = default;
 
-  void rename(const Nostd::WString &);
-  const Nostd::WString &description() const noexcept;
+  void rename(const Nostd::String &);
+  const Nostd::String &description() const noexcept;
   Mugshot &mugshot() noexcept;
   const Mugshot &mugshot() const noexcept;
   Skill superSkill() const noexcept;
@@ -59,7 +59,7 @@ public:
                                                  const Hero &);
 
 private:
-  Nostd::WString dsc{};
+  Nostd::String dsc{};
   Mugshot mug{};
   Skill ssk;
   int curH, maxH, curM, maxM, scr;

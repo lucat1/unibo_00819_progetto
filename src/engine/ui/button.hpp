@@ -27,7 +27,7 @@ private:
 public:
   static const constexpr szu side_padding = 4;
 
-  Button(const Nostd::WString &content = "");
+  Button(const Nostd::String &content = "");
   Button(const char *content = "");
 
   void show(WINDOW *window, szu x, szu y, szu max_width, szu max_height);

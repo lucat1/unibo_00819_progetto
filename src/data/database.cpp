@@ -29,7 +29,7 @@ using namespace Data;
 using namespace Data::Pawns;
 using Nostd::List;
 using Nostd::Vector;
-using Nostd::WString;
+using Nostd::String;
 using std::ifstream;
 
 constexpr char Database::separator, Database::newrecord, Database::escape;
@@ -126,7 +126,7 @@ const List<Result> &Database::results() const noexcept { return res; }
 void Database::save_results() const {
   std::ofstream ofs(scor);
   for (auto x : res)
-    put_CSV_WString(ofs, x.name()) << separator << x.score() << separator
+    put_CSV_String(ofs, x.name()) << separator << x.score() << separator
                                     << Engine::color_to_short(x.foreground())
                                     << separator << x.character() << newrecord;
   ofs.close();
@@ -171,8 +171,8 @@ void Database::load_settings(const char *assets_filepath) {
   settings_ifs.close();
   // current values
   ifstream conf_ifs(conf);
-  WString key;
-  while (get_CSV_WString(conf_ifs, key)) {
+  String key;
+  while (get_CSV_String(conf_ifs, key)) {
     size_t value;
     conf_ifs >> value;
     for (auto &s : set)
@@ -206,8 +206,8 @@ void Database::load_sceneries(const char *assets_filepath) {
 
 void Database::load_results() {
   ifstream ifs{scor};
-  WString name;
-  while (get_CSV_WString(ifs, name)) {
+  String name;
+  while (get_CSV_String(ifs, name)) {
     int score;
     (ifs >> score).ignore();
     short foreground;
@@ -264,9 +264,9 @@ void Database::load_items(const char *assets_filepath) {
 }
 
 std::basic_istream<char> &
-Data::get_CSV_WString(std::basic_istream<char> &is, WString &s) {
+Data::get_CSV_String(std::basic_istream<char> &is, String &s) {
   if (is) {
-    s = WString{};
+    s = String{};
     for (char input; is.get(input) && input != Database::separator &&
                         input != Database::newrecord;) {
       if (input == Database::escape) {
@@ -282,8 +282,8 @@ Data::get_CSV_WString(std::basic_istream<char> &is, WString &s) {
 }
 
 std::basic_ostream<char> &
-Data::put_CSV_WString(std::basic_ostream<char> &os,
-                      const Nostd::WString &s) {
+Data::put_CSV_String(std::basic_ostream<char> &os,
+                      const Nostd::String &s) {
   for (auto x = s.cbegin(); x + 1 != s.end(); ++x) {
     if (*x == Database::separator || *x == Database::newrecord)
       os << Database::escape;

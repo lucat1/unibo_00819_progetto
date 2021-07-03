@@ -17,7 +17,7 @@
 Engine::UI::TextBox::TextBox(const char *content) : Box() {
   this->content = content;
 }
-Engine::UI::TextBox::TextBox(const Nostd::WString &content)
+Engine::UI::TextBox::TextBox(const Nostd::String &content)
     : TextBox(content.c_str()) {}
 
 void Engine::UI::TextBox::update_lines(szu max_width) {
@@ -27,7 +27,7 @@ void Engine::UI::TextBox::update_lines(szu max_width) {
 }
 
 Engine::UI::TextBox::strings
-Engine::UI::TextBox::split_content(const Nostd::WString content,
+Engine::UI::TextBox::split_content(const Nostd::String content,
                                    szu max_width) {
   strings lines;
   if (max_width == 0)

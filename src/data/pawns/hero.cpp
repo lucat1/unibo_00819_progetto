@@ -14,7 +14,7 @@
 #include <stdexcept>
 
 #include "../../engine/colorable.hpp"
-#include "../../nostd/wstring.hpp"
+#include "../../nostd/string.hpp"
 #include "../database.hpp"
 #include "skill.hpp"
 
@@ -24,7 +24,7 @@ using Data::Pawns::Interactable;
 using Data::Pawns::Skill;
 
 Hero::Hero(Engine::Color foreground, char character,
-           const Nostd::WString &name, const Nostd::WString &description,
+           const Nostd::String &name, const Nostd::String &description,
            Skill skill, Skill superSkill, int health, int mana)
     : Engine::EntityTile{character, foreground}, Pawn{name, character,
                                                       foreground},
@@ -36,9 +36,9 @@ Hero::Hero(Engine::Color foreground, char character,
     throw std::invalid_argument("Mana must be positive.");
 }
 
-void Hero::rename(const Nostd::WString &s) { Pawn::nm = s; }
+void Hero::rename(const Nostd::String &s) { Pawn::nm = s; }
 
-const Nostd::WString &Hero::description() const noexcept { return dsc; }
+const Nostd::String &Hero::description() const noexcept { return dsc; }
 
 Mugshot &Hero::mugshot() noexcept { return mug; }
 
@@ -77,9 +77,9 @@ Data::Pawns::operator>>(std::basic_istream<char> &is, Hero &h) {
   (is >> foreground).ignore();
   char character;
   (is >> character).ignore();
-  Nostd::WString name, description;
-  Data::get_CSV_WString(is, name);
-  Data::get_CSV_WString(is, description);
+  Nostd::String name, description;
+  Data::get_CSV_String(is, name);
+  Data::get_CSV_String(is, description);
   Skill skill, superSkill;
   (is >> skill).ignore();
   (is >> superSkill).ignore();

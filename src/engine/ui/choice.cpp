@@ -68,7 +68,7 @@ void Engine::UI::Choice::show(WINDOW *window, szu abs_x, szu y, szu max_width,
     szu next_x = x + 2 * digits(setting->last()) + 2;
 
     UI::start_color(window, color_on);
-    Nostd::WString str;
+    Nostd::String str;
     stringify(*setting->current_value(), str);
     str.push_back(u'/');
     stringify(setting->last(), str);

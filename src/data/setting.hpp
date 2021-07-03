@@ -12,7 +12,7 @@
 #ifndef DATA_SETTING_HPP
 #define DATA_SETTING_HPP
 
-#include "../nostd/wstring.hpp"
+#include "../nostd/string.hpp"
 #include <istream>
 #include <iterator>
 #include <ostream>
@@ -80,11 +80,11 @@ public:
   // size: number of possible values (cannot be 0)
   // stride: step between possible values (cannot be 0)
   // default_index: index (starting from 0) of default value
-  Setting(Nostd::WString label, int start = 0, size_t size = 2, int stride = 1,
+  Setting(Nostd::String label, int start = 0, size_t size = 2, int stride = 1,
           size_t default_index = 0);
   // current_index: index (starting from 0) of default value. If not specified,
   // it is the same as default_index
-  Setting(Nostd::WString label, int start, size_t size, int stride,
+  Setting(Nostd::String label, int start, size_t size, int stride,
           size_t default_index, size_t current_index);
 
   // move
@@ -105,7 +105,7 @@ public:
   int set(const iterator &); // update the current setting value
 
   // getters
-  const Nostd::WString &label() const noexcept;
+  const Nostd::String &label() const noexcept;
   size_type size() const noexcept; // number of possible values
   int stride() const noexcept;     // distance between two possible values
   int first() const noexcept;      // first possible value
@@ -119,7 +119,7 @@ public:
                                                  const Setting &);
 
 private:
-  Nostd::WString lbl;
+  Nostd::String lbl;
   int strt{0}, strd{1};
   size_t sz{2}, def_ind{0}, curr_ind{0};
 };

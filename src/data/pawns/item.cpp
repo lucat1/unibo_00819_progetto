@@ -18,7 +18,7 @@
 using Data::Pawns::Item;
 
 Item::Item(Engine::Color foreground, char character,
-           const Nostd::WString &name, int healthBonus, bool healthMode,
+           const Nostd::String &name, int healthBonus, bool healthMode,
            int manaBonus, bool manaMode, int scoreBonus)
     : Engine::EntityTile{character, foreground},
       Pawn{name, character, foreground}, hB{healthBonus}, mB{manaBonus},
@@ -51,8 +51,8 @@ Data::Pawns::operator>>(std::basic_istream<char> &is, Item &i) {
   (is >> foreground).ignore();
   char character;
   (is >> character).ignore();
-  Nostd::WString name;
-  Data::get_CSV_WString(is, name);
+  Nostd::String name;
+  Data::get_CSV_String(is, name);
   int healthBonus, manaBonus, scoreBonus;
   (is >> healthBonus).ignore();
   bool healthMode, manaMode;

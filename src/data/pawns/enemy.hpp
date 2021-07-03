@@ -15,7 +15,7 @@
 #include <istream>
 
 #include "../../engine/colorable.hpp"
-#include "../../nostd/wstring.hpp"
+#include "../../nostd/string.hpp"
 #include "character.hpp"
 #include "interactable.hpp"
 
@@ -29,7 +29,7 @@ namespace Pawns {
 */
 class Enemy : public Character, public Interactable {
 public:
-  Enemy(Engine::Color foreground, char character, const Nostd::WString &name,
+  Enemy(Engine::Color foreground, char character, const Nostd::String &name,
         Skill skill, int healthDamage, int manaDamage, int scoreDamage,
         int behavior);
   Enemy(Enemy &&) = default;

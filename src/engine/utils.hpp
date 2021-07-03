@@ -12,7 +12,7 @@
 #ifndef ENGINE_UTILS_HPP
 #define ENGINE_UTILS_HPP
 
-#include "../nostd/wstring.hpp"
+#include "../nostd/string.hpp"
 
 namespace Engine {
 namespace Utils {
@@ -23,13 +23,13 @@ int digits(int n);
 // converts a number between 0 and 9 (inclusive) to a char charter
 char digitize(int n);
 
-// puts the given number in digits inside the provided WString
-void stringify(int n, Nostd::WString &str);
+// puts the given number in digits inside the provided String
+void stringify(int n, Nostd::String &str);
 
 // adds left padding (as spaces) to the given string in order to make
 // it fill `n` charters.
 // NOTE: it can also trim the string if the string's length is greather tha `n`
-void leftpad(size_t n, Nostd::WString &str);
+void leftpad(size_t n, Nostd::String &str);
 
 } // namespace Utils
 } // namespace Engine

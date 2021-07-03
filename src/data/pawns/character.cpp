@@ -15,7 +15,7 @@
 
 using Data::Pawns::Character;
 
-Character::Character(const Nostd::WString &name, char character,
+Character::Character(const Nostd::String &name, char character,
                      Engine::Color foreground, Skill skill)
     : Pawn{name, character, foreground}, sk{skill} {}
 

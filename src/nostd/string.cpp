@@ -6,22 +6,22 @@
   Luca Tagliavini #971133
   03/09/2021
 
-  wstring.cpp: implements the methods to construct, modify and do IO operations
+  string.cpp: implements the methods to construct, modify and do IO operations
   on a string of whide charters.
 */
-#include "wstring.hpp"
+#include "string.hpp"
 #include <cstring>
 #include <stdexcept>
 
-Nostd::WString::WString(const WString::allocator_type &alloc)
+Nostd::String::String(const String::allocator_type &alloc)
     : Vector(1, u'\0', alloc) {}
 
-Nostd::WString::WString(const WString &str,
-                        const WString::allocator_type &alloc)
-    : WString(str.c_str(), alloc) {}
+Nostd::String::String(const String &str,
+                        const String::allocator_type &alloc)
+    : String(str.c_str(), alloc) {}
 
-Nostd::WString::WString(const WString &str, size_t start, size_t len,
-                        const WString::allocator_type &alloc)
+Nostd::String::String(const String &str, size_t start, size_t len,
+                        const String::allocator_type &alloc)
     : Vector(len == npos ? str.size() - start : len + 1, alloc) {
   // we also check that we don't go out of the *str array as we
   // could loop infinitely when len = npos (read entire string)
@@ -33,19 +33,19 @@ Nostd::WString::WString(const WString &str, size_t start, size_t len,
   v[len] = u'\0';
 }
 
-Nostd::WString::WString(const char *str,
-                        const WString::allocator_type &alloc)
-    : WString(str, strlen(str), alloc) {}
+Nostd::String::String(const char *str,
+                        const String::allocator_type &alloc)
+    : String(str, strlen(str), alloc) {}
 
-Nostd::WString::WString(const char *str, size_t len,
-                        const WString::allocator_type &alloc)
+Nostd::String::String(const char *str, size_t len,
+                        const String::allocator_type &alloc)
     : Vector(len + 1, alloc) {
   for (size_t i = 0; i < len; i++)
     v[i] = str[i];
   v[len] = u'\0';
 }
 
-Nostd::WString::WString(WString &&str, const WString::allocator_type &alloc)
+Nostd::String::String(String &&str, const String::allocator_type &alloc)
     : Vector(str, alloc) {
   v = str.v;
   sz = str.sz;
@@ -53,50 +53,50 @@ Nostd::WString::WString(WString &&str, const WString::allocator_type &alloc)
   str.v = nullptr;
 }
 
-bool Nostd::WString::empty() const {
+bool Nostd::String::empty() const {
   return sz <= 1 || (sz == 1 && v[0] == u'\0');
 }
 
-char *Nostd::WString::c_str() const { return v; }
-char *Nostd::WString::data() const { return v; }
-size_t Nostd::WString::length() const { return sz - 1; }
-size_t Nostd::WString::max_size() const { return SIZE_MAX; }
+char *Nostd::String::c_str() const { return v; }
+char *Nostd::String::data() const { return v; }
+size_t Nostd::String::length() const { return sz - 1; }
+size_t Nostd::String::max_size() const { return SIZE_MAX; }
 
 // we override the Vector::resize to resize to a n+1 size and keep space for
 // the '\0' char
-void Nostd::WString::resize(size_t n) {
+void Nostd::String::resize(size_t n) {
   Vector::resize(n + 1);
   v[n] = u'\0';
 }
 
 // we override the Vector::clear to resize to size 1 and keep space for the
 // '\0' char, using the previously defined method
-void Nostd::WString::clear() { resize(0); }
+void Nostd::String::clear() { resize(0); }
 
-char &Nostd::WString::back() { return v[sz - 2]; }
-const char &Nostd::WString::back() const { return v[sz - 2]; }
+char &Nostd::String::back() { return v[sz - 2]; }
+const char &Nostd::String::back() const { return v[sz - 2]; }
 
-Nostd::WString &Nostd::WString::append(const Nostd::WString &str) {
+Nostd::String &Nostd::String::append(const Nostd::String &str) {
   return insert(sz - 1, str);
 }
 
-Nostd::WString &Nostd::WString::append(const char *str) {
+Nostd::String &Nostd::String::append(const char *str) {
   return insert(sz - 1, str);
 }
 
-void Nostd::WString::push_back(const char c) {
+void Nostd::String::push_back(const char c) {
   resize(sz); // increases the size by 1
   v[sz - 2] = c;
   v[sz - 1] = u'\0';
 }
 
-Nostd::WString &Nostd::WString::insert(size_t start, const Nostd::WString &str,
+Nostd::String &Nostd::String::insert(size_t start, const Nostd::String &str,
                                        size_t substart, size_t subend) {
-  WString substr = str.substr(substart, subend);
+  String substr = str.substr(substart, subend);
   return insert(start, substr.c_str());
 }
 
-Nostd::WString &Nostd::WString::insert(size_t start, const char *str,
+Nostd::String &Nostd::String::insert(size_t start, const char *str,
                                        size_t len) {
   // deliberately not using Vector::resize as we'd do the copying twice, which
   // is not smart at all. this method is therefore a modified copy of
@@ -121,22 +121,22 @@ Nostd::WString &Nostd::WString::insert(size_t start, const char *str,
   return *this;
 }
 
-Nostd::WString &Nostd::WString::insert(size_t start, const char c) {
+Nostd::String &Nostd::String::insert(size_t start, const char c) {
   char str[2] = {c, u'\0'};
   return insert(start, str);
 }
 
-int Nostd::WString::compare(const Nostd::WString &str) const {
+int Nostd::String::compare(const Nostd::String &str) const {
   return compare(0, str.length(), str.c_str());
 }
-int Nostd::WString::compare(size_t start, size_t len,
-                            const Nostd::WString &str) const {
+int Nostd::String::compare(size_t start, size_t len,
+                            const Nostd::String &str) const {
   return compare(start, len, str.c_str());
 }
-int Nostd::WString::compare(const char *str) const {
+int Nostd::String::compare(const char *str) const {
   return compare(0, strlen(str), str);
 }
-int Nostd::WString::compare(size_t start, size_t len, const char *str,
+int Nostd::String::compare(size_t start, size_t len, const char *str,
                             size_t n) const {
   if (start > len)
     throw std::out_of_range("invalid start position in compare call");
@@ -146,19 +146,19 @@ int Nostd::WString::compare(size_t start, size_t len, const char *str,
     n = length() - start;
   return strncmp(v, str + start, n);
 }
-bool Nostd::WString::operator==(const WString &str) const {
+bool Nostd::String::operator==(const String &str) const {
   return !compare(str);
 }
-bool Nostd::WString::operator!=(const WString &str) const {
+bool Nostd::String::operator!=(const String &str) const {
   return compare(str);
 }
-size_t Nostd::WString::find(Nostd::WString &seq, size_t start) const {
+size_t Nostd::String::find(Nostd::String &seq, size_t start) const {
   return find(seq.c_str(), start, seq.length());
 }
-size_t Nostd::WString::find(const char *seq, size_t start) const {
+size_t Nostd::String::find(const char *seq, size_t start) const {
   return find(seq, start, strlen(seq));
 }
-size_t Nostd::WString::find(const char *seq, size_t start, size_t n) const {
+size_t Nostd::String::find(const char *seq, size_t start, size_t n) const {
   if (n == 0)
     return npos; // undefined behaviour, searching for an empty string
 
@@ -168,15 +168,15 @@ size_t Nostd::WString::find(const char *seq, size_t start, size_t n) const {
 
   return npos;
 }
-size_t Nostd::WString::find(const char c, size_t start) const {
+size_t Nostd::String::find(const char c, size_t start) const {
   char str[2] = {c, u'\0'};
   return find(str, start);
 }
-Nostd::WString Nostd::WString::substr(size_t start, size_t len) const {
-  WString res(*this, start, len);
+Nostd::String Nostd::String::substr(size_t start, size_t len) const {
+  String res(*this, start, len);
   return res;
 }
-Nostd::WString Nostd::WString::rtrim() {
+Nostd::String Nostd::String::rtrim() {
   size_t i = length() - 1;
   while (i >= 0 && Nostd::iswspace(v[i]))
     i--;
@@ -185,7 +185,7 @@ Nostd::WString Nostd::WString::rtrim() {
 
   return substr(0, i);
 }
-Nostd::WString Nostd::WString::ltrim() {
+Nostd::String Nostd::String::ltrim() {
   size_t i = 0;
   while (i < length() && Nostd::iswspace(v[i]))
     i++;
@@ -195,11 +195,11 @@ Nostd::WString Nostd::WString::ltrim() {
   return substr(i);
 }
 
-Nostd::WString &Nostd::WString::operator=(const Nostd::WString &str) {
+Nostd::String &Nostd::String::operator=(const Nostd::String &str) {
   return operator=(str.c_str());
 }
 
-Nostd::WString &Nostd::WString::operator=(Nostd::WString &&str) {
+Nostd::String &Nostd::String::operator=(Nostd::String &&str) {
   all_elems.deallocate(v, cap);
   v = str.v;
   sz = str.sz;
@@ -208,7 +208,7 @@ Nostd::WString &Nostd::WString::operator=(Nostd::WString &&str) {
   return *this;
 }
 
-Nostd::WString &Nostd::WString::operator=(const char *str) {
+Nostd::String &Nostd::String::operator=(const char *str) {
   // we shrink/grow the vector deliberately by hand as we don't care
   // about the old string and therefore we can avoid the copy loop
   //
@@ -223,22 +223,22 @@ Nostd::WString &Nostd::WString::operator=(const char *str) {
   return *this;
 }
 
-Nostd::WString &Nostd::WString::operator=(const char c) {
+Nostd::String &Nostd::String::operator=(const char c) {
   const char str[] = {c, u'\0'};
   return operator=(str);
 }
 
-Nostd::WString &Nostd::WString::operator+=(const Nostd::WString &str) {
+Nostd::String &Nostd::String::operator+=(const Nostd::String &str) {
   append(str);
   return *this;
 }
 
-Nostd::WString &Nostd::WString::operator+=(const char *str) {
+Nostd::String &Nostd::String::operator+=(const char *str) {
   append(str);
   return *this;
 }
 
-Nostd::WString &Nostd::WString::operator+=(const char c) {
+Nostd::String &Nostd::String::operator+=(const char c) {
   push_back(c);
   return *this;
 }
@@ -251,12 +251,12 @@ bool Nostd::iswspace(char c) {
 }
 
 std::basic_ostream<char> &Nostd::operator<<(std::ostream &os,
-                                               const Nostd::WString &str) {
+                                               const Nostd::String &str) {
   return os << str.c_str();
 }
 
 std::basic_istream<char> &Nostd::operator>>(std::istream &is,
-                                               Nostd::WString &str) {
+                                               Nostd::String &str) {
   str.clear();
   char c;
   while (Nostd::iswspace(c = is.get()) && is.good())
@@ -265,7 +265,7 @@ std::basic_istream<char> &Nostd::operator>>(std::istream &is,
 }
 
 std::istream &Nostd::getline(std::istream &is,
-                                            Nostd::WString &str) {
+                                            Nostd::String &str) {
   str.clear();
   char c;
   while ((c = is.get()) != u'\n' && is.good())

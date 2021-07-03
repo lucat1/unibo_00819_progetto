@@ -22,7 +22,7 @@ Engine::UI::Logo::Logo() : TextBox("") {
 }
 
 Engine::UI::TextBox::strings
-Engine::UI::Logo::split_content(const Nostd::WString content, szu max_width) {
+Engine::UI::Logo::split_content(const Nostd::String content, szu max_width) {
   strings lines;
   for (size_t i = 0; i < logo_height; i++)
     lines.push_back(logo[i]);

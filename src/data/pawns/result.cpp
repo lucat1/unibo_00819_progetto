@@ -14,9 +14,9 @@
 #include <stdexcept>
 
 using Data::Pawns::Result;
-using Nostd::WString;
+using Nostd::String;
 
-Result::Result(const WString &name, char character, Engine::Color foreground,
+Result::Result(const String &name, char character, Engine::Color foreground,
                int score)
     : Engine::EntityTile{character, foreground},
       Pawn{name, character, foreground}, scr{score} {

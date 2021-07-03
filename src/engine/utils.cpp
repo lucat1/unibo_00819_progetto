@@ -29,7 +29,7 @@ char Engine::Utils::digitize(int n) {
   return u'0' + n;
 }
 
-void Engine::Utils::stringify(int n, Nostd::WString &str) {
+void Engine::Utils::stringify(int n, Nostd::String &str) {
   if (n == 0)
     str.insert(str.length(), u'0');
   else {
@@ -45,7 +45,7 @@ void Engine::Utils::stringify(int n, Nostd::WString &str) {
   }
 }
 
-void Engine::Utils::leftpad(size_t n, Nostd::WString &str) {
+void Engine::Utils::leftpad(size_t n, Nostd::String &str) {
   size_t len = str.length();
   if (len > n) {
     str = str.substr(0, n - 1);

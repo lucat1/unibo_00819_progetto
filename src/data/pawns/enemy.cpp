@@ -19,7 +19,7 @@
 using Data::Pawns::Enemy;
 
 Enemy::Enemy(Engine::Color foreground, char character,
-             const Nostd::WString &name, Skill skill, int healthDamage,
+             const Nostd::String &name, Skill skill, int healthDamage,
              int manaDamage, int scoreDamage, int behavior)
     : Engine::EntityTile{character, foreground}, Pawn{name, character,
                                                       foreground},
@@ -55,8 +55,8 @@ Data::Pawns::operator>>(std::basic_istream<char> &is, Enemy &e) {
   (is >> foreground).ignore();
   char character;
   (is >> character).ignore();
-  Nostd::WString name;
-  Data::get_CSV_WString(is, name);
+  Nostd::String name;
+  Data::get_CSV_String(is, name);
   Skill skill;
   int healthDamage, manaDamage, scoreDamage, behavior;
   (is >> skill).ignore();
