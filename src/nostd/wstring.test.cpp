@@ -1,6 +1,7 @@
 #include "wstring.hpp"
 #include "test.hpp"
 #include <cassert>
+#include <cstring>
 #include <sstream>
 
 using Nostd::it;
@@ -59,7 +60,7 @@ int main() {
 
   it("length matches wcslen", [] {
     WString ws = "dadsadsadsadsaadasdad";
-    assert(ws.length() == wcslen(ws.c_str()));
+    assert(ws.length() == strlen(ws.c_str()));
   });
 
   it("resizes the string according to spec", [] {
@@ -102,7 +103,7 @@ int main() {
     WString another_ws(" test");
     ws.append(another_ws);
     assert(ws.length() == another_ws.length() + 11);
-    assert(wcscmp(ws.c_str(), "test string test") == 0);
+    assert(strcmp(ws.c_str(), "test string test") == 0);
     assert(ws[ws.size() - 1] == u'\0');
   });
 
@@ -110,7 +111,7 @@ int main() {
     WString ws = "test string";
     ws.append(" test");
     assert(ws.length() == 16);
-    assert(wcscmp(ws.c_str(), "test string test") == 0);
+    assert(strcmp(ws.c_str(), "test string test") == 0);
     assert(ws[ws.size() - 1] == u'\0');
   });
 
@@ -118,7 +119,7 @@ int main() {
     WString ws = "test string";
     ws.push_back(u's');
     assert(ws.length() == 12);
-    assert(wcscmp(ws.c_str(), "test strings") == 0);
+    assert(strcmp(ws.c_str(), "test strings") == 0);
     assert(ws[ws.size() - 1] == u'\0');
   });
 
@@ -128,7 +129,7 @@ int main() {
     ws.insert(2, ws1, 2, 2);
     ws.insert(ws.length(), ws1);
     assert(ws.length() == 15);
-    assert(wcscmp(ws.c_str(), "test stringtest") == 0);
+    assert(strcmp(ws.c_str(), "test stringtest") == 0);
     assert(ws[ws.size() - 1] == u'\0');
   });
 
@@ -136,7 +137,7 @@ int main() {
     WString ws = "te string";
     ws.insert(2, "st");
     assert(ws.length() == 11);
-    assert(wcscmp(ws.c_str(), "test string") == 0);
+    assert(strcmp(ws.c_str(), "test string") == 0);
     assert(ws[ws.size() - 1] == u'\0');
   });
 
@@ -145,7 +146,7 @@ int main() {
     ws.insert(2, u's');
     ws.insert(3, u't');
     assert(ws.length() == 11);
-    assert(wcscmp(ws.c_str(), "test string") == 0);
+    assert(strcmp(ws.c_str(), "test string") == 0);
     assert(ws[ws.size() - 1] == u'\0');
   });
 
@@ -190,7 +191,6 @@ int main() {
     str = str.substr(2, 5);
     assert(str.compare("st te") == 0);
   });
-
   it("trims whitespace from the right side", [] {
     WString str = "test   \t \v  ";
     str = str.rtrim();
@@ -207,8 +207,8 @@ int main() {
     WString ws;
     const char *str = "test string";
     ws = str;
-    assert(wcscmp(ws.c_str(), str) == 0);
-    assert(ws.length() == wcslen(str));
+    assert(strcmp(ws.c_str(), str) == 0);
+    assert(ws.length() == strlen(str));
   });
 
   it("properly assigns to a char", [] {
@@ -225,32 +225,32 @@ int main() {
     ws += c_str;
     ws += "b";
     ws += u'c';
-    assert(wcscmp(ws.c_str(), "abc") == 0);
+    assert(strcmp(ws.c_str(), "abc") == 0);
   });
 
   it("prints a string to output stream", [] {
     WString str = "test string";
-    std::wstringstream out;
+    std::stringstream out;
     out << str;
-    assert(wcscmp(out.str().c_str(), str.c_str()) == 0);
+    assert(strcmp(out.str().c_str(), str.c_str()) == 0);
   });
 
   it("reads a word from input stream", [] {
-    std::wstringstream in(std::wstring("first_word second_word"));
+    std::stringstream in(std::string("first_word second_word"));
     WString str;
     in >> str;
     assert(str.compare("first_word") == 0);
   });
 
   it("reads a line from input stream until \\n", [] {
-    std::wstringstream in(std::wstring("first_word second_word\n"));
+    std::stringstream in(std::string("first_word second_word\n"));
     WString str;
     getline(in, str);
     assert(str.compare("first_word second_word") == 0);
   });
 
   it("reads a line from input stream until EOF", [] {
-    std::wstringstream in(std::wstring("a long sentence"));
+    std::stringstream in(std::string("a long sentence"));
     WString str;
     Nostd::getline(in, str);
     assert(str.compare("a long sentence") == 0);

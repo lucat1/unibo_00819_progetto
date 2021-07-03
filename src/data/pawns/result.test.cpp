@@ -21,25 +21,25 @@ using Nostd::it;
 
 int main() {
   it("constructs a Result from scratch", [] {
-    Result r{"Foxy🦊", u'🦊', Engine::Color::aqua, 150};
-    assert(!r.name().compare("Foxy🦊"));
-    assert(r.character() == u'🦊');
+    Result r{"Foxy", 'f', Engine::Color::aqua, 150};
+    assert(!r.name().compare("Foxy"));
+    assert(r.character() == 'f');
     assert(r.foreground() == Engine::Color::aqua);
     assert(r.score() == 150);
   });
   it("constructs a Result from a Hero", [] {
     Result r{Data::Pawns::Hero{
-        Engine::Color::aqua, u'🦊', "Foxy", "Neat guy.", {}, {}, 5, 10}};
+        Engine::Color::aqua, 'f', "Foxy", "Neat guy.", {}, {}, 5, 10}};
     assert(!r.name().compare("Foxy"));
-    assert(r.character() == u'🦊');
+    assert(r.character() == 'f');
     assert(r.score() == 0);
     assert(r.foreground() == Engine::Color::aqua);
   });
   it("implicitly converts to int", [] {
-    Result r1{"Foxy🦊", u'🦊', Engine::Color::aqua, 75};
+    Result r1{"Foxy", 'f', Engine::Color::aqua, 75};
     assert(r1 == 75);
     assert(int{r1} == 75);
-    Result r2{"Andreea", u'✨', Engine::Color::aqua, 150};
+    Result r2{"Andreea", 's', Engine::Color::aqua, 150};
     assert(r1 < r2);
   });
 }

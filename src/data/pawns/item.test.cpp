@@ -22,17 +22,17 @@ using Nostd::it;
 int main() {
   it("constructs an Item", [] {
     Item mushroom{
-        Engine::Color::red, u'🍄', "Mushroom", 2, false, 0, false, 50};
+        Engine::Color::red, 'm', "Mushroom", 2, false, 0, false, 50};
     assert(mushroom.foreground() == Engine::Color::red);
-    assert(mushroom.character() == u'🍄');
+    assert(mushroom.character() == 'm');
     assert(mushroom.name() == "Mushroom");
   });
   it("reads an Item from a stream", [] {
     Item mushroom{Engine::Color::transparent, u' ', "", 0, false, 0, false, 0};
-    std::wistringstream wiss{"9,🍄,Mushroom,2,0,0,0,50\n"};
-    wiss >> mushroom;
+    std::istringstream iss{"9,m,Mushroom,2,0,0,0,50\n"};
+    iss >> mushroom;
     assert(mushroom.foreground() == Engine::Color::red);
-    assert(mushroom.character() == u'🍄');
+    assert(mushroom.character() == 'm');
     assert(mushroom.name() == "Mushroom");
   });
 }

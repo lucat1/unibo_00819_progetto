@@ -22,9 +22,9 @@ using Nostd::it;
 int main() {
   it("constructs a Hero", [] {
     Hero foxy{
-        Engine::Color::aqua, u'🦊', "Foxy", "Neat guy.", {}, {}, 5, 10};
+        Engine::Color::aqua, 'f', "Foxy", "Neat guy.", {}, {}, 5, 10};
     assert(foxy.foreground() == Engine::Color::aqua);
-    assert(foxy.character() == u'🦊');
+    assert(foxy.character() == 'f');
     assert(foxy.name() == "Foxy");
     assert(foxy.description() == "Neat guy.");
     assert(foxy.currentHealth() == 5);
@@ -35,16 +35,16 @@ int main() {
   });
   it("performs basic health/mana operations", [] {
     Hero foxy{
-        Engine::Color::aqua, u'🦊', "Foxy", "Neat guy.", {}, {}, 5, 10};
+        Engine::Color::aqua, 'f', "Foxy", "Neat guy.", {}, {}, 5, 10};
     assert(!foxy.isDead());
     assert(!foxy.attemptSuperSkill());
   });
   it("reads a Hero from a stream", [] {
     Hero foxy{Engine::Color::transparent, u' ', "", "", {}, {}, 1, 1};
-    std::wistringstream wiss{"6,🦊,Foxy,Neat guy.,0,0,0,0,0,0,5,10\n"};
-    wiss >> foxy;
+    std::istringstream iss{"6,f,Foxy,Neat guy.,0,0,0,0,0,0,5,10\n"};
+    iss >> foxy;
     assert(foxy.foreground() == Engine::Color::teal);
-    assert(foxy.character() == u'🦊');
+    assert(foxy.character() == 'f');
     assert(foxy.name() == "Foxy");
     assert(foxy.description() == "Neat guy.");
     assert(foxy.currentHealth() == 5);

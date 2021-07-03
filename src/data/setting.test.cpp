@@ -49,7 +49,7 @@ int main() {
     assert(s.last() == 10);
   });
   it("reads from streams", [] {
-    std::wstringstream stream("Label,5,10,10,5");
+    std::stringstream stream("Label,5,10,10,5");
     Setting setting;
     stream >> setting;
     assert(!setting.label().compare("Label"));
@@ -60,7 +60,7 @@ int main() {
     assert(setting.current_value() == setting.begin() + 5);
   });
   it("writes onto streams", [] {
-    std::wstringstream stream{};
+    std::stringstream stream{};
     stream << Setting("Label", 5, 10, 10, 5);
     assert(!stream.str().compare("Label,5"));
   });
