@@ -18,10 +18,10 @@ using Data::Palette::button;
 using Engine::UI::Box;
 
 Engine::UI::Button *Engine::Menu::Main::append_button(Box *parent,
-                                                      const wchar_t *str) {
+                                                      const char *str) {
   auto center = parent->append<UI::Center>();
   center->propb(Box::Property::center_horizontal, true);
-  auto btn = center->append<UI::Button, const wchar_t *>(str);
+  auto btn = center->append<UI::Button, const char *>(str);
   unfocus(btn);
   return btn;
 }
@@ -37,11 +37,11 @@ Box *Engine::Menu::Main::generate() {
 
   // buttons
   auto btn_container = root->append<UI::Box>();
-  auto play = append_button(btn_container, L"Play");
+  auto play = append_button(btn_container, "Play");
   play->props(Box::Property::padding_bottom, 1);
-  auto settings = append_button(btn_container, L"Settings");
+  auto settings = append_button(btn_container, "Settings");
   settings->props(Box::Property::padding_bottom, 1);
-  append_button(btn_container, L"Quit");
+  append_button(btn_container, "Quit");
 
   return root;
 }

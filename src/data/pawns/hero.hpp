@@ -30,7 +30,7 @@ namespace Pawns {
 */
 class Hero : public Character {
 public:
-  Hero(Engine::Color foreground, wchar_t character, const Nostd::WString &name,
+  Hero(Engine::Color foreground, char character, const Nostd::WString &name,
        const Nostd::WString &description, Skill skill, Skill superSkill,
        int maxHealth, int maxMana);
   Hero(Hero &&) = default;
@@ -55,7 +55,7 @@ public:
   bool attemptSuperSkill() noexcept;
   int score() const noexcept;
 
-  friend std::basic_ostream<wchar_t> &operator>>(std::basic_ostream<wchar_t> &,
+  friend std::basic_ostream<char> &operator>>(std::basic_ostream<char> &,
                                                  const Hero &);
 
 private:
@@ -65,7 +65,7 @@ private:
   int curH, maxH, curM, maxM, scr;
 };
 
-std::basic_istream<wchar_t> &operator>>(std::basic_istream<wchar_t> &, Hero &);
+std::basic_istream<char> &operator>>(std::basic_istream<char> &, Hero &);
 
 } // namespace Pawns
 

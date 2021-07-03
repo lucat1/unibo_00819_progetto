@@ -21,7 +21,7 @@ using Nostd::it;
 int main() {
   it("reads a Skill from a stream", [] {
     Skill fireMagic{};
-    std::wistringstream wiss{L"1,1,0,9,🔥,Fireball,2,0,50,5,0,0\n"};
+    std::wistringstream wiss{"1,1,0,9,🔥,Fireball,2,0,50,5,0,0\n"};
     wiss >> fireMagic;
     assert(fireMagic.projectiles().size() == 1);
   });

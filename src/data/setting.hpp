@@ -115,7 +115,7 @@ public:
   int operator[](size_type) const noexcept;
   int at(size_type) const;
 
-  friend std::basic_ostream<wchar_t> &operator<<(std::basic_ostream<wchar_t> &,
+  friend std::basic_ostream<char> &operator<<(std::basic_ostream<char> &,
                                                  const Setting &);
 
 private:
@@ -126,9 +126,9 @@ private:
 
 // The two following methods ignore the setting's current value and work with
 // non-standard CSV format
-std::basic_istream<wchar_t> &operator>>(std::basic_istream<wchar_t> &,
+std::basic_istream<char> &operator>>(std::basic_istream<char> &,
                                         Setting &);
-std::basic_ostream<wchar_t> &operator<<(std::basic_ostream<wchar_t> &,
+std::basic_ostream<char> &operator<<(std::basic_ostream<char> &,
                                         const Setting &);
 
 } // namespace Data

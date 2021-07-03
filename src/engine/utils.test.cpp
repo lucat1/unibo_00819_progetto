@@ -20,7 +20,7 @@ using Nostd::WString;
 
 int main() {
   it("generates a padded string of the correct length", [] {
-    WString str1 = L"yet another test string", str2 = L"test test test string";
+    WString str1 = "yet another test string", str2 = "test test test string";
     leftpad(100, str1);
     assert(str1.length() == 100);
   });

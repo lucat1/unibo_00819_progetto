@@ -15,7 +15,7 @@
 
 using Data::Pawns::Pawn;
 
-Pawn::Pawn(Nostd::WString name, wchar_t character, Engine::Color foreground)
+Pawn::Pawn(Nostd::WString name, char character, Engine::Color foreground)
     : Engine::EntityTile{character, foreground}, nm{name} {}
 
 Pawn &Pawn::operator=(Pawn &&p) {

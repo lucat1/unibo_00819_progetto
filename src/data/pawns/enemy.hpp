@@ -29,7 +29,7 @@ namespace Pawns {
 */
 class Enemy : public Character, public Interactable {
 public:
-  Enemy(Engine::Color foreground, wchar_t character, const Nostd::WString &name,
+  Enemy(Engine::Color foreground, char character, const Nostd::WString &name,
         Skill skill, int healthDamage, int manaDamage, int scoreDamage,
         int behavior);
   Enemy(Enemy &&) = default;
@@ -49,7 +49,7 @@ public:
 
   bool has_behavior(Behavior bhvr) const noexcept;
 
-  friend std::basic_ostream<wchar_t> &operator>>(std::basic_ostream<wchar_t> &,
+  friend std::basic_ostream<char> &operator>>(std::basic_ostream<char> &,
                                                  const Enemy &);
 
 protected:
@@ -65,7 +65,7 @@ private:
 constexpr Enemy::Behavior operator|(Enemy::Behavior a, Enemy::Behavior b);
 constexpr Enemy::Behavior operator&(Enemy::Behavior a, Enemy::Behavior b);
 
-std::basic_istream<wchar_t> &operator>>(std::basic_istream<wchar_t> &, Enemy &);
+std::basic_istream<char> &operator>>(std::basic_istream<char> &, Enemy &);
 
 } // namespace Pawns
 

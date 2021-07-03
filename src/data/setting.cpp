@@ -139,7 +139,7 @@ int Setting::at(size_type n) const {
   return (*this)[n];
 }
 
-std::basic_istream<wchar_t> &Data::operator>>(std::basic_istream<wchar_t> &is,
+std::basic_istream<char> &Data::operator>>(std::basic_istream<char> &is,
                                               Setting &s) {
   Nostd::WString label;
   int start, stride;
@@ -157,7 +157,7 @@ std::basic_istream<wchar_t> &Data::operator>>(std::basic_istream<wchar_t> &is,
   return is;
 }
 
-std::basic_ostream<wchar_t> &Data::operator<<(std::basic_ostream<wchar_t> &os,
+std::basic_ostream<char> &Data::operator<<(std::basic_ostream<char> &os,
                                               const Setting &s) {
   return put_CSV_WString(os, s.label()) << Database::separator << s.curr_ind;
 }

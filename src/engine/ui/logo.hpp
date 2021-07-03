@@ -21,11 +21,16 @@ namespace UI {
 // element inside a Box
 class Logo : public TextBox {
 public:
-  static constexpr const szu logo_width = 28, logo_height = 6;
-  static constexpr const wchar_t *logo[logo_height] = {
-      L"        _                   ", L"       | |                  ",
-      L"  __ _ | | _ __ ___    __ _ ", L" / _` || || '_ ` _ \\  / _` |",
-      L"| (_| || || | | | | || (_| |", L" \\__,_||_||_| |_| |_| \\__,_|",
+  static constexpr const szu logo_width = 70, logo_height = 8;
+  static constexpr const char *logo[logo_height] = {
+" _____                                _                              _    ",
+"|  _  |                              (_)                            | |   ",
+"| | | |_   _____ _ __ ___ _ __   __ _ _ _ __   ___  ___ _ __ ___  __| |   ",
+"| | | \\ \\ / / _ \\ '__/ _ \\ '_ \\ / _` | | '_ \\ / _ \\/ _ \\ '__/ _ \\/ _` |   ",
+"\\ \\_/ /\\ V /  __/ | |  __/ | | | (_| | | | | |  __/  __/ | |  __/ (_| |   ",
+" \\___/  \\_/ \\___|_|  \\___|_| |_|\\__, |_|_| |_|\\___|\\___|_|  \\___|\\__,_|   ",
+"                                 __/ |                                    ",
+"                                |___/                                     "
   };
 
   // constructs the parent class (TextBox) with the static logo strings

@@ -40,9 +40,9 @@ public:
   // '-' where necessary, when splitting a word
   static strings split_content(const Nostd::WString content, szu max_width);
 
-  static constexpr const wchar_t *append_default_value = L"";
-  TextBox(const Nostd::WString &content = L"");
-  TextBox(const wchar_t *content = L"");
+  static constexpr const char *append_default_value = "";
+  TextBox(const Nostd::WString &content = "");
+  TextBox(const char *content = "");
 
   void show(WINDOW *window, szu x, szu y, szu max_width, szu max_height);
   dim size(szu max_width, szu max_height);

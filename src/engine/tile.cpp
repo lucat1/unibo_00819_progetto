@@ -16,7 +16,7 @@
 
 using Engine::Tile;
 
-wchar_t Tile::character() const { return L' '; }
+char Tile::character() const { return u' '; }
 
 bool Tile::operator==(const Tile &tile) const {
   return character() == tile.character() && background() == tile.background() &&

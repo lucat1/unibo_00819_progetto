@@ -50,9 +50,9 @@ Box *Engine::Menu::Results::append_line(Box *parent, const Nostd::WString &rank,
                                         bool color) {
   Nostd::WString padded_rank = rank, padded_score = score, padded_nick = nick;
   leftpad(rank_size, padded_rank);
-  padded_rank.append(L" ");
+  padded_rank.append(" ");
   leftpad(score_size, padded_score);
-  padded_score.append(L" ");
+  padded_score.append(" ");
   leftpad(nick_size, padded_nick);
 
   auto line = parent->append<UI::Box>();
@@ -83,7 +83,7 @@ Box *Engine::Menu::Results::generate() {
   list->props(Box::Property::padding_bottom, 1);
 
   // append a fake table header as another line
-  append_line(list, L"Rank", L"Score", L"Nick", true);
+  append_line(list, "Rank", "Score", "Nick", true);
 
   Box::szu i = 1;
   for (auto result : results) {
@@ -96,7 +96,7 @@ Box *Engine::Menu::Results::generate() {
   // buttons at the end of the page for closing the menu
   auto center = root->append<UI::Center>();
   center->propb(Box::Property::center_horizontal, true);
-  auto btn = center->append<UI::Button, const wchar_t *>(L"Back");
+  auto btn = center->append<UI::Button, const char *>("Back");
   btn->props(Box::Property::padding_top, 1);
   btn->props(Box::Property::padding_bottom, 1);
   btn->propc(Box::Property::foreground, button.second);

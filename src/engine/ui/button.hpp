@@ -27,8 +27,8 @@ private:
 public:
   static const constexpr szu side_padding = 4;
 
-  Button(const Nostd::WString &content = L"");
-  Button(const wchar_t *content = L"");
+  Button(const Nostd::WString &content = "");
+  Button(const char *content = "");
 
   void show(WINDOW *window, szu x, szu y, szu max_width, szu max_height);
   dim size(szu max_width, szu max_height);

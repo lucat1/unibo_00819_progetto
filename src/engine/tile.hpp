@@ -31,7 +31,7 @@ public:
   Tile(const Tile &) = default;
   Tile &operator=(const Tile &) = default;
 
-  virtual wchar_t character() const;
+  virtual char character() const;
   virtual ~Tile() = default;
 
   bool operator==(const Tile &) const;

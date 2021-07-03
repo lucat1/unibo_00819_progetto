@@ -38,10 +38,10 @@ Nostd::Vector<Data::Setting> Engine::Menu::Settings::dereference_updated() {
 }
 
 Engine::UI::Button *Engine::Menu::Settings::append_button(Box *parent,
-                                                          const wchar_t *str) {
+                                                          const char *str) {
   auto wrapper = parent->append<UI::Center>();
   wrapper->propb(Box::Property::center_horizontal, true);
-  auto btn = wrapper->append<UI::Button, const wchar_t *>(str);
+  auto btn = wrapper->append<UI::Button, const char *>(str);
   unfocus(btn);
   return btn;
 }
@@ -94,9 +94,9 @@ Box *Engine::Menu::Settings::generate() {
   auto chbox = root->append<UI::Center>();
   chbox->propb(Box::Property::center_horizontal, true);
   auto btn_parent = chbox->append<UI::Box>();
-  auto btn1 = append_button(btn_parent, L"Save");
+  auto btn1 = append_button(btn_parent, "Save");
   btn1->props(Box::Property::padding_bottom, 1);
-  append_button(btn_parent, L"Cancel");
+  append_button(btn_parent, "Cancel");
   return root;
 }
 

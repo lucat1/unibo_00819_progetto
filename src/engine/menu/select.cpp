@@ -51,7 +51,7 @@ void Engine::Menu::Select::append_title(UI::Box *root) {
   wrapper->props(Box::Property::padding_top, 1);
   wrapper->props(Box::Property::padding_bottom, 2);
   auto title_text =
-      wrapper->append<UI::TextBox, const wchar_t *>(L"Pick your hero");
+      wrapper->append<UI::TextBox, const char *>("Pick your hero");
   title_text->propc(Box::Property::foreground, Data::Palette::primary);
 }
 
@@ -94,7 +94,7 @@ Box *Engine::Menu::Select::generate() {
   auto data_restriction =
       data_wrapper->append<UI::StrictBox, Box::dim>({40, 1});
   data_restriction->propb(Box::Property::direction_horizontal, true);
-  Nostd::WString health = L"health: ", mana = L"mana: ";
+  Nostd::WString health = "health: ", mana = "mana: ";
   Utils::stringify(heroes[focused].maxHealth(), health);
   Utils::stringify(heroes[focused].maxMana(), mana);
   auto health_text =

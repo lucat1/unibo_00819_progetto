@@ -29,7 +29,7 @@ namespace Pawns {
 class Result : public Pawn {
 public:
   Result() = default;
-  Result(const Nostd::WString &, wchar_t = L' ',
+  Result(const Nostd::WString &, char = u' ',
          Engine::Color = Engine::Color::transparent, int = 0);
   Result(Hero);
   Result(Result &&) = default;

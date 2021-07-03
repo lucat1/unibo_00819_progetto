@@ -20,8 +20,8 @@ namespace Utils {
 // returns the amount of digits needed to display an integer
 int digits(int n);
 
-// converts a number between 0 and 9 (inclusive) to a wchar_t charter
-wchar_t digitize(int n);
+// converts a number between 0 and 9 (inclusive) to a char charter
+char digitize(int n);
 
 // puts the given number in digits inside the provided WString
 void stringify(int n, Nostd::WString &str);

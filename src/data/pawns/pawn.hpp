@@ -28,7 +28,7 @@ namespace Pawns {
 class Pawn : public virtual Engine::EntityTile {
 public:
   Pawn() = default;
-  Pawn(Nostd::WString, wchar_t = L' ',
+  Pawn(Nostd::WString, char = u' ',
        Engine::Color = Engine::Color::transparent);
   Pawn(Pawn &&) = default;
   Pawn &operator=(Pawn &&);
@@ -48,7 +48,7 @@ protected:
     In this case, though, we want child classes to have unrestricted write
     privileges to a data member, and the general user to have none.
   */
-  Nostd::WString nm{L"???"};
+  Nostd::WString nm{"???"};
   bool movedFrom{false};
 };
 

@@ -12,7 +12,7 @@
 
 #include "choice.hpp"
 #include "../utils.hpp"
-#include <curses.h>
+#include <ncurses.h>
 
 using Engine::Utils::digits;
 using Engine::Utils::stringify;
@@ -46,23 +46,23 @@ void Engine::UI::Choice::show(WINDOW *window, szu abs_x, szu y, szu max_width,
   if (boolean) {
     bool on = *setting->current_value() == 1;
     UI::start_color(window, color_off);
-    mvwaddwstr(window, y, x, L"<");
+    mvwaddstr(window, y, x, "<");
     UI::end_color(window, color_off);
 
     UI::start_color(window, !on ? color_on : color_off);
-    mvwaddwstr(window, y, x + 2, L"off");
+    mvwaddstr(window, y, x + 2, "off");
     UI::end_color(window, !on ? color_on : color_off);
 
     UI::start_color(window, color_off);
-    mvwaddwstr(window, y, x + 6, L"/");
+    mvwaddstr(window, y, x + 6, "/");
     UI::end_color(window, color_off);
 
     UI::start_color(window, on ? color_on : color_off);
-    mvwaddwstr(window, y, x + 8, L"on");
+    mvwaddstr(window, y, x + 8, "on");
     UI::end_color(window, on ? color_on : color_off);
 
     UI::start_color(window, color_off);
-    mvwaddwstr(window, y, x + 11, L">");
+    mvwaddstr(window, y, x + 11, ">");
     UI::end_color(window, color_off);
   } else {
     szu next_x = x + 2 * digits(setting->last()) + 2;
@@ -70,10 +70,10 @@ void Engine::UI::Choice::show(WINDOW *window, szu abs_x, szu y, szu max_width,
     UI::start_color(window, color_on);
     Nostd::WString str;
     stringify(*setting->current_value(), str);
-    str.push_back(L'/');
+    str.push_back(u'/');
     stringify(setting->last(), str);
-    str.push_back(L' ');
-    mvwaddwstr(window, y, x, str.c_str());
+    str.push_back(u' ');
+    mvwaddstr(window, y, x, str.c_str());
     UI::end_color(window, color_on);
 
     // val : 10 = max : min

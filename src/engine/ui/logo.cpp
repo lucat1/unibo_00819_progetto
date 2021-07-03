@@ -14,9 +14,9 @@
 #include "logo.hpp"
 #include "../../data/palette.hpp"
 
-constexpr const wchar_t *Engine::UI::Logo::logo[];
+constexpr const char *Engine::UI::Logo::logo[];
 
-Engine::UI::Logo::Logo() : TextBox(L"") {
+Engine::UI::Logo::Logo() : TextBox("") {
   propc(Box::Property::foreground, Data::Palette::logo.first);
   propc(Box::Property::background, Data::Palette::logo.second);
 }
