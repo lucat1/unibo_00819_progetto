@@ -50,7 +50,7 @@ private:
   int hE{0}, hM{false};
 };
 
-std::basic_istream<wchar_t> &operator>>(std::basic_istream<wchar_t> &, Skill &);
+std::basic_istream<char> &operator>>(std::basic_istream<char> &, Skill &);
 
 } // namespace Pawns
 

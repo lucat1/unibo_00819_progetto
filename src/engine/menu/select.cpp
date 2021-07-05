@@ -51,7 +51,7 @@ void Engine::Menu::Select::append_title(UI::Box *root) {
   wrapper->props(Box::Property::padding_top, 1);
   wrapper->props(Box::Property::padding_bottom, 2);
   auto title_text =
-      wrapper->append<UI::TextBox, const wchar_t *>(L"Pick your hero");
+      wrapper->append<UI::TextBox, const char *>("Pick your hero");
   title_text->propc(Box::Property::foreground, Data::Palette::primary);
 }
 
@@ -71,7 +71,7 @@ Box *Engine::Menu::Select::generate() {
   auto name_wrapper = center_column->append<UI::Center>();
   name_wrapper->propb(Box::Property::center_horizontal, true);
   name_wrapper->props(Box::Property::padding_bottom, 1);
-  auto name = name_wrapper->append<UI::TextBox, const Nostd::WString &>(
+  auto name = name_wrapper->append<UI::TextBox, const Nostd::String &>(
       heroes[focused].name());
   name->propc(Box::Property::foreground, Data::Palette::secondary);
 
@@ -86,7 +86,7 @@ Box *Engine::Menu::Select::generate() {
   description_wrapper->props(Box::Property::padding_bottom, 1);
   auto description_restriction =
       description_wrapper->append<UI::StrictBox, Box::dim>({40, 3});
-  description_restriction->append<UI::TextBox, const Nostd::WString &>(
+  description_restriction->append<UI::TextBox, const Nostd::String &>(
       heroes[focused].description());
 
   auto data_wrapper = center_column->append<UI::Center>();
@@ -94,14 +94,14 @@ Box *Engine::Menu::Select::generate() {
   auto data_restriction =
       data_wrapper->append<UI::StrictBox, Box::dim>({40, 1});
   data_restriction->propb(Box::Property::direction_horizontal, true);
-  Nostd::WString health = L"health: ", mana = L"mana: ";
+  Nostd::String health = "health: ", mana = "mana: ";
   Utils::stringify(heroes[focused].maxHealth(), health);
   Utils::stringify(heroes[focused].maxMana(), mana);
   auto health_text =
-      data_restriction->append<UI::TextBox, const Nostd::WString &>(health);
+      data_restriction->append<UI::TextBox, const Nostd::String &>(health);
   health_text->propc(Box::Property::foreground, Data::Palette::health);
   auto mana_text =
-      data_restriction->append<UI::TextBox, const Nostd::WString &>(mana);
+      data_restriction->append<UI::TextBox, const Nostd::String &>(mana);
   mana_text->propb(Box::Property::float_right, true);
   mana_text->propc(Box::Property::foreground, Data::Palette::mana);
 

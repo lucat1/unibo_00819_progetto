@@ -32,7 +32,7 @@ void Engine::UI::Mugshot::show(WINDOW *window, szu x, szu y, szu max_width,
       short pixel_color = color_to_short(cell.value());
       int color = Engine::UI::color_pair(pixel_color, pixel_color);
       Engine::UI::start_color(window, color);
-      mvwaddch(window, y + y_inc, x + x_inc, L' ');
+      mvwaddch(window, y + y_inc, x + x_inc, u' ');
       Engine::UI::end_color(window, color);
       x_inc++;
     }

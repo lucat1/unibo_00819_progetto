@@ -22,16 +22,20 @@ namespace Scene {
 
 class Scene : public Drawable {
 private:
-  /* const Data::Pawns::Hero &player; */
-  Data::Pawns::Hero player;
+  // TODO: refactor with the proper world structure
+  const Data::Pawns::Hero &player;
+  // TODO: remove this functionality, the world structure will contain a way to
+  // notify us that the game has ended
+  bool over = false;
 
   void draw();
 
 public:
   Kind kind() const;
   void handle_event(Event e);
+  bool is_over();
 
-  Scene(WINDOW *window);
+  Scene(WINDOW *window, const Data::Pawns::Hero &hero);
 };
 
 } // namespace Scene

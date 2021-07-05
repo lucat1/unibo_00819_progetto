@@ -14,10 +14,10 @@
 #include "text_box.hpp"
 #include <algorithm>
 
-Engine::UI::TextBox::TextBox(const wchar_t *content) : Box() {
+Engine::UI::TextBox::TextBox(const char *content) : Box() {
   this->content = content;
 }
-Engine::UI::TextBox::TextBox(const Nostd::WString &content)
+Engine::UI::TextBox::TextBox(const Nostd::String &content)
     : TextBox(content.c_str()) {}
 
 void Engine::UI::TextBox::update_lines(szu max_width) {
@@ -27,8 +27,7 @@ void Engine::UI::TextBox::update_lines(szu max_width) {
 }
 
 Engine::UI::TextBox::strings
-Engine::UI::TextBox::split_content(const Nostd::WString content,
-                                   szu max_width) {
+Engine::UI::TextBox::split_content(const Nostd::String content, szu max_width) {
   strings lines;
   if (max_width == 0)
     return lines;
@@ -42,10 +41,10 @@ Engine::UI::TextBox::split_content(const Nostd::WString content,
       // as a word and we add the - charter. Otherwhise we consider this the
       // beginning of a new word and leave it for the next line.
       if (!Nostd::iswspace(sub[wrote - 2]))
-        sub.back() = L'-';
+        sub.back() = u'-';
       else {
         wrote--; // leave the new word in the next line
-        sub.back() = L' ';
+        sub.back() = u' ';
       }
     }
 
@@ -70,8 +69,8 @@ void Engine::UI::TextBox::show(WINDOW *window, szu x, szu y, szu max_width,
   // size is the first priority.
   for (size_t i = 0; i < std::min(max_height, (szu)lines.size()); i++) {
     auto line = lines[i];
-    mvwaddwstr(window, y + i, x + (fr ? max_width - line.length() : 0),
-               line.c_str());
+    mvwaddstr(window, y + i, x + (fr ? max_width - line.length() : 0),
+              line.c_str());
   }
 
   end_color(window);

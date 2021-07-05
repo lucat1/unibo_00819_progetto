@@ -11,8 +11,8 @@
 
 #include "scenery.hpp"
 
-std::basic_istream<wchar_t> &Data::operator>>(std::basic_istream<wchar_t> &i,
-                                              Scenery::Autotile &a) {
+std::basic_istream<char> &Data::operator>>(std::basic_istream<char> &i,
+                                           Scenery::Autotile &a) {
   if (i) {
     (i >> a.singlet).ignore();
     (i >> a.concave_top_left >> a.concave_top_right).ignore();
@@ -29,8 +29,8 @@ std::basic_istream<wchar_t> &Data::operator>>(std::basic_istream<wchar_t> &i,
   return i;
 }
 
-std::basic_istream<wchar_t> &Data::operator>>(std::basic_istream<wchar_t> &i,
-                                              Scenery &s) {
+std::basic_istream<char> &Data::operator>>(std::basic_istream<char> &i,
+                                           Scenery &s) {
   if (i >> s.ground) {
     i >> s.platform;
     size_t sky_colors;

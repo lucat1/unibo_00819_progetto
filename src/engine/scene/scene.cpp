@@ -14,19 +14,8 @@
 #include "hud.hpp"
 #include <exception>
 
-Engine::Scene::Scene::Scene(WINDOW *window)
-    : Drawable(window, Screen::columns, Screen::lines),
-      player{
-          Engine::Color::grey,
-          L'l',
-          L"Luca",
-          L"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vitae "
-          L"libero congue, molestie lacus ac, tempus ex. Sed eget ultricies "
-          L"lorem.",
-          {},
-          {},
-          10,
-          6} {
+Engine::Scene::Scene::Scene(WINDOW *window, const Data::Pawns::Hero &hero)
+    : Drawable(window, Screen::columns, Screen::lines), player{hero} {
   // TODO: remove when we recieve a proper world object with the map and
   // entities data
 }
@@ -35,10 +24,14 @@ Engine::Drawable::Kind Engine::Scene::Scene::kind() const { return Kind::game; }
 
 void Engine::Scene::Scene::handle_event(Event e) {
   if (e != Event::redraw)
-    throw std::invalid_argument("Engine::Scene::Scene only handles "
-                                "Engine::Drawable::Event::redraw events");
+    over = true;
+  // TODO: restore, this is the proper mechanic
+  /* throw std::invalid_argument("Engine::Scene::Scene only handles " */
+  /*                             "Engine::Drawable::Event::redraw events"); */
   draw();
 }
+
+bool Engine::Scene::Scene::is_over() { return over; }
 
 void Engine::Scene::Scene::draw() {
   // do all serious rendering first, lastly render the HUD

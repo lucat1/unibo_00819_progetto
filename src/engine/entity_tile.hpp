@@ -24,7 +24,7 @@ namespace Engine {
 class EntityTile : public Tile {
 public:
   EntityTile() = default;
-  EntityTile(wchar_t, Engine::Color = Engine::Color::transparent);
+  EntityTile(char, Engine::Color = Engine::Color::transparent);
   EntityTile(EntityTile &&) = default;
   EntityTile &operator=(EntityTile &&) = default;
   EntityTile(const EntityTile &) = default;
@@ -32,11 +32,11 @@ public:
 
   virtual ~EntityTile() = default;
 
-  wchar_t character() const noexcept override final;
+  char character() const noexcept override final;
   Color foreground() const noexcept override final;
 
 private:
-  wchar_t chr{L' '};
+  char chr{u' '};
   Engine::Color fg{Engine::Color::transparent};
 };
 

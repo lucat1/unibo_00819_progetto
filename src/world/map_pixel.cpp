@@ -13,7 +13,7 @@
 using namespace World;
 using namespace Engine;
 
-MapPixel::MapPixel(wchar_t icon, Color fg, Color bg) noexcept {
+MapPixel::MapPixel(char icon, Color fg, Color bg) noexcept {
   this->c = icon;
   this->fg = fg;
   this->bg = bg;
@@ -21,7 +21,7 @@ MapPixel::MapPixel(wchar_t icon, Color fg, Color bg) noexcept {
 
 Color MapPixel::foreground() const { return fg; }
 Color MapPixel::background() const { return bg; }
-wchar_t MapPixel::character() const { return c; }
+char MapPixel::character() const { return c; }
 
 bool MapPixel::operator==(MapPixel m) const { return m.c == c; }
 bool MapPixel::operator!=(MapPixel m) const { return m.c != c; }

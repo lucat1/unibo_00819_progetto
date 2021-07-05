@@ -25,9 +25,9 @@ private:
   const Nostd::List<Data::Pawns::Result> &results;
   bool has_interacted = 0;
   UI::Box *append_line(UI::Box *parent, int rank, int score,
-                       const Nostd::WString &nick);
-  UI::Box *append_line(UI::Box *parent, const Nostd::WString &rank,
-                       const Nostd::WString &score, const Nostd::WString &nick,
+                       const Nostd::String &nick);
+  UI::Box *append_line(UI::Box *parent, const Nostd::String &rank,
+                       const Nostd::String &score, const Nostd::String &nick,
                        bool color = false);
 
 protected:

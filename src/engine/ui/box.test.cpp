@@ -65,7 +65,7 @@ int main() {
     assert(size.second == 0);
   });
 
-  TextBox *tb1 = box1->append<TextBox, const wchar_t *>(L"this is a test text");
+  TextBox *tb1 = box1->append<TextBox, const char *>("this is a test text");
   it("reports the correct size when it has children", [box1, tb1] {
     auto size = box1->size(1000, 1000);
     assert(size.first > 0);
@@ -109,8 +109,7 @@ int main() {
   });
 
   Box *vbox = new Box();
-  TextBox *tb =
-      vbox->append<TextBox, const wchar_t *>(L"this is a test string");
+  TextBox *tb = vbox->append<TextBox, const char *>("this is a test string");
   Box *pbox = vbox->append<Box>();
   pbox->props(Box::Property::padding_left, 2);
   pbox->props(Box::Property::padding_right, 2);

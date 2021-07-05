@@ -23,7 +23,7 @@ int main() {
     // Settings
     const auto &s = d.settings();
     assert(s.size() == 2);
-    assert(!s.at(0).label().compare(L"Sounds"));
+    assert(!s.at(0).label().compare("Sounds"));
     assert(s.at(1).size() == 3);
     // Map chunks
     const auto &m = d.map_chunks();
@@ -36,7 +36,7 @@ int main() {
     const auto &sc = d.sceneries();
     assert(sc.size() == 3);
     assert(sc.at(0).ground.foreground == Engine::Color::grey7);
-    assert(sc.at(0).ground.center == L'#');
+    assert(sc.at(0).ground.center == u'#');
     assert(sc.at(0).platform.background == Engine::Color::grey7);
     assert(sc.at(0).sky.size() == 3);
     assert(sc.at(0).sky.at(1) == Engine::Color::dodger_blue3);
@@ -44,25 +44,24 @@ int main() {
     const auto &r = d.results();
     assert(r.size() == 4);
     assert(r.cbegin()->score() == 8000000);
-    assert(r.cend()->name() == L"Stefano");
-    /*// Heroes
+    assert(r.cend()->name() == "Stefano");
+    // Heroes
     const auto &h = d.heroes();
     assert(h.size() == 4);
-    assert(h.contains(L"Luca"));
-    assert(h.contains(L"Andreea"));
-    assert(h.contains(L"Mattia"));
-    assert(h.contains(L"Stefano"));
+    assert(h.at(0).name() == "Luca");
+    assert(h.at(1).name() == "Andreea");
+    assert(h.at(2).name() == "Mattia");
+    assert(h.at(3).name() == "Stefano");
     // Enemies
-    const auto &h = d.enemies();
-    assert(e.size() == 3);
-    assert(e.contains(L"Goomba"));
-    assert(e.contains(L"Neko"));
-    assert(e.contains(L"Unicorn"));
+    const auto &e = d.enemies();
+    assert(e.size() == 7);
+    assert(e.at(0).name() == "boulder");
+    assert(e.at(1).name() == "snake");
     // Items
-    const auto &e = d.items();
-    assert(i.size() == 2);
-    assert(i.contains(L"Mushroom"));
-    assert(i.contains(L"Star"));*/
+    const auto &i = d.items();
+    assert(i.size() == 7);
+    assert(i.at(0).name() == "small mushroom");
+    assert(i.at(1).name() == "mushroom");
   });
   it("saves user settings on filesystem", [] {
     Database d("tests/alma.conf.csv", "tests/assets/", "tests/scoreboard.csv");

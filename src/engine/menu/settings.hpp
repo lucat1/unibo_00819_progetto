@@ -29,7 +29,7 @@ private:
   int clicked_on = -1;
   void alloc_updated(Nostd::Vector<Data::Setting> &settings);
   Nostd::Vector<Data::Setting> dereference_updated();
-  UI::Button *append_button(UI::Box *parent, const wchar_t *str);
+  UI::Button *append_button(UI::Box *parent, const char *str);
   UI::Box *append_line(UI::Box *parent, Data::Setting *setting);
 
 protected:

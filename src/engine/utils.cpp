@@ -22,19 +22,19 @@ int Engine::Utils::digits(int n) {
   return k;
 }
 
-wchar_t Engine::Utils::digitize(int n) {
+char Engine::Utils::digitize(int n) {
   if (n > 9)
-    return L'-'; // undefined behaviour
+    return u'-'; // undefined behaviour
 
-  return L'0' + n;
+  return u'0' + n;
 }
 
-void Engine::Utils::stringify(int n, Nostd::WString &str) {
+void Engine::Utils::stringify(int n, Nostd::String &str) {
   if (n == 0)
-    str.insert(str.length(), L'0');
+    str.insert(str.length(), u'0');
   else {
     if (n < 0) {
-      str.insert(0, L'-');
+      str.insert(0, u'-');
       n = -n; // make it positive
     }
     int last = str.length();
@@ -45,16 +45,16 @@ void Engine::Utils::stringify(int n, Nostd::WString &str) {
   }
 }
 
-void Engine::Utils::leftpad(size_t n, Nostd::WString &str) {
+void Engine::Utils::leftpad(size_t n, Nostd::String &str) {
   size_t len = str.length();
   if (len > n) {
     str = str.substr(0, n - 1);
   } else if (len != n) {
     size_t amount = n - len;
-    wchar_t space[amount + 1];
+    char space[amount + 1];
     // fill the space string with the right amount of spaces
     for (size_t i = 0; i < amount; i++)
-      space[i] = L' ';
+      space[i] = u' ';
     space[amount] = '\0';
 
     str.insert(0, space, amount);

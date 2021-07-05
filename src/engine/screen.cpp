@@ -13,7 +13,7 @@
 
 #include "screen.hpp"
 #include "menu/main.hpp"
-#include <curses.h>
+#include <ncurses.h>
 
 Engine::Screen::Screen() {
   this->content = nullptr;
@@ -57,6 +57,8 @@ bool Engine::Screen::can_fit() {
 }
 
 bool Engine::Screen::open() {
+  // allow printing unicode symbols
+  setlocale(LC_ALL, "");
   stdscreen = initscr();
   if (stdscreen == nullptr || start_color())
     return false;

@@ -13,7 +13,7 @@
 #define DATA_PAWNS_RESULT_HPP
 
 #include "../../engine/colorable.hpp"
-#include "../../nostd/wstring.hpp"
+#include "../../nostd/string.hpp"
 #include "hero.hpp"
 #include "pawn.hpp"
 
@@ -29,7 +29,7 @@ namespace Pawns {
 class Result : public Pawn {
 public:
   Result() = default;
-  Result(const Nostd::WString &, wchar_t = L' ',
+  Result(const Nostd::String &, char = u' ',
          Engine::Color = Engine::Color::transparent, int = 0);
   Result(Hero);
   Result(Result &&) = default;

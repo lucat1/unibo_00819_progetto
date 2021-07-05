@@ -21,6 +21,7 @@ namespace Scene {
 class HUD : public UI::Box {
 private:
   int health, max_health, mana, max_mana;
+  void bar(WINDOW *window, szu x, szu y, int value, int max_value, const char* icon, Color c);
 
 public:
   HUD(int health, int max_health, int mana, int max_mana);
