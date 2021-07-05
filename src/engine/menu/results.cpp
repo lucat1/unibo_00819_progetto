@@ -31,8 +31,8 @@ Engine::Menu::Results::Results(WINDOW *window,
     : Menu(window), results{results} {}
 
 Box *Engine::Menu::Results::append_line(Box *parent, int rank, int score,
-                                        const Nostd::WString &nick) {
-  Nostd::WString score_str, rank_str;
+                                        const Nostd::String &nick) {
+  Nostd::String score_str, rank_str;
   Utils::stringify(rank, rank_str);
   Utils::stringify(score, score_str);
   return append_line(parent, score_str, rank_str, nick);
@@ -44,22 +44,22 @@ Box::szu nick_size = 14;
 Box::szu score_size =
     Engine::Screen::columns - (2 * menu_padding) - rank_size - nick_size - 2;
 
-Box *Engine::Menu::Results::append_line(Box *parent, const Nostd::WString &rank,
-                                        const Nostd::WString &score,
-                                        const Nostd::WString &nick,
+Box *Engine::Menu::Results::append_line(Box *parent, const Nostd::String &rank,
+                                        const Nostd::String &score,
+                                        const Nostd::String &nick,
                                         bool color) {
-  Nostd::WString padded_rank = rank, padded_score = score, padded_nick = nick;
+  Nostd::String padded_rank = rank, padded_score = score, padded_nick = nick;
   leftpad(rank_size, padded_rank);
-  padded_rank.append(L" ");
+  padded_rank.append(" ");
   leftpad(score_size, padded_score);
-  padded_score.append(L" ");
+  padded_score.append(" ");
   leftpad(nick_size, padded_nick);
 
   auto line = parent->append<UI::Box>();
   line->propb(Box::Property::direction_horizontal, true);
-  auto r = line->append<UI::TextBox, const Nostd::WString &>(padded_rank);
-  auto s = line->append<UI::TextBox, const Nostd::WString &>(padded_score);
-  auto n = line->append<UI::TextBox, const Nostd::WString &>(padded_nick);
+  auto r = line->append<UI::TextBox, const Nostd::String &>(padded_rank);
+  auto s = line->append<UI::TextBox, const Nostd::String &>(padded_score);
+  auto n = line->append<UI::TextBox, const Nostd::String &>(padded_nick);
   if (color) {
     r->propc(Box::Property::foreground, primary);
     s->propc(Box::Property::foreground, primary);
@@ -83,7 +83,7 @@ Box *Engine::Menu::Results::generate() {
   list->props(Box::Property::padding_bottom, 1);
 
   // append a fake table header as another line
-  append_line(list, L"Rank", L"Score", L"Nick", true);
+  append_line(list, "Rank", "Score", "Nick", true);
 
   Box::szu i = 1;
   for (auto result : results) {
@@ -96,7 +96,7 @@ Box *Engine::Menu::Results::generate() {
   // buttons at the end of the page for closing the menu
   auto center = root->append<UI::Center>();
   center->propb(Box::Property::center_horizontal, true);
-  auto btn = center->append<UI::Button, const wchar_t *>(L"Back");
+  auto btn = center->append<UI::Button, const char *>("Back");
   btn->props(Box::Property::padding_top, 1);
   btn->props(Box::Property::padding_bottom, 1);
   btn->propc(Box::Property::foreground, button.second);

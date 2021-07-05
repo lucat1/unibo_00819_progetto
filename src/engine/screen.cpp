@@ -13,7 +13,7 @@
 
 #include "screen.hpp"
 #include "menu/main.hpp"
-#include <curses.h>
+#include <ncurses.h>
 
 Engine::Screen::Screen() {
   this->content = nullptr;

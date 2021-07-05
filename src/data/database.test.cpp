@@ -23,7 +23,7 @@ int main() {
     // Settings
     const auto &s = d.settings();
     assert(s.size() == 2);
-    assert(!s.at(0).label().compare(L"Sounds"));
+    assert(!s.at(0).label().compare("Sounds"));
     assert(s.at(1).size() == 3);
     // Map chunks
     const auto &m = d.map_chunks();
@@ -36,7 +36,7 @@ int main() {
     const auto &sc = d.sceneries();
     assert(sc.size() == 3);
     assert(sc.at(0).ground.foreground == Engine::Color::grey7);
-    assert(sc.at(0).ground.center == L'#');
+    assert(sc.at(0).ground.center == u'#');
     assert(sc.at(0).platform.background == Engine::Color::grey7);
     assert(sc.at(0).sky.size() == 3);
     assert(sc.at(0).sky.at(1) == Engine::Color::dodger_blue3);
@@ -44,24 +44,24 @@ int main() {
     const auto &r = d.results();
     assert(r.size() == 4);
     assert(r.cbegin()->score() == 8000000);
-    assert(r.cend()->name() == L"Stefano");
+    assert(r.cend()->name() == "Stefano");
     // Heroes
     const auto &h = d.heroes();
     assert(h.size() == 4);
-    assert(h.at(0).name() == L"Luca");
-    assert(h.at(1).name() == L"Andreea");
-    assert(h.at(2).name() == L"Mattia");
-    assert(h.at(3).name() == L"Stefano");
+    assert(h.at(0).name() == "Luca");
+    assert(h.at(1).name() == "Andreea");
+    assert(h.at(2).name() == "Mattia");
+    assert(h.at(3).name() == "Stefano");
     // Enemies
     const auto &e = d.enemies();
     assert(e.size() == 7);
-    assert(e.at(0).name() == L"boulder");
-    assert(e.at(1).name() == L"snake");
+    assert(e.at(0).name() == "boulder");
+    assert(e.at(1).name() == "snake");
     // Items
     const auto &i = d.items();
     assert(i.size() == 7);
-    assert(i.at(0).name() == L"small mushroom");
-    assert(i.at(1).name() == L"mushroom");
+    assert(i.at(0).name() == "small mushroom");
+    assert(i.at(1).name() == "mushroom");
   });
   it("saves user settings on filesystem", [] {
     Database d("tests/alma.conf.csv", "tests/assets/", "tests/scoreboard.csv");

@@ -17,7 +17,7 @@
 
 #include "../nostd/list.hpp"
 #include "../nostd/vector.hpp"
-#include "../nostd/wstring.hpp"
+#include "../nostd/string.hpp"
 #include "map_chunk.hpp"
 #include "pawns/enemy.hpp"
 #include "pawns/hero.hpp"
@@ -35,7 +35,7 @@ namespace Data {
 */
 class Database {
 public:
-  constexpr static wchar_t separator{','}, newrecord{'\n'}, escape{'\\'};
+  constexpr static char separator{','}, newrecord{'\n'}, escape{'\\'};
   constexpr const static char *const settings_rel_fp{"/csv/settings.csv"},
       *const maps_rel_fp{"/img/maps.txt"},
           *const sceneries_rel_fp{"/img/sceneries.txt"},
@@ -99,11 +99,11 @@ private:
   void load_items(const char *assets_filepath);
 };
 
-std::basic_istream<wchar_t> &get_CSV_WString(std::basic_istream<wchar_t> &,
-                                             Nostd::WString &);
+std::basic_istream<char> &get_CSV_String(std::basic_istream<char> &,
+                                             Nostd::String &);
 
-std::basic_ostream<wchar_t> &put_CSV_WString(std::basic_ostream<wchar_t> &,
-                                             const Nostd::WString &);
+std::basic_ostream<char> &put_CSV_String(std::basic_ostream<char> &,
+                                             const Nostd::String &);
 
 } // namespace Data
 

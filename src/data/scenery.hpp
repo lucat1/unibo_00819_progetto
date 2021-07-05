@@ -30,7 +30,7 @@ struct Scenery {
     form any kind of shape.
   */
   struct Autotile {
-    wchar_t singlet,                               // ▢
+    char singlet,                               // ▢
         concave_top_left, concave_top_right,       // ⌟⌞
         concave_bottom_left, concave_bottom_right, // ⌝⌜
         top_left, top, top_right,                  // ⎡⎺⎤
@@ -46,10 +46,10 @@ struct Scenery {
 // - seven lines for the foreground Autotile (as shown above)
 // - a single line with the number of the color in the sky followed by a single
 //   code for each of them
-std::basic_istream<wchar_t> &operator>>(std::basic_istream<wchar_t> &,
+std::basic_istream<char> &operator>>(std::basic_istream<char> &,
                                         Scenery::Autotile &);
 
-std::basic_istream<wchar_t> &operator>>(std::basic_istream<wchar_t> &,
+std::basic_istream<char> &operator>>(std::basic_istream<char> &,
                                         Scenery &);
 
 } // namespace Data

@@ -26,7 +26,7 @@ ifeq ($(UNAME), Linux)
 		CXXFLAGS += $(shell ncursesw5-config --cflags)
 		LDFLAGS += $(shell ncursesw5-config --libs)
 		else
-		LDFLAGS += -lncurses -lncursesw
+		LDFLAGS += -lncurses
 		endif
 	endif
 endif

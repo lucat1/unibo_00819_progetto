@@ -42,8 +42,8 @@ Skill::projectiles() const noexcept {
   return p;
 }
 
-std::basic_istream<wchar_t> &
-Data::Pawns::operator>>(std::basic_istream<wchar_t> &is, Skill &s) {
+std::basic_istream<char> &
+Data::Pawns::operator>>(std::basic_istream<char> &is, Skill &s) {
   int n; // number of projectiles
   (is >> n).ignore();
   Nostd::UnorderedMap<Nostd::Pair<int, int>, Projectile> projectiles{};
@@ -51,7 +51,7 @@ Data::Pawns::operator>>(std::basic_istream<wchar_t> &is, Skill &s) {
     int x, y;
     (is >> x).ignore();
     (is >> y).ignore();
-    Projectile p{Engine::Color::transparent, L' ', L"", 0, 0, 0, 0};
+    Projectile p{Engine::Color::transparent, u' ', "", 0, 0, 0, 0};
     (is >> p).ignore();
     projectiles.put({x, y}, p);
   }

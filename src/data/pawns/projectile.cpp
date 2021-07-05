@@ -18,8 +18,8 @@
 
 using Data::Pawns::Projectile;
 
-Projectile::Projectile(Engine::Color foreground, wchar_t character,
-                       const Nostd::WString &name, int healthDamage,
+Projectile::Projectile(Engine::Color foreground, char character,
+                       const Nostd::String &name, int healthDamage,
                        int manaDamage, int scoreDamage, int range)
     : Engine::EntityTile{character, foreground}, Pawn{name, character,
                                                       foreground},
@@ -54,14 +54,14 @@ int Projectile::uncheckedScoreEffect(int currentScore) {
   return std::max(0, currentScore - sD);
 }
 
-std::basic_istream<wchar_t> &
-Data::Pawns::operator>>(std::basic_istream<wchar_t> &is, Projectile &p) {
+std::basic_istream<char> &
+Data::Pawns::operator>>(std::basic_istream<char> &is, Projectile &p) {
   short foreground;
   (is >> foreground).ignore();
-  wchar_t character;
+  char character;
   (is >> character).ignore();
-  Nostd::WString name;
-  Data::get_CSV_WString(is, name);
+  Nostd::String name;
+  Data::get_CSV_String(is, name);
   int healthDamage, manaDamage, scoreDamage, range;
   (is >> healthDamage).ignore();
   (is >> manaDamage).ignore();

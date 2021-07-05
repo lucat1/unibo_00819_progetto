@@ -13,7 +13,7 @@
 
 using Engine::BlockTile;
 
-BlockTile::BlockTile(wchar_t character, Engine::Color foreground,
+BlockTile::BlockTile(char character, Engine::Color foreground,
                      Engine::Color background)
     : EntityTile{character, foreground}, bg{background} {}
 

@@ -17,26 +17,26 @@ using Engine::UI::TextBox;
 using Nostd::it;
 
 int main() {
-  TextBox t = TextBox(L"");
+  TextBox t = TextBox("");
   it("doesn't split a small enough line", [t] {
-    Nostd::WString str = L"this is a test line";
+    Nostd::String str = "this is a test line";
     auto lines = t.split_content(str, 100);
     assert(lines.size() == 1);
     assert(lines[0].compare(str) == 0);
   });
 
   it("splits the line when there's a whitespace", [t] {
-    Nostd::WString str = L"this is a test line";
+    Nostd::String str = "this is a test line";
     auto lines = t.split_content(str, 10);
     assert(lines.size() == 2);
-    assert(lines[0].compare(L"this is a ") == 0);
+    assert(lines[0].compare("this is a ") == 0);
   });
 
   it("splits the line across a word", [t] {
-    Nostd::WString str = L"this is a test line";
+    Nostd::String str = "this is a test line";
     auto lines = t.split_content(str, 12);
     assert(lines.size() == 2);
-    assert(lines[0].compare(L"this is a te-") == 0);
-    assert(lines[1].compare(L"st line") == 0);
+    assert(lines[0].compare("this is a te-") == 0);
+    assert(lines[1].compare("st line") == 0);
   });
 }
