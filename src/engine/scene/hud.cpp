@@ -16,11 +16,13 @@
 #include "../utils.hpp"
 #include <cstring>
 
-Engine::Scene::HUD::HUD(int health, int max_health, int mana, int max_mana) {
+Engine::Scene::HUD::HUD(int health, int max_health, int mana, int max_mana,
+                        int score) {
   this->health = health;
   this->max_health = max_health;
   this->mana = mana;
   this->max_mana = max_mana;
+  this->score = score;
 }
 
 void Engine::Scene::HUD::bar(WINDOW *window, szu x, szu y, int value,
@@ -32,7 +34,8 @@ void Engine::Scene::HUD::bar(WINDOW *window, szu x, szu y, int value,
 
   int mid =
       ((float)value / max_value) * 9; // value percentage drawn in 9 char cells
-  int icon_pair = Engine::UI::color_pair(color_to_short(c), color_to_short(Color::black));
+  int icon_pair =
+      Engine::UI::color_pair(color_to_short(c), color_to_short(Color::black));
   Engine::UI::start_color(window, icon_pair);
   mvwaddstr(window, y, x, icon);
   x = x + 3; // hardcoded as strlen doesn't give proper output on unicode chars
@@ -68,7 +71,10 @@ void Engine::Scene::HUD::bar(WINDOW *window, szu x, szu y, int value,
 void Engine::Scene::HUD::show(WINDOW *window, szu x, szu y, szu max_width,
                               szu max_height) {
   bar(window, x, y, health, max_health, " ♡ ", Data::Palette::health);
-  bar(window, x+12, y, mana, max_mana, " ↑ ", Data::Palette::mana);
+  bar(window, x + 12, y, mana, max_mana, " ↑ ", Data::Palette::mana);
+  Nostd::String scr = " ● ";
+  Utils::stringify(4765, scr);
+  mvwaddstr(window, x + 24, y, scr.c_str());
   // TODO: fight message, when we got that data actually
   wnoutrefresh(window);
 }

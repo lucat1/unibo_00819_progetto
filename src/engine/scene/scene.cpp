@@ -38,7 +38,7 @@ void Engine::Scene::Scene::draw() {
 
   // draw HUD
   HUD hud(player.currentHealth(), player.maxHealth(), player.currentMana(),
-          player.maxMana());
+          player.maxMana(), player.score());
   hud.show(window, 0, Screen::lines - 1, Screen::columns, 1);
 
   doupdate();
