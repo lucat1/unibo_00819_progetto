@@ -21,8 +21,7 @@ using Nostd::it;
 
 int main() {
   it("constructs an Item", [] {
-    Item mushroom{
-        Engine::Color::red, 'm', "Mushroom", 2, false, 0, false, 50};
+    Item mushroom{Engine::Color::red, 'm', "Mushroom", 2, false, 0, false, 50};
     assert(mushroom.foreground() == Engine::Color::red);
     assert(mushroom.character() == 'm');
     assert(mushroom.name() == "Mushroom");

@@ -21,8 +21,7 @@ using Nostd::it;
 
 int main() {
   it("constructs a Hero", [] {
-    Hero foxy{
-        Engine::Color::aqua, 'f', "Foxy", "Neat guy.", {}, {}, 5, 10};
+    Hero foxy{Engine::Color::aqua, 'f', "Foxy", "Neat guy.", {}, {}, 5, 10};
     assert(foxy.foreground() == Engine::Color::aqua);
     assert(foxy.character() == 'f');
     assert(foxy.name() == "Foxy");
@@ -34,8 +33,7 @@ int main() {
     assert(!foxy.score());
   });
   it("performs basic health/mana operations", [] {
-    Hero foxy{
-        Engine::Color::aqua, 'f', "Foxy", "Neat guy.", {}, {}, 5, 10};
+    Hero foxy{Engine::Color::aqua, 'f', "Foxy", "Neat guy.", {}, {}, 5, 10};
     assert(!foxy.isDead());
     assert(!foxy.attemptSuperSkill());
   });

@@ -12,7 +12,7 @@
 #include "scenery.hpp"
 
 std::basic_istream<char> &Data::operator>>(std::basic_istream<char> &i,
-                                              Scenery::Autotile &a) {
+                                           Scenery::Autotile &a) {
   if (i) {
     (i >> a.singlet).ignore();
     (i >> a.concave_top_left >> a.concave_top_right).ignore();
@@ -30,7 +30,7 @@ std::basic_istream<char> &Data::operator>>(std::basic_istream<char> &i,
 }
 
 std::basic_istream<char> &Data::operator>>(std::basic_istream<char> &i,
-                                              Scenery &s) {
+                                           Scenery &s) {
   if (i >> s.ground) {
     i >> s.platform;
     size_t sky_colors;

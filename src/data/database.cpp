@@ -28,8 +28,8 @@
 using namespace Data;
 using namespace Data::Pawns;
 using Nostd::List;
-using Nostd::Vector;
 using Nostd::String;
+using Nostd::Vector;
 using std::ifstream;
 
 constexpr char Database::separator, Database::newrecord, Database::escape;
@@ -127,8 +127,8 @@ void Database::save_results() const {
   std::ofstream ofs(scor);
   for (auto x : res)
     put_CSV_String(ofs, x.name()) << separator << x.score() << separator
-                                    << Engine::color_to_short(x.foreground())
-                                    << separator << x.character() << newrecord;
+                                  << Engine::color_to_short(x.foreground())
+                                  << separator << x.character() << newrecord;
   ofs.close();
 }
 
@@ -263,12 +263,12 @@ void Database::load_items(const char *assets_filepath) {
   ifs.close();
 }
 
-std::basic_istream<char> &
-Data::get_CSV_String(std::basic_istream<char> &is, String &s) {
+std::basic_istream<char> &Data::get_CSV_String(std::basic_istream<char> &is,
+                                               String &s) {
   if (is) {
     s = String{};
     for (char input; is.get(input) && input != Database::separator &&
-                        input != Database::newrecord;) {
+                     input != Database::newrecord;) {
       if (input == Database::escape) {
         if (is)
           is.get(input);
@@ -281,9 +281,8 @@ Data::get_CSV_String(std::basic_istream<char> &is, String &s) {
   return is;
 }
 
-std::basic_ostream<char> &
-Data::put_CSV_String(std::basic_ostream<char> &os,
-                      const Nostd::String &s) {
+std::basic_ostream<char> &Data::put_CSV_String(std::basic_ostream<char> &os,
+                                               const Nostd::String &s) {
   for (auto x = s.cbegin(); x + 1 != s.end(); ++x) {
     if (*x == Database::separator || *x == Database::newrecord)
       os << Database::escape;

@@ -3,6 +3,7 @@
 #include "engine/colorable.hpp"
 #include "engine/menu/select.hpp"
 #include "engine/menu/settings.hpp"
+#include "engine/scene/scene.hpp"
 #include "engine/screen.hpp"
 #include <fstream>
 #include <iostream>
@@ -60,11 +61,18 @@ int main() {
           break;
         }
       } else {
+        // save settings if that was the previous menu
         if (screen.is_content<Menu::Settings>())
           d.settings() = screen.get_content<Menu::Settings>()->get_result();
 
-        // always go back to the main menu after some menus close
-        screen.set_content<Menu::Main>();
+        if (!screen.is_content<Menu::Select>())
+          // go back to the main menu
+          screen.set_content<Menu::Main>();
+        else {
+          // otherwhise start a game
+          auto hero = screen.get_content<Menu::Select>()->get_result();
+          screen.set_content<Scene::Scene, const Data::Pawns::Hero &>(hero);
+        }
       }
     }
 

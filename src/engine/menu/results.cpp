@@ -46,8 +46,7 @@ Box::szu score_size =
 
 Box *Engine::Menu::Results::append_line(Box *parent, const Nostd::String &rank,
                                         const Nostd::String &score,
-                                        const Nostd::String &nick,
-                                        bool color) {
+                                        const Nostd::String &nick, bool color) {
   Nostd::String padded_rank = rank, padded_score = score, padded_nick = nick;
   leftpad(rank_size, padded_rank);
   padded_rank.append(" ");

@@ -57,6 +57,8 @@ bool Engine::Screen::can_fit() {
 }
 
 bool Engine::Screen::open() {
+  // allow printing unicode symbols
+  setlocale(LC_ALL, "");
   stdscreen = initscr();
   if (stdscreen == nullptr || start_color())
     return false;

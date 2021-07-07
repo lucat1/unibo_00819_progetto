@@ -16,12 +16,11 @@
 Nostd::String::String(const String::allocator_type &alloc)
     : Vector(1, u'\0', alloc) {}
 
-Nostd::String::String(const String &str,
-                        const String::allocator_type &alloc)
+Nostd::String::String(const String &str, const String::allocator_type &alloc)
     : String(str.c_str(), alloc) {}
 
 Nostd::String::String(const String &str, size_t start, size_t len,
-                        const String::allocator_type &alloc)
+                      const String::allocator_type &alloc)
     : Vector(len == npos ? str.size() - start : len + 1, alloc) {
   // we also check that we don't go out of the *str array as we
   // could loop infinitely when len = npos (read entire string)
@@ -33,12 +32,11 @@ Nostd::String::String(const String &str, size_t start, size_t len,
   v[len] = u'\0';
 }
 
-Nostd::String::String(const char *str,
-                        const String::allocator_type &alloc)
+Nostd::String::String(const char *str, const String::allocator_type &alloc)
     : String(str, strlen(str), alloc) {}
 
 Nostd::String::String(const char *str, size_t len,
-                        const String::allocator_type &alloc)
+                      const String::allocator_type &alloc)
     : Vector(len + 1, alloc) {
   for (size_t i = 0; i < len; i++)
     v[i] = str[i];
@@ -91,13 +89,13 @@ void Nostd::String::push_back(const char c) {
 }
 
 Nostd::String &Nostd::String::insert(size_t start, const Nostd::String &str,
-                                       size_t substart, size_t subend) {
+                                     size_t substart, size_t subend) {
   String substr = str.substr(substart, subend);
   return insert(start, substr.c_str());
 }
 
 Nostd::String &Nostd::String::insert(size_t start, const char *str,
-                                       size_t len) {
+                                     size_t len) {
   // deliberately not using Vector::resize as we'd do the copying twice, which
   // is not smart at all. this method is therefore a modified copy of
   // Vector::resize
@@ -130,14 +128,14 @@ int Nostd::String::compare(const Nostd::String &str) const {
   return compare(0, str.length(), str.c_str());
 }
 int Nostd::String::compare(size_t start, size_t len,
-                            const Nostd::String &str) const {
+                           const Nostd::String &str) const {
   return compare(start, len, str.c_str());
 }
 int Nostd::String::compare(const char *str) const {
   return compare(0, strlen(str), str);
 }
 int Nostd::String::compare(size_t start, size_t len, const char *str,
-                            size_t n) const {
+                           size_t n) const {
   if (start > len)
     throw std::out_of_range("invalid start position in compare call");
 
@@ -149,9 +147,7 @@ int Nostd::String::compare(size_t start, size_t len, const char *str,
 bool Nostd::String::operator==(const String &str) const {
   return !compare(str);
 }
-bool Nostd::String::operator!=(const String &str) const {
-  return compare(str);
-}
+bool Nostd::String::operator!=(const String &str) const { return compare(str); }
 size_t Nostd::String::find(Nostd::String &seq, size_t start) const {
   return find(seq.c_str(), start, seq.length());
 }
@@ -251,12 +247,12 @@ bool Nostd::iswspace(char c) {
 }
 
 std::basic_ostream<char> &Nostd::operator<<(std::ostream &os,
-                                               const Nostd::String &str) {
+                                            const Nostd::String &str) {
   return os << str.c_str();
 }
 
 std::basic_istream<char> &Nostd::operator>>(std::istream &is,
-                                               Nostd::String &str) {
+                                            Nostd::String &str) {
   str.clear();
   char c;
   while (Nostd::iswspace(c = is.get()) && is.good())
@@ -264,8 +260,7 @@ std::basic_istream<char> &Nostd::operator>>(std::istream &is,
   return is;
 }
 
-std::istream &Nostd::getline(std::istream &is,
-                                            Nostd::String &str) {
+std::istream &Nostd::getline(std::istream &is, Nostd::String &str) {
   str.clear();
   char c;
   while ((c = is.get()) != u'\n' && is.good())

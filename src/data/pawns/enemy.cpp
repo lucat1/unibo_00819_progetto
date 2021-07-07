@@ -49,8 +49,8 @@ int Enemy::uncheckedScoreEffect(int currentScore) {
   return std::max(0, currentScore - sD);
 }
 
-std::basic_istream<char> &
-Data::Pawns::operator>>(std::basic_istream<char> &is, Enemy &e) {
+std::basic_istream<char> &Data::Pawns::operator>>(std::basic_istream<char> &is,
+                                                  Enemy &e) {
   short foreground;
   (is >> foreground).ignore();
   char character;

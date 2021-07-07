@@ -54,8 +54,8 @@ int Projectile::uncheckedScoreEffect(int currentScore) {
   return std::max(0, currentScore - sD);
 }
 
-std::basic_istream<char> &
-Data::Pawns::operator>>(std::basic_istream<char> &is, Projectile &p) {
+std::basic_istream<char> &Data::Pawns::operator>>(std::basic_istream<char> &is,
+                                                  Projectile &p) {
   short foreground;
   (is >> foreground).ignore();
   char character;

@@ -109,8 +109,7 @@ int main() {
   });
 
   Box *vbox = new Box();
-  TextBox *tb =
-      vbox->append<TextBox, const char *>("this is a test string");
+  TextBox *tb = vbox->append<TextBox, const char *>("this is a test string");
   Box *pbox = vbox->append<Box>();
   pbox->props(Box::Property::padding_left, 2);
   pbox->props(Box::Property::padding_right, 2);

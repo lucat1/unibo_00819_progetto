@@ -27,8 +27,7 @@ void Engine::UI::TextBox::update_lines(szu max_width) {
 }
 
 Engine::UI::TextBox::strings
-Engine::UI::TextBox::split_content(const Nostd::String content,
-                                   szu max_width) {
+Engine::UI::TextBox::split_content(const Nostd::String content, szu max_width) {
   strings lines;
   if (max_width == 0)
     return lines;
@@ -71,7 +70,7 @@ void Engine::UI::TextBox::show(WINDOW *window, szu x, szu y, szu max_width,
   for (size_t i = 0; i < std::min(max_height, (szu)lines.size()); i++) {
     auto line = lines[i];
     mvwaddstr(window, y + i, x + (fr ? max_width - line.length() : 0),
-               line.c_str());
+              line.c_str());
   }
 
   end_color(window);

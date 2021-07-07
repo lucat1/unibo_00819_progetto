@@ -10,8 +10,8 @@
 */
 
 #include "utils.hpp"
-#include "../nostd/test.hpp"
 #include "../nostd/string.hpp"
+#include "../nostd/test.hpp"
 #include <cassert>
 
 using Engine::Utils::leftpad;

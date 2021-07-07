@@ -140,7 +140,7 @@ int Setting::at(size_type n) const {
 }
 
 std::basic_istream<char> &Data::operator>>(std::basic_istream<char> &is,
-                                              Setting &s) {
+                                           Setting &s) {
   Nostd::String label;
   int start, stride;
   size_t size, default_index;
@@ -158,6 +158,6 @@ std::basic_istream<char> &Data::operator>>(std::basic_istream<char> &is,
 }
 
 std::basic_ostream<char> &Data::operator<<(std::basic_ostream<char> &os,
-                                              const Setting &s) {
+                                           const Setting &s) {
   return put_CSV_String(os, s.label()) << Database::separator << s.curr_ind;
 }

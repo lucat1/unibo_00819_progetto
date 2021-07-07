@@ -62,9 +62,11 @@ protected:
   virtual void decrement(UI::Box *box) = 0;
 
 public:
+  Kind kind() const;
+  void handle_event(Event e);
+
   Menu(WINDOW *window);
   ~Menu();
-  void handle_event(Event e);
 };
 
 } // namespace Menu

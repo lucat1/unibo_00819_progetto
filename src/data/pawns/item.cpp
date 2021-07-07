@@ -17,9 +17,9 @@
 
 using Data::Pawns::Item;
 
-Item::Item(Engine::Color foreground, char character,
-           const Nostd::String &name, int healthBonus, bool healthMode,
-           int manaBonus, bool manaMode, int scoreBonus)
+Item::Item(Engine::Color foreground, char character, const Nostd::String &name,
+           int healthBonus, bool healthMode, int manaBonus, bool manaMode,
+           int scoreBonus)
     : Engine::EntityTile{character, foreground},
       Pawn{name, character, foreground}, hB{healthBonus}, mB{manaBonus},
       sB{scoreBonus}, hM{healthMode}, mM{manaMode} {
@@ -45,8 +45,8 @@ int Item::uncheckedManaEffect(int currentMana, int maxMana) {
 
 int Item::uncheckedScoreEffect(int currentScore) { return currentScore + sB; }
 
-std::basic_istream<char> &
-Data::Pawns::operator>>(std::basic_istream<char> &is, Item &i) {
+std::basic_istream<char> &Data::Pawns::operator>>(std::basic_istream<char> &is,
+                                                  Item &i) {
   short foreground;
   (is >> foreground).ignore();
   char character;

@@ -6,7 +6,8 @@
   Luca Tagliavini #971133
   07/01/2021
 
-  center.cpp: Implements the Engine::UI::Mugshot class to draw a matrix of tiles
+  mugshot.cpp: Implements the Engine::UI::Mugshot class to draw a matrix of
+  tiles
 */
 
 #include "mugshot.hpp"
