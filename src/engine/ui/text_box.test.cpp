@@ -13,8 +13,6 @@
 #include "../../nostd/test.hpp"
 #include <cassert>
 
-#include <iostream>
-
 using Engine::UI::TextBox;
 using Nostd::it;
 
