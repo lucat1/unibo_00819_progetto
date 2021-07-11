@@ -36,7 +36,9 @@ int main() {
     Nostd::String str = "this is a test line";
     auto lines = t.split_content(str, 12);
     assert(lines.size() == 2);
-    assert(lines[0].compare("this is a te-") == 0);
-    assert(lines[1].compare("st line") == 0);
+    assert(lines[0].length() <= 12);
+    assert(lines[1].length() <= 12);
+    assert(lines[0].compare("this is a t-") == 0);
+    assert(lines[1].compare("est line") == 0);
   });
 }
