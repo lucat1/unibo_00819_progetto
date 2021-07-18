@@ -47,15 +47,63 @@ Il programma si articola in pi\`u moduli, che sono rappresentati nel codice con
 lo strumento linguistico dello spazio dei nomi (\emph{namespace}). \`E stato
 designato un responsabile diverso per ciascuno di questi moduli.
 \begin{itemize}
-  \item \verb!Data!:
-  \item \verb!Engine!:
-  \item \verb!World!:
-  \item \verb!Game!:
+  \item \verb!Data! (S. Volpe): descrive la base di dati del gioco e gli enti in
+    essa contenuti, come \verb!Scenery!, \verb!Hero!, \verb!Skill!. La lettura
+    di tali informazioni avviene da disco.
+  \item \verb!Engine! (L. Tagliavini): fornisce il nucleo \emph{software} per
+    l'uso di grafica in tempo reale e audio. Offre strutture per il rendering,
+    la creazione di interfacce utente e la riproduzione della colonna sonora.
+    % TODO: fact checking sulla colonna sonora
+  \item \verb!World! (M. Girolimetto): genera una mappa di gioco dinamicamente
+    espandibile, popolandola con entit\`a di vario genere. Il livello di
+    difficolt\`a aumenta in relazione alle dimensioni della mappa.
+  \item \verb!Game! (A. Scrob): combina le funzionalit\`a degli altri moduli in
+    un unico \emph{game loop}. Implementa la logica di gioco e la navigazione
+    tra menu diversi.
 \end{itemize}
 
 Date le limitazioni sull'uso della \emph{Standard Template Library} offerta dal
 linguaggio, il progetto include un ulteriore modulo, denominato \verb!Nostd!, che emula
 alcuni strumenti della libreria standard. Quest'ultimo \`e stato realizzato
 congiuntamente dall'intera squadra.
+
+\subsection{Miscellanei}
+
+La cartella \verb!assets! raccoglie le risorse caricate dalla base di dati.
+Esse sono classificabili in quattro categorie.
+
+\begin{itemize}
+  \item Progettazione (S. Volpe): creazione dei frammenti della mappa e delle
+    statistiche di gioco.
+  \item Grafica (L. Tagliavini): scelta di caratteri e colori per la
+    rappresentazione di paesaggi, entit\`a e ritratti.
+  \item Audio (M. Girolimetto): composizione della colonna sonora riprodotta
+    nelle varie fasi del gioco.
+  \item Testi (A. Scrob): nomi delle entit\`a e descrizioni dei personaggi
+    giocabili.
+\end{itemize}
+
+\section{Scelte implementative}
+
+I paradigmi di programmazione usati come modello nella stesura del codice
+sorgente sono quello procedurale, orientato agli oggetti e generico. Il
+linguaggio scelto ci ha permesso di coniugare l'uso di potenti strumenti
+linguistici e concettuali per l'astrazione con accorgimenti di basso livello
+per ottenere prestazioni relativamente soddisfacenti.
+
+\subsection{Nostd}
+\verb!Nostd! (re)implementa liste, vettori, stringhe, matrici e mappe, ovvero i
+contenitori utili al resto del progetto. Fedelt\`a alla \emph{STL},
+semplicit\`a e pragmatismo ne hanno guidato la progettazione.
+\verb!allocator.hpp!, \verb!concepts.hpp! e \verb!pair.hpp! hanno funto da
+intestazioni ausiliarie.
+
+\subsection{Data}
+
+\subsection{Engine}
+
+\subsection{World}
+
+\subsection{Game}
 
 \end{document}
