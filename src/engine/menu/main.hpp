@@ -28,7 +28,7 @@ class Main : public Menu {
 private:
   int focused = 0, max_focused = 2;
   int clicked_on = -1;
-  UI::Button *append_button(UI::Box *parent, const wchar_t *str);
+  UI::Button *append_button(UI::Box *parent, const char *str);
 
 protected:
   UI::Box *generate();

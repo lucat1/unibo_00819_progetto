@@ -16,14 +16,14 @@
 #include <ostream>
 
 #include "../nostd/list.hpp"
-#include "../nostd/unordered_map.hpp"
 #include "../nostd/vector.hpp"
-#include "../nostd/wstring.hpp"
+#include "../nostd/string.hpp"
 #include "map_chunk.hpp"
 #include "pawns/enemy.hpp"
 #include "pawns/hero.hpp"
 #include "pawns/item.hpp"
 #include "pawns/result.hpp"
+#include "pawns/skill.hpp"
 #include "scenery.hpp"
 #include "setting.hpp"
 
@@ -35,13 +35,14 @@ namespace Data {
 */
 class Database {
 public:
-  constexpr static wchar_t separator{','}, newrecord{'\n'}, escape{'\\'};
+  constexpr static char separator{','}, newrecord{'\n'}, escape{'\\'};
   constexpr const static char *const settings_rel_fp{"/csv/settings.csv"},
       *const maps_rel_fp{"/img/maps.txt"},
           *const sceneries_rel_fp{"/img/sceneries.txt"},
               *const heroes_rel_fp{"/csv/heroes.csv"},
-                  *const enemies_rel_fp{"/csv/enemies.csv"},
-                      *const items_rel_fp{"/csv/items.csv"};
+                  *const mugshots_rel_fp{"/img/heroes.txt"},
+                      *const enemies_rel_fp{"/csv/enemies.csv"},
+                          *const items_rel_fp{"/csv/items.csv"};
 
   Database() = delete; // cannot constructs a database from nothing
   Database(const char *configuration, const char *assets,
@@ -67,19 +68,14 @@ public:
   const Nostd::List<Pawns::Result> &results() const noexcept;
   void save_results() const; // saves current high scores to filesystem
 
-  Nostd::UnorderedMap<Nostd::WString, Pawns::Hero> &heroes() noexcept;
-  const Nostd::UnorderedMap<Nostd::WString, Pawns::Hero> &
-  heroes() const noexcept;
+  Nostd::Vector<Pawns::Hero> &heroes() noexcept;
+  const Nostd::Vector<Pawns::Hero> &heroes() const noexcept;
 
-  Nostd::UnorderedMap<Nostd::WString, Pawns::Enemy> &enemies() noexcept;
-  const Nostd::UnorderedMap<Nostd::WString, Pawns::Enemy> &
-  enemies() const noexcept;
+  Nostd::Vector<Pawns::Enemy> &enemies() noexcept;
+  const Nostd::Vector<Pawns::Enemy> &enemies() const noexcept;
 
-  Nostd::UnorderedMap<Nostd::WString, Pawns::Item> &items() noexcept;
-  const Nostd::UnorderedMap<Nostd::WString, Pawns::Item> &
-  items() const noexcept;
-
-  // TODO
+  Nostd::Vector<Pawns::Item> &items() noexcept;
+  const Nostd::Vector<Pawns::Item> &items() const noexcept;
 
 private:
   char *conf, *scor;
@@ -87,10 +83,9 @@ private:
   Nostd::Vector<MapChunk> map{};
   Nostd::Vector<Scenery> sce{};
   Nostd::List<Pawns::Result> res{};
-  Nostd::UnorderedMap<Nostd::WString, Pawns::Hero> her{};
-  Nostd::UnorderedMap<Nostd::WString, Pawns::Enemy> ene{};
-  Nostd::UnorderedMap<Nostd::WString, Pawns::Item> ite{};
-  // TODO
+  Nostd::Vector<Pawns::Hero> her{};
+  Nostd::Vector<Pawns::Enemy> ene{};
+  Nostd::Vector<Pawns::Item> ite{};
 
   char *newstrcpy(const char *) const;
   char *newstrcat(const char *, const char *) const;
@@ -99,16 +94,16 @@ private:
   void load_sceneries(const char *assets_filepath);
   void load_results();
   void load_heroes(const char *assets_filepath);
+  void load_mugshots(const char *assets_filepath);
   void load_enemies(const char *assets_filepath);
   void load_items(const char *assets_filepath);
-  // TODO
 };
 
-std::basic_istream<wchar_t> &get_CSV_WString(std::basic_istream<wchar_t> &,
-                                             Nostd::WString &);
+std::basic_istream<char> &get_CSV_String(std::basic_istream<char> &,
+                                             Nostd::String &);
 
-std::basic_ostream<wchar_t> &put_CSV_WString(std::basic_ostream<wchar_t> &,
-                                             const Nostd::WString &);
+std::basic_ostream<char> &put_CSV_String(std::basic_ostream<char> &,
+                                             const Nostd::String &);
 
 } // namespace Data
 

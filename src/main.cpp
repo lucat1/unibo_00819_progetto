@@ -1,9 +1,9 @@
 #include "engine/menu/main.hpp"
-#include "data/mugshot.hpp"
-#include "data/pawns/hero.hpp"
+#include "data/database.hpp"
 #include "engine/colorable.hpp"
-#include "engine/menu/results.hpp"
+#include "engine/menu/select.hpp"
 #include "engine/menu/settings.hpp"
+#include "engine/scene/scene.hpp"
 #include "engine/screen.hpp"
 #include <fstream>
 #include <iostream>
@@ -20,29 +20,12 @@ void handle(bool can_display) {
 }
 
 int main() {
-  // Sample Hero
-  Data::Pawns::Hero leo{
-      Engine::Color::red, L'🦁', L"Leo", L"Neat guy.", {}, {}, 9, 4};
-  wifstream wifs{"tests/assets/img/heroes.txt"};
-  wifs.ignore();
-  wifs.ignore();
-  Data::Mugshot m{};
-  wifs >> m;
-  wifs.close();
-  // leo.setMugshot(m);
+  Data::Database d("tests/alma.conf.csv", "tests/assets/",
+                   "tests/scoreboard.csv");
 
   Screen screen;
   handle(screen.open());
   screen.set_content<Menu::Main>();
-  Nostd::Vector<Data::Setting> settings;
-  settings.push_back(Data::Setting(L"Sound", 0, 2, 1, 0, 1));
-  settings.push_back(Data::Setting(L"Frames Per Second", 30, 3, 30, 1));
-
-  // TODO: properly by calling database.results()
-  Nostd::List<Data::Pawns::Result> results;
-  results.push_back(Data::Pawns::Result(L"Lienin", 100293, Color::red, L'='));
-  results.push_back(Data::Pawns::Result(L"Adolf", 98666, Color::yellow, L'/'));
-  results.push_back(Data::Pawns::Result(L"Benito", 20034, Color::green, L'!'));
 
   int key;
   bool running = true;
@@ -61,22 +44,35 @@ int main() {
           break;
         case Menu::Main::Result::settings:
           screen.set_content<Menu::Settings,
-                             const Nostd::Vector<Data::Setting> &>(settings);
+                             const Nostd::Vector<Data::Setting> &>(
+              d.settings());
           break;
         case Menu::Main::Result::play:
           // TODO: change me
-          screen.set_content<Menu::Results,
-                             const Nostd::List<Data::Pawns::Result> &>(results);
+          /*screen.set_content<Menu::Results,
+                             const Nostd::List<Data::Pawns::Result>
+             &>(d.results());
+                             */
+          screen.set_content<Menu::Select,
+                             const Nostd::Vector<Data::Pawns::Hero> &>(
+              d.heroes());
           break;
         default:
           break;
         }
       } else {
+        // save settings if that was the previous menu
         if (screen.is_content<Menu::Settings>())
-          settings = screen.get_content<Menu::Settings>()->get_result();
+          d.settings() = screen.get_content<Menu::Settings>()->get_result();
 
-        // always go back to the main menu after some menus close
-        screen.set_content<Menu::Main>();
+        if (!screen.is_content<Menu::Select>())
+          // go back to the main menu
+          screen.set_content<Menu::Main>();
+        else {
+          // otherwhise start a game
+          auto hero = screen.get_content<Menu::Select>()->get_result();
+          screen.set_content<Scene::Scene, const Data::Pawns::Hero &>(hero);
+        }
       }
     }
 
@@ -116,6 +112,5 @@ int main() {
       break;
     };
   }
-
   return 0;
 }

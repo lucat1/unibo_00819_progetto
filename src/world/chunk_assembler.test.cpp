@@ -21,7 +21,7 @@ using namespace Engine;
 int main() {
   it("does something better no ask", [] {
     Database d("tests/alma.conf.csv", "tests/assets/", "tests/scoreboard.csv");
-    assert(d.map_chunks().size() == 2);
+    assert(d.map_chunks().size() == 10);
     ChunkAssembler assembler(d.map_chunks(), d.sceneries());
     Matrix<BlockTile> m = assembler.get();
     // per Luca: a te interessa solo il codice qua sopra, in particolare

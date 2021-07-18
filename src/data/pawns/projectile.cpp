@@ -18,19 +18,29 @@
 
 using Data::Pawns::Projectile;
 
-Projectile::Projectile(Engine::Color foreground, wchar_t character,
-                       const Nostd::WString &name, int healthDamage,
-                       int manaDamage, int scoreDamage)
+Projectile::Projectile(Engine::Color foreground, char character,
+                       const Nostd::String &name, int healthDamage,
+                       int manaDamage, int scoreDamage, int range)
     : Engine::EntityTile{character, foreground}, Pawn{name, character,
                                                       foreground},
-      hD{healthDamage}, mD{manaDamage}, sD{scoreDamage} {
+      hD{healthDamage}, mD{manaDamage}, sD{scoreDamage}, rng{range} {
   if (hD < 0)
-    throw std::invalid_argument("Health damage must be positive.");
+    throw std::invalid_argument("Health damage must be positive or zero.");
   if (mD < 0)
-    throw std::invalid_argument("Mana damage must be positive.");
+    throw std::invalid_argument("Mana damage must be positive or zero.");
   if (sD < 0)
-    throw std::invalid_argument("Score damage must be positive.");
+    throw std::invalid_argument("Score damage must be positive or zero.");
+  if (range < 0)
+    throw std::invalid_argument("Range must be positive or zero.");
 }
+
+void Projectile::countMovement() {
+  if (isExpired())
+    throw std::logic_error("This projectile is already expired.");
+  --rng;
+}
+
+bool Projectile::isExpired() const noexcept { return !rng; }
 
 int Projectile::uncheckedHealthEffect(int currentHealth, int) {
   return std::max(0, currentHealth - hD);
@@ -44,21 +54,20 @@ int Projectile::uncheckedScoreEffect(int currentScore) {
   return std::max(0, currentScore - sD);
 }
 
-std::basic_istream<wchar_t> &
-Data::Pawns::operator>>(std::basic_istream<wchar_t> &is, Projectile &p) {
+std::basic_istream<char> &Data::Pawns::operator>>(std::basic_istream<char> &is,
+                                                  Projectile &p) {
   short foreground;
   (is >> foreground).ignore();
-  wchar_t character;
+  char character;
   (is >> character).ignore();
-  Nostd::WString name;
-  Data::get_CSV_WString(is, name);
-  int healthDamage, manaDamage, scoreDamage;
+  Nostd::String name;
+  Data::get_CSV_String(is, name);
+  int healthDamage, manaDamage, scoreDamage, range;
   (is >> healthDamage).ignore();
   (is >> manaDamage).ignore();
-  if (is >> scoreDamage) {
+  (is >> scoreDamage).ignore();
+  if (is >> range)
     p = Projectile(Engine::short_to_color(foreground), character, name,
-                   healthDamage, manaDamage, scoreDamage);
-    is.ignore();
-  }
+                   healthDamage, manaDamage, scoreDamage, range);
   return is;
 }

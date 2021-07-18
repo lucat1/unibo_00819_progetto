@@ -32,7 +32,7 @@ enum class MapUnit : char {
   item = '$'
 };
 
-std::basic_istream<char> &operator>>(std::basic_istream<char> &, MapUnit &);
+std::istream &operator>>(std::istream &, MapUnit &);
 
 /*
   A MapChunk describes the topology of a piece of the game world, but not its
@@ -72,7 +72,7 @@ private:
 // - MapChunk::height lines, each containing as many valid MapUnit chars as the
 // width
 //   of the map
-std::basic_istream<char> &operator>>(std::basic_istream<char> &, MapChunk &);
+std::istream &operator>>(std::istream &, MapChunk &);
 
 } // namespace Data
 

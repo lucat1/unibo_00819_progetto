@@ -15,7 +15,7 @@
 #include <istream>
 
 #include "../../engine/colorable.hpp"
-#include "../../nostd/wstring.hpp"
+#include "../../nostd/string.hpp"
 #include "interactable.hpp"
 
 namespace Data {
@@ -27,9 +27,9 @@ namespace Pawns {
 */
 class Projectile : public Interactable {
 public:
-  Projectile(Engine::Color foreground, wchar_t character,
-             const Nostd::WString &name, int healthDamage, int manaDamage,
-             int scoreDamage);
+  Projectile(Engine::Color foreground, char character,
+             const Nostd::String &name, int healthDamage, int manaDamage,
+             int scoreDamage, int range);
   Projectile(Projectile &&) = default;
   Projectile &operator=(Projectile &&) = default;
   Projectile(const Projectile &) = default;
@@ -37,7 +37,10 @@ public:
 
   ~Projectile() = default;
 
-  friend std::basic_ostream<wchar_t> &operator>>(std::basic_ostream<wchar_t> &,
+  void countMovement();
+  bool isExpired() const noexcept;
+
+  friend std::basic_ostream<char> &operator>>(std::basic_ostream<char> &,
                                                  const Projectile &);
 
 protected:
@@ -46,10 +49,10 @@ protected:
   int uncheckedScoreEffect(int currentScore) override final;
 
 private:
-  int hD, mD, sD;
+  int hD, mD, sD, rng;
 };
 
-std::basic_istream<wchar_t> &operator>>(std::basic_istream<wchar_t> &,
+std::basic_istream<char> &operator>>(std::basic_istream<char> &,
                                         Projectile &);
 
 } // namespace Pawns

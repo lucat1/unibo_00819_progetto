@@ -14,7 +14,7 @@
 
 #include <istream>
 
-#include "../engine/tile.hpp"
+#include "../engine/colorable.hpp"
 #include "../nostd/matrix.hpp"
 
 namespace Data {
@@ -23,7 +23,7 @@ namespace Data {
   A Mugshot works as a detailed sprite to be shown during the game. It is
   represented as a Matrix of BlockTiles.
 */
-class Mugshot : public Nostd::Matrix<Engine::Tile> {
+class Mugshot : public Nostd::Matrix<Engine::Color> {
 public:
   Mugshot();
   Mugshot(Mugshot &&) = default;
@@ -31,11 +31,12 @@ public:
   Mugshot(const Mugshot &) = default;
   Mugshot &operator=(const Mugshot &) = default;
 
-  constexpr static size_t side{12};
+  ~Mugshot() = default;
+
+  constexpr static size_t width{24}, height{12};
 };
 
-std::basic_istream<wchar_t> &operator>>(std::basic_istream<wchar_t> &,
-                                        Mugshot &);
+std::istream &operator>>(std::istream &, Mugshot &);
 
 } // namespace Data
 

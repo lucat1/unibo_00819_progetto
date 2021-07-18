@@ -18,12 +18,13 @@
 
 using Data::Pawns::Enemy;
 
-Enemy::Enemy(Engine::Color foreground, wchar_t character,
-             const Nostd::WString &name, Skill skill, int healthDamage,
+Enemy::Enemy(Engine::Color foreground, char character,
+             const Nostd::String &name, Skill skill, int healthDamage,
              int manaDamage, int scoreDamage, int behavior)
-    : Engine::EntityTile{character, foreground}, Character{name, character,
-                                                           foreground, skill},
-      hD{healthDamage}, mD{manaDamage}, sD{scoreDamage}, bhv{behavior} {
+    : Engine::EntityTile{character, foreground}, Pawn{name, character,
+                                                      foreground},
+      Character{name, character, foreground, skill}, hD{healthDamage},
+      mD{manaDamage}, sD{scoreDamage}, bhv{behavior} {
   if (hD < 0)
     throw std::invalid_argument("Health damage must be positive.");
   if (mD < 0)
@@ -48,17 +49,17 @@ int Enemy::uncheckedScoreEffect(int currentScore) {
   return std::max(0, currentScore - sD);
 }
 
-std::basic_istream<wchar_t> &
-Data::Pawns::operator>>(std::basic_istream<wchar_t> &is, Enemy &e) {
+std::basic_istream<char> &Data::Pawns::operator>>(std::basic_istream<char> &is,
+                                                  Enemy &e) {
   short foreground;
   (is >> foreground).ignore();
-  wchar_t character;
+  char character;
   (is >> character).ignore();
-  Nostd::WString name;
-  Data::get_CSV_WString(is, name);
+  Nostd::String name;
+  Data::get_CSV_String(is, name);
   Skill skill;
-  (is >> skill).ignore();
   int healthDamage, manaDamage, scoreDamage, behavior;
+  (is >> skill).ignore();
   (is >> healthDamage).ignore();
   (is >> manaDamage).ignore();
   (is >> scoreDamage).ignore();

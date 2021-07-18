@@ -36,12 +36,9 @@ void ChunkAssembler::fill_list() noexcept {
     return;
 
   Vector<ChunkInfo> infos(chunks.size());
-  std::cout << "Chunks: " << std::endl;
   for (size_t i = 0; i < chunks.size(); i++) {
     ChunkInfo x = {i, &chunks[i]};
     infos.at(i) = x;
-    std::cout << "{ " << chunks[i].starting_row() << " - "
-              << chunks[i].ending_row() << " }" << std::endl;
   }
 
   for (ChunkInfo first : infos) {

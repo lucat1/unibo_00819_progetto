@@ -16,8 +16,7 @@
 using Data::MapChunk;
 using Data::MapUnit;
 
-std::basic_istream<char> &Data::operator>>(std::basic_istream<char> &i,
-                                           MapUnit &m) {
+std::istream &Data::operator>>(std::istream &i, MapUnit &m) {
   char c;
   if (i >> c)
     m = static_cast<MapUnit>(c);
@@ -45,8 +44,7 @@ size_t MapChunk::starting_row() const noexcept { return strt_row; }
 
 size_t MapChunk::ending_row() const noexcept { return end_row; }
 
-std::basic_istream<char> &Data::operator>>(std::basic_istream<char> &i,
-                                           MapChunk &m) {
+std::istream &Data::operator>>(std::istream &i, MapChunk &m) {
   size_t w, s, e;
   if (i >> w >> s >> e) {
     m = MapChunk(w, s, e);

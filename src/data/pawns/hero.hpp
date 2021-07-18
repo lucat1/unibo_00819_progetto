@@ -15,7 +15,7 @@
 #include <istream>
 
 #include "../../engine/colorable.hpp"
-#include "../../nostd/wstring.hpp"
+#include "../../nostd/string.hpp"
 #include "../mugshot.hpp"
 #include "character.hpp"
 #include "interactable.hpp"
@@ -30,8 +30,8 @@ namespace Pawns {
 */
 class Hero : public Character {
 public:
-  Hero(Engine::Color foreground, wchar_t character, const Nostd::WString &name,
-       const Nostd::WString &description, Skill skill, Skill superSkill,
+  Hero(Engine::Color foreground, char character, const Nostd::String &name,
+       const Nostd::String &description, Skill skill, Skill superSkill,
        int maxHealth, int maxMana);
   Hero(Hero &&) = default;
   Hero &operator=(Hero &&) = default;
@@ -40,10 +40,10 @@ public:
 
   virtual ~Hero() = default;
 
-  void rename(const Nostd::WString &);
-  const Nostd::WString &description() const noexcept;
-  const Mugshot &getMugshot() const noexcept;
-  void setMugshot(const Mugshot &);
+  void rename(const Nostd::String &);
+  const Nostd::String &description() const noexcept;
+  Mugshot &mugshot() noexcept;
+  const Mugshot &mugshot() const noexcept;
   Skill superSkill() const noexcept;
   void interact(Interactable &);
   int currentHealth() const noexcept;
@@ -55,17 +55,17 @@ public:
   bool attemptSuperSkill() noexcept;
   int score() const noexcept;
 
-  friend std::basic_ostream<wchar_t> &operator>>(std::basic_ostream<wchar_t> &,
+  friend std::basic_ostream<char> &operator>>(std::basic_ostream<char> &,
                                                  const Hero &);
 
 private:
-  Nostd::WString dsc{};
+  Nostd::String dsc{};
   Mugshot mug{};
   Skill ssk;
   int curH, maxH, curM, maxM, scr;
 };
 
-std::basic_istream<wchar_t> &operator>>(std::basic_istream<wchar_t> &, Hero &);
+std::basic_istream<char> &operator>>(std::basic_istream<char> &, Hero &);
 
 } // namespace Pawns
 

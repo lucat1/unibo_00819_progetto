@@ -1,3 +1,8 @@
-9,🍄,Mushroom,2,0,0,0,50
-11,⭐,Star,0,0,1,100,200
+9,m,small mushroom,1,0,0,0,50
+9,m,mushroom,2,0,0,0,100
+9,m,big mushroom,3,0,0,0,150
+13,p,small potion,0,0,25,1,25
+13,p,potion,0,0,50,1,100
+13,big potion,0,0,100,1,175
+11,coin,0,0,0,0,500
 

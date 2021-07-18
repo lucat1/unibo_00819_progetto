@@ -13,9 +13,9 @@
 
 using Engine::EntityTile;
 
-EntityTile::EntityTile(wchar_t character, Engine::Color foreground)
+EntityTile::EntityTile(char character, Engine::Color foreground)
     : chr{character}, fg{foreground} {}
 
-wchar_t EntityTile::character() const noexcept { return chr; }
+char EntityTile::character() const noexcept { return chr; }
 
 auto EntityTile::foreground() const noexcept -> Color { return fg; }
