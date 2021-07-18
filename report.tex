@@ -1,0 +1,61 @@
+\documentclass[a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{enumerate}
+
+% \hfuzz=100.0pt  % ignore paragraph lengths warnings
+% \usepackage[hidelinks]{hyperref}
+
+\title{Overengineered \\
+\large Relazione del progetto per l'insegnamento di Programmazione}
+\author{
+  M. Girolimetto,
+  A. Scrob,
+  L. Tagliavini,
+  S. Volpe
+}
+
+\date{
+	Universit\`a di Bologna \\
+  \today
+}
+
+\begin{document}
+
+\maketitle
+
+\section{Funzionalit\`a}
+
+Overengineered \`e un videogioco a piattaforme a scorrimento laterale con mappa
+illimitata implementato in \verb!C++!. L'esecuzione avviene all'interno di un terminale:
+l'interfaccia \`e perci\`o realizzata tramite una grafica ASCII. La mappa \`e
+genearata in modo incrementale tramite l'unione di frammenti presviluppati. La
+possibilit\`a di scegliere tra pi\`u personaggi, unita alla variet\`a di nemici
+ed oggetti, rende il sistema di combattimento una sintesi fra scontri corpo a
+corpo e a distanza.
+
+\section{Spartizione dei ruoli}
+
+Il lavoro \`e stato diviso tra i membri del gruppo sia sotto il piano della
+programmazione che delle figure di contorno richieste per la creazione di un videogioco.
+
+\subsection{Programmazione}
+
+Il programma si articola in pi\`u moduli, che sono rappresentati nel codice con
+lo strumento linguistico dello spazio dei nomi (\emph{namespace}). \`E stato
+designato un responsabile diverso per ciascuno di questi moduli.
+\begin{itemize}
+  \item \verb!Data!:
+  \item \verb!Engine!:
+  \item \verb!World!:
+  \item \verb!Game!:
+\end{itemize}
+
+Date le limitazioni sull'uso della \emph{Standard Template Library} offerta dal
+linguaggio, il progetto include un ulteriore modulo, denominato \verb!Nostd!, che emula
+alcuni strumenti della libreria standard. Quest'ultimo \`e stato realizzato
+congiuntamente dall'intera squadra.
+
+\end{document}
