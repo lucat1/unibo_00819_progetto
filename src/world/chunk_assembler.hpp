@@ -42,18 +42,16 @@ private:
   // Returns the next Data::MapChunk to draw
   Data::MapChunk *next_chunk() noexcept;
 
-  Nostd::Matrix<Engine::BlockTile>
+  Nostd::Matrix<Engine::BlockTile *>
   assemble_scenery(const Data::MapChunk *, const Data::Scenery) const noexcept;
 
 public:
   ChunkAssembler() = delete;
 
-  ChunkAssembler(Nostd::Vector<Data::MapChunk>, Nostd::Vector<Data::Scenery>);
+  ChunkAssembler(const Nostd::Vector<Data::MapChunk> &,
+                 const Nostd::Vector<Data::Scenery> &);
 
-  Nostd::Matrix<Engine::BlockTile> get() noexcept;
-
-  void print_list() const noexcept;
-  void print_scenery(Data::Scenery) noexcept;
+  Nostd::Matrix<Engine::BlockTile *> get() noexcept;
 };
 
 } // namespace World

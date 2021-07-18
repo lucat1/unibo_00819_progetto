@@ -14,6 +14,9 @@ public:
     V val;
     Item *next, *prev;
     List<V> *list;
+
+    Item(List<V> *list, Item *prev, Item *next = nullptr, V value = V())
+        : val(value), next(next), prev(prev), list(list) {}
   };
 
   class const_iterator;
@@ -92,10 +95,7 @@ public:
   List(size_t size) {
     sz = size;
     for (size_t i = 0; i < sz; i++) {
-      Item *x = new Item;
-      x->next = nullptr;
-      x->prev = tail;
-      x->list = this;
+      Item *x = new Item(this, tail);
       if (i == 0)
         head = x;
       if (tail != nullptr)
@@ -107,11 +107,7 @@ public:
   List(size_t size, V ele) {
     sz = size;
     for (size_t i = 0; i < sz; i++) {
-      Item *x = new Item;
-      x->val = ele;
-      x->next = nullptr;
-      x->prev = tail;
-      x->list = this;
+      Item *x = new Item(this, tail, nullptr, ele);
       if (i == 0)
         head = x;
       if (tail != nullptr)
@@ -179,12 +175,7 @@ public:
   // Inserts a new element at the beginning of the list, right before its
   // current first element.
   void push_front(V ele) {
-    Item *x = new Item;
-    x->list = this;
-    x->val = ele;
-    x->next = head;
-    x->prev = nullptr;
-
+    Item *x = new Item(this, nullptr, head, ele);
     if (head != nullptr)
       head->prev = x;
     head = x;
@@ -196,12 +187,7 @@ public:
   // Adds a new element at the end of the list container, after its current
   // last element.
   void push_back(V ele) {
-    Item *x = new Item;
-    x->list = this;
-    x->val = ele;
-    x->next = nullptr;
-    x->prev = tail;
-
+    Item *x = new Item(this, tail, nullptr, ele);
     if (tail == nullptr)
       head = x;
     else
