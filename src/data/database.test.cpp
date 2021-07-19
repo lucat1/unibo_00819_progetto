@@ -27,11 +27,11 @@ int main() {
     assert(s.at(1).size() == 3);
     // Map chunks
     const auto &m = d.map_chunks();
-    assert(m.size() == 10);
-    assert(m.at(0).ending_row() == 16);
-    assert(m.at(0).at(19).at(30).value() == Data::MapUnit::ground);
-    assert(m.at(4).starting_row() == 16);
-    assert(m.at(4).at(5).at(69).value() == Data::MapUnit::item);
+    assert(m.size() == 11);
+    assert(m.at(0).starting_row() == 19);
+    assert(m.at(0).at(19).at(30).value() == Data::MapUnit::nothing);
+    assert(m.at(1).ending_row() == 16);
+    assert(m.at(1).at(19).at(30).value() == Data::MapUnit::ground);
     // Sceneries
     const auto &sc = d.sceneries();
     assert(sc.size() == 3);

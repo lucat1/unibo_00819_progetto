@@ -56,7 +56,7 @@ public:
 
   // capacity
   size_t width() const noexcept;
-  constexpr static size_t height{20};
+  constexpr static size_t height{24};
 
   // 0-based index of the player's starting row (usually right above floor)
   size_t starting_row() const noexcept;
