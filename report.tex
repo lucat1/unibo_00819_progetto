@@ -51,9 +51,9 @@ designato un responsabile diverso per ciascuno di questi moduli.
     essa contenuti, come \verb!Scenery!, \verb!Hero!, \verb!Skill!. La lettura
     di tali informazioni avviene da disco.
   \item \verb!Engine! (L. Tagliavini): fornisce il nucleo \emph{software} per
-    l'uso di grafica in tempo reale e audio. Offre strutture per il rendering,
-    la creazione di interfacce utente e la riproduzione della colonna sonora.
-    % TODO: fact checking sulla colonna sonora
+    l'uso di grafica in tempo reale e audio. Offre strutture per il
+    \emph{rendering}, la creazione di interfacce utente e la riproduzione della
+    colonna sonora. % TODO: fact checking sulla colonna sonora
   \item \verb!World! (M. Girolimetto): genera una mappa di gioco dinamicamente
     espandibile, popolandola con entit\`a di vario genere. Il livello di
     difficolt\`a aumenta in relazione alle dimensioni della mappa.
@@ -69,7 +69,8 @@ dalla consegna, il progetto include un ulteriore modulo, denominato
 
 \subsection{Miscellanei}
 
-La cartella \verb!assets! raccoglie le risorse caricate dalla base di dati.
+La cartella \verb!assets! raccoglie le risorse (file di estensioni \verb!.txt! e
+\verb!.csv!) caricate dalla base di dati.
 Esse sono classificabili in quattro categorie.
 
 \begin{itemize}
@@ -109,7 +110,7 @@ Italia, Milano, 2015, p. 810.}), la quasi totalità dei dati della base di
 dati viene memorizzata in vettori del tipo appropriato. Fa eccezione
 \verb!Result!, le cui istanze sono memorizzate in una lista per privilegiare
 inserimenti interni durante l'iterazione su esse. Molte delle classi coinvolte,
-inoltre, appartengono ad un'unica gerarchia circoscritta nel sottospazio dei
+inoltre, appartengono ad un'unica gerarchia circoscritta dal sottospazio dei
 nomi \verb!Data::Pawns!.
 
 \subsection{Engine}
@@ -118,6 +119,18 @@ nomi \verb!Data::Pawns!.
 
 \subsection{World}
 
+Sia la mappa di gioco che l'insieme degli agenti che la popolano sono
+rappresentati da liste. In questo modo, vengono semplificate le operazioni di
+accodamento ed eliminazione da effettuare con il progredire del gioco. Le
+coordinate di ciascun agente sono espresse da un iteratore facente riferimento
+alla matrice in cui esso si trova, nonch\'e dagli indici della riga e della
+colonna relative.
+
 \subsection{Game}
+
+Affinch\'e il modulo possa gestire il \emph{game loop}, ad ogni aggiornamento
+dello stato della partita la lista degli agenti viene scorsa per intero una ed
+una sola volta. Tale processo prevede spostamenti sulla mappa, controlli di
+collisioni, modifiche alle statistice e distruzioni.
 
 \end{document}
