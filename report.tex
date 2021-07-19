@@ -28,7 +28,7 @@
 
 \section{Funzionalit\`a}
 
-Overengineered \`e un videogioco a piattaforme a scorrimento laterale con mappa
+\emph{Overengineered} \`e un videogioco a piattaforme a scorrimento laterale con mappa
 illimitata implementato in \verb!C++!. L'esecuzione avviene all'interno di un terminale:
 l'interfaccia \`e perci\`o realizzata tramite una grafica ASCII. La mappa \`e
 genearata in modo incrementale tramite l'unione di frammenti presviluppati. La
@@ -62,10 +62,10 @@ designato un responsabile diverso per ciascuno di questi moduli.
     tra menu diversi.
 \end{itemize}
 
-Date le limitazioni sull'uso della \emph{Standard Template Library} offerta dal
-linguaggio, il progetto include un ulteriore modulo, denominato \verb!Nostd!, che emula
-alcuni strumenti della libreria standard. Quest'ultimo \`e stato realizzato
-congiuntamente dall'intera squadra.
+Date le limitazioni sull'uso della \emph{Standard Template Library} imposte
+dalla consegna, il progetto include un ulteriore modulo, denominato
+\verb!Nostd!, che emula alcuni strumenti della libreria standard. Quest'ultimo
+\`e stato realizzato congiuntamente dall'intera squadra.
 
 \subsection{Miscellanei}
 
@@ -92,6 +92,7 @@ linguistici e concettuali per l'astrazione con accorgimenti di basso livello
 per ottenere prestazioni relativamente soddisfacenti.
 
 \subsection{Nostd}
+
 \verb!Nostd! (re)implementa liste, vettori, stringhe, matrici e mappe, ovvero i
 contenitori utili al resto del progetto. Fedelt\`a alla \emph{STL},
 semplicit\`a e pragmatismo ne hanno guidato la progettazione.
@@ -100,7 +101,20 @@ intestazioni ausiliarie.
 
 \subsection{Data}
 
+Così come prescritto da B. Stroustrup (\guillemotleft A meno che esista una buona ragione per
+non farlo, usate \verb!vector!.\guillemotright\footnote{\label{note1} Vedi B.
+Stroustrup, \emph{C++. Linguaggio, libreria standard, principi di
+programmazione}, 4. ed., trad. it. di Giulia Maselli e Paolo Postinghel, Pearson
+Italia, Milano, 2015, p. 810.}), la quasi totalità dei dati della base di
+dati viene memorizzata in vettori del tipo appropriato. Fa eccezione
+\verb!Result!, le cui istanze sono memorizzate in una lista per privilegiare
+inserimenti interni durante l'iterazione su esse. Molte delle classi coinvolte,
+inoltre, appartengono ad un'unica gerarchia circoscritta nel sottospazio dei
+nomi \verb!Data::Pawns!.
+
 \subsection{Engine}
+
+% TODO Luca T.
 
 \subsection{World}
 
