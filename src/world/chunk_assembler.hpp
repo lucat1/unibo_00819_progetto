@@ -24,23 +24,11 @@ namespace World {
 
 class ChunkAssembler {
 private:
-  struct ChunkInfo {
-    size_t id;
-    Data::MapChunk *chunk;
-  };
-
-  Nostd::Vector<Data::MapChunk> chunks;
-  Nostd::Vector<Data::Scenery> sceneries;
-  Nostd::Vector<ChunkInfo> *adjacency_list = nullptr;
-  World::RandomGenerator random_gen;
+  const Nostd::Vector<Data::MapChunk> *chunks;
+  const Nostd::Vector<Data::Scenery> *sceneries;
+  const World::RandomGenerator random_gen;
   Data::Scenery current_scenery;
-  ChunkInfo *current = nullptr;
-
-  // Create the adjacency list. Called from the constractor.
-  void fill_list() noexcept;
-
-  // Returns the next Data::MapChunk to draw
-  Data::MapChunk *next_chunk() noexcept;
+  const Data::MapChunk *current_chunk;
 
   Nostd::Matrix<Engine::BlockTile *>
   assemble_scenery(const Data::MapChunk *, const Data::Scenery) const noexcept;
@@ -51,7 +39,10 @@ public:
   ChunkAssembler(const Nostd::Vector<Data::MapChunk> &,
                  const Nostd::Vector<Data::Scenery> &);
 
-  Nostd::Matrix<Engine::BlockTile *> get() noexcept;
+  Nostd::Matrix<Engine::BlockTile *> get() const noexcept;
+
+  // Returns the next Data::MapChunk to draw
+  void next_chunk() noexcept;
 };
 
 } // namespace World

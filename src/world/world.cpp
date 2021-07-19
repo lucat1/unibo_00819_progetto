@@ -17,4 +17,6 @@ using namespace Data;
 World::World::World(const Database &d) noexcept
     : assembler(d.map_chunks(), d.sceneries()) {
   enviroment.push_back(assembler.get());
+  assembler.next_chunk();
+  enviroment.push_back(assembler.get());
 }

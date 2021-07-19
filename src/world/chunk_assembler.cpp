@@ -21,48 +21,16 @@ using namespace Engine;
 
 ChunkAssembler::ChunkAssembler(const Vector<MapChunk> &chunks,
                                const Vector<Scenery> &sceneries) {
-  this->chunks = chunks;
-  this->sceneries = sceneries;
-  this->adjacency_list = new Vector<ChunkInfo>[chunks.size()];
-  this->current_scenery = sceneries[0];
-  fill_list();
-}
-
-// Create the adjacency_list from Chunks using starting_row and ending_row to
-// link nodes
-void ChunkAssembler::fill_list() noexcept {
-  if (adjacency_list == nullptr)
-    return;
-
-  Vector<ChunkInfo> infos(chunks.size());
-  for (size_t i = 0; i < chunks.size(); i++) {
-    ChunkInfo x = {i, &chunks[i]};
-    infos.at(i) = x;
-  }
-
-  for (ChunkInfo first : infos) {
-    for (ChunkInfo second : infos) {
-      if (first.id == second.id)
-        continue;
-      if (first.chunk->ending_row() == second.chunk->starting_row()) {
-        adjacency_list[first.id].push_back(second);
-      }
-    }
-  }
+  this->chunks = &chunks;
+  this->sceneries = &sceneries;
+  this->current_chunk = &this->chunks->at(0);
 }
 
 // Generate a random number i between 0 and the number of nodes liked to Current
 // and take the i-esim linked node.
-MapChunk *ChunkAssembler::next_chunk() noexcept {
-  if (current == nullptr) {
-    current = new ChunkInfo;
-    current->id = 0;
-    current->chunk = &chunks[0];
-  } else {
-    auto rand = random_gen.get_random(adjacency_list[current->id].size());
-    current = &adjacency_list[current->id][rand];
-  }
-  return current->chunk;
+void ChunkAssembler::next_chunk() noexcept {
+  auto rand = random_gen.get_random(this->chunks->size());
+  this->current_chunk = &this->chunks->at(rand);
 }
 
 // Combine a Data::MapChunk with a Data::Scenery to make a
@@ -92,8 +60,8 @@ ChunkAssembler::assemble_scenery(const MapChunk *chunk,
   return res;
 }
 
-Matrix<BlockTile *> ChunkAssembler::get() noexcept {
-  MapChunk *c = next_chunk();
+Matrix<BlockTile *> ChunkAssembler::get() const noexcept {
+  const MapChunk *const c = this->current_chunk;
   return assemble_scenery(c, this->current_scenery);
 }
 

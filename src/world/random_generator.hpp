@@ -9,7 +9,7 @@ namespace World {
 
 class RandomGenerator {
 private:
-  time_t seed;
+  const time_t seed;
 
 public:
   using uint = size_t;
@@ -18,10 +18,10 @@ public:
   RandomGenerator();
 
   // Get random number between 0 and bound parameter
-  uint get_random(uint bound);
+  const uint get_random(const uint &bound) const noexcept;
 
   // Seed filed getter
-  time_t get_seed();
+  time_t get_seed() const noexcept;
 };
 
 } // namespace World
