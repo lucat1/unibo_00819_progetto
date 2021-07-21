@@ -27,11 +27,12 @@ private:
   const Nostd::Vector<Data::MapChunk> *chunks;
   const Nostd::Vector<Data::Scenery> *sceneries;
   const World::RandomGenerator random_gen;
-  Data::Scenery current_scenery;
+  const Data::Scenery *current_scenery;
   const Data::MapChunk *current_chunk;
 
   Nostd::Matrix<Engine::BlockTile *>
-  assemble_scenery(const Data::MapChunk *, const Data::Scenery) const noexcept;
+  assemble_scenery(const Data::MapChunk *,
+                   const Data::Scenery *) const noexcept;
 
 public:
   ChunkAssembler() = delete;

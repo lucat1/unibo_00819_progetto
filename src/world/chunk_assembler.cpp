@@ -24,6 +24,7 @@ ChunkAssembler::ChunkAssembler(const Vector<MapChunk> &chunks,
   this->chunks = &chunks;
   this->sceneries = &sceneries;
   this->current_chunk = &this->chunks->at(0);
+  this->current_scenery = &this->sceneries->at(0);
 }
 
 // Generate a random number i between 0 and the number of nodes liked to Current
@@ -37,7 +38,7 @@ void ChunkAssembler::next_chunk() noexcept {
 // Nostd::Matrix<World::MapPixel>.
 Matrix<BlockTile *>
 ChunkAssembler::assemble_scenery(const MapChunk *chunk,
-                                 const Scenery scenery) const noexcept {
+                                 const Scenery *scenery) const noexcept {
   BlockTile *nullPixel =
       new BlockTile('?', Color::transparent, Color::transparent);
   Matrix<BlockTile *> res({chunk->height, chunk->width()}, nullPixel);
@@ -46,15 +47,15 @@ ChunkAssembler::assemble_scenery(const MapChunk *chunk,
       MapUnit map_unit = chunk->at(i).at(j).value();
       if (map_unit == MapUnit::nothing)
         res.at(i).at(j).value() =
-            new BlockTile(' ', Color::transparent, scenery.sky[0]);
+            new BlockTile(' ', Color::transparent, scenery->sky[0]);
       else if (map_unit == MapUnit::ground)
         res.at(i).at(j).value() =
-            new BlockTile(scenery.ground.singlet, scenery.ground.foreground,
-                          scenery.ground.background);
+            new BlockTile(scenery->ground.singlet, scenery->ground.foreground,
+                          scenery->ground.background);
       else if (map_unit == MapUnit::platform)
-        res.at(i).at(j).value() =
-            new BlockTile(scenery.platform.singlet, scenery.platform.foreground,
-                          scenery.ground.background);
+        res.at(i).at(j).value() = new BlockTile(scenery->platform.singlet,
+                                                scenery->platform.foreground,
+                                                scenery->ground.background);
     }
   }
   return res;

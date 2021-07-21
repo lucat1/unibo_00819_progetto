@@ -33,15 +33,6 @@ int main() {
   it("does something better no ask", [] {
     Database d("tests/alma.conf.csv", "tests/assets/", "tests/scoreboard.csv");
     WWorld w(d);
-    for (auto x : w.enviroment) {
-      for (auto r : x) {
-        for (auto c : r) {
-          std::wcout << c.value()->character();
-        }
-        std::wcout << std::endl;
-      }
-      std::wcout << std::endl << std::endl;
-    }
   });
   return 0;
 }

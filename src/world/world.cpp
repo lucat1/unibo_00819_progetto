@@ -19,4 +19,10 @@ World::World::World(const Database &d) noexcept
   enviroment.push_back(assembler.get());
   assembler.next_chunk();
   enviroment.push_back(assembler.get());
+  assembler.next_chunk();
+  enviroment.push_back(assembler.get());
+  assembler.next_chunk();
+  enviroment.push_back(assembler.get());
+  assembler.next_chunk();
+  enviroment.push_back(assembler.get());
 }
