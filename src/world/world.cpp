@@ -11,18 +11,15 @@
 
 #include "world.hpp"
 #include "chunk_assembler.hpp"
+#include <cstddef>
 
 using namespace Data;
 
 World::World::World(const Database &d) noexcept
     : assembler(d.map_chunks(), d.sceneries()) {
-  enviroment.push_back(assembler.get());
-  assembler.next_chunk();
-  enviroment.push_back(assembler.get());
-  assembler.next_chunk();
-  enviroment.push_back(assembler.get());
-  assembler.next_chunk();
-  enviroment.push_back(assembler.get());
-  assembler.next_chunk();
-  enviroment.push_back(assembler.get());
+
+  for (size_t i{0}; i < this->LOADED_CHUNKS; i++) {
+    this->enviroment.push_back(this->assembler.get());
+    this->assembler.next_chunk();
+  }
 }

@@ -22,6 +22,7 @@ public:
   World(const Data::Database &d) noexcept;
 
 private:
+  const unsigned int LOADED_CHUNKS = 50;
   ChunkAssembler assembler;
 };
 
