@@ -40,5 +40,12 @@ void Engine::Scene::Scene::draw() {
           p.score());
   hud.show(window, 0, Screen::lines - 1, Screen::columns, 1);
 
+  // draw the world around the player
+  // TODO: await proper implementation
+  auto pos = world.position;
+  int left = 0, right = 0;
+  pos->fragment
+
+  // ncurses redraw
   doupdate();
 }

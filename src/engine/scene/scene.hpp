@@ -28,8 +28,12 @@ private:
   bool over = false;
 
   void draw();
+  void draw_chunk();
 
 public:
+  static const szu width = 80;
+  static const szu height = 24; // one line reserved for the HUD
+
   Kind kind() const;
   void handle_event(Event e);
   bool is_over();
