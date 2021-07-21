@@ -12,12 +12,14 @@
 #define WORLD_WORLD_HPP
 
 #include "../data/database.hpp"
+#include "../data/pawns/hero.hpp"
 #include "../nostd/list.hpp"
 #include "../world/chunk_assembler.hpp"
 
 namespace World {
 class World {
 public:
+  Data::Pawns::Hero player;
   Nostd::List<Nostd::Matrix<Engine::BlockTile *>> enviroment;
   World(const Data::Database &d) noexcept;
 

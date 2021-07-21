@@ -15,15 +15,14 @@
 #define ENGINE_SCENE_SCRENE_HPP
 
 #include "../drawable.hpp"
-#include "../../data/pawns/hero.hpp"
+#include "../../world/world.hpp"
 
 namespace Engine {
 namespace Scene {
 
 class Scene : public Drawable {
 private:
-  // TODO: refactor with the proper world structure
-  const Data::Pawns::Hero &player;
+  const World::World &world;
   // TODO: remove this functionality, the world structure will contain a way to
   // notify us that the game has ended
   bool over = false;
@@ -35,7 +34,7 @@ public:
   void handle_event(Event e);
   bool is_over();
 
-  Scene(WINDOW *window, const Data::Pawns::Hero &hero);
+  Scene(WINDOW *window, const World::World &world);
 };
 
 } // namespace Scene

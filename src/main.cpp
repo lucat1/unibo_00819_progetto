@@ -5,6 +5,7 @@
 #include "engine/menu/settings.hpp"
 #include "engine/scene/scene.hpp"
 #include "engine/screen.hpp"
+#include "world/world.hpp"
 #include <fstream>
 #include <iostream>
 #include <unistd.h>
@@ -22,6 +23,7 @@ void handle(bool can_display) {
 int main() {
   Data::Database d("tests/alma.conf.csv", "tests/assets/",
                    "tests/scoreboard.csv");
+  World::World world(d);
 
   Screen screen;
   handle(screen.open());
@@ -70,8 +72,9 @@ int main() {
           screen.set_content<Menu::Main>();
         else {
           // otherwhise start a game
-          auto hero = screen.get_content<Menu::Select>()->get_result();
-          screen.set_content<Scene::Scene, const Data::Pawns::Hero &>(hero);
+          // TODO: use this to provide the world a context of the current hero
+          /* auto hero = screen.get_content<Menu::Select>()->get_result(); */
+          screen.set_content<Scene::Scene, const World::World &>(world);
         }
       }
     }

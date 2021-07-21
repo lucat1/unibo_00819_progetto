@@ -10,15 +10,13 @@
 */
 
 #include "scene.hpp"
+#include "../../world/world.hpp"
 #include "../screen.hpp"
 #include "hud.hpp"
 #include <exception>
 
-Engine::Scene::Scene::Scene(WINDOW *window, const Data::Pawns::Hero &hero)
-    : Drawable(window, Screen::columns, Screen::lines), player{hero} {
-  // TODO: remove when we recieve a proper world object with the map and
-  // entities data
-}
+Engine::Scene::Scene::Scene(WINDOW *window, const World::World &world)
+    : Drawable(window, Screen::columns, Screen::lines), world{world} {}
 
 Engine::Drawable::Kind Engine::Scene::Scene::kind() const { return Kind::game; }
 
@@ -35,10 +33,11 @@ bool Engine::Scene::Scene::is_over() { return over; }
 
 void Engine::Scene::Scene::draw() {
   // do all serious rendering first, lastly render the HUD
+  Data::Pawns::Hero p = world.player;
 
   // draw HUD
-  HUD hud(player.currentHealth(), player.maxHealth(), player.currentMana(),
-          player.maxMana(), player.score());
+  HUD hud(p.currentHealth(), p.maxHealth(), p.currentMana(), p.maxMana(),
+          p.score());
   hud.show(window, 0, Screen::lines - 1, Screen::columns, 1);
 
   doupdate();

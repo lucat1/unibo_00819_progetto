@@ -36,7 +36,7 @@ Engine::UI::TextBox::split_content(const Nostd::String content, szu max_width) {
   while (content.length() - pos > max_width) {
     size_t wrote = std::min(content.length() - pos, (size_t)max_width);
     auto sub = content.substr(pos, wrote);
-    if(Nostd::iswspace(content[pos+wrote])) {
+    if (Nostd::iswspace(content[pos + wrote])) {
       // if we cut right at the end of a word (aka just before a whitespace)
       // ditch that whitespace so the new line doesn't start with a blank char
       wrote++;
@@ -47,7 +47,7 @@ Engine::UI::TextBox::split_content(const Nostd::String content, szu max_width) {
       if (!Nostd::iswspace(sub[wrote - 2]))
         sub.back() = u'-';
       else
-        sub = sub.substr(0, wrote-1);
+        sub = sub.substr(0, wrote - 1);
       wrote--; // leave the new word in the next line
     }
 
@@ -56,7 +56,7 @@ Engine::UI::TextBox::split_content(const Nostd::String content, szu max_width) {
   }
 
   // append remaining if we have any
-  if (pos != content.length()-1)
+  if (pos != content.length() - 1)
     lines.push_back(content.substr(pos));
   return lines;
 }
