@@ -25,6 +25,9 @@ public:
   Nostd::List<Nostd::Matrix<Engine::BlockTile *>> environment;
   World(const Data::Database &d) noexcept;
 
+  // Add new assembled chunk to enviroment
+  void add_chunk() noexcept;
+
 private:
   const unsigned int LOADED_CHUNKS = 50;
   ChunkAssembler assembler;
