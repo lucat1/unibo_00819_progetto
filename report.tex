@@ -1,0 +1,136 @@
+\documentclass[a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[italian]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{enumerate}
+
+% \hfuzz=100.0pt  % ignore paragraph lengths warnings
+% \usepackage[hidelinks]{hyperref}
+
+\title{Overengineered \\
+\large Relazione del progetto per l'insegnamento di Programmazione}
+\author{
+  M. Girolimetto,
+  A. Scrob,
+  L. Tagliavini,
+  S. Volpe
+}
+
+\date{
+	Universit\`a di Bologna \\
+  \today
+}
+
+\begin{document}
+
+\maketitle
+
+\section{Funzionalit\`a}
+
+\emph{Overengineered} \`e un videogioco a piattaforme a scorrimento laterale con mappa
+illimitata implementato in \verb!C++!. L'esecuzione avviene all'interno di un terminale:
+l'interfaccia \`e perci\`o realizzata tramite una grafica ASCII. La mappa \`e
+genearata in modo incrementale tramite l'unione di frammenti presviluppati. La
+possibilit\`a di scegliere tra pi\`u personaggi, unita alla variet\`a di nemici
+ed oggetti, rende il sistema di combattimento una sintesi fra scontri corpo a
+corpo e a distanza.
+
+\section{Spartizione dei ruoli}
+
+Il lavoro \`e stato diviso tra i membri del gruppo sia sotto il piano della
+programmazione che delle figure di contorno richieste per la creazione di un videogioco.
+
+\subsection{Programmazione}
+
+Il programma si articola in pi\`u moduli, che sono rappresentati nel codice con
+lo strumento linguistico dello spazio dei nomi (\emph{namespace}). \`E stato
+designato un responsabile diverso per ciascuno di questi moduli.
+\begin{itemize}
+  \item \verb!Data! (S. Volpe): descrive la base di dati del gioco e gli enti in
+    essa contenuti, come \verb!Scenery!, \verb!Hero!, \verb!Skill!. La lettura
+    di tali informazioni avviene da disco.
+  \item \verb!Engine! (L. Tagliavini): fornisce il nucleo \emph{software} per
+    l'uso di grafica in tempo reale e audio. Offre strutture per il
+    \emph{rendering}, la creazione di interfacce utente e la riproduzione della
+    colonna sonora. % TODO: fact checking sulla colonna sonora
+  \item \verb!World! (M. Girolimetto): genera una mappa di gioco dinamicamente
+    espandibile, popolandola con entit\`a di vario genere. Il livello di
+    difficolt\`a aumenta in relazione alle dimensioni della mappa.
+  \item \verb!Game! (A. Scrob): combina le funzionalit\`a degli altri moduli in
+    un unico \emph{game loop}. Implementa la logica di gioco e la navigazione
+    tra menu diversi.
+\end{itemize}
+
+Date le limitazioni sull'uso della \emph{Standard Template Library} imposte
+dalla consegna, il progetto include un ulteriore modulo, denominato
+\verb!Nostd!, che emula alcuni strumenti della libreria standard. Quest'ultimo
+\`e stato realizzato congiuntamente dall'intera squadra.
+
+\subsection{Miscellanei}
+
+La cartella \verb!assets! raccoglie le risorse (file di estensioni \verb!.txt! e
+\verb!.csv!) caricate dalla base di dati.
+Esse sono classificabili in quattro categorie.
+
+\begin{itemize}
+  \item Progettazione (S. Volpe): creazione dei frammenti della mappa e delle
+    statistiche di gioco.
+  \item Grafica (L. Tagliavini): scelta di caratteri e colori per la
+    rappresentazione di paesaggi, entit\`a e ritratti.
+  \item Audio (M. Girolimetto): composizione della colonna sonora riprodotta
+    nelle varie fasi del gioco.
+  \item Testi (A. Scrob): nomi delle entit\`a e descrizioni dei personaggi
+    giocabili.
+\end{itemize}
+
+\section{Scelte implementative}
+
+I paradigmi di programmazione usati come modello nella stesura del codice
+sorgente sono quello procedurale, orientato agli oggetti e generico. Il
+linguaggio scelto ci ha permesso di coniugare l'uso di potenti strumenti
+linguistici e concettuali per l'astrazione con accorgimenti di basso livello
+per ottenere prestazioni relativamente soddisfacenti.
+
+\subsection{Nostd}
+
+\verb!Nostd! (re)implementa liste, vettori, stringhe, matrici e mappe, ovvero i
+contenitori utili al resto del progetto. Fedelt\`a alla \emph{STL},
+semplicit\`a e pragmatismo ne hanno guidato la progettazione.
+\verb!allocator.hpp!, \verb!concepts.hpp! e \verb!pair.hpp! hanno funto da
+intestazioni ausiliarie.
+
+\subsection{Data}
+
+Così come prescritto da B. Stroustrup (\guillemotleft A meno che esista una buona ragione per
+non farlo, usate \verb!vector!.\guillemotright\footnote{\label{note1} Vedi B.
+Stroustrup, \emph{C++. Linguaggio, libreria standard, principi di
+programmazione}, 4. ed., trad. it. di Giulia Maselli e Paolo Postinghel, Pearson
+Italia, Milano, 2015, p. 810.}), la quasi totalità dei dati della base di
+dati viene memorizzata in vettori del tipo appropriato. Fa eccezione
+\verb!Result!, le cui istanze sono memorizzate in una lista per privilegiare
+inserimenti interni durante l'iterazione su esse. Molte delle classi coinvolte,
+inoltre, appartengono ad un'unica gerarchia circoscritta dal sottospazio dei
+nomi \verb!Data::Pawns!.
+
+\subsection{Engine}
+
+% TODO Luca T.
+
+\subsection{World}
+
+Sia la mappa di gioco che l'insieme degli agenti che la popolano sono
+rappresentati da liste. In questo modo, vengono semplificate le operazioni di
+accodamento ed eliminazione da effettuare con il progredire del gioco. Le
+coordinate di ciascun agente sono espresse da un iteratore facente riferimento
+alla matrice in cui esso si trova, nonch\'e dagli indici della riga e della
+colonna relative.
+
+\subsection{Game}
+
+Affinch\'e il modulo possa gestire il \emph{game loop}, ad ogni aggiornamento
+dello stato della partita la lista degli agenti viene scorsa per intero una ed
+una sola volta. Tale processo prevede spostamenti sulla mappa, controlli di
+collisioni, modifiche alle statistice e distruzioni.
+
+\end{document}
