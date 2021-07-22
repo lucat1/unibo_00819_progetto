@@ -30,7 +30,7 @@ int main() {
   screen.set_content<Menu::Main>();
 
   int key;
-  bool running = true;
+  bool running = true, gaming = false;
   while (running) {
     // quit if usleep is blocked by an interrupt and the key is an ERR
     if (usleep(1000000 / 25) == EINTR) // 25fps
@@ -67,16 +67,20 @@ int main() {
         if (screen.is_content<Menu::Settings>())
           d.settings() = screen.get_content<Menu::Settings>()->get_result();
 
-        if (!screen.is_content<Menu::Select>())
+        if (!screen.is_content<Menu::Select>()) {
           // go back to the main menu
+          gaming = false;
           screen.set_content<Menu::Main>();
-        else {
+        } else {
           // otherwhise start a game
           // TODO: use this to provide the world a context of the current hero
           /* auto hero = screen.get_content<Menu::Select>()->get_result(); */
+          gaming = true;
           screen.set_content<Scene::Scene, const World::World &>(world);
         }
       }
+    } else if(gaming) {
+      screen.send_event(Drawable::Event::redraw);
     }
 
     // keyboard handling
@@ -93,22 +97,35 @@ int main() {
 
     case 'k':
     case KEY_UP:
-      screen.send_event(Drawable::Event::move_up);
+      if(!gaming)
+        screen.send_event(Drawable::Event::move_up);
+      else
+        world.position->y = std::min(world.position->y+1, 24);
+
       break;
 
     case 'j':
     case KEY_DOWN:
-      screen.send_event(Drawable::Event::move_down);
+      if(!gaming)
+        screen.send_event(Drawable::Event::move_down);
+      else
+        world.position->y = std::max(world.position->y-1, 0);
       break;
 
     case 'h':
     case KEY_LEFT:
-      screen.send_event(Drawable::Event::move_left);
+      if(!gaming)
+        screen.send_event(Drawable::Event::move_left);
+      else
+        world.position->dec_x();
       break;
 
     case 'l':
     case KEY_RIGHT:
-      screen.send_event(Drawable::Event::move_right);
+      if(!gaming)
+        screen.send_event(Drawable::Event::move_right);
+      else
+        world.position->inc_x();
       break;
     case ERR:
       // ignore ncurses's getch errors

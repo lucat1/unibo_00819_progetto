@@ -22,13 +22,14 @@ namespace Scene {
 
 class Scene : public Drawable {
 private:
+  static const int threshold = 10;
   const World::World &world;
   // TODO: remove this functionality, the world structure will contain a way to
   // notify us that the game has ended
   bool over = false;
 
   void draw();
-  void draw_chunk(Nostd::Matrix<BlockTile *> chunk, int x, int y);
+  void draw_chunk(Nostd::Matrix<BlockTile *> chunk, int x, int y, int offset_x = 0, int offset_y = 0);
 
 public:
   static const szu width = Screen::columns;

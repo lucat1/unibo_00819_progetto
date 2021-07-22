@@ -15,6 +15,9 @@
 #include "hud.hpp"
 #include <exception>
 
+#include <iostream>
+using namespace std;
+
 Engine::Scene::Scene::Scene(WINDOW *window, const World::World &world)
     : Drawable(window, Screen::columns, Screen::lines), world{world} {}
 
@@ -32,37 +35,55 @@ void Engine::Scene::Scene::handle_event(Event e) {
 bool Engine::Scene::Scene::is_over() { return over; }
 
 void Engine::Scene::Scene::draw() {
-  // do all serious rendering first, lastly render the HUD
-  Data::Pawns::Hero p = world.player;
-
-  // draw HUD
-  HUD hud(p.currentHealth(), p.maxHealth(), p.currentMana(), p.maxMana(),
-          p.score());
-  hud.show(window, 0, Screen::lines - 1, Screen::columns, 1);
+  // start with a blank slate
+  werase(window);
 
   // draw the world around the player
   // TODO: await proper implementation
   auto pos = world.position;
-  // compute the amout of drawing needed on the sides of the player (taking into
-  // account the beginning of the map where we can't center the player)
-  /* int left = std::min(pos.x, width / 2), */
-  /*     right = std::max(width - pos.x, width / 2); */
-  // draw the chunk the player is currently on
-  draw_chunk(*(pos->fragment), 0, 0);
-  /* while(left > 0) { */
-  /* } */
-  /* while(right > 0) { */
-  /* } */
+  // the drawing of the map is handled in this way:
+  // 1. compute the *first* chunk to be drawn
+  // 2. adress the initial position of the player when there is no world to the left
+  // 3. draw from there on until we exceed the screen width
+  auto start = pos->fragment; // assume the player is in the first chunk
+  size_t first_offset = 0, player_x = pos->x; // assuming the player is behind the threshold
+  if(*start != *world.environment.begin()) {
+    auto space_left = (width/2) - pos->x;
+    while(start != world.environment.begin() && (space_left = space_left-(*start).extent(1)) > 0)
+      start = std::prev(start);
 
-  mvwaddch(window, pos->y, pos->x, 'p');
-  // ncurses redraw
+    first_offset = -space_left;
+    player_x = width/2;
+  } else if(player_x > width/2) {
+    // in the first chunk but it's wide enough to center the player
+    first_offset = player_x - width/2;
+    player_x = width/2;
+  }
+  // phase 3: draw the chunks from the left-most until we have screen space
+  size_t filled = 0;
+  while(filled < width) {
+    draw_chunk(*start, filled, 0, first_offset);
+    filled += (*start).extent(1) - first_offset;
+    start = std::next(start);
+    if(first_offset != 0)
+      first_offset = 0;
+  }
+
+  // draw the hero
+  mvwaddch(window, height-pos->y, player_x, world.player.character());
+
+  // lastly render the HUD
+  Data::Pawns::Hero p = world.player;
+  HUD hud(p.currentHealth(), p.maxHealth(), p.currentMana(), p.maxMana(),
+          p.score());
+  hud.show(window, 0, Screen::lines - 1, Screen::columns, 1);
   wnoutrefresh(window);
   doupdate();
 }
 
-void Engine::Scene::Scene::draw_chunk(Nostd::Matrix<BlockTile *> chunk, int x, int y) {
+void Engine::Scene::Scene::draw_chunk(Nostd::Matrix<BlockTile *> chunk, int x, int y, int offset_x, int offset_y) {
   // draw until we're out of the screen
-  size_t mx = 0, my = 0;
+  size_t mx = offset_x, my = offset_y;
   int x_cpy = x;
   while(y < height && my < chunk.extent(0)) {
     while(x < width && mx < chunk.extent(1)) {

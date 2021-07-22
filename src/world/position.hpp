@@ -9,15 +9,36 @@
 
 namespace World {
 class Position {
+  private :Nostd::List<Nostd::Matrix<Engine::BlockTile *>> environment;
+
 public:
   Nostd::List<Nostd::Matrix<Engine::BlockTile *>>::iterator fragment;
   int x, y;
 
   Position(
   Nostd::List<Nostd::Matrix<Engine::BlockTile *>> environment) {
-    x = Engine::Screen::columns / 2;
-    y = Engine::Screen::lines / 2;
-    fragment = environment.begin();
+    this->environment = environment;
+    this->x = 0;
+    this->y = 5;
+    this->fragment = environment.begin();
+  }
+
+  void dec_x() {
+    if(x != 0)
+      x--;
+    else if(*fragment != *environment.begin()) {
+      fragment = std::prev(fragment);
+      x = (*fragment).extent(1)-1;
+    }
+  }
+
+  void inc_x() {
+    if((size_t)x != (*fragment).extent(1)-1)
+      x++;
+    else {
+      fragment = std::next(fragment);
+      x = 0;
+    }
   }
 };
 }
