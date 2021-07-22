@@ -43,9 +43,37 @@ void Engine::Scene::Scene::draw() {
   // draw the world around the player
   // TODO: await proper implementation
   auto pos = world.position;
-  int left = 0, right = 0;
-  pos->fragment
+  // compute the amout of drawing needed on the sides of the player (taking into
+  // account the beginning of the map where we can't center the player)
+  /* int left = std::min(pos.x, width / 2), */
+  /*     right = std::max(width - pos.x, width / 2); */
+  // draw the chunk the player is currently on
+  draw_chunk(*(pos->fragment), 0, 0);
+  /* while(left > 0) { */
+  /* } */
+  /* while(right > 0) { */
+  /* } */
 
+  mvwaddch(window, pos->y, pos->x, 'p');
   // ncurses redraw
+  wnoutrefresh(window);
   doupdate();
+}
+
+void Engine::Scene::Scene::draw_chunk(Nostd::Matrix<BlockTile *> chunk, int x, int y) {
+  // draw until we're out of the screen
+  size_t mx = 0, my = 0;
+  int x_cpy = x;
+  while(y < height && my < chunk.extent(0)) {
+    while(x < width && mx < chunk.extent(1)) {
+      auto tile = chunk[my][mx].value();
+      int pair = Engine::UI::color_pair(color_to_short(tile->foreground()), color_to_short(tile->background()));
+      Engine::UI::start_color(window, pair);
+      mvwaddch(window, y, x, tile->character());
+      Engine::UI::end_color(window, pair);
+      x++; mx++;
+    }
+    y++; my++;
+    x =x_cpy; mx = 0;
+  }
 }

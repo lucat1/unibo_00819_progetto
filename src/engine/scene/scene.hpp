@@ -28,11 +28,11 @@ private:
   bool over = false;
 
   void draw();
-  void draw_chunk();
+  void draw_chunk(Nostd::Matrix<BlockTile *> chunk, int x, int y);
 
 public:
-  static const szu width = 80;
-  static const szu height = 24; // one line reserved for the HUD
+  static const szu width = Screen::columns;
+  static const szu height = Screen::lines-1; // one line reserved for the HUD
 
   Kind kind() const;
   void handle_event(Event e);

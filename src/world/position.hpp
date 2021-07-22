@@ -17,13 +17,7 @@ public:
   Nostd::List<Nostd::Matrix<Engine::BlockTile *>> environment) {
     x = Engine::Screen::columns / 2;
     y = Engine::Screen::lines / 2;
-    auto it = environment.begin();
-    int xx = 0;
-    while(xx + (int)(*it).extent(1) < x) {
-      xx += (*it).extent(1);
-      it = std::next(it);
-    }
-    fragment = it;
+    fragment = environment.begin();
   }
 };
 }
