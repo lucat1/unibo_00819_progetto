@@ -115,7 +115,14 @@ nomi \verb!Data::Pawns!.
 
 \subsection{Engine}
 
-% TODO Luca T.
+Tutti le schermate ad eccezione della scena di gioco sono composte da una serie
+di elementi visuali contenuti in \verb!Engine::UI! i quali vengono inseriti in
+una struttura arborescente che ricorda quella di un \emph{Document Object Model}.
+% questa frase mi fa altamente cagare, ma volevo dire qualcosa di simile e non so come
+In tal modo si favorisce il riutilizzo del codice e una maggiore separazione
+tra il contenuto e la logica dei menu.
+La schermata di gioco scorre la lista di frammenti del mondo vicini al giocatore
+mostrandoli a schermo, sovrapponendovi entit\`a e proiettili.
 
 \subsection{World}
 
