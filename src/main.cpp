@@ -79,7 +79,7 @@ int main() {
           screen.set_content<Scene::Scene, const World::World &>(world);
         }
       }
-    } else if(gaming) {
+    } else if (gaming) {
       screen.send_event(Drawable::Event::redraw);
     }
 
@@ -97,24 +97,24 @@ int main() {
 
     case 'k':
     case KEY_UP:
-      if(!gaming)
+      if (!gaming)
         screen.send_event(Drawable::Event::move_up);
       else
-        world.position->y = std::min(world.position->y+1, 24);
+        world.position->y = std::min(world.position->y + 1, 24);
 
       break;
 
     case 'j':
     case KEY_DOWN:
-      if(!gaming)
+      if (!gaming)
         screen.send_event(Drawable::Event::move_down);
       else
-        world.position->y = std::max(world.position->y-1, 0);
+        world.position->y = std::max(world.position->y - 1, 0);
       break;
 
     case 'h':
     case KEY_LEFT:
-      if(!gaming)
+      if (!gaming)
         screen.send_event(Drawable::Event::move_left);
       else
         world.position->dec_x();
@@ -122,7 +122,7 @@ int main() {
 
     case 'l':
     case KEY_RIGHT:
-      if(!gaming)
+      if (!gaming)
         screen.send_event(Drawable::Event::move_right);
       else
         world.position->inc_x();
