@@ -115,14 +115,13 @@ nomi \verb!Data::Pawns!.
 
 \subsection{Engine}
 
-Tutti le schermate ad eccezione della scena di gioco sono composte da una serie
-di elementi visuali contenuti in \verb!Engine::UI! i quali vengono inseriti in
-una struttura arborescente che ricorda quella di un \emph{Document Object Model}.
-% questa frase mi fa altamente cagare, ma volevo dire qualcosa di simile e non so come
-In tal modo si favorisce il riutilizzo del codice e una maggiore separazione
-tra il contenuto e la logica dei menu.
+Tutte le schermate ad eccezione della scena di gioco sono composte da una serie
+di elementi visuali contenuti in \verb!Engine::UI!. Essi vengono inseriti in una
+struttura arborescente che ricorda quella di un \emph{Document Object Model}:
+questo permette, oltre al riutilizzo del codice, una più netta separazione tra
+contenuto e logica dei menu.
 La schermata di gioco scorre la lista di frammenti del mondo vicini al giocatore
-mostrandoli a schermo, sovrapponendovi entit\`a e proiettili.
+per mostrarli a schermo sovrapponendovi entit\`a e proiettili.
 
 \subsection{World}
 
