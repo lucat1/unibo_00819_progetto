@@ -72,7 +72,14 @@ void Engine::Scene::Scene::draw() {
   }
 
   // draw the player charter
+  // gather the background from the player's current fragment and the foreground
+  // from the Hero class
+  int pair = Engine::UI::color_pair(
+      color_to_short(world.player.foreground()),
+      color_to_short((*pos->fragment)[height-pos->y][pos->x].value()->background()));
+  Engine::UI::start_color(window, pair);
   mvwaddch(window, height - pos->y, player_x, world.player.character());
+  Engine::UI::end_color(window, pair);
 
   // lastly render the HUD
   Data::Pawns::Hero p = world.player;
