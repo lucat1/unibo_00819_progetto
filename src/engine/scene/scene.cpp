@@ -47,14 +47,12 @@ void Engine::Scene::Scene::draw() {
   size_t first_offset = 0,
          player_x = pos->x; // assuming the player is behind the threshold
   if (pos->x > width / 2) {
-    // in the first chunk but it's wide enough to center the player
-    first_offset = player_x - width / 2;
+    // the chunk is wide enough to center the player
+    first_offset = pos->x - width / 2;
     player_x = width / 2;
   } else if (*start != *world.environment.begin()) {
-    // traverse backwards until we have no more space left to fill
-    // at that point the absolute value of space_left will be the part of the
-    // first frame that can be left out (as it'll not be rendered in the width x
-    // height screen)
+    // traverse backwards $n$ chunks until we have no more screen space left to
+    // fill. then the value of space_left will be the offset of the first chunk
     auto space_left = (width / 2) - pos->x;
     start = std::prev(start);
     while ((space_left -= (*start).extent(1)) > 0)
@@ -73,6 +71,7 @@ void Engine::Scene::Scene::draw() {
       first_offset = 0;
   }
 
+  // draw the player charter
   mvwaddch(window, height - pos->y, player_x, world.player.character());
 
   // lastly render the HUD
@@ -84,6 +83,7 @@ void Engine::Scene::Scene::draw() {
   doupdate();
 }
 
+// TODO: y offsetting, when needed
 void Engine::Scene::Scene::draw_chunk(Nostd::Matrix<BlockTile *> chunk, int x,
                                       int y, int offset_x, int offset_y) {
   // draw until we're out of the screen
@@ -103,6 +103,6 @@ void Engine::Scene::Scene::draw_chunk(Nostd::Matrix<BlockTile *> chunk, int x,
     y++;
     my++;
     x = x_cpy;
-    mx = 0;
+    mx = offset_x;
   }
 }
