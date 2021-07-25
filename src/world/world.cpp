@@ -14,6 +14,10 @@
 #include <cstddef>
 
 using namespace Data;
+using namespace Nostd;
+using namespace Engine;
+
+using AChunk = World::World::AssembledChunk;
 
 // World::World constructor
 World::World::World(const Database &d) noexcept
@@ -21,10 +25,4 @@ World::World::World(const Database &d) noexcept
 
   for (size_t i{0}; i < this->LOADED_CHUNKS; i++)
     add_chunk();
-}
-
-// Add new assembled chunk to enviroment
-void World::World::add_chunk() noexcept {
-  this->enviroment.push_back(this->assembler.get());
-  this->assembler.next_chunk();
 }

@@ -24,6 +24,8 @@ namespace World {
 
 class ChunkAssembler {
 private:
+  const static size_t MAX_CHUNKS_HEIGHT_DIFFERECE = 5;
+
   const Nostd::Vector<Data::MapChunk> *chunks;
   const Nostd::Vector<Data::Scenery> *sceneries;
   const World::RandomGenerator random_gen;
@@ -33,6 +35,8 @@ private:
   Nostd::Matrix<Engine::BlockTile *>
   assemble_scenery(const Data::MapChunk *,
                    const Data::Scenery *) const noexcept;
+
+  void shift_chunk(Data::MapChunk *chunk, const int &shifting_factor) noexcept;
 
 public:
   ChunkAssembler() = delete;
@@ -44,6 +48,8 @@ public:
 
   // Returns the next Data::MapChunk to draw
   void next_chunk() noexcept;
+
+  const Data::Scenery *get_current_scenery() const noexcept;
 };
 
 } // namespace World

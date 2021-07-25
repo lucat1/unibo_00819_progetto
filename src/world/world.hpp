@@ -14,11 +14,14 @@
 #include "../data/database.hpp"
 #include "../nostd/list.hpp"
 #include "../world/chunk_assembler.hpp"
+#include <cstddef>
 
 namespace World {
 class World {
 public:
-  Nostd::List<Nostd::Matrix<Engine::BlockTile *>> enviroment;
+  using AssembledChunk = Nostd::Matrix<Engine::BlockTile *>;
+
+  Nostd::List<AssembledChunk> enviroment;
   World(const Data::Database &d) noexcept;
 
   // Add new assembled chunk to enviroment
