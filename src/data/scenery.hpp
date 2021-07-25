@@ -30,7 +30,7 @@ struct Scenery {
     form any kind of shape.
   */
   struct Autotile {
-    char singlet,                               // ▢
+    char singlet,                                  // ▢
         concave_top_left, concave_top_right,       // ⌟⌞
         concave_bottom_left, concave_bottom_right, // ⌝⌜
         top_left, top, top_right,                  // ⎡⎺⎤
@@ -38,7 +38,7 @@ struct Scenery {
         bottom_left, bottom, bottom_right;         // ⎣⎯⎦
     Engine::Color foreground, background;          // 9 0
   } ground, platform;
-  Nostd::Vector<Engine::Color> sky;
+  Nostd::Vector<Engine::Color> sky; // the sky may have multiple shades
 };
 
 // A stream can represent a Scenery using:
@@ -47,10 +47,9 @@ struct Scenery {
 // - a single line with the number of the color in the sky followed by a single
 //   code for each of them
 std::basic_istream<char> &operator>>(std::basic_istream<char> &,
-                                        Scenery::Autotile &);
+                                     Scenery::Autotile &);
 
-std::basic_istream<char> &operator>>(std::basic_istream<char> &,
-                                        Scenery &);
+std::basic_istream<char> &operator>>(std::basic_istream<char> &, Scenery &);
 
 } // namespace Data
 

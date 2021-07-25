@@ -150,6 +150,10 @@ const Nostd::Vector<Pawns::Item> &Database::items() const noexcept {
   return ite;
 }
 
+char *Database::to_audio_filepath(const char *audio_filename) const noexcept {
+  return newstrcat(audio_rel_fp, audio_filename);
+}
+
 char *Database::newstrcpy(const char *str) const {
   return std::strcpy(new char[std::strlen(str) + 1], str);
 }

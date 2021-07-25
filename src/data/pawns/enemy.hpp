@@ -39,6 +39,7 @@ public:
 
   ~Enemy() = default;
 
+  // A Behavior is a bitmask
   enum class Behavior {
     none = 0,
     moving = 1,
@@ -47,10 +48,11 @@ public:
     vertical = 8
   };
 
+  // Checks whether this Enemy does indeed have a certain behavior
   bool has_behavior(Behavior bhvr) const noexcept;
 
   friend std::basic_ostream<char> &operator>>(std::basic_ostream<char> &,
-                                                 const Enemy &);
+                                              const Enemy &);
 
 protected:
   int uncheckedHealthEffect(int currentHealth, int maxHealth) override final;
@@ -62,7 +64,9 @@ private:
   int bhv;
 };
 
+// If either a or b has a certain behavior, then so does a | b (and vice versa).
 constexpr Enemy::Behavior operator|(Enemy::Behavior a, Enemy::Behavior b);
+// If both a and b have a certain behavior, then so does a & b (and vice versa).
 constexpr Enemy::Behavior operator&(Enemy::Behavior a, Enemy::Behavior b);
 
 std::basic_istream<char> &operator>>(std::basic_istream<char> &, Enemy &);
