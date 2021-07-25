@@ -11,6 +11,7 @@
 
 #include "chunk_assembler.hpp"
 #include "../nostd/matrix.hpp"
+#include <cstddef>
 
 using namespace World;
 using namespace Nostd;
@@ -50,12 +51,13 @@ ChunkAssembler::assemble_scenery(const MapChunk *chunk,
   BlockTile *nullPixel =
       new BlockTile('?', Color::transparent, Color::transparent);
   Matrix<BlockTile *> res({chunk->height, chunk->width()}, nullPixel);
+  size_t sky_index = scenery->sky.size() - 1;
   for (size_t i{0}; i < chunk->height; i++) {
     for (size_t j{0}; j < chunk->width(); j++) {
       MapUnit map_unit = chunk->at(i).at(j).value();
       if (map_unit == MapUnit::nothing)
         res.at(i).at(j).value() =
-            new BlockTile(' ', Color::transparent, scenery->sky[0]);
+            new BlockTile(' ', Color::transparent, scenery->sky[sky_index]);
       else if (map_unit == MapUnit::ground)
         res.at(i).at(j).value() =
             new BlockTile(scenery->ground.singlet, scenery->ground.foreground,
@@ -65,6 +67,8 @@ ChunkAssembler::assemble_scenery(const MapChunk *chunk,
                                                 scenery->platform.foreground,
                                                 scenery->ground.background);
     }
+    if (i % 3 == 0 && sky_index > 0)
+      sky_index--;
   }
   return res;
 }
