@@ -22,9 +22,9 @@ using AChunk = World::World::AssembledChunk;
 // World::World constructor
 World::World::World(const Database &d) noexcept
     : player{d.heroes()[0]}, assembler(d.map_chunks(), d.sceneries()) {
-  this->position = new Position(this->environment);
   for (size_t i{0}; i < this->LOADED_CHUNKS; i++)
     add_chunk();
+  this->position = new Position(this->environment);
 }
 
 // Add new assembled chunk to enviroment
