@@ -24,6 +24,7 @@ ChunkAssembler::ChunkAssembler(const Vector<MapChunk> &chunks,
   this->sceneries = &sceneries;
   this->current_chunk = &this->chunks->at(0);
   this->current_scenery = &this->sceneries->at(0);
+  this->chunks_assembled = 0;
 }
 
 // Generate a random number i between 0 and the number of nodes liked to Current
@@ -41,6 +42,11 @@ void ChunkAssembler::next_chunk() noexcept {
                                    : diff - MAX_CHUNKS_HEIGHT_DIFFERECE);
   }
   this->current_chunk = selected;
+}
+
+void ChunkAssembler::next_scenery() noexcept {
+  auto rand = random_gen.get_random(this->sceneries->size());
+  this->current_scenery = &this->sceneries->at(rand);
 }
 
 // Combine a Data::MapChunk with a Data::Scenery to make a
@@ -73,8 +79,11 @@ ChunkAssembler::assemble_scenery(const MapChunk *chunk,
   return res;
 }
 
-Matrix<BlockTile *> ChunkAssembler::get() const noexcept {
+Matrix<BlockTile *> ChunkAssembler::get() noexcept {
   const MapChunk *const c = this->current_chunk;
+  this->chunks_assembled++;
+  if (chunks_assembled % 10 == 0)
+    next_scenery();
   return assemble_scenery(c, this->current_scenery);
 }
 

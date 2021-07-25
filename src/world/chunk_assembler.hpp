@@ -18,6 +18,7 @@
 #include "../nostd/matrix.hpp"
 #include "../nostd/vector.hpp"
 #include "random_generator.hpp"
+#include <cstddef>
 
 namespace World {
 
@@ -30,6 +31,7 @@ private:
   const World::RandomGenerator random_gen;
   const Data::Scenery *current_scenery;
   const Data::MapChunk *current_chunk;
+  size_t chunks_assembled;
 
   Nostd::Matrix<Engine::BlockTile *>
   assemble_scenery(const Data::MapChunk *,
@@ -43,10 +45,12 @@ public:
   ChunkAssembler(const Nostd::Vector<Data::MapChunk> &,
                  const Nostd::Vector<Data::Scenery> &);
 
-  Nostd::Matrix<Engine::BlockTile *> get() const noexcept;
+  Nostd::Matrix<Engine::BlockTile *> get() noexcept;
 
   // Returns the next Data::MapChunk to draw
   void next_chunk() noexcept;
+
+  void next_scenery() noexcept;
 
   const Data::Scenery *get_current_scenery() const noexcept;
 };
