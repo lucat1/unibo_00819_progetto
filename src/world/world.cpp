@@ -30,5 +30,6 @@ World::World::World(const Database &d) noexcept
 // Add new assembled chunk to enviroment
 void World::World::add_chunk() noexcept {
   this->environment.push_back(this->assembler.get());
-  this->assembler.next_chunk();
+  for (size_t i{0}; i < this->LOADED_CHUNKS; i++)
+    add_chunk();
 }
