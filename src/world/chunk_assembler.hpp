@@ -18,7 +18,6 @@
 #include "../nostd/matrix.hpp"
 #include "../nostd/vector.hpp"
 #include "random_generator.hpp"
-#include <cstddef>
 
 namespace World {
 
