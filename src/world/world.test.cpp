@@ -13,6 +13,8 @@
 #include "../nostd/test.hpp"
 #include "chunk_assembler.hpp"
 #include <cassert>
+#include <cstddef>
+#include <iostream>
 
 using namespace Nostd;
 using namespace Data;

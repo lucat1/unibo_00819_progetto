@@ -13,7 +13,7 @@
 #include "../nostd/matrix.hpp"
 #include <cstddef>
 #include <cstdlib>
-#include <sys/select.h>
+#include <iostream>
 
 using namespace World;
 using namespace Nostd;
@@ -39,7 +39,8 @@ void ChunkAssembler::next_chunk() noexcept {
   const size_t lastHeight = selected->starting_row();
   int diff = oldHeight - lastHeight;
   if (abs(diff) > MAX_CHUNKS_HEIGHT_DIFFERECE) {
-    shift_chunk(selected, diff);
+    shift_chunk(selected, diff < 0 ? diff + MAX_CHUNKS_HEIGHT_DIFFERECE
+                                   : diff - MAX_CHUNKS_HEIGHT_DIFFERECE);
   }
   this->current_chunk = selected;
 }
@@ -82,18 +83,38 @@ const Scenery *ChunkAssembler::get_current_scenery() const noexcept {
 
 void ChunkAssembler::shift_chunk(MapChunk *chunk,
                                  const int &shifting_factor) noexcept {
+  /*for (auto x : *chunk) {
+    for (auto y : x) {
+      if (y->value() == MapUnit::nothing)
+        std::cout << " ";
+      else
+        std::cout << "#";
+    }
+    std::cout << std::endl;
+  }*/
+
   for (size_t i{0}; i < chunk->width(); i++) {
     for (size_t j{0}; j < chunk->height; j++) {
       int shifted_index = j + shifting_factor;
       if (shifted_index >= 0 && shifted_index < (int)chunk->height) {
-        chunk->at(j).at(i) = chunk->at(shifted_index).at(i);
+        chunk->at(j).at(i)->value() = chunk->at(shifted_index).at(i)->value();
       } else if (shifted_index < 0) {
         chunk->at(j).at(i).value() = MapUnit::nothing;
-      } else if (shifted_index > (int)chunk->height) {
+      } else if (shifted_index >= (int)chunk->height) {
         chunk->at(j).at(i).value() = chunk->at(chunk->height - 1).at(i).value();
       }
     }
   }
+
+  /*for (auto x : *chunk) {
+    for (auto y : x) {
+      if (y->value() == MapUnit::nothing)
+        std::cout << " ";
+      else
+        std::cout << "#";
+    }
+    std::cout << std::endl;
+  }*/
 }
 
 #include "../nostd/matrix.cpp"
