@@ -76,9 +76,9 @@ void Engine::Scene::Scene::draw() {
   // from the Hero class
   int pair = Engine::UI::color_pair(
       color_to_short(world.player.foreground()),
-      color_to_short((*pos->fragment)[height-pos->y][pos->x].value()->background()));
+      color_to_short((*pos->fragment)[pos->y][pos->x].value()->background()));
   Engine::UI::start_color(window, pair);
-  mvwaddch(window, height - pos->y, player_x, world.player.character());
+  mvwaddch(window, pos->y, player_x, world.player.character());
   Engine::UI::end_color(window, pair);
 
   // lastly render the HUD

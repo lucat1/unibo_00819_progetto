@@ -19,7 +19,7 @@ public:
   Nostd::List<Nostd::Matrix<Engine::BlockTile *>> environment) {
     this->environment = environment;
     this->x = 0;
-    this->y = 5;
+    this->y = 19;
     this->fragment = environment.begin();
   }
 
