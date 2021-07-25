@@ -16,13 +16,17 @@
 #include "../nostd/list.hpp"
 #include "../world/chunk_assembler.hpp"
 #include "position.hpp"
+#include <cstddef>
 
 namespace World {
 class World {
 public:
+  using AssembledChunk = Nostd::Matrix<Engine::BlockTile *>;
+
   Data::Pawns::Hero player;
   Position *position;
-  Nostd::List<Nostd::Matrix<Engine::BlockTile *>> environment;
+  Nostd::List<AssembledChunk> environment;
+
   World(const Data::Database &d) noexcept;
 
   // Add new assembled chunk to enviroment

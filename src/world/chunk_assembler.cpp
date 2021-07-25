@@ -13,6 +13,7 @@
 #include "../nostd/matrix.hpp"
 #include <cstddef>
 #include <cstdlib>
+#include <sys/select.h>
 
 using namespace World;
 using namespace Nostd;
@@ -31,7 +32,16 @@ ChunkAssembler::ChunkAssembler(const Vector<MapChunk> &chunks,
 // and take the i-esim linked node.
 void ChunkAssembler::next_chunk() noexcept {
   auto rand = random_gen.get_random(this->chunks->size());
-  this->current_chunk = &this->chunks->at(rand);
+  MapChunk *selected = new MapChunk(this->chunks->at(rand));
+
+  // Check for up or down shift
+  const size_t oldHeight = this->current_chunk->ending_row();
+  const size_t lastHeight = selected->starting_row();
+  int diff = oldHeight - lastHeight;
+  if (abs(diff) > MAX_CHUNKS_HEIGHT_DIFFERECE) {
+    shift_chunk(selected, diff);
+  }
+  this->current_chunk = selected;
 }
 
 // Combine a Data::MapChunk with a Data::Scenery to make a
@@ -64,6 +74,26 @@ ChunkAssembler::assemble_scenery(const MapChunk *chunk,
 Matrix<BlockTile *> ChunkAssembler::get() const noexcept {
   const MapChunk *const c = this->current_chunk;
   return assemble_scenery(c, this->current_scenery);
+}
+
+const Scenery *ChunkAssembler::get_current_scenery() const noexcept {
+  return this->current_scenery;
+}
+
+void ChunkAssembler::shift_chunk(MapChunk *chunk,
+                                 const int &shifting_factor) noexcept {
+  for (size_t i{0}; i < chunk->width(); i++) {
+    for (size_t j{0}; j < chunk->height; j++) {
+      int shifted_index = j + shifting_factor;
+      if (shifted_index >= 0 && shifted_index < (int)chunk->height) {
+        chunk->at(j).at(i) = chunk->at(shifted_index).at(i);
+      } else if (shifted_index < 0) {
+        chunk->at(j).at(i).value() = MapUnit::nothing;
+      } else if (shifted_index > (int)chunk->height) {
+        chunk->at(j).at(i).value() = chunk->at(chunk->height - 1).at(i).value();
+      }
+    }
+  }
 }
 
 #include "../nostd/matrix.cpp"

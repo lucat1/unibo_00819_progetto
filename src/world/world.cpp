@@ -14,6 +14,10 @@
 #include <cstddef>
 
 using namespace Data;
+using namespace Nostd;
+using namespace Engine;
+
+using AChunk = World::World::AssembledChunk;
 
 // World::World constructor
 World::World::World(const Database &d) noexcept
