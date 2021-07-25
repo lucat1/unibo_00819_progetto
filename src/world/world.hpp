@@ -33,7 +33,7 @@ public:
   void add_chunk() noexcept;
 
 private:
-  const unsigned int LOADED_CHUNKS = 50;
+  const size_t LOADED_CHUNKS = 50;
   ChunkAssembler assembler;
 };
 
