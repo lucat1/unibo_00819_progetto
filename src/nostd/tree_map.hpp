@@ -33,9 +33,6 @@
 
 #include "map.hpp"
 #include "vector.hpp"
-#include <cassert>
-#include <cstddef>
-#include <cstdio>
 #include <exception>
 #include <iterator>
 

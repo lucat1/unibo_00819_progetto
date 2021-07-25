@@ -11,7 +11,6 @@
 
 #include "world.hpp"
 #include "chunk_assembler.hpp"
-#include <cstddef>
 
 using namespace Data;
 using namespace Nostd;

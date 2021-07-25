@@ -16,7 +16,6 @@
 #include "../nostd/list.hpp"
 #include "../world/chunk_assembler.hpp"
 #include "position.hpp"
-#include <cstddef>
 
 namespace World {
 class World {
