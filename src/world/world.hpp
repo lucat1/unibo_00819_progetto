@@ -23,9 +23,9 @@ class World {
 public:
   using AssembledChunk = Nostd::Matrix<Engine::BlockTile *>;
 
+  Nostd::List<AssembledChunk> environment;
   Data::Pawns::Hero player;
   Position *position;
-  Nostd::List<AssembledChunk> environment;
 
   World(const Data::Database &d) noexcept;
 
