@@ -37,6 +37,10 @@ private:
   assemble_scenery(const Data::MapChunk *,
                    const Data::Scenery *) const noexcept;
 
+  char elaborate_autotile(const Data::MapChunk *chunk,
+                          const Data::Scenery::Autotile *tile, const int &x,
+                          const int &y) const noexcept;
+
   void shift_chunk(Data::MapChunk *chunk, const int &shifting_factor) noexcept;
 
 public:

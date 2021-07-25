@@ -65,13 +65,13 @@ ChunkAssembler::assemble_scenery(const MapChunk *chunk,
         res.at(i).at(j).value() =
             new BlockTile(' ', Color::transparent, scenery->sky[sky_index]);
       else if (map_unit == MapUnit::ground)
-        res.at(i).at(j).value() =
-            new BlockTile(scenery->ground.singlet, scenery->ground.foreground,
-                          scenery->ground.background);
+        res.at(i).at(j).value() = new BlockTile(
+            elaborate_autotile(chunk, &scenery->ground, j, i),
+            scenery->ground.foreground, scenery->ground.background);
       else if (map_unit == MapUnit::platform)
-        res.at(i).at(j).value() = new BlockTile(scenery->platform.singlet,
-                                                scenery->platform.foreground,
-                                                scenery->ground.background);
+        res.at(i).at(j).value() = new BlockTile(
+            elaborate_autotile(chunk, &scenery->platform, j, i),
+            scenery->platform.foreground, scenery->ground.background);
     }
     if (i % 3 == 0 && sky_index > 0)
       sky_index--;
@@ -79,6 +79,49 @@ ChunkAssembler::assemble_scenery(const MapChunk *chunk,
   return res;
 }
 
+char ChunkAssembler::elaborate_autotile(const MapChunk *chunk,
+                                        const Scenery::Autotile *tile,
+                                        const int &x,
+                                        const int &y) const noexcept {
+  if (y == 0 || chunk->at(y - 1).at(x).value() == MapUnit::nothing) {
+    if (x == 0)
+      return tile->top_left;
+    else if (x == (int)chunk->width() - 1)
+      return tile->top_right;
+    if (chunk->at(y)->at(x - 1).value() != MapUnit::nothing) {
+      if (chunk->at(y)->at(x + 1).value() != MapUnit::nothing)
+        return tile->top;
+      else
+        return tile->top_right;
+    } else
+      return tile->top_left;
+  } else if (y == chunk->height - 1 ||
+             chunk->at(y + 1).at(x).value() == MapUnit::nothing) {
+    if (x == 0)
+      return tile->bottom_left;
+    else if (x == (int)chunk->width() - 1)
+      return tile->bottom_right;
+    if (chunk->at(y)->at(x - 1).value() != MapUnit::nothing) {
+      if (chunk->at(y)->at(x + 1).value() != MapUnit::nothing)
+        return tile->bottom;
+      else
+        return tile->bottom_right;
+    } else
+      return tile->bottom_left;
+  } else {
+    if (x == 0)
+      return tile->left;
+    else if (x == (int)chunk->width() - 1)
+      return tile->right;
+    if (chunk->at(y)->at(x - 1).value() != MapUnit::nothing) {
+      if (chunk->at(y)->at(x + 1).value() != MapUnit::nothing)
+        return tile->center;
+      else
+        return tile->right;
+    } else
+      return tile->left;
+  }
+}
 Matrix<BlockTile *> ChunkAssembler::get() noexcept {
   const MapChunk *const c = this->current_chunk;
   this->chunks_assembled++;
