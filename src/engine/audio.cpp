@@ -11,11 +11,9 @@
 */
 
 #include "audio.hpp"
-#include <cstdio>
-#include <cstdlib>
 #include <cstring>
-#include <sys/wait.h>
 #include <fcntl.h>
+#include <sys/wait.h>
 #include <unistd.h>
 
 #include <iostream>
@@ -36,8 +34,8 @@ bool has_tool(const char *tool, char path[256]) {
   // read the command output into the path argument
   fgets(path, 256, f);
   // remove trailing \n in file path
-  int i = strlen(path)-1;
-  if(i > 0) {
+  int i = strlen(path) - 1;
+  if (i > 0) {
     path[i] = '\0';
   }
   return !pclose(f);
@@ -77,7 +75,8 @@ bool Engine::Audio::play(const char *fp) {
 }
 
 Engine::Audio::PlayerState Engine::Audio::status() {
-  // kill(pid, 0) returns 0 if the pid exists, therefore the thread is still running
+  // kill(pid, 0) returns 0 if the pid exists, therefore the thread is still
+  // running
   if (pid != -1 && !kill(pid, 0))
     return PlayerState::playing;
   else {
@@ -88,6 +87,6 @@ Engine::Audio::PlayerState Engine::Audio::status() {
 
 // quit NOT gracefully, we just want the audio to stop immediately
 void Engine::Audio::stop() {
-  if(status() == PlayerState::playing)
-    kill(pid, SIGKILL); 
+  if (status() == PlayerState::playing)
+    kill(pid, SIGKILL);
 }

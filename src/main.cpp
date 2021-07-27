@@ -27,9 +27,11 @@ int main() {
     cout << "started playing" << endl;
   }
   int i = 0;
-  while (i<50) {
+  while (i < 50) {
     sleep(1);
-    cout << "still running: " << (Audio::status() == Audio::PlayerState::playing ? "p" : "s") << endl;
+    cout << "still running: "
+         << (Audio::status() == Audio::PlayerState::playing ? "p" : "s")
+         << endl;
     i++;
   }
   Audio::stop();
