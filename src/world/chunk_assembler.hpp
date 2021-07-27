@@ -44,6 +44,7 @@ private:
   void shift_chunk(Data::MapChunk *chunk, const int &shifting_factor) noexcept;
 
   inline size_t fib(const size_t &) const noexcept;
+  inline bool is_ground_or_platform(const Data::MapUnit &) const noexcept;
 
 public:
   ChunkAssembler() = delete;

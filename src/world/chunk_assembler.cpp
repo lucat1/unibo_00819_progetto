@@ -103,26 +103,26 @@ char ChunkAssembler::elaborate_autotile(const MapChunk *chunk,
                                         const Scenery::Autotile *tile,
                                         const int &x,
                                         const int &y) const noexcept {
-  if (y == 0 || chunk->at(y - 1).at(x).value() == MapUnit::nothing) {
+  if (y == 0 || !is_ground_or_platform(chunk->at(y - 1).at(x).value())) {
     if (x == 0)
       return tile->top_left;
     else if (x == (int)chunk->width() - 1)
       return tile->top_right;
-    if (chunk->at(y)->at(x - 1).value() != MapUnit::nothing) {
-      if (chunk->at(y)->at(x + 1).value() != MapUnit::nothing)
+    if (is_ground_or_platform(chunk->at(y)->at(x - 1).value())) {
+      if (is_ground_or_platform(chunk->at(y)->at(x + 1).value()))
         return tile->top;
       else
         return tile->top_right;
     } else
       return tile->top_left;
   } else if (y == chunk->height - 1 ||
-             chunk->at(y + 1).at(x).value() == MapUnit::nothing) {
+             !is_ground_or_platform(chunk->at(y + 1).at(x).value())) {
     if (x == 0)
       return tile->bottom_left;
     else if (x == (int)chunk->width() - 1)
       return tile->bottom_right;
-    if (chunk->at(y)->at(x - 1).value() != MapUnit::nothing) {
-      if (chunk->at(y)->at(x + 1).value() != MapUnit::nothing)
+    if (is_ground_or_platform(chunk->at(y)->at(x - 1).value())) {
+      if (is_ground_or_platform(chunk->at(y)->at(x + 1).value()))
         return tile->bottom;
       else
         return tile->bottom_right;
@@ -133,8 +133,8 @@ char ChunkAssembler::elaborate_autotile(const MapChunk *chunk,
       return tile->left;
     else if (x == (int)chunk->width() - 1)
       return tile->right;
-    if (chunk->at(y)->at(x - 1).value() != MapUnit::nothing) {
-      if (chunk->at(y)->at(x + 1).value() != MapUnit::nothing)
+    if (is_ground_or_platform(chunk->at(y)->at(x - 1).value())) {
+      if (is_ground_or_platform(chunk->at(y)->at(x + 1).value()))
         return tile->center;
       else
         return tile->right;
@@ -142,6 +142,12 @@ char ChunkAssembler::elaborate_autotile(const MapChunk *chunk,
       return tile->left;
   }
 }
+
+inline bool
+ChunkAssembler::is_ground_or_platform(const MapUnit &u) const noexcept {
+  return u == MapUnit::ground || u == MapUnit::platform;
+}
+
 Matrix<BlockTile *> ChunkAssembler::get() noexcept {
   const MapChunk *const c = this->current_chunk;
   this->chunks_assembled++;
@@ -156,16 +162,6 @@ const Scenery *ChunkAssembler::get_current_scenery() const noexcept {
 
 void ChunkAssembler::shift_chunk(MapChunk *chunk,
                                  const int &shifting_factor) noexcept {
-  /*for (auto x : *chunk) {
-    for (auto y : x) {
-      if (y->value() == MapUnit::nothing)
-        std::cout << " ";
-      else
-        std::cout << "#";
-    }
-    std::cout << std::endl;
-  }*/
-
   for (size_t i{0}; i < chunk->width(); i++) {
     for (size_t j{0}; j < chunk->height; j++) {
       int shifted_index = j + shifting_factor;
@@ -178,16 +174,6 @@ void ChunkAssembler::shift_chunk(MapChunk *chunk,
       }
     }
   }
-
-  /*for (auto x : *chunk) {
-    for (auto y : x) {
-      if (y->value() == MapUnit::nothing)
-        std::cout << " ";
-      else
-        std::cout << "#";
-    }
-    std::cout << std::endl;
-  }*/
 }
 
 #include "../nostd/matrix.cpp"
