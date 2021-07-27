@@ -38,6 +38,7 @@ endif
 
 # Things to build
 ALL_FILES := $(wildcard $(SRC_DIR)/**/**/*.cpp) $(wildcard $(SRC_DIR)/**/*.cpp) $(wildcard $(SRC_DIR)/*.cpp)
+ALL_HEADER_FILES := $(wildcard $(SRC_DIR)/**/**/*.hpp) $(wildcard $(SRC_DIR)/**/*.hpp) $(wildcard $(SRC_DIR)/*.hpp)
 CPP_FILES := $(filter-out %.test.cpp, $(ALL_FILES))
 TEST_FILES := $(filter %.test.cpp, $(ALL_FILES))
 
@@ -72,7 +73,7 @@ clean:
 	@rm -rf build $(TARGET)
 
 format:
-	clang-format -i $(ALL_FILES)
+	clang-format -i $(ALL_FILES) $(ALL_HEADER_FILES)
 
 run: all
 	@echo "RUN\t$(TARGET)"

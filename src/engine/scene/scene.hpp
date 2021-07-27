@@ -6,16 +6,17 @@
   Luca Tagliavini #971133
   07/02/2021
 
-  scene.hpp: Defines the Engine::Scene::Screne class, the main game rendering facility.
-  This class implements the Engine::Drawable interface like all Engine::Menu::* classes
-  to be displayed inside the usual Engine::Screen session.
+  scene.hpp: Defines the Engine::Scene::Screne class, the main game rendering
+  facility. This class implements the Engine::Drawable interface like all
+  Engine::Menu::* classes to be displayed inside the usual Engine::Screen
+  session.
 */
 
 #ifndef ENGINE_SCENE_SCRENE_HPP
 #define ENGINE_SCENE_SCRENE_HPP
 
-#include "../drawable.hpp"
 #include "../../world/world.hpp"
+#include "../drawable.hpp"
 
 namespace Engine {
 namespace Scene {
@@ -29,11 +30,12 @@ private:
   bool over = false;
 
   void draw();
-  void draw_chunk(Nostd::Matrix<BlockTile *> chunk, int x, int y, int offset_x = 0, int offset_y = 0);
+  void draw_chunk(Nostd::Matrix<BlockTile *> chunk, int x, int y,
+                  int offset_x = 0, int offset_y = 0);
 
 public:
   static const szu width = Screen::columns;
-  static const szu height = Screen::lines-1; // one line reserved for the HUD
+  static const szu height = Screen::lines - 1; // one line reserved for the HUD
 
   Kind kind() const;
   void handle_event(Event e);

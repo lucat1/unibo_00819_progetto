@@ -28,8 +28,7 @@ namespace Pawns {
 class Pawn : public virtual Engine::EntityTile {
 public:
   Pawn() = default;
-  Pawn(Nostd::String, char = u' ',
-       Engine::Color = Engine::Color::transparent);
+  Pawn(Nostd::String, char = u' ', Engine::Color = Engine::Color::transparent);
   Pawn(Pawn &&) = default;
   Pawn &operator=(Pawn &&);
   Pawn(const Pawn &) = default;
