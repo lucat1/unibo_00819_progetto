@@ -21,9 +21,12 @@ namespace Engine {
 // format, as it's the only one supported by both `aplay` and `afplay`
 class Audio {
 private:
-  static char *tool;
+  static char tool[256];
+  static int pid;
 
 public:
+  enum class PlayerState : bool { playing, stopped };
+
   // searches for the best tool to use to play audio. Choises are:
   // - aplay (on Linux, for ALSA - Advanced Linux Sound Architecture)
   // - afplay (on Darwin, aka OSX/MacOS)
@@ -33,9 +36,15 @@ public:
   static void fetch_tool();
 
   // play plays the given wav file using one of the available system tools
-  static int play(const char *fp);
+  // the player process is started in another thread and is therefore non
+  // blocking
+  static bool play(const char *fp);
 
-  // stop stops the current playing audio file
+  // returns the player current status, either playing or stopped
+  static PlayerState status();
+
+  // stop stops the current playing audio file.
+  // under the hood we simply kill the thread running the player process
   static void stop();
 };
 
