@@ -51,6 +51,7 @@ void ChunkAssembler::next_scenery() noexcept {
 
 // Combine a Data::MapChunk with a Data::Scenery to make a
 // Nostd::Matrix<World::MapPixel>.
+// Sky color is chosen using Fibonacci's sequence.
 Matrix<BlockTile *>
 ChunkAssembler::assemble_scenery(const MapChunk *chunk,
                                  const Scenery *scenery) const noexcept {
@@ -58,10 +59,12 @@ ChunkAssembler::assemble_scenery(const MapChunk *chunk,
       new BlockTile('?', Color::transparent, Color::transparent);
   Matrix<BlockTile *> res({chunk->height, chunk->width()}, nullPixel);
   size_t sky_index = scenery->sky.size() - 1;
+  size_t sky_counter = 2 * fib(sky_index);
   for (size_t i{0}; i < chunk->height; i++) {
     for (size_t j{0}; j < chunk->width(); j++) {
       MapUnit map_unit = chunk->at(i).at(j).value();
-      if (map_unit == MapUnit::nothing)
+      if (map_unit == MapUnit::nothing || map_unit == MapUnit::enemy ||
+          map_unit == MapUnit::item)
         res.at(i).at(j).value() =
             new BlockTile(' ', Color::transparent, scenery->sky[sky_index]);
       else if (map_unit == MapUnit::ground)
@@ -73,10 +76,27 @@ ChunkAssembler::assemble_scenery(const MapChunk *chunk,
             elaborate_autotile(chunk, &scenery->platform, j, i),
             scenery->platform.foreground, scenery->ground.background);
     }
-    if (i % 3 == 0 && sky_index > 0)
-      sky_index--;
+    if (sky_index > 0) {
+      if (--sky_counter == 0) {
+        sky_index--;
+        sky_counter = 2 * fib(sky_index);
+      }
+    }
   }
   return res;
+}
+
+inline size_t ChunkAssembler::fib(const size_t &n) const noexcept {
+  if (n == 0 || n == 1)
+    return 1;
+  size_t a = 1;
+  size_t b = 1;
+  for (size_t i = 2; i <= n; i++) {
+    int c = b;
+    b += a;
+    a = c;
+  }
+  return b;
 }
 
 char ChunkAssembler::elaborate_autotile(const MapChunk *chunk,
