@@ -15,6 +15,7 @@
 #include <fcntl.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#include <signal.h>
 
 #include <iostream>
 using namespace std;
