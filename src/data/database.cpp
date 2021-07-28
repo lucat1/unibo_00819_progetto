@@ -192,7 +192,7 @@ void Database::load_map_chunks(const char *assets_filepath) {
   const char *const maps_fp{newstrcat(assets_filepath, maps_rel_fp)};
   ifstream ifs{maps_fp};
   delete maps_fp;
-  MapChunk m(0, 0, 0);
+  MapChunk m(0);
   while (ifs >> m)
     map.push_back(m);
   ifs.close();
