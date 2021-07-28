@@ -1,0 +1,5 @@
+#!/bin/sh -e
+
+while true; do
+  $1 $2
+done || exit 1

@@ -22,6 +22,7 @@ using namespace std;
 
 char Engine::Audio::tool[256] = "not_fetched";
 int Engine::Audio::pid = -1;
+const char *loop = "assets/loop";
 
 // check is the system has a program available in the $PATH and in case
 // return a zero error code and puts the path in the second argument
@@ -69,7 +70,7 @@ bool Engine::Audio::play(const char *fp) {
     dup2(dn, 2);
     close(dn);
 
-    exit(execl(tool, tool, fp, nullptr));
+    exit(execlp(loop, tool, tool, fp, nullptr));
     exit(0);
   }
   return true;
