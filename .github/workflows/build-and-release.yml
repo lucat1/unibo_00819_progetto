@@ -28,21 +28,15 @@ jobs:
       - name: 'make clean all'
         run: make clean all
 
-      - name: release
-        uses: softprops/action-gh-release@v1
-        if: startsWith(github.ref, 'refs/tags/')
-        with:
-          name: ${{ github.ref }}-${{ matrix.platform }}
-          body: ${{ github.sha }}
-          files: alma 
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: upload artifact
         uses: actions/upload-artifact@v2
         with:
-          name: alma-${{ matrix.platform }}
-          path: alma
+          name: overengineered-${{ matrix.platform }}
+          path: |
+            overengineered
+            assets/**/*
+            overengineered.conf.csv
+            scoreboard.csv
 
       - name: 'make clean static'
         if: startsWith(matrix.platform, 'ubuntu-latest')
@@ -52,5 +46,9 @@ jobs:
         uses: actions/upload-artifact@v2
         if: startsWith(matrix.platform, 'ubuntu-latest')
         with:
-          name: alma-${{ matrix.platform }}-static
-          path: alma
+          name: overengineered-${{ matrix.platform }}-static
+          path: |
+            overengineered
+            assets/**/*
+            overengineered.conf.csv
+            scoreboard.csv

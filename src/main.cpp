@@ -34,7 +34,7 @@ int main() {
   /*   i++; */
   /* } */
   /* Audio::stop(); */
-  Data::Database d("alma.conf.csv", "assets/",
+  Data::Database d("overengineered.conf.csv", "assets/",
                    "scoreboard.csv");
   World::World world(d);
 
