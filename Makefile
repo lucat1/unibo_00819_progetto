@@ -1,7 +1,7 @@
 SRC_DIR  = src
 INT_DIR  = build
 TEST_DIR = build/test
-TARGET  = alma
+TARGET   = overengineered
 
 CXX = g++
 ## -MMD creates dependency list, but ignores system includes ## -MF specifies where to create the dependency file name
