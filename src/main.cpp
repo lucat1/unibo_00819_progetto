@@ -22,7 +22,7 @@ void handle(bool can_display) {
 
 int main() {
   /* Audio::fetch_tool(); */
-  /* if (Audio::play("tests/assets/sound/main_menu.wav")) { */
+  /* if (Audio::play("assets/sound/main_menu.wav")) { */
   /*   cout << "started playing" << endl; */
   /* } */
   /* int i = 0; */
@@ -34,8 +34,8 @@ int main() {
   /*   i++; */
   /* } */
   /* Audio::stop(); */
-  Data::Database d("tests/alma.conf.csv", "tests/assets/",
-                   "tests/scoreboard.csv");
+  Data::Database d("alma.conf.csv", "assets/",
+                   "scoreboard.csv");
   World::World world(d);
 
   Screen screen;
