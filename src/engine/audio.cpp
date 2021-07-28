@@ -13,16 +13,13 @@
 #include "audio.hpp"
 #include <cstring>
 #include <fcntl.h>
+#include <cstdio>
+#include <cstdlib>
 #include <sys/wait.h>
 #include <unistd.h>
-#include <signal.h>
-
-#include <iostream>
-using namespace std;
 
 char Engine::Audio::tool[256] = "not_fetched";
 int Engine::Audio::pid = -1;
-const char *loop = "assets/loop";
 
 // check is the system has a program available in the $PATH and in case
 // return a zero error code and puts the path in the second argument
@@ -55,6 +52,7 @@ void Engine::Audio::fetch_tool() {
     strcpy(tool, "none");
 }
 
+
 bool Engine::Audio::play(const char *fp) {
   if (strcmp(tool, "not_fetched"))
     fetch_tool();
@@ -70,8 +68,10 @@ bool Engine::Audio::play(const char *fp) {
     dup2(dn, 2);
     close(dn);
 
-    exit(execlp(loop, tool, tool, fp, nullptr));
-    exit(0);
+    int code;
+    while (true)
+      code = execlp(tool, tool, fp, nullptr);
+    exit(code);
   }
   return true;
 }
@@ -90,5 +90,5 @@ Engine::Audio::PlayerState Engine::Audio::status() {
 // quit NOT gracefully, we just want the audio to stop immediately
 void Engine::Audio::stop() {
   if (status() == PlayerState::playing)
-    kill(pid, SIGKILL);
+    kill(pid, SIGINT);
 }
