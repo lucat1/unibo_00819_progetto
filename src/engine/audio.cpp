@@ -11,10 +11,11 @@
 */
 
 #include "audio.hpp"
-#include <cstring>
-#include <fcntl.h>
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
+#include <fcntl.h>
+#include <signal.h>
 #include <sys/wait.h>
 #include <unistd.h>
 
@@ -51,7 +52,6 @@ void Engine::Audio::fetch_tool() {
   else
     strcpy(tool, "none");
 }
-
 
 bool Engine::Audio::play(const char *fp) {
   if (strcmp(tool, "not_fetched"))
