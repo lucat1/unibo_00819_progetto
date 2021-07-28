@@ -5,22 +5,20 @@
 #include <algorithm>
 #include <iterator>
 #include <stdexcept>
-#include "allocator.hpp"
 
 namespace Nostd {
 
-template <typename V, class Alloc = Allocator<V>>
-class Vector {
- public:
+template <typename V, class Alloc = Allocator<V>> class Vector {
+public:
   using allocator_type = Alloc;
-  using iterator = V*;
+  using iterator = V *;
   using reverse_iterator = std::reverse_iterator<iterator>;
-  using const_iterator = const V*;
+  using const_iterator = const V *;
   using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
- protected:
+protected:
   allocator_type all_elems;
-  V* v = nullptr;
+  V *v = nullptr;
   size_t sz = 0, cap = 0;
 
   void calc_cap() {
@@ -38,7 +36,7 @@ class Vector {
     v = all_elems.allocate(cap);
   }
 
-  void construct_v(size_t size, const V& ele) {
+  void construct_v(size_t size, const V &ele) {
     for (size_t i = 0; i < size; i++)
       all_elems.construct(v + i, ele);
   }
@@ -48,7 +46,7 @@ class Vector {
       size_t old_cap = cap;
       sz = size;
       calc_cap();
-      V* newv = all_elems.allocate(cap);
+      V *newv = all_elems.allocate(cap);
       for (size_t i = 0; i < sz; ++i)
         all_elems.construct(newv + i, v[i]);
       all_elems.deallocate(v, old_cap);
@@ -56,49 +54,48 @@ class Vector {
     }
   }
 
- public:
+public:
   // Constructs an empty container, with no elements
-  Vector(const allocator_type& alloc = allocator_type()) {
+  Vector(const allocator_type &alloc = allocator_type()) {
     all_elems = alloc;
     allocate_v(0);
   }
   // Constructs a vector of the given size
-  explicit Vector(size_t size, const allocator_type& alloc = allocator_type()) {
+  explicit Vector(size_t size, const allocator_type &alloc = allocator_type()) {
     all_elems = alloc;
     allocate_v(size);
   }
 
   // Returns a reference to the first element in the vector
-  V& front() { return v[0]; }
-  const V& front() const { return v[0]; }
+  V &front() { return v[0]; }
+  const V &front() const { return v[0]; }
 
   // Returns a reference to the last element in the vector
-  V& back() { return v[sz - 1]; }
-  const V& back() const { return v[sz - 1]; }
+  V &back() { return v[sz - 1]; }
+  const V &back() const { return v[sz - 1]; }
 
   // it is constructor that creates a vector with size elements and size * 1.5
   // capacity copying size times the ele value into the vector
-  Vector(size_t size,
-         const V& ele,
-         const allocator_type& alloc = allocator_type()) {
+  Vector(size_t size, const V &ele,
+         const allocator_type &alloc = allocator_type()) {
     all_elems = alloc;
     allocate_v(size);
     construct_v(size, ele);
   }
   // Copies data from another vector instance (in linear time)
-  Vector(const Vector& vec, const allocator_type& alloc = allocator_type()) {
+  Vector(const Vector &vec, const allocator_type &alloc = allocator_type()) {
     all_elems = alloc;
     allocate_v(vec.sz);
     for (size_t i = 0; i < vec.sz; i++)
       all_elems.construct(v + i, vec[i]);
   }
   // Moves data from another vector (resues same memory sequence for v)
-  Vector(Vector&& vec, const allocator_type& alloc = allocator_type()) {
+  Vector(Vector &&vec, const allocator_type &alloc = allocator_type()) {
     all_elems = alloc;
     this->v = vec.v;
     this->sz = vec.sz;
     this->cap = vec.cap;
-    vec.v = nullptr;  // to prevent unwanted deallocations
+    vec.v = nullptr; // to prevent unwanted deallocations
   }
   ~Vector() {
     all_elems.deallocate(v, cap);
@@ -117,32 +114,32 @@ class Vector {
   void clear() { shrink(0); };
 
   // Returns a reference to the element at position i in the vector
-  V& at(size_t i) {
+  V &at(size_t i) {
     if (i >= sz)
       throw std::out_of_range("index out of bounds");
     return v[i];
   }
 
   // Returns a constant reference to the element at index i
-  const V& at(size_t i) const {
+  const V &at(size_t i) const {
     if (i >= sz)
       throw std::out_of_range("index out of bounds");
     return v[i];
   }
 
   // Reference "at" operator. NOTE: throws unlike C++'s
-  V& operator[](size_t i) { return at(i); }
+  V &operator[](size_t i) { return at(i); }
 
   // Cconstant "at" operator reference. NOTE: throws unlike C++'s
-  const V& operator[](size_t i) const { return at(i); };
+  const V &operator[](size_t i) const { return at(i); };
 
   // Copy assignment operator
-  Vector<V>& operator=(const Vector<V>& vec) {
+  Vector<V> &operator=(const Vector<V> &vec) {
     this->~Vector();
     sz = vec.size();
     calc_cap();
 
-    V* newv = all_elems.allocate(cap);
+    V *newv = all_elems.allocate(cap);
     for (size_t i = 0; i < sz; i++)
       all_elems.construct(newv + i, vec[i]);
     v = newv;
@@ -150,13 +147,13 @@ class Vector {
   }
 
   // Move assigment operator
-  Vector<V>& operator=(Vector<V>&& vec) {
+  Vector<V> &operator=(Vector<V> &&vec) {
     all_elems.deallocate(v, cap);
     all_elems = vec.all_elems;
     v = vec.v;
     sz = vec.sz;
     cap = vec.cap;
-    vec.v = nullptr;  // to prevent unwanted deallocations
+    vec.v = nullptr; // to prevent unwanted deallocations
     return *this;
   }
 
@@ -182,7 +179,7 @@ class Vector {
     sz = n;
     calc_cap();
 
-    V* newv = all_elems.allocate(cap);
+    V *newv = all_elems.allocate(cap);
     // copy old values
     for (size_t i = 0; i < n_copies; i++)
       all_elems.construct(newv + i, v[i]);
@@ -216,8 +213,8 @@ class Vector {
   }
 };
 
-}  // namespace Nostd
+} // namespace Nostd
 
 #include "allocator.cpp"
 
-#endif  // NOSTD_VECTOR_HPP
+#endif // NOSTD_VECTOR_HPP

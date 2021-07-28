@@ -21,6 +21,19 @@ void handle(bool can_display) {
 }
 
 int main() {
+  /* Audio::fetch_tool(); */
+  /* if (Audio::play("tests/assets/sound/main_menu.wav")) { */
+  /*   cout << "started playing" << endl; */
+  /* } */
+  /* int i = 0; */
+  /* while (i < 5) { */
+  /*   sleep(1); */
+  /*   cout << "still running: " */
+  /*        << (Audio::status() == Audio::PlayerState::playing ? "p" : "s") */
+  /*        << endl; */
+  /*   i++; */
+  /* } */
+  /* Audio::stop(); */
   Data::Database d("tests/alma.conf.csv", "tests/assets/",
                    "tests/scoreboard.csv");
   World::World world(d);
