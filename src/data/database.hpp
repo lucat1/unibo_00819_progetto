@@ -45,7 +45,7 @@ public:
                   *const mugshots_rel_fp{"/img/heroes.txt"},
                       *const enemies_rel_fp{"/csv/enemies.csv"},
                           *const items_rel_fp{"/csv/items.csv"},
-                              *const audio_rel_fp{"/audio/"};
+                              *const audio_rel_fp{"/sounds/"};
 
   Database() = delete; // cannot constructs a database from nothing
   // Each parameter is a relative filepath:

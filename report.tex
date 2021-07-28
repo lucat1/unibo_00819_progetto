@@ -44,9 +44,10 @@ programmazione che delle figure di contorno richieste per la creazione di un vid
 
 \subsection{Programmazione}
 
-Il programma si articola in pi\`u moduli, che sono rappresentati nel codice con
-lo strumento linguistico dello spazio dei nomi (\emph{namespace}). \`E stato
-designato un responsabile diverso per ciascuno di questi moduli.
+Il programma, scritto usando \verb!C++11! come norma tenica, si articola in
+pi\`u moduli, che sono rappresentati nel codice con lo strumento linguistico
+dello spazio dei nomi (\emph{namespace}). \`E stato designato un responsabile
+diverso per ciascuno di questi moduli.
 \begin{itemize}
   \item \verb!Data! (S. Volpe): descrive la base di dati del gioco e gli enti in
     essa contenuti, come \verb!Scenery!, \verb!Hero!, \verb!Skill!. La lettura
@@ -54,19 +55,23 @@ designato un responsabile diverso per ciascuno di questi moduli.
   \item \verb!Engine! (L. Tagliavini): fornisce il nucleo \emph{software} per
     l'uso di grafica in tempo reale e audio. Offre strutture per il
     \emph{rendering}, la creazione di interfacce utente e la riproduzione della
-    colonna sonora. % TODO: fact checking sulla colonna sonora
+    colonna sonora.
   \item \verb!World! (M. Girolimetto): genera una mappa di gioco dinamicamente
     espandibile, popolandola con entit\`a di vario genere. Il livello di
     difficolt\`a aumenta in relazione alle dimensioni della mappa.
   \item \verb!Game! (A. Scrob): combina le funzionalit\`a degli altri moduli in
-    un unico \emph{game loop}. Implementa la logica di gioco e la navigazione
-    tra menu diversi.
+    un unico \emph{game loop}. Implementa la logica di gioco, incluso il sistema
+    di combattimento, e la navigazione tra menu diversi.
 \end{itemize}
 
-Date le limitazioni sull'uso della \emph{Standard Template Library} imposte
-dalla consegna, il progetto include un ulteriore modulo, denominato
-\verb!Nostd!, che emula alcuni strumenti della libreria standard. Quest'ultimo
-\`e stato realizzato congiuntamente dall'intera squadra.
+Le specifiche del progetto prevedono serie limitazioni sull'uso della
+\emph{Standard Template Library}. I contenitori come \verb!vector!, \verb!list!
+e \verb!map!, per esempio, sono vietati, cos\`i come \verb!string!. Per far
+fronte a tali richieste, \`e stato necessario includere un ulteriore modulo,
+denominato \verb!Nostd!. Esso emula alcuni strumenti della libreria standard,
+integrandoli secondo le necessit\`a del progetto. \verb!Nostd! \`e stato
+realizzato congiuntamente dall'intera squadra: a ciascun membro del gruppo \`e
+stata affidata una parte delle sue intestazioni.
 
 \subsection{Miscellanei}
 

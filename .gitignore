@@ -1,2 +1,4 @@
 build
 /alma
+report.*
+!report.tex
