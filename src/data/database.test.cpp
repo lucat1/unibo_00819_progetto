@@ -28,9 +28,7 @@ int main() {
     // Map chunks
     const auto &m = d.map_chunks();
     assert(m.size() == 11);
-    assert(m.at(0).starting_row() == 19);
     assert(m.at(0).at(19).at(30).value() == Data::MapUnit::nothing);
-    assert(m.at(1).ending_row() == 16);
     assert(m.at(1).at(19).at(30).value() == Data::MapUnit::ground);
     // Sceneries
     const auto &sc = d.sceneries();
