@@ -74,7 +74,7 @@ ChunkAssembler::assemble_scenery(const MapChunk *chunk,
       else if (map_unit == MapUnit::platform)
         res.at(i).at(j).value() = new BlockTile(
             elaborate_autotile(chunk, &scenery->platform, j, i),
-            scenery->platform.foreground, scenery->ground.background);
+            scenery->platform.foreground, scenery->platform.background);
     }
     if (sky_index > 0) {
       if (--sky_counter == 0) {
