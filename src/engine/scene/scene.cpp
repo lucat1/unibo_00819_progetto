@@ -45,15 +45,15 @@ void Engine::Scene::Scene::draw() {
   // 3. draw from there on until we exceed the screen width
   auto start = pos->fragment; // assume the player is in the first chunk
   size_t first_offset = 0,
-         player_x = pos->x; // assuming the player is behind the threshold
-  if (pos->x > width / 2) {
+         player_x = pos->get_x(); // assuming the player is behind the threshold
+  if (pos->get_x() > width / 2) {
     // the chunk is wide enough to center the player
-    first_offset = pos->x - width / 2;
+    first_offset = pos->get_x() - width / 2;
     player_x = width / 2;
   } else if (*start != *world.environment.begin()) {
     // traverse backwards $n$ chunks until we have no more screen space left to
     // fill. then the value of space_left will be the offset of the first chunk
-    auto space_left = (width / 2) - pos->x;
+    auto space_left = (width / 2) - pos->get_x();
     start = std::prev(start);
     while ((space_left -= (*start).extent(1)) > 0)
       start = std::prev(start);
@@ -76,9 +76,10 @@ void Engine::Scene::Scene::draw() {
   // from the Hero class
   int pair = Engine::UI::color_pair(
       color_to_short(world.player.foreground()),
-      color_to_short((*pos->fragment)[pos->y][pos->x].value()->background()));
+      color_to_short(
+          (*pos->fragment)[pos->get_y()][pos->get_x()].value()->background()));
   Engine::UI::start_color(window, pair);
-  mvwaddch(window, pos->y, player_x, world.player.character());
+  mvwaddch(window, pos->get_y(), player_x, world.player.character());
   Engine::UI::end_color(window, pair);
 
   // lastly render the HUD

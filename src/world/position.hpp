@@ -1,46 +1,42 @@
 #ifndef WORLD_POSITION_HPP
 #define WORLD_POSITION_HPP
 
+#include "../engine/block_tile.hpp"
+#include "../engine/screen.hpp"
 #include "../nostd/list.hpp"
 #include "../nostd/matrix.hpp"
-#include "../engine/screen.hpp"
-#include "../engine/block_tile.hpp"
 #include <iterator>
 
 namespace World {
 class Position {
-  private :Nostd::List<Nostd::Matrix<Engine::BlockTile *>> environment;
+private:
+  Nostd::List<Nostd::Matrix<Engine::BlockTile *>> environment;
+  int x;
+  int y;
 
 public:
   Nostd::List<Nostd::Matrix<Engine::BlockTile *>>::iterator fragment;
-  int x, y;
 
-  Position(
-  Nostd::List<Nostd::Matrix<Engine::BlockTile *>> environment) {
+  Position(Nostd::List<Nostd::Matrix<Engine::BlockTile *>> environment) {
     this->environment = environment;
     this->x = 0;
     this->y = 19;
     this->fragment = environment.begin();
   }
 
-  void dec_x() {
-    if(x != 0)
-      x--;
-    else if(*fragment != *environment.begin()) {
-      fragment = std::prev(fragment);
-      x = (*fragment).extent(1)-1;
-    }
-  }
+  int get_x() const noexcept;
+  int get_y() const noexcept;
+  void set_x(const int &) noexcept;
+  void set_y(const int &) noexcept;
 
-  void inc_x() {
-    if((size_t)x != (*fragment).extent(1)-1)
-      x++;
-    else {
-      fragment = std::next(fragment);
-      x = 0;
-    }
-  }
+  void move_left() noexcept;
+
+  void move_right() noexcept;
+
+  void move_down() noexcept;
+
+  void move_up() noexcept;
 };
-}
+} // namespace World
 
 #endif // WORLD_POSITION_HPP
