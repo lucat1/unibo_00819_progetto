@@ -87,7 +87,7 @@ public:
   // Converts an audio filename to its relative filepath:
   // - adds subfolder path
   // - does not add file extension
-  char *to_audio_filepath(const char *audio_filename) const noexcept;
+  Nostd::String to_audio_filepath(const char *audio_filename) const noexcept;
 
 private:
   char *conf, *scor;
