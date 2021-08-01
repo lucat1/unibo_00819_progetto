@@ -1,3 +1,13 @@
+/*
+  University of Bologna
+  First cicle degree in Computer Science
+  00819 - Programmazione
+
+  Mattia Girolimetto #977478
+  01/08/2021
+
+  position.cpp: //TODO.
+*/
 #ifndef WORLD_POSITION_HPP
 #define WORLD_POSITION_HPP
 
@@ -5,37 +15,45 @@
 #include "../engine/screen.hpp"
 #include "../nostd/list.hpp"
 #include "../nostd/matrix.hpp"
+#include <exception>
 #include <iterator>
 
 namespace World {
 class Position {
 private:
-  Nostd::List<Nostd::Matrix<Engine::BlockTile *>> environment;
+  const Nostd::List<Nostd::Matrix<Engine::BlockTile *>> *environment;
+  Nostd::List<Nostd::Matrix<Engine::BlockTile *>>::iterator fragment;
   int x;
   int y;
+  static const int INITIAL_Y = 19;
 
 public:
-  Nostd::List<Nostd::Matrix<Engine::BlockTile *>>::iterator fragment;
-
-  Position(Nostd::List<Nostd::Matrix<Engine::BlockTile *>> environment) {
-    this->environment = environment;
-    this->x = 0;
-    this->y = 19;
-    this->fragment = environment.begin();
-  }
+  Position(const Nostd::List<Nostd::Matrix<Engine::BlockTile *>> *environment,
+           int x = 0, int y = INITIAL_Y);
 
   int get_x() const noexcept;
   int get_y() const noexcept;
-  void set_x(const int &) noexcept;
-  void set_y(const int &) noexcept;
 
-  void move_left() noexcept;
+  void move_left();
 
-  void move_right() noexcept;
+  void move_right();
 
-  void move_down() noexcept;
+  void move_down();
 
-  void move_up() noexcept;
+  void move_up();
+};
+
+class InvalidPositionException : public std::exception {
+private:
+  std::string message;
+
+public:
+  InvalidPositionException(const int &x, const int &y) {
+    this->message = "(" + std::to_string(x) + " " + std::to_string(y) +
+                    ") isn't a valid position";
+  }
+
+  const char *what() const noexcept override { return message.c_str(); }
 };
 } // namespace World
 

@@ -100,7 +100,7 @@ int main() {
       if (!gaming)
         screen.send_event(Drawable::Event::move_up);
       else
-        world.position->set_y(std::max(world.position->get_y() - 1, 0));
+        world.position->move_up();
 
       break;
 
@@ -109,7 +109,7 @@ int main() {
       if (!gaming)
         screen.send_event(Drawable::Event::move_down);
       else
-        world.position->set_y(std::min(world.position->get_y() + 1, 24));
+        world.position->move_down();
       break;
 
     case 'h':
