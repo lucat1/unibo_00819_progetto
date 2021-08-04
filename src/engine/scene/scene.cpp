@@ -43,7 +43,7 @@ void Engine::Scene::Scene::draw() {
   // 2. adress the initial position of the player when there is no world to the
   // left
   // 3. draw from there on until we exceed the screen width
-  auto start = pos->fragment; // assume the player is in the first chunk
+  auto start = pos->get_fragment(); // assume the player is in the first chunk
   size_t first_offset = 0,
          player_x = pos->get_x(); // assuming the player is behind the threshold
   if (pos->get_x() > width / 2) {
@@ -76,8 +76,9 @@ void Engine::Scene::Scene::draw() {
   // from the Hero class
   int pair = Engine::UI::color_pair(
       color_to_short(world.player.foreground()),
-      color_to_short(
-          (*pos->fragment)[pos->get_y()][pos->get_x()].value()->background()));
+      color_to_short((*pos->get_fragment())[pos->get_y()][pos->get_x()]
+                         .value()
+                         ->background()));
   Engine::UI::start_color(window, pair);
   mvwaddch(window, pos->get_y(), player_x, world.player.character());
   Engine::UI::end_color(window, pair);

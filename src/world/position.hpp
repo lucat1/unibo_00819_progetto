@@ -22,7 +22,8 @@ namespace World {
 class Position {
 private:
   const Nostd::List<Nostd::Matrix<Engine::BlockTile *>> *environment;
-  Nostd::List<Nostd::Matrix<Engine::BlockTile *>>::iterator fragment;
+  Nostd::List<Nostd::Matrix<Engine::BlockTile *>>::iterator
+      fragment; // TODO const iterator
   int x;
   int y;
   static const int INITIAL_Y = 19;
@@ -33,6 +34,8 @@ public:
 
   int get_x() const noexcept;
   int get_y() const noexcept;
+  Nostd::List<Nostd::Matrix<Engine::BlockTile *>>::iterator
+  get_fragment() const noexcept;
 
   void move_left();
 

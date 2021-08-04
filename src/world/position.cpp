@@ -38,6 +38,9 @@ void Position::move_right() {
   }
 }
 
+List<Matrix<BlockTile *>>::iterator Position::get_fragment() const noexcept {
+  return this->fragment;
+}
 void Position::move_up() { y = std::max(y - 1, 0); }
 
 void Position::move_down() { y = std::min(y + 1, 24); }
