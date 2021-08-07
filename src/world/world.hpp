@@ -20,6 +20,7 @@
 namespace World {
 class World {
 public:
+  static const size_t DEFAULT_CHUNKS_REFILL = 50;
   using AssembledChunk = Nostd::Matrix<Engine::BlockTile *>;
 
   Nostd::List<AssembledChunk> environment;
@@ -29,10 +30,9 @@ public:
   World(const Data::Database &d) noexcept;
 
   // Add new assembled chunk to enviroment
-  void add_chunk() noexcept;
+  void add_chunk(const int &) noexcept;
 
 private:
-  const size_t LOADED_CHUNKS = 50;
   ChunkAssembler assembler;
 };
 

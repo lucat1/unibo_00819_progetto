@@ -21,13 +21,14 @@ using AChunk = World::World::AssembledChunk;
 // World::World constructor
 World::World::World(const Database &d) noexcept
     : player{d.heroes()[0]}, assembler(d.map_chunks(), d.sceneries()) {
-  for (size_t i{0}; i < this->LOADED_CHUNKS; i++)
-    add_chunk();
+  add_chunk(DEFAULT_CHUNKS_REFILL);
   this->position = new Position(&this->environment);
 }
 
 // Add new assembled chunk to enviroment
-void World::World::add_chunk() noexcept {
-  this->environment.push_back(this->assembler.get());
-  this->assembler.next_chunk();
+void World::World::add_chunk(const int &) noexcept {
+  for (size_t i{0}; i < this->DEFAULT_CHUNKS_REFILL; i++) {
+    this->environment.push_back(this->assembler.get());
+    this->assembler.next_chunk();
+  }
 }

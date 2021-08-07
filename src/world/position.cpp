@@ -6,24 +6,29 @@
   Mattia Girolimetto #977478
   01/08/2021
 
-  position.cpp: Implementation of World::Position.
+  position.cpp: Implementation of World::WPosition.
 */
 
 #include "position.hpp"
 #include "../data/map_chunk.hpp"
+#include "world.hpp"
+#include <functional>
 
-using namespace World;
 using namespace Nostd;
 using namespace Engine;
 
-Position::Position(const List<Matrix<BlockTile *>> *environment, int x, int y) {
+using WPosition = World::Position;
+using WWorld = World::World;
+
+WPosition::Position(const List<Matrix<BlockTile *>> *environment, int x,
+                    int y) {
   this->x = x;
   this->y = y;
   this->environment = environment;
   this->fragment = environment->begin();
 }
 
-void Position::move_left() {
+void WPosition::move_left() {
   if (x != 0)
     x--;
   else if (*fragment != *environment->begin()) {
@@ -33,26 +38,26 @@ void Position::move_left() {
   // else we are in the first column of the first chunk so we do nothing
 }
 
-void Position::move_right() {
+void WPosition::move_right() {
   if ((size_t)x != (*fragment).extent(1) - 1)
     x++;
   else {
     if (*fragment == *environment->end()) {
-      // TODO generate more chunk
+      // TODO invoke World::World::add_chunks()
     }
     fragment = std::next(fragment);
     x = 0;
   }
 }
 
-List<Matrix<BlockTile *>>::iterator Position::get_fragment() const noexcept {
+List<Matrix<BlockTile *>>::iterator WPosition::get_fragment() const noexcept {
   return this->fragment;
 }
-void Position::move_up() { y = std::max(y - 1, 0); }
+void WPosition::move_up() { y = std::max(y - 1, 0); }
 
-void Position::move_down() {
+void WPosition::move_down() {
   y = std::min(y + 1, (int)Data::MapChunk::height - 1);
 }
 
-int Position::get_x() const noexcept { return this->x; }
-int Position::get_y() const noexcept { return this->y; }
+int WPosition::get_x() const noexcept { return this->x; }
+int WPosition::get_y() const noexcept { return this->y; }
