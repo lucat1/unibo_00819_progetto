@@ -23,7 +23,7 @@ private:
   Data::Database db;
   World::World world;
   bool loop();
-  void change_content();
+  bool change_content();
   void handle_keypress();
   int play_soundtrack(const char[]);
 

@@ -52,22 +52,24 @@ bool Game::Game::loop() {
   if (usleep(1000000 / 25) == EINTR) // 25fps
     return false;
 
-  if (screen.get_content()->is_over())
-    change_content();
-  else if (in_game)
+  bool b;
+  if (screen.get_content()->is_over()) {
+    if((b = change_content()) != running)
+      return b;
+  } else if (in_game)
     screen.send_event(Engine::Drawable::Event::redraw);
 
   handle_keypress();
   return true;
 }
 
-void Game::Game::change_content() {
+bool Game::Game::change_content() {
   if (screen.is_content<Main>()) {
     // do something when the main menu is exited
     auto res = screen.get_content<Main>()->get_result();
     switch (res) {
     case Main::Result::quit:
-      running = false;
+      return false;
       break;
     case Main::Result::settings:
       screen.set_content<Settings, const Nostd::Vector<Data::Setting> &>(
@@ -102,6 +104,7 @@ void Game::Game::change_content() {
       screen.set_content<Scene, const World::World &>(world);
     }
   }
+  return true;
 }
 
 void Game::Game::handle_keypress() {
