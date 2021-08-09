@@ -54,7 +54,7 @@ void Engine::Audio::fetch_tool() {
 }
 
 Engine::Audio::Error Engine::Audio::play(const char *fp) {
-  if (strcmp(tool, "not_fetched"))
+  if (strcmp(tool, "not_fetched") == 0)
     fetch_tool();
 
   if (strcmp(tool, "none") == 0)
