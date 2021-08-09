@@ -13,13 +13,17 @@
 
 #include "../nostd/test.hpp"
 #include "database.hpp"
+#include <cstring>
 
 using Data::Database;
 using Nostd::it;
 
+#include <iostream>
+using namespace std;
+
 int main() {
   it("loads a database from the filesystem", [] {
-    Database d("tests/overengineered.conf.csv", "tests/assets/", "tests/scoreboard.csv");
+    Database d("tests/overengineered.conf.csv", "tests/assets", "tests/scoreboard.csv");
     // Settings
     const auto &s = d.settings();
     assert(s.size() == 2);
@@ -62,11 +66,11 @@ int main() {
     assert(i.at(1).name() == "mushroom");
   });
   it("saves user settings on filesystem", [] {
-    Database d("tests/overengineered.conf.csv", "tests/assets/", "tests/scoreboard.csv");
+    Database d("tests/overengineered.conf.csv", "tests/assets", "tests/scoreboard.csv");
     auto &s = d.settings().at(0);
     s.set(s.begin());
     d.save_settings();
-    d = Database("tests/overengineered.conf.csv", "tests/assets/",
+    d = Database("tests/overengineered.conf.csv", "tests/assets",
                  "tests/scoreboard.csv");
     assert(*d.settings().at(0).current_value() == 0);
     auto &s2 = d.settings().at(0);
@@ -74,15 +78,20 @@ int main() {
     d.save_settings();
   });
   it("saves user results on filesystem", [] {
-    Database d("tests/overengineered.conf.csv", "tests/assets/", "tests/scoreboard.csv");
+    Database d("tests/overengineered.conf.csv", "tests/assets", "tests/scoreboard.csv");
     using Data::Pawns::Hero;
     assert(!d.results().empty());
     d.results().push_back(d.results().front());
     d.save_results();
-    d = Database("tests/overengineered.conf.csv", "tests/assets/",
+    d = Database("tests/overengineered.conf.csv", "tests/assets",
                  "tests/scoreboard.csv");
     assert(d.results().front().score() == d.results().back().score());
     d.results().pop_back();
     d.save_results();
+  });
+  it("generates valid audio file paths", [] {
+    Database d("tests/overengineered.conf.csv", "tests/assets", "tests/scoreboard.csv");
+    cout << d.to_audio_filepath("main_menu") << endl;
+    assert(strcmp(d.to_audio_filepath("main_menu").c_str(), "tests/assets/sounds/main_menu.wav") == 0);
   });
 }
