@@ -61,9 +61,8 @@ Engine::Audio::Error Engine::Audio::play(const char *fp) {
     return Error::no_tool;
 
   // check if we have read permission on the given file at fp
-  if(access(fp, R_OK) != 0)
+  if (access(fp, R_OK) != 0)
     return Error::invalid_file;
-
 
   pid = fork();
   if (pid == 0) {

@@ -23,7 +23,8 @@ using namespace std;
 
 int main() {
   it("loads a database from the filesystem", [] {
-    Database d("tests/overengineered.conf.csv", "tests/assets", "tests/scoreboard.csv");
+    Database d("tests/overengineered.conf.csv", "tests/assets",
+               "tests/scoreboard.csv");
     // Settings
     const auto &s = d.settings();
     assert(s.size() == 2);
@@ -66,7 +67,8 @@ int main() {
     assert(i.at(1).name() == "mushroom");
   });
   it("saves user settings on filesystem", [] {
-    Database d("tests/overengineered.conf.csv", "tests/assets", "tests/scoreboard.csv");
+    Database d("tests/overengineered.conf.csv", "tests/assets",
+               "tests/scoreboard.csv");
     auto &s = d.settings().at(0);
     s.set(s.begin());
     d.save_settings();
@@ -78,7 +80,8 @@ int main() {
     d.save_settings();
   });
   it("saves user results on filesystem", [] {
-    Database d("tests/overengineered.conf.csv", "tests/assets", "tests/scoreboard.csv");
+    Database d("tests/overengineered.conf.csv", "tests/assets",
+               "tests/scoreboard.csv");
     using Data::Pawns::Hero;
     assert(!d.results().empty());
     d.results().push_back(d.results().front());
@@ -90,8 +93,10 @@ int main() {
     d.save_results();
   });
   it("generates valid audio file paths", [] {
-    Database d("tests/overengineered.conf.csv", "tests/assets", "tests/scoreboard.csv");
+    Database d("tests/overengineered.conf.csv", "tests/assets",
+               "tests/scoreboard.csv");
     cout << d.to_audio_filepath("main_menu") << endl;
-    assert(strcmp(d.to_audio_filepath("main_menu").c_str(), "tests/assets/sounds/main_menu.wav") == 0);
+    assert(strcmp(d.to_audio_filepath("main_menu").c_str(),
+                  "tests/assets/sounds/main_menu.wav") == 0);
   });
 }
