@@ -12,6 +12,7 @@
 #ifndef DATA_MAP_CHUNK_HPP
 #define DATA_MAP_CHUNK_HPP
 
+#include <cstddef>
 #include <istream>
 
 #include "../nostd/matrix.hpp"
