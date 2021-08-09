@@ -60,8 +60,8 @@ bool Engine::Audio::play(const char *fp) {
   if (strcmp(tool, "none") == 0)
     return false;
 
-  // check for the existance of the given file at fp
-  if(access(fp, F_OK) != 0)
+  // check if we have read permission on the given file at fp
+  if(access(fp, R_OK) != 0)
     return false;
 
 
