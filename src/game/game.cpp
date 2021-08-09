@@ -1,10 +1,23 @@
+/*
+  University of Bologna
+  First cicle degree in Computer Science
+  00819 - Programmazione
+
+  Andreea Scrob #989372
+  07/08/2021
+
+  game.cpp: implementation of the main game logic.
+*/
+
 #include "game.hpp"
+#include "../engine/audio.hpp"
 #include "../engine/menu/main.hpp"
 #include "../engine/menu/select.hpp"
 #include "../engine/menu/settings.hpp"
 #include "../engine/scene/scene.hpp"
 #include <iostream>
 #include <unistd.h>
+using Engine::Audio;
 using Engine::Drawable;
 using Engine::Menu::Main;
 using Engine::Menu::Select;
@@ -13,19 +26,24 @@ using Engine::Scene::Scene;
 using std::cout;
 
 Game::Game::Game()
-    : db("overengineered.conf.csv", "assets/", "scoreboard.csv"), world(db) {}
+    : db("overengineered.conf.csv", "assets", "scoreboard.csv"), world(db) {}
 
 int Game::Game::run() {
+  int e = play_soundtrack("main_menu");
+  if (e != 0)
+    return e + 1;
+
   if (!screen.open()) {
     cout << "Could not open screen. Perhaps your terminal is too small?\n";
     return 1;
-  };
+  }
+
   screen.set_content<Main>();
   while (running) {
     running = loop();
   }
-
   screen.close();
+  Audio::stop();
   return 0;
 }
 
@@ -105,7 +123,6 @@ void Game::Game::handle_keypress() {
       screen.send_event(Drawable::Event::move_up);
     else
       world.position->y = std::max(world.position->y - 1, 0);
-
     break;
 
   case 'j':
@@ -135,4 +152,21 @@ void Game::Game::handle_keypress() {
     // ignore ncurses's getch errors
     break;
   };
+}
+
+int Game::Game::play_soundtrack(const char fn[]) {
+  auto fp = db.to_audio_filepath(fn);
+  switch (Audio::play(fp.c_str())) {
+  case Audio::Error::none:
+    return 0;
+  case Audio::Error::no_tool:
+    cout << "Could not play the soundtrack. Do you have aplay or afplay?\n";
+    return 1;
+  case Audio::Error::invalid_file:
+    cout << "Could not play the soundtrack: invalid file (" << fp << ").\n";
+    return 2;
+  default:
+    cout << "Could not play the soundtrack: unknown error.\n";
+    return 3;
+  }
 }
