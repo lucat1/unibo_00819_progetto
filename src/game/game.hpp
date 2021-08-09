@@ -22,6 +22,7 @@ private:
   bool running = true, in_game = false;
   Data::Database db;
   World::World world;
+  static void before_close(int);
   bool loop();
   bool change_content();
   void handle_keypress();

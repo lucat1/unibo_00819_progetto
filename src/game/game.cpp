@@ -17,6 +17,7 @@
 #include "../engine/scene/scene.hpp"
 #include <iostream>
 #include <unistd.h>
+#include <signal.h>
 using Engine::Audio;
 using Engine::Drawable;
 using Engine::Menu::Main;
@@ -28,7 +29,12 @@ using std::cout;
 Game::Game::Game()
     : db("overengineered.conf.csv", "assets", "scoreboard.csv"), world(db) {}
 
+void Game::Game::before_close(int) {
+  Audio::stop();
+}
+
 int Game::Game::run() {
+  signal(SIGTERM, before_close);
   int e = play_soundtrack("main_menu");
   if (e != 0)
     return e + 1;
@@ -43,7 +49,7 @@ int Game::Game::run() {
     running = loop();
   }
   screen.close();
-  Audio::stop();
+  before_close(0); // useless parameter
   return 0;
 }
 

@@ -11,6 +11,7 @@
 */
 
 #include "audio.hpp"
+#include <cerrno>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -107,5 +108,5 @@ Engine::Audio::PlayerState Engine::Audio::status() {
 // quit NOT gracefully, we just want the audio to stop immediately
 void Engine::Audio::stop() {
   if (status() == PlayerState::playing)
-    kill(pid, SIGINT);
+    kill(pid, SIGKILL);
 }
