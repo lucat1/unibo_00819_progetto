@@ -54,7 +54,7 @@ bool Game::Game::loop() {
 
   bool b;
   if (screen.get_content()->is_over()) {
-    if((b = change_content()) != running)
+    if ((b = change_content()) != running)
       return b;
   } else if (in_game)
     screen.send_event(Engine::Drawable::Event::redraw);
@@ -99,7 +99,7 @@ bool Game::Game::change_content() {
     } else {
       // otherwhise start a game
       // TODO: use this to provide the world a context of the current hero
-      /* auto hero = screen.get_content<Menu::Select>()->get_result(); */
+      world.player.first = screen.get_content<Select>()->get_result();
       in_game = true;
       screen.set_content<Scene, const World::World &>(world);
     }
@@ -125,7 +125,7 @@ void Game::Game::handle_keypress() {
     if (!in_game)
       screen.send_event(Drawable::Event::move_up);
     else
-      world.position->y = std::max(world.position->y - 1, 0);
+      world.player.second->y = std::max(world.player.second->y - 1, 0);
     break;
 
   case 'j':
@@ -133,7 +133,7 @@ void Game::Game::handle_keypress() {
     if (!in_game)
       screen.send_event(Drawable::Event::move_down);
     else
-      world.position->y = std::min(world.position->y + 1, 24);
+      world.player.second->y = std::min(world.player.second->y + 1, 24);
     break;
 
   case 'h':
@@ -141,7 +141,7 @@ void Game::Game::handle_keypress() {
     if (!in_game)
       screen.send_event(Drawable::Event::move_left);
     else
-      world.position->dec_x();
+      world.player.second->dec_x();
     break;
 
   case 'l':
@@ -149,7 +149,7 @@ void Game::Game::handle_keypress() {
     if (!in_game)
       screen.send_event(Drawable::Event::move_right);
     else
-      world.position->inc_x();
+      world.player.second->inc_x();
     break;
   case ERR:
     // ignore ncurses's getch errors

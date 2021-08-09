@@ -14,14 +14,14 @@
 #include "../data/database.hpp"
 #include "../data/pawns/hero.hpp"
 #include "../nostd/list.hpp"
+#include "../nostd/pair.hpp"
 #include "../world/chunk_assembler.hpp"
 #include "position.hpp"
 
 namespace World {
 class World {
 public:
-  Data::Pawns::Hero player;
-  Position *position;
+  Nostd::Pair<Data::Pawns::Hero, Position *> player;
   Nostd::List<Nostd::Matrix<Engine::BlockTile *>> environment;
   World(const Data::Database &d) noexcept;
 
