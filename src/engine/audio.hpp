@@ -26,6 +26,7 @@ private:
 
 public:
   enum class PlayerState : bool { playing, stopped };
+  enum class Error : int { none, no_tool, invalid_file };
 
   // searches for the best tool to use to play audio. Choises are:
   // - aplay (on Linux, for ALSA - Advanced Linux Sound Architecture)
@@ -38,7 +39,7 @@ public:
   // play plays the given wav file using one of the available system tools
   // the player process is started in another thread and is therefore non
   // blocking
-  static bool play(const char *fp);
+  static Error play(const char *fp);
 
   // returns the player current status, either playing or stopped
   static PlayerState status();
