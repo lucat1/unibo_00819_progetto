@@ -19,6 +19,9 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+#include <iostream>
+using namespace std;
+
 char Engine::Audio::tool[256] = "not_fetched";
 int Engine::Audio::pid = -1;
 
@@ -72,9 +75,18 @@ Engine::Audio::Error Engine::Audio::play(const char *fp) {
     dup2(dn, 2);
     close(dn);
 
-    int code;
-    while (true)
-      code = execlp(tool, tool, fp, nullptr);
+    int code = 0;
+    while (code != -1) {
+      int ppid = fork();
+      if (ppid < 0)
+        exit(1);
+      else if (ppid == 0)
+        exit(execlp(tool, tool, fp, nullptr));
+
+      wait(nullptr);
+      code = errno;
+    }
+
     exit(code);
   }
 
