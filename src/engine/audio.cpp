@@ -79,7 +79,7 @@ Engine::Audio::Error Engine::Audio::play(const char *fp) {
     while (code != -1) {
       int ppid = fork();
       if (ppid < 0)
-        exit(1);
+        exit(-1);
       else if (ppid == 0)
         exit(execlp(tool, tool, fp, nullptr));
 
