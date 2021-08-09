@@ -53,16 +53,16 @@ void Engine::Audio::fetch_tool() {
     strcpy(tool, "none");
 }
 
-bool Engine::Audio::play(const char *fp) {
+Engine::Audio::Error Engine::Audio::play(const char *fp) {
   if (strcmp(tool, "not_fetched"))
     fetch_tool();
 
   if (strcmp(tool, "none") == 0)
-    return false;
+    return Error::no_tool;
 
   // check if we have read permission on the given file at fp
   if(access(fp, R_OK) != 0)
-    return false;
+    return Error::invalid_file;
 
 
   pid = fork();
@@ -78,7 +78,8 @@ bool Engine::Audio::play(const char *fp) {
       code = execlp(tool, tool, fp, nullptr);
     exit(code);
   }
-  return true;
+
+  return Error::none;
 }
 
 Engine::Audio::PlayerState Engine::Audio::status() {
