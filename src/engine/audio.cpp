@@ -60,6 +60,11 @@ bool Engine::Audio::play(const char *fp) {
   if (strcmp(tool, "none") == 0)
     return false;
 
+  // check for the existance of the given file at fp
+  if(access(fp, F_OK) != 0)
+    return false;
+
+
   pid = fork();
   if (pid == 0) {
     // open /dev/null and pipe this thread's output to it
