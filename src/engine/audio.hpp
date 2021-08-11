@@ -1,9 +1,9 @@
 /*
-  university of bologna
-  first cicle degree in computer science
-  00819 - programmazione
+  University of Bologna
+  First cicle degree in Computer Science
+  00819 - Programmazione
 
-  luca tagliavini #971133
+  Luca Tagliavini #971133
   07/27/2021
 
   audio.hpp: provides a platform-independent way to play audio across `aplay` on
@@ -23,10 +23,12 @@ class Audio {
 private:
   static char tool[256];
   static int pid;
+  // shared across threads
+  static bool *playing;
 
 public:
-  enum class PlayerState : bool { playing, stopped };
-  enum class Error : int { none, no_tool, invalid_file };
+  enum class State : bool { playing, stopped };
+  enum class Error : int { none, no_thread, no_tool, invalid_file };
 
   // searches for the best tool to use to play audio. Choises are:
   // - aplay (on Linux, for ALSA - Advanced Linux Sound Architecture)
@@ -42,7 +44,7 @@ public:
   static Error play(const char *fp);
 
   // returns the player current status, either playing or stopped
-  static PlayerState status();
+  static State status();
 
   // stop stops the current playing audio file.
   // under the hood we simply kill the thread running the player process
