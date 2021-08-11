@@ -70,7 +70,7 @@ Engine::Audio::Error Engine::Audio::play(const char *fp) {
   // keep shared memory across threads with mman functions
   // see man mmap, man munmap and https://stackoverflow.com/a/13274800
   playing = (bool *)mmap(nullptr, sizeof *playing, PROT_READ | PROT_WRITE,
-                      MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+                         MAP_SHARED | MAP_ANONYMOUS, -1, 0);
   *playing = true;
   pid = fork();
   if (pid < 0)
@@ -89,10 +89,11 @@ Engine::Audio::Error Engine::Audio::play(const char *fp) {
 
       // if we don't have any aplay instance start a new one
       int status = -1;
-      if(ppid != -1)
+      if (ppid != -1)
         waitpid(ppid, &status, WNOHANG);
 
-      if (ppid == -1 || WIFEXITED(status) || WIFSTOPPED(status) || WIFSIGNALED(status)) {
+      if (ppid == -1 || WIFEXITED(status) || WIFSTOPPED(status) ||
+          WIFSIGNALED(status)) {
         ppid = fork();
         if (ppid < 0)
           exit(-1);
