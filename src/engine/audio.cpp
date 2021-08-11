@@ -67,6 +67,9 @@ Engine::Audio::Error Engine::Audio::play(const char *fp) {
   if (access(fp, R_OK) != 0)
     return Error::invalid_file;
 
+  if(status() == State::playing)
+    stop();
+
   // keep shared memory across threads with mman functions
   // see man mmap, man munmap and https://stackoverflow.com/a/13274800
   playing = (bool *)mmap(nullptr, sizeof *playing, PROT_READ | PROT_WRITE,
@@ -102,7 +105,7 @@ Engine::Audio::Error Engine::Audio::play(const char *fp) {
       }
     }
     // stop the aplay instance if we got one
-    if (ppid != -1 && !kill(ppid, 0))
+    if (ppid != -1)
       kill(ppid, SIGINT);
 
     exit(0);
@@ -120,5 +123,7 @@ void Engine::Audio::stop() {
     *playing = false;
     munmap(playing, sizeof *playing);
     playing = nullptr;
+    wait(nullptr);
+    pid = -1;
   }
 }

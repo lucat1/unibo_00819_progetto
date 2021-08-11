@@ -35,10 +35,6 @@ Game::Game::Game()
 void Game::Game::before_close(int) { Audio::stop(); }
 
 int Game::Game::run() {
-  int e = play_soundtrack("main_menu");
-  if (e != 0)
-    return e + 1;
-
   if (!screen.open()) {
     cout << "Could not open screen. Perhaps your terminal is too small?\n";
     return 1;
