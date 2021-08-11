@@ -73,7 +73,7 @@ void Engine::Scene::HUD::show(WINDOW *window, szu x, szu y, szu max_width,
   bar(window, x, y, health, max_health, " ♡ ", Data::Palette::health);
   bar(window, x + 12, y, mana, max_mana, " ↑ ", Data::Palette::mana);
   Nostd::String scr = " ● ";
-  Utils::stringify(4765, scr);
+  Utils::stringify(score, scr);
   mvwaddstr(window, x + 24, y, scr.c_str());
   // TODO: fight message, when we got that data actually
   wnoutrefresh(window);

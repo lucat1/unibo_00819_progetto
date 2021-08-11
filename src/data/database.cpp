@@ -36,20 +36,23 @@ constexpr char Database::separator, Database::newrecord, Database::escape;
 
 Database::Database(const char *configuration, const char *assets,
                    const char *scoreboard)
-    : conf{newstrcpy(configuration)}, scor{newstrcpy(scoreboard)} {
-  load_settings(assets);
-  load_map_chunks(assets);
-  load_sceneries(assets);
+    : conf{newstrcpy(configuration)}, ass{newstrcpy(assets)}, scor{newstrcpy(
+                                                                  scoreboard)} {
+  load_settings();
+  load_map_chunks();
+  load_sceneries();
   load_results();
-  load_heroes(assets);
-  load_mugshots(assets);
-  load_enemies(assets);
-  load_items(assets);
+  load_heroes();
+  load_mugshots();
+  load_enemies();
+  load_items();
 }
 
 Database::Database(Database &&d) {
   conf = d.conf;
   d.conf = nullptr;
+  ass = d.ass;
+  d.ass = nullptr;
   scor = d.scor;
   d.scor = nullptr;
   using std::move;
@@ -66,6 +69,9 @@ Database &Database::operator=(Database &&d) {
   delete conf;
   conf = d.conf;
   d.conf = nullptr;
+  delete ass;
+  ass = d.ass;
+  d.ass = nullptr;
   delete scor;
   scor = d.scor;
   d.scor = nullptr;
@@ -84,6 +90,7 @@ Database::Database(const Database &d) { *this = d; }
 
 Database &Database::operator=(const Database &d) {
   conf = newstrcpy(d.conf);
+  ass = newstrcpy(d.ass);
   scor = newstrcpy(d.scor);
   set = d.set;
   map = d.map;
@@ -97,6 +104,7 @@ Database &Database::operator=(const Database &d) {
 
 Database::~Database() {
   delete conf;
+  delete ass;
   delete scor;
 }
 
@@ -151,7 +159,10 @@ const Nostd::Vector<Pawns::Item> &Database::items() const noexcept {
 }
 
 String Database::to_audio_filepath(const char *audio_filename) const noexcept {
-  return String{audio_rel_fp}.append(audio_filename);
+  return String{ass}
+      .append(audio_rel_fp)
+      .append(audio_filename)
+      .append(audio_ext);
 }
 
 char *Database::newstrcpy(const char *str) const {
@@ -164,9 +175,9 @@ char *Database::newstrcat(const char *str1, const char *str2) const {
       str2);
 }
 
-void Database::load_settings(const char *assets_filepath) {
+void Database::load_settings() {
   // game settings
-  const char *const settings_fp{newstrcat(assets_filepath, settings_rel_fp)};
+  const char *const settings_fp{newstrcat(ass, settings_rel_fp)};
   ifstream settings_ifs{settings_fp};
   delete settings_fp;
   Setting s;
@@ -179,8 +190,9 @@ void Database::load_settings(const char *assets_filepath) {
   while (get_CSV_String(conf_ifs, key)) {
     size_t value;
     conf_ifs >> value;
+    conf_ifs.ignore();
     for (auto &s : set)
-      if (!key.compare(s.label())) {
+      if (key == s.label()) {
         s.set(s.begin() + value);
         break;
       }
@@ -188,8 +200,8 @@ void Database::load_settings(const char *assets_filepath) {
   conf_ifs.close();
 }
 
-void Database::load_map_chunks(const char *assets_filepath) {
-  const char *const maps_fp{newstrcat(assets_filepath, maps_rel_fp)};
+void Database::load_map_chunks() {
+  const char *const maps_fp{newstrcat(ass, maps_rel_fp)};
   ifstream ifs{maps_fp};
   delete maps_fp;
   MapChunk m(0);
@@ -198,8 +210,8 @@ void Database::load_map_chunks(const char *assets_filepath) {
   ifs.close();
 }
 
-void Database::load_sceneries(const char *assets_filepath) {
-  const char *const sceneries_fp{newstrcat(assets_filepath, sceneries_rel_fp)};
+void Database::load_sceneries() {
+  const char *const sceneries_fp{newstrcat(ass, sceneries_rel_fp)};
   ifstream ifs{sceneries_fp};
   delete sceneries_fp;
   Scenery s;
@@ -225,8 +237,8 @@ void Database::load_results() {
   }
 }
 
-void Database::load_heroes(const char *assets_filepath) {
-  const char *const heroes_fp{newstrcat(assets_filepath, heroes_rel_fp)};
+void Database::load_heroes() {
+  const char *const heroes_fp{newstrcat(ass, heroes_rel_fp)};
   ifstream ifs{heroes_fp};
   delete heroes_fp;
   Hero h{Engine::Color::transparent, u' ', "", "", {}, {}, 1, 1};
@@ -235,8 +247,8 @@ void Database::load_heroes(const char *assets_filepath) {
   ifs.close();
 }
 
-void Database::load_mugshots(const char *assets_filepath) {
-  const char *const mugshots_fp{newstrcat(assets_filepath, mugshots_rel_fp)};
+void Database::load_mugshots() {
+  const char *const mugshots_fp{newstrcat(ass, mugshots_rel_fp)};
   ifstream ifs{mugshots_fp};
   delete mugshots_fp;
   for (auto &x : her) {
@@ -247,8 +259,8 @@ void Database::load_mugshots(const char *assets_filepath) {
   ifs.close();
 }
 
-void Database::load_enemies(const char *assets_filepath) {
-  const char *const enemies_fp{newstrcat(assets_filepath, enemies_rel_fp)};
+void Database::load_enemies() {
+  const char *const enemies_fp{newstrcat(ass, enemies_rel_fp)};
   ifstream ifs{enemies_fp};
   delete enemies_fp;
   Enemy e{Engine::Color::transparent, u' ', "", {}, 0, 0, 0, 1};
@@ -257,8 +269,8 @@ void Database::load_enemies(const char *assets_filepath) {
   ifs.close();
 }
 
-void Database::load_items(const char *assets_filepath) {
-  const char *const items_fp{newstrcat(assets_filepath, items_rel_fp)};
+void Database::load_items() {
+  const char *const items_fp{newstrcat(ass, items_rel_fp)};
   ifstream ifs{items_fp};
   delete items_fp;
   Item i{Engine::Color::transparent, u' ', "", 0, false, 0, false, 0};

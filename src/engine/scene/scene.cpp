@@ -37,7 +37,7 @@ void Engine::Scene::Scene::draw() {
 
   // draw the world around the player
   // TODO: await proper implementation
-  auto pos = world.position;
+  auto pos = world.player.second;
   // the drawing of the map is handled in this way:
   // 1. compute the *first* chunk to be drawn
   // 2. adress the initial position of the player when there is no world to the
@@ -75,16 +75,16 @@ void Engine::Scene::Scene::draw() {
   // gather the background from the player's current fragment and the foreground
   // from the Hero class
   int pair = Engine::UI::color_pair(
-      color_to_short(world.player.foreground()),
+      color_to_short(world.player.first.foreground()),
       color_to_short((*pos->get_fragment())[pos->get_y()][pos->get_x()]
                          .value()
                          ->background()));
   Engine::UI::start_color(window, pair);
-  mvwaddch(window, pos->get_y(), player_x, world.player.character());
+  mvwaddch(window, pos->get_y(), player_x, world.player.first.character());
   Engine::UI::end_color(window, pair);
 
   // lastly render the HUD
-  Data::Pawns::Hero p = world.player;
+  auto p = world.player.first;
   HUD hud(p.currentHealth(), p.maxHealth(), p.currentMana(), p.maxMana(),
           p.score());
   hud.show(window, 0, Screen::lines - 1, Screen::columns, 1);

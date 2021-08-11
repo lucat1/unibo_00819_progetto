@@ -45,7 +45,8 @@ public:
                   *const mugshots_rel_fp{"/img/heroes.txt"},
                       *const enemies_rel_fp{"/csv/enemies.csv"},
                           *const items_rel_fp{"/csv/items.csv"},
-                              *const audio_rel_fp{"/sounds/"};
+                              *const audio_rel_fp{"/sounds/"},
+                                  *const audio_ext{".wav"};
 
   Database() = delete; // cannot constructs a database from nothing
   // Each parameter is a relative filepath:
@@ -86,11 +87,11 @@ public:
 
   // Converts an audio filename to its relative filepath:
   // - adds subfolder path
-  // - does not add file extension
+  // - adds file extension
   Nostd::String to_audio_filepath(const char *audio_filename) const noexcept;
 
 private:
-  char *conf, *scor;
+  char *conf, *ass, *scor;
   Nostd::Vector<Setting> set{};
   Nostd::Vector<MapChunk> map{};
   Nostd::Vector<Scenery> sce{};
@@ -101,14 +102,14 @@ private:
 
   char *newstrcpy(const char *) const;
   char *newstrcat(const char *, const char *) const;
-  void load_settings(const char *assets_filepath);
-  void load_map_chunks(const char *assets_filepath);
-  void load_sceneries(const char *assets_filepath);
+  void load_settings();
+  void load_map_chunks();
+  void load_sceneries();
   void load_results();
-  void load_heroes(const char *assets_filepath);
-  void load_mugshots(const char *assets_filepath);
-  void load_enemies(const char *assets_filepath);
-  void load_items(const char *assets_filepath);
+  void load_heroes();
+  void load_mugshots();
+  void load_enemies();
+  void load_items();
 };
 
 // Gets a "string" value from an input stream in CSV format

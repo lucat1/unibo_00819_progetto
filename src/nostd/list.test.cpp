@@ -49,6 +49,22 @@ int main() {
     assert(l.front() == 7);
   });
 
+  it("inserts new elements", [] {
+    List<int> l;
+    l.insert(l.begin(), 3);
+    l.insert(l.begin(), 1);
+    l.insert(l.end(), 4);
+    l.insert(++l.begin(), 2);
+    auto p = l.begin();
+    assert(*p == 1);
+    p++;
+    assert(*p == 2);
+    p++;
+    assert(*p == 3);
+    p++;
+    assert(*p == 4);
+  });
+
   it("removes matching values", [] {
     List<int> l;
     l.push_back(8);

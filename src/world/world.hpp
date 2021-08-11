@@ -14,6 +14,7 @@
 #include "../data/database.hpp"
 #include "../data/pawns/hero.hpp"
 #include "../nostd/list.hpp"
+#include "../nostd/pair.hpp"
 #include "../world/chunk_assembler.hpp"
 #include "position.hpp"
 
@@ -24,8 +25,7 @@ public:
   using AssembledChunk = Nostd::Matrix<Engine::Tile *>;
 
   Nostd::List<AssembledChunk> environment;
-  Data::Pawns::Hero player;
-  Position *position;
+  Nostd::Pair<Data::Pawns::Hero, Position *> player;
 
   World(const Data::Database &d) noexcept;
 
