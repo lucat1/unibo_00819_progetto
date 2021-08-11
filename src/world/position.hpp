@@ -38,13 +38,13 @@ public:
   Nostd::List<Nostd::Matrix<Engine::BlockTile *>>::iterator
   get_fragment() const noexcept;
 
-  void move_left();
+  bool move_left();
 
-  void move_right();
+  bool move_right();
 
-  void move_down();
+  bool move_down();
 
-  void move_up();
+  bool move_up();
 };
 
 class InvalidPositionException : public std::exception {

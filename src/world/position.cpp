@@ -12,52 +12,60 @@
 #include "position.hpp"
 #include "../data/map_chunk.hpp"
 #include "world.hpp"
-#include <functional>
 
 using namespace Nostd;
 using namespace Engine;
 
-using WPosition = World::Position;
-using WWorld = World::World;
+using World::Position;
 
-WPosition::Position(const List<Matrix<BlockTile *>> *environment, int x,
-                    int y) {
+Position::Position(const List<Matrix<BlockTile *>> *environment, int x, int y) {
   this->x = x;
   this->y = y;
   this->environment = environment;
   this->fragment = environment->begin();
 }
 
-void WPosition::move_left() {
+List<Matrix<BlockTile *>>::iterator Position::get_fragment() const noexcept {
+  return this->fragment;
+}
+
+bool Position::move_left() {
   if (x != 0)
     x--;
   else if (*fragment != *environment->begin()) {
     fragment = std::prev(fragment);
     x = (*fragment).extent(1) - 1;
-  }
-  // else we are in the first column of the first chunk so we do nothing
+  } else
+    return false; // first column of the first chunk (and so we do nothing)
+  return true;
 }
 
-void WPosition::move_right() {
+bool Position::move_right() {
   if ((size_t)x != (*fragment).extent(1) - 1)
     x++;
   else {
-    if (*fragment == *environment->end()) {
-      // TODO invoke World::World::add_chunks()
-    }
+    if (*fragment == *environment->end())
+      return false; // last column of the last chunk (and so we do nothing)
     fragment = std::next(fragment);
     x = 0;
   }
+  return true;
 }
 
-List<Matrix<BlockTile *>>::iterator WPosition::get_fragment() const noexcept {
-  return this->fragment;
-}
-void WPosition::move_up() { y = std::max(y - 1, 0); }
-
-void WPosition::move_down() {
-  y = std::min(y + 1, (int)Data::MapChunk::height - 1);
+bool Position::move_up() {
+  if (!y)
+    return false; // first row (and so we do nothing)
+  --y;
+  return true;
 }
 
-int WPosition::get_x() const noexcept { return this->x; }
-int WPosition::get_y() const noexcept { return this->y; }
+bool Position::move_down() {
+  if (y == (int)Data::MapChunk::height - 1) // last row (and so we do nothing)
+    return false;
+  ++y;
+  return true;
+}
+
+int Position::get_x() const noexcept { return this->x; }
+
+int Position::get_y() const noexcept { return this->y; }
