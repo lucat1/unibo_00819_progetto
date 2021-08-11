@@ -121,9 +121,12 @@ Engine::Audio::State Engine::Audio::status() {
 void Engine::Audio::stop() {
   if (status() == State::playing) {
     *playing = false;
-    munmap(playing, sizeof *playing);
-    playing = nullptr;
     wait(nullptr);
+
+    // cleanup
+    if(playing != nullptr)
+      munmap(playing, sizeof *playing);
+    playing = nullptr;
     pid = -1;
   }
 }
