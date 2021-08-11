@@ -40,15 +40,15 @@ public:
 
   virtual ~Hero() = default;
 
-  void rename(const Nostd::String &);
+  void rename(const Nostd::String &); // you can rename the Hero you play as
   const Nostd::String &description() const noexcept;
   Mugshot &mugshot() noexcept;
   const Mugshot &mugshot() const noexcept;
   Skill superSkill() const noexcept;
-  void interact(Interactable &);
+  void interact(Interactable &); // applies the effect of an Interactable
   int currentHealth() const noexcept;
   int maxHealth() const noexcept;
-  bool isDead() const noexcept;
+  bool isDead() const noexcept; // checks if the game is over
   int currentMana() const noexcept;
   int maxMana() const noexcept;
   // if mana is full, sets it to zero and returns true
@@ -56,7 +56,7 @@ public:
   int score() const noexcept;
 
   friend std::basic_ostream<char> &operator>>(std::basic_ostream<char> &,
-                                                 const Hero &);
+                                              const Hero &);
 
 private:
   Nostd::String dsc{};

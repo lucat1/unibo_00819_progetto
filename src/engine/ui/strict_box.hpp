@@ -6,8 +6,9 @@
   Luca Tagliavini #971133
   07/01/2021
 
-  strict_box.hpp: Declares the Engine::UI::StrictBox class which acts as a standard
-  box but has an additional layer of size restriction in the form of absolute maximum dimentions.
+  strict_box.hpp: Declares the Engine::UI::StrictBox class which acts as a
+  standard box but has an additional layer of size restriction in the form of
+  absolute maximum dimentions.
 */
 
 #ifndef ENGINE_UI_STRICT_BOX_HPP

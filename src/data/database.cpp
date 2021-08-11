@@ -150,6 +150,10 @@ const Nostd::Vector<Pawns::Item> &Database::items() const noexcept {
   return ite;
 }
 
+String Database::to_audio_filepath(const char *audio_filename) const noexcept {
+  return String{audio_rel_fp}.append(audio_filename);
+}
+
 char *Database::newstrcpy(const char *str) const {
   return std::strcpy(new char[std::strlen(str) + 1], str);
 }
@@ -188,7 +192,7 @@ void Database::load_map_chunks(const char *assets_filepath) {
   const char *const maps_fp{newstrcat(assets_filepath, maps_rel_fp)};
   ifstream ifs{maps_fp};
   delete maps_fp;
-  MapChunk m(0, 0, 0);
+  MapChunk m(0);
   while (ifs >> m)
     map.push_back(m);
   ifs.close();

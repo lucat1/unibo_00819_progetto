@@ -112,11 +112,11 @@ public:
   int last() const noexcept;       // last possible value
 
   // element access (to the possible values)
-  int operator[](size_type) const noexcept;
-  int at(size_type) const;
+  int operator[](size_type) const noexcept; // no checked bounds
+  int at(size_type) const;                  // checked bounds
 
   friend std::basic_ostream<char> &operator<<(std::basic_ostream<char> &,
-                                                 const Setting &);
+                                              const Setting &);
 
 private:
   Nostd::String lbl;
@@ -126,10 +126,9 @@ private:
 
 // The two following methods ignore the setting's current value and work with
 // non-standard CSV format
-std::basic_istream<char> &operator>>(std::basic_istream<char> &,
-                                        Setting &);
+std::basic_istream<char> &operator>>(std::basic_istream<char> &, Setting &);
 std::basic_ostream<char> &operator<<(std::basic_ostream<char> &,
-                                        const Setting &);
+                                     const Setting &);
 
 } // namespace Data
 

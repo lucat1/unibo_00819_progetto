@@ -21,16 +21,23 @@
 using Engine::Color;
 
 namespace Data {
+
+/*
+  The Palette features both individual colors and pairs of colors.
+*/
 namespace Palette {
 
 using Subpalette = Nostd::Pair<Color, Color>;
 
 constexpr Color primary = Color::red, secondary = Color::aqua,
-                unfocused = Color::grey23, health = Color::green, mana = Color::deep_sky_blue3;
+                unfocused = Color::grey23, health = Color::green,
+                mana = Color::deep_sky_blue3;
+
 constexpr Subpalette logo(primary, Color::transparent),
     button(secondary, unfocused), slider(secondary, Color::transparent);
 
 } // namespace Palette
+
 } // namespace Data
 
 #endif

@@ -41,7 +41,7 @@ public:
   bool isExpired() const noexcept;
 
   friend std::basic_ostream<char> &operator>>(std::basic_ostream<char> &,
-                                                 const Projectile &);
+                                              const Projectile &);
 
 protected:
   int uncheckedHealthEffect(int currentHealth, int maxHealth) override final;
@@ -52,8 +52,7 @@ private:
   int hD, mD, sD, rng;
 };
 
-std::basic_istream<char> &operator>>(std::basic_istream<char> &,
-                                        Projectile &);
+std::basic_istream<char> &operator>>(std::basic_istream<char> &, Projectile &);
 
 } // namespace Pawns
 

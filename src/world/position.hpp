@@ -15,8 +15,6 @@
 #include "../engine/screen.hpp"
 #include "../nostd/list.hpp"
 #include "../nostd/matrix.hpp"
-#include <exception>
-#include <functional>
 #include <iterator>
 
 namespace World {

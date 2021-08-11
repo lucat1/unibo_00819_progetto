@@ -33,6 +33,7 @@ public:
 
   ~Mugshot() = default;
 
+  // A Mugshot has only two extents (i.e. it is a bidimensional matrix).
   constexpr static size_t width{24}, height{12};
 };
 

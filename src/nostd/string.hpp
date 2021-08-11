@@ -46,12 +46,12 @@ public:
   String(const String &str, const allocator_type &alloc = allocator_type());
   // construct a String from another String from start to start+len
   String(const String &str, size_t start, size_t len = npos,
-          const allocator_type &alloc = allocator_type());
+         const allocator_type &alloc = allocator_type());
   // constructs a String from a c-style string
   String(const char *str, const allocator_type &alloc = allocator_type());
   // constructs a String from a c-style string limiting its length
   String(const char *str, size_t len,
-          const allocator_type &alloc = allocator_type());
+         const allocator_type &alloc = allocator_type());
   // construct a String from another _temporary_ String copying its content
   String(String &&str, const allocator_type &alloc = allocator_type());
 
@@ -81,7 +81,7 @@ public:
   void push_back(const char c);
   // inserts a String in between the current string instance, copying it
   String &insert(size_t start, const String &str, size_t substart = 0,
-                  size_t subend = npos);
+                 size_t subend = npos);
   // inserts the chars of a char* in between the current string
   String &insert(size_t start, const char *str, size_t len = npos);
   // inserts the a char at the given position in the string
@@ -95,8 +95,7 @@ public:
   int compare(const char *str) const;
   // compares this instance with a given string, starting from a start index and
   // only computing n checks
-  int compare(size_t start, size_t len, const char *str,
-              size_t n = npos) const;
+  int compare(size_t start, size_t len, const char *str, size_t n = npos) const;
   // compare the two Strings
   bool operator==(const String &str) const;
   bool operator!=(const String &str) const;
@@ -134,12 +133,9 @@ public:
 
 bool iswspace(char c);
 
-std::basic_ostream<char> &operator<<(std::ostream &os,
-                                        const String &str);
-std::basic_istream<char> &operator>>(std::istream &os,
-                                        String &str);
-std::basic_istream<char> &getline(std::istream &os,
-                                     String &str);
+std::basic_ostream<char> &operator<<(std::ostream &os, const String &str);
+std::basic_istream<char> &operator>>(std::istream &os, String &str);
+std::basic_istream<char> &getline(std::istream &os, String &str);
 
 } // namespace Nostd
 

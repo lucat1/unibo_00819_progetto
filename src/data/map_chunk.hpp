@@ -28,10 +28,11 @@ enum class MapUnit : char {
   nothing = '.',
   ground = '#',
   platform = '=',
-  enemy = '!',
-  item = '$'
+  enemy = '!', // every enemy is drawn over MapUnit.nothing
+  item = '$'   // every item is drawn over MapUnit.nothing
 };
 
+// A MapUnit can be read from an input stream using its underlying character.
 std::istream &operator>>(std::istream &, MapUnit &);
 
 /*
@@ -43,10 +44,11 @@ class MapChunk : public Nostd::Matrix<MapUnit> {
 public:
   // width is mandatory
   MapChunk() = delete;
-  // width is the number of columns of the map, value is the initial value of
-  // every MapUnit in it
-  MapChunk(size_t width, size_t starting_row, size_t ending_row,
-           MapUnit value = MapUnit::nothing);
+  // - width is the number of columns of the map
+  // - the starting row is the one used to let the player enter from the left
+  // - the ending row is the one used to let the player exit from the right
+  // - value is the initial value of every MapUnit in it
+  MapChunk(size_t width, MapUnit value = MapUnit::nothing);
   MapChunk(MapChunk &&) = default;
   MapChunk &operator=(MapChunk &&) = default;
   MapChunk(const MapChunk &) = default;
@@ -55,16 +57,8 @@ public:
   ~MapChunk() = default;
 
   // capacity
-  size_t width() const noexcept;
-  constexpr static size_t height{24};
-
-  // 0-based index of the player's starting row (usually right above floor)
-  size_t starting_row() const noexcept;
-  // 0-based index of the player's ending row (usually right above floor)
-  size_t ending_row() const noexcept;
-
-private:
-  size_t strt_row, end_row;
+  size_t width() const noexcept;      // number of columns
+  constexpr static size_t height{24}; // number of rows
 };
 
 // A stream can represent a MapChunk using:

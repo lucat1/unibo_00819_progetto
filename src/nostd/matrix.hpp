@@ -77,7 +77,7 @@ public:
 
     bool operator==(const ConstIterator &) const noexcept;
     bool operator!=(const ConstIterator &) const noexcept;
-    // the following operators throw a std::domain_error when comparing
+    // The following operators throw a std::domain_error when comparing
     // submatrixes represented by different splices (for example, the ones
     // which do not have the same order). The same goes when calculating the
     // difference between two iterators.
@@ -99,6 +99,7 @@ public:
     ConstIterator operator[](size_t) const noexcept;
     ConstIterator at(size_t) const;
 
+    // Returns a reference to the pointed value: use instead of *
     const_reference value() const;
 
   protected: // very bad
@@ -124,11 +125,20 @@ public:
     Iterator &operator+=(difference_type);
     Iterator &operator-=(difference_type);
 
+    // As a submatrix cannot be dereferenced to a single value, *p must return
+    // p itself. This is still useful in for-each loops, but please remember:
+    // if you work with a copy of the iterator, you are still working on the
+    // same matrix.
     Iterator &operator*();
     Iterator *operator->();
+    // p[n] is *not* the same as *(p + n): it returns an iterator pointing to
+    // a submatrix of the one originally pointed. An at() method is also
+    // available: it throws std::out_of_range on invalid submatrix indexes and
+    // std::domain_error when used on an iterator pointing to a single cell.
     Iterator operator[](size_t) const noexcept;
     Iterator at(size_t) const;
 
+    // Returns a reference to the pointed value: use instead of *
     reference value() const;
 
   private:
@@ -170,16 +180,16 @@ public:
   const_reverse_iterator crend() const noexcept;
 
   // capacity
-  size_t order() const noexcept; // number of dimensions
-  size_t extent(size_t) const;   // given the index of a dimensions
-  size_t size() const noexcept;  // the total number of elements
-  bool empty() const noexcept;
-  allocator_type get_allocator() const noexcept;
+  size_t order() const noexcept;               // number of dimensions
+  size_t extent(size_t dimension_index) const; // getter for any extent
+  size_t size() const noexcept;                // the total number of elements
+  bool empty() const noexcept; // checks whether the matrix is empty
+  allocator_type get_allocator() const noexcept; // returns the allocator used
 
   // element access
   iterator operator[](size_t); // access to an indexed row
   const_iterator operator[](size_t) const;
-  iterator at(size_type);
+  iterator at(size_type); // like [], but with checked bounds
   const_iterator at(size_type) const;
   pointer data() noexcept; // access to the C-style array
   const_pointer data() const noexcept;

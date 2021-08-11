@@ -19,7 +19,7 @@ using Nostd::it;
 
 int main() {
   it("loads a database from the filesystem", [] {
-    Database d("tests/alma.conf.csv", "tests/assets/", "tests/scoreboard.csv");
+    Database d("tests/overengineered.conf.csv", "tests/assets/", "tests/scoreboard.csv");
     // Settings
     const auto &s = d.settings();
     assert(s.size() == 2);
@@ -28,9 +28,7 @@ int main() {
     // Map chunks
     const auto &m = d.map_chunks();
     assert(m.size() == 11);
-    assert(m.at(0).starting_row() == 19);
     assert(m.at(0).at(19).at(30).value() == Data::MapUnit::nothing);
-    assert(m.at(1).ending_row() == 16);
     assert(m.at(1).at(19).at(30).value() == Data::MapUnit::ground);
     // Sceneries
     const auto &sc = d.sceneries();
@@ -64,11 +62,11 @@ int main() {
     assert(i.at(1).name() == "mushroom");
   });
   it("saves user settings on filesystem", [] {
-    Database d("tests/alma.conf.csv", "tests/assets/", "tests/scoreboard.csv");
+    Database d("tests/overengineered.conf.csv", "tests/assets/", "tests/scoreboard.csv");
     auto &s = d.settings().at(0);
     s.set(s.begin());
     d.save_settings();
-    d = Database("tests/alma.conf.csv", "tests/assets/",
+    d = Database("tests/overengineered.conf.csv", "tests/assets/",
                  "tests/scoreboard.csv");
     assert(*d.settings().at(0).current_value() == 0);
     auto &s2 = d.settings().at(0);
@@ -76,12 +74,12 @@ int main() {
     d.save_settings();
   });
   it("saves user results on filesystem", [] {
-    Database d("tests/alma.conf.csv", "tests/assets/", "tests/scoreboard.csv");
+    Database d("tests/overengineered.conf.csv", "tests/assets/", "tests/scoreboard.csv");
     using Data::Pawns::Hero;
     assert(!d.results().empty());
     d.results().push_back(d.results().front());
     d.save_results();
-    d = Database("tests/alma.conf.csv", "tests/assets/",
+    d = Database("tests/overengineered.conf.csv", "tests/assets/",
                  "tests/scoreboard.csv");
     assert(d.results().front().score() == d.results().back().score());
     d.results().pop_back();

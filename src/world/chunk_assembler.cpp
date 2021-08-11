@@ -33,14 +33,14 @@ void ChunkAssembler::next_chunk() noexcept {
   auto rand = random_gen.get_random(this->chunks->size());
   MapChunk *selected = new MapChunk(this->chunks->at(rand));
 
-  // Check for up or down shift
-  const size_t oldHeight = this->current_chunk->ending_row();
+  // Check for up or down shift DEPRECATED
+  /*const size_t oldHeight = this->current_chunk->ending_row();
   const size_t lastHeight = selected->starting_row();
   int diff = oldHeight - lastHeight;
   if (abs(diff) > MAX_CHUNKS_HEIGHT_DIFFERECE) {
     shift_chunk(selected, diff < 0 ? diff + MAX_CHUNKS_HEIGHT_DIFFERECE
                                    : diff - MAX_CHUNKS_HEIGHT_DIFFERECE);
-  }
+  }*/
   this->current_chunk = selected;
 }
 

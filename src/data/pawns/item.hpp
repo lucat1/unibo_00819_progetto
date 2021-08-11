@@ -41,7 +41,7 @@ public:
   ~Item() = default;
 
   friend std::basic_ostream<char> &operator>>(std::basic_ostream<char> &,
-                                                 const Item &);
+                                              const Item &);
 
 protected:
   int uncheckedHealthEffect(int currentHealth, int maxHealth) override final;

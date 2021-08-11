@@ -21,7 +21,7 @@ namespace UI {
 
 // Displays the mughshot for a champion, which after all is just a Nostd::Matrix
 // of n \times n size, so the login will be simple and similar to the general
-// game drawing 
+// game drawing
 class Mugshot : public Box {
 private:
   Data::Mugshot mugshot;

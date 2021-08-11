@@ -19,20 +19,45 @@
 
 namespace Nostd {
 
+/*
+  Checks whether type T has == operator.
+*/
 template <class T> constexpr bool Has_equal();
 
+/*
+  Checks whether type T has != operator.
+*/
 template <class T> constexpr bool Has_not_equal();
 
+/*
+  Checks whether type T has >> operator.
+*/
 template <class T> constexpr bool Has_right_shift();
 
+/*
+  Checks whether type T has << operator.
+*/
 template <class T> constexpr bool Has_left_shift();
 
+/*
+  Checks whether type T is boolean.
+*/
 template <class T> constexpr bool Boolean();
 
+/*
+  Checks whether type T has both == and != operators, and whether they both
+  return a boolean.
+*/
 template <class T> constexpr bool Equality_comparable();
 
+/*
+  Checks whether type T has a move constructor and a move assignment operator.
+*/
 template <class T> constexpr bool Movable();
 
+/*
+  Checks whether type T has a copy constructor and a copy assignment operator.
+*/
 template <class T> constexpr bool Copyable();
 
 /*

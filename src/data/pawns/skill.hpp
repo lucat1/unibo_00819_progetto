@@ -39,6 +39,7 @@ public:
 
   ~Skill() = default;
 
+  // Each Projectile's key is its spawning coordinates relative to the caster.
   const Nostd::UnorderedMap<Nostd::Pair<int, int>, Projectile> &
   projectiles() const noexcept;
 
