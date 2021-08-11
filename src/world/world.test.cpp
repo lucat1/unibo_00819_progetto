@@ -27,7 +27,7 @@ int main() {
                "tests/scoreboard.csv");
     assert(d.map_chunks().size() == 11);
     WChunkAssembler assembler(d.map_chunks(), d.sceneries());
-    Matrix<BlockTile *> m = assembler.get();
+    Matrix<Tile *> m = assembler.get();
     // TODO
   });
   it("does something better no ask", [] {
