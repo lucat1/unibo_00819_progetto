@@ -1,3 +1,13 @@
+/*
+  University of Bologna
+  First cicle degree in Computer Science
+  00819 - Programmazione
+
+  Andreea Scrob #989372
+  0?/??/2021
+
+  list.hpp: .
+*/
 #ifndef NOSTD_LIST_HPP
 #define NOSTD_LIST_HPP
 
@@ -277,6 +287,22 @@ public:
     l.head = nullptr;
     l.tail = nullptr;
   }
+  // TODO:commento
+  iterator insert(const_iterator position, V ele) {
+    if (position == end())
+      push_back(ele);
+    else {
+      sz++;
+      Item *x = new Item(this, position.item->prev, position.item, ele);
+      if (position == begin())
+        head = x;
+      else
+        position.item->prev->next = x;
+      position.item->prev = x;
+    }
+    return --position;
+  }
+
   // Removes from the container all the elements that compare equal to ele.
   // This calls the destructor of these objects and reduces the container size
   // by the number of elements removed. inefficient implementation

@@ -198,3 +198,16 @@ void Game::Game::apply_settings() {
       fps = *x.current_value();
   }
 }
+
+void Game::Game::update_scoreboard() {
+  auto &scoreboard = db.results();
+  if (scoreboard.size() == 0)
+    scoreboard.push_front(world.player.first);
+  else {
+    Nostd::List<Data::Pawns::Result>::iterator p;
+    for (p = scoreboard.begin();
+         p != scoreboard.end() && *p >= world.player.first.score(); p++)
+      ;
+    scoreboard.insert(p, world.player.first);
+  }
+}

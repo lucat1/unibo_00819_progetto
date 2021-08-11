@@ -30,6 +30,7 @@ private:
   int fps = 60;
   bool sound = true;
   void apply_settings();
+  void update_scoreboard();
 
 public:
   int run();
