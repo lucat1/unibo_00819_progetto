@@ -93,8 +93,8 @@ void Engine::Scene::Scene::draw() {
 }
 
 // TODO: y offsetting, when needed
-void Engine::Scene::Scene::draw_chunk(Nostd::Matrix<BlockTile *> chunk, int x,
-                                      int y, int offset_x, int offset_y) {
+void Engine::Scene::Scene::draw_chunk(Nostd::Matrix<Tile *> chunk, int x, int y,
+                                      int offset_x, int offset_y) {
   // draw until we're out of the screen
   size_t mx = offset_x, my = offset_y;
   int x_cpy = x;

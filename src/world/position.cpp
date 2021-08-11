@@ -18,14 +18,15 @@ using namespace Engine;
 
 using World::Position;
 
-Position::Position(const List<Matrix<BlockTile *>> *environment, int x, int y) {
+Position::Position(const List<Matrix<Tile *>> *environment,
+                   List<Matrix<Tile *>>::iterator fragment, int x, int y) {
   this->x = x;
   this->y = y;
   this->environment = environment;
-  this->fragment = environment->begin();
+  this->fragment = fragment;
 }
 
-List<Matrix<BlockTile *>>::iterator Position::get_fragment() const noexcept {
+List<Matrix<Tile *>>::iterator Position::get_fragment() const noexcept {
   return this->fragment;
 }
 

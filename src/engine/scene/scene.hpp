@@ -30,8 +30,8 @@ private:
   bool over = false;
 
   void draw();
-  void draw_chunk(Nostd::Matrix<BlockTile *> chunk, int x, int y,
-                  int offset_x = 0, int offset_y = 0);
+  void draw_chunk(Nostd::Matrix<Tile *> chunk, int x, int y, int offset_x = 0,
+                  int offset_y = 0);
 
 public:
   static const szu width = Screen::columns;

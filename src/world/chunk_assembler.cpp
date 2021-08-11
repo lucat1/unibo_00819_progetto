@@ -52,12 +52,12 @@ void ChunkAssembler::next_scenery() noexcept {
 // Combine a Data::MapChunk with a Data::Scenery to make a
 // Nostd::Matrix<World::MapPixel>.
 // Sky color is chosen using Fibonacci's sequence.
-Matrix<BlockTile *>
+Matrix<Tile *>
 ChunkAssembler::assemble_scenery(const MapChunk *chunk,
                                  const Scenery *scenery) const noexcept {
   BlockTile *nullPixel =
       new BlockTile('?', Color::transparent, Color::transparent);
-  Matrix<BlockTile *> res({chunk->height, chunk->width()}, nullPixel);
+  Matrix<Tile *> res({chunk->height, chunk->width()}, nullPixel);
   size_t sky_index = scenery->sky.size() - 1;
   size_t sky_counter = 2 * fib(sky_index);
   for (size_t i{0}; i < chunk->height; i++) {
@@ -148,7 +148,7 @@ ChunkAssembler::is_ground_or_platform(const MapUnit &u) const noexcept {
   return u == MapUnit::ground || u == MapUnit::platform;
 }
 
-Matrix<BlockTile *> ChunkAssembler::get() noexcept {
+Matrix<Tile *> ChunkAssembler::get() noexcept {
   const MapChunk *const c = this->current_chunk;
   this->chunks_assembled++;
   if (chunks_assembled % 10 == 0)

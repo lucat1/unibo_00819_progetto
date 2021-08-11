@@ -33,7 +33,7 @@ private:
   const Data::MapChunk *current_chunk;
   size_t chunks_assembled;
 
-  Nostd::Matrix<Engine::BlockTile *>
+  Nostd::Matrix<Engine::Tile *>
   assemble_scenery(const Data::MapChunk *,
                    const Data::Scenery *) const noexcept;
 
@@ -52,7 +52,7 @@ public:
   ChunkAssembler(const Nostd::Vector<Data::MapChunk> &,
                  const Nostd::Vector<Data::Scenery> &);
 
-  Nostd::Matrix<Engine::BlockTile *> get() noexcept;
+  Nostd::Matrix<Engine::Tile *> get() noexcept;
 
   // Returns the next Data::MapChunk to draw
   void next_chunk() noexcept;

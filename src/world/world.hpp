@@ -21,7 +21,7 @@ namespace World {
 class World {
 public:
   static const size_t DEFAULT_CHUNKS_REFILL = 50;
-  using AssembledChunk = Nostd::Matrix<Engine::BlockTile *>;
+  using AssembledChunk = Nostd::Matrix<Engine::Tile *>;
 
   Nostd::List<AssembledChunk> environment;
   Data::Pawns::Hero player;
