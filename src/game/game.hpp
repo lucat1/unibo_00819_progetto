@@ -4,7 +4,7 @@
   00819 - Programmazione
 
   Andreea Scrob #989372
-  07/08/2021
+  08/07/2021
 
   game.hpp: declaration of the Game::Game class.
 */
@@ -27,6 +27,9 @@ private:
   bool change_content();
   void handle_keypress();
   int play_soundtrack(const char[]);
+  int fps = 60;
+  bool sound = true;
+  void apply_settings();
 
 public:
   int run();
