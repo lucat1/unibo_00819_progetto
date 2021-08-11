@@ -287,6 +287,7 @@ public:
     l.head = nullptr;
     l.tail = nullptr;
   }
+
   // TODO:commento
   iterator insert(const_iterator position, V ele) {
     if (position == end())
@@ -316,11 +317,15 @@ public:
   iterator begin() {
     iterator p;
     p.item = head;
+    if (sz == 0)
+      p.end = true;
     return p;
   }
   const_iterator begin() const {
     iterator p;
     p.item = head;
+    if (sz == 0)
+      p.end = true;
     return p;
   }
   iterator end() {
