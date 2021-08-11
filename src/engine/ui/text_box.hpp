@@ -1,36 +1,54 @@
-#ifndef TEXT_BOX_HPP
-#define TEXT_BOX_HPP
+/*
+  University of bologna
+  First cicle degree in Computer Science
+  00819 - Programmazione
 
-#include "../../nostd/wstring.hpp"
+  Luca Tagliavini #971133
+  03/15/2021
+
+  text_box.hpp: Defines the Engine::UI::TextBox class used to display text in
+  the UI with the constraint of fitting the give max_width.
+*/
+
+#ifndef ENGINE_UI_TEXT_BOX_HPP
+#define ENGINE_UI_TEXT_BOX_HPP
+
+#include "../../nostd/string.hpp"
 #include "box.hpp"
-#include <ncurses.h>
 
 namespace Engine {
 namespace UI {
 
-// TextBox straigh up ignores the height value as it is defined by its width and
-// content length.
-// NOTE(tip): you can wrap a TextBox in a Box with an aribtrary height if you
-// for some reason wanna fill some amount of height
+// Displays a text content and wraps a long sentence in multiple lines properly
+//
+// NOTE: deliberately ignores any padding given. To achieve that wrap this
+// element inside a Box
 class TextBox : public Box {
 public:
-  Nostd::WString content;
-  Nostd::Vector<Nostd::WString> lines;
+  using strings = Nostd::Vector<Nostd::String>;
 
-  static constexpr const wchar_t *append_default_value = L"";
-  TextBox(uint16_t max_width, uint16_t max_height,
-          map<enum Box::Props, uint16_t> props = {},
-          Nostd::WString &&content = L"");
-  TextBox(uint16_t max_width, uint16_t max_height,
-          map<enum Box::Props, uint16_t> props = {},
-          const wchar_t *content = L"");
+protected:
+  Nostd::String content;
+  strings lines;
+  szu old_max_width = -1;
+  // updates the lines by re-splitting the content if necessary( namely width
+  // has changed)
+  void update_lines(szu max_width);
 
-  void split_content();
-  Pair<uint16_t, uint16_t> size();
-  void show(WINDOW *window, uint16_t x, uint16_t y);
+public:
+  // splits the content into various lines to fit into `max_width` and adds
+  // '-' where necessary, when splitting a word
+  static strings split_content(const Nostd::String content, szu max_width);
+
+  static constexpr const char *append_default_value = "";
+  TextBox(const Nostd::String &content = "");
+  TextBox(const char *content = "");
+
+  void show(WINDOW *window, szu x, szu y, szu max_width, szu max_height);
+  dim size(szu max_width, szu max_height);
 };
 
 } // namespace UI
 } // namespace Engine
 
-#endif // TEXT_BOX_HPP
+#endif // ENGINE_UI_TEXT_BOX_HPP

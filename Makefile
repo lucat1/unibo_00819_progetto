@@ -1,27 +1,44 @@
 SRC_DIR  = src
 INT_DIR  = build
 TEST_DIR = build/test
-TARGET  = alma
+TARGET   = overengineered
 
 CXX = g++
 ## -MMD creates dependency list, but ignores system includes ## -MF specifies where to create the dependency file name
 ## -MP creates phony targets for headers (deals with deleted headers after
 ##  obj file has been compiled)
 ## -MT specifies the dependency target (path qualified obj file name)
-DEP_FLAGS = -std=c++11 -MT $@ -MMD -MP -MF $(@:.o=.d)
-CXXFLAGS = $(DEP_FLAGS) -Wall -Werror
-LDFLAGS = -lstdc++ -lcurses -lncurses
-# conditional linker flags based on OS (Linux, Darwin = MacOS)
+CXXFLAGS = -std=c++11 -MT $@ -MMD -MP -MF $(@:.o=.d) -Wall -Werror
+LDFLAGS = -lstdc++
+# conditional linker flags based on OS (Linux (tested on Ubuntu, Elementary and void), Darwin = MacOS)
 UNAME := $(shell uname)
 ifeq ($(UNAME), Linux)
-LDFLAGS +=  -lncursesw
+	HAS_CURSESW6 := $(shell command -v ncursesw6-config 2> /dev/null)
+	HAS_CURSESW5 := $(shell command -v ncursesw5-config 2> /dev/null)
+
+	# use ncursesw6-config utility to find libraries when available
+	# therwhise go for a best guess
+	ifdef HAS_CURSESW6
+	CXXFLAGS += $(shell ncursesw6-config --cflags)
+	LDFLAGS += $(shell ncursesw6-config --libs)
+	else
+		ifdef HAS_CURSESW5
+		CXXFLAGS += $(shell ncursesw5-config --cflags)
+		LDFLAGS += $(shell ncursesw5-config --libs)
+		else
+		LDFLAGS += -lncurses -lncursesw
+		endif
+	endif
 endif
+
 ifeq ($(UNAME), Darwin)
-DEP_FLAGS += -D_XOPEN_SOURCE_EXTENDED
+LDFLAGS += -lncurses
+CXXFLAGS += -D_XOPEN_SOURCE_EXTENDED
 endif
 
 # Things to build
 ALL_FILES := $(wildcard $(SRC_DIR)/**/**/*.cpp) $(wildcard $(SRC_DIR)/**/*.cpp) $(wildcard $(SRC_DIR)/*.cpp)
+ALL_HEADER_FILES := $(wildcard $(SRC_DIR)/**/**/*.hpp) $(wildcard $(SRC_DIR)/**/*.hpp) $(wildcard $(SRC_DIR)/*.hpp)
 CPP_FILES := $(filter-out %.test.cpp, $(ALL_FILES))
 TEST_FILES := $(filter %.test.cpp, $(ALL_FILES))
 
@@ -35,10 +52,32 @@ TEST_TARGETS := $(TEST_OBJ_FILES:$(INT_DIR)/%.o=$(TEST_DIR)/%)
 
 SUB_FOLDERS := $(filter-out src, $(patsubst src/%,%, $(shell find src -type d)))
 OBJ_FOLDERS := $(addprefix build/, $(SUB_FOLDERS)) $(addprefix build/test/, $(SUB_FOLDERS))
-.PHONY: clean format run test $(TEST_TARGETS)
+.PHONY: test debug info clean format run $(TEST_TARGETS)
 
-all: $(TARGET)
-test: $(TEST_TARGETS)
+all: info $(TARGET)
+test: info $(TEST_TARGETS)
+debug: CXXFLAGS += -ggdb
+debug: clean all test
+static: LDFLAGS += -static -static-libstdc++ -static-libgcc
+static: info all
+
+info:
+	@echo
+	@echo "CXX = $(CXX)"
+	@echo "CXXFLAGS = $(CXXFLAGS)"
+	@echo "LDFLAGS = $(LDFLAGS)"
+	@echo
+
+clean:
+	@echo "RMRF\tbuild $(TARGET)"
+	@rm -rf build $(TARGET)
+
+format:
+	clang-format -i $(ALL_FILES) $(ALL_HEADER_FILES)
+
+run: all
+	@echo "RUN\t$(TARGET)"
+	@./$(TARGET)
 
 $(TEST_TARGETS): $(TEST_DIR)/%: $(INT_DIR)/%.o | $(ALL_OBJ_FILES)
 	@echo "LD\t$<"
@@ -62,12 +101,3 @@ $(OBJ_FOLDERS):
 	@mkdir -p $@
 
 -include $(DEP_FILES)
-
-clean:
-	rm -rf build $(TARGET)
-
-format:
-	clang-format -i $(ALL_FILES)
-
-run: all
-	@./$(TARGET)

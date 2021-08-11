@@ -1,0 +1,54 @@
+name: release binaries and upload artifacts
+on:
+  push:
+    branches: [ develop ]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [ develop ]
+
+jobs:
+  release:
+    name: compile release assets
+    strategy:
+      matrix:
+        platform: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.platform }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: install ncurses on linux
+        if: startsWith(matrix.platform, 'ubuntu-latest')
+        run: sudo apt-get install libncurses5-dev libncursesw5-dev -y
+
+      - name: 'make clean test'
+        run: make clean test
+
+      - name: 'make clean all'
+        run: make clean all
+
+      - name: upload artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: overengineered-${{ matrix.platform }}
+          path: |
+            overengineered
+            assets/**/*
+            overengineered.conf.csv
+            scoreboard.csv
+
+      - name: 'make clean static'
+        if: startsWith(matrix.platform, 'ubuntu-latest')
+        run: make clean static
+
+      - name: upload artifact
+        uses: actions/upload-artifact@v2
+        if: startsWith(matrix.platform, 'ubuntu-latest')
+        with:
+          name: overengineered-${{ matrix.platform }}-static
+          path: |
+            overengineered
+            assets/**/*
+            overengineered.conf.csv
+            scoreboard.csv

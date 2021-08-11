@@ -45,15 +45,25 @@ public:
   Allocator() noexcept = default;
   Allocator(const Allocator &) noexcept = default;
   template <class U> Allocator(const Allocator<U> &) noexcept;
-  ~Allocator() noexcept;
+  ~Allocator() = default;
 
+  // Returns the address of the given object
   pointer address(reference) const noexcept;
   const_pointer address(const_reference) const noexcept;
-  // the hint is ignored
-  pointer allocate(size_type, Allocator<void>::const_pointer hint = 0);
-  void deallocate(pointer, size_type); // the 2nd argument is ignored
+  // Allocates a new area of storage whose size is n times the size of
+  // value_type. No object construction is performed and the hint is ignored.
+  pointer allocate(size_type n, Allocator<void>::const_pointer hint = 0);
+  // Deallocates a previously allocated area of storage. The 2nd argument
+  // is ignored. No object destruction is performed.
+  void deallocate(pointer, size_type);
+  // Returns the maximum number of value_type objects that could be allocated at
+  // once.
   size_type max_size() const noexcept;
+  // Constructs an object of type U at the given address with the given
+  // arguments. No allocation is performed.
   template <class U, class... Args> void construct(U *, Args &&...);
+  // Destroy the object of type U at the given location.
+  // No deallocation is performed.
   template <class U> void destroy(U *);
 };
 

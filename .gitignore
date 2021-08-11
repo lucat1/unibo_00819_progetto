@@ -1,2 +1,4 @@
 build
-/alma
+/overengineered
+report.*
+!report.tex
