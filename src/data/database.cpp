@@ -190,8 +190,9 @@ void Database::load_settings() {
   while (get_CSV_String(conf_ifs, key)) {
     size_t value;
     conf_ifs >> value;
+    conf_ifs.ignore();
     for (auto &s : set)
-      if (!key.compare(s.label())) {
+      if (key == s.label()) {
         s.set(s.begin() + value);
         break;
       }
