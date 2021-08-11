@@ -1,9 +1,9 @@
 /*
-  university of bologna
-  first cicle degree in computer science
-  00819 - programmazione
+  University of Bologna
+  First cicle degree in Computer Science
+  00819 - Programmazione
 
-  luca tagliavini #971133
+  Luca Tagliavini #971133
   07/27/2021
 
   audio.cpp: implements the logic for audio-playing using the `aplay` and
@@ -11,16 +11,19 @@
 */
 
 #include "audio.hpp"
+#include <cerrno>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
 #include <fcntl.h>
 #include <signal.h>
+#include <sys/mman.h>
 #include <sys/wait.h>
 #include <unistd.h>
 
 char Engine::Audio::tool[256] = "not_fetched";
 int Engine::Audio::pid = -1;
+bool *Engine::Audio::playing = nullptr;
 
 // check is the system has a program available in the $PATH and in case
 // return a zero error code and puts the path in the second argument
@@ -53,42 +56,69 @@ void Engine::Audio::fetch_tool() {
     strcpy(tool, "none");
 }
 
-bool Engine::Audio::play(const char *fp) {
-  if (strcmp(tool, "not_fetched"))
+Engine::Audio::Error Engine::Audio::play(const char *fp) {
+  if (strcmp(tool, "not_fetched") == 0)
     fetch_tool();
 
   if (strcmp(tool, "none") == 0)
-    return false;
+    return Error::no_tool;
 
+  // check if we have read permission on the given file at fp
+  if (access(fp, R_OK) != 0)
+    return Error::invalid_file;
+
+  // keep shared memory across threads with mman functions
+  // see man mmap, man munmap and https://stackoverflow.com/a/13274800
+  playing = (bool *)mmap(nullptr, sizeof *playing, PROT_READ | PROT_WRITE,
+                         MAP_SHARED | MAP_ANONYMOUS, -1, 0);
+  *playing = true;
   pid = fork();
-  if (pid == 0) {
+  if (pid < 0)
+    return Error::no_thread;
+  else if (pid == 0) {
     // open /dev/null and pipe this thread's output to it
     int dn = open("/dev/null", O_WRONLY);
     dup2(dn, 1);
     dup2(dn, 2);
     close(dn);
 
-    int code;
-    while (true)
-      code = execlp(tool, tool, fp, nullptr);
-    exit(code);
-  }
-  return true;
+    int ppid = -1;
+    while (*playing) {
+      if ((usleep(1000000 / 30) == EINTR))
+        break; // stop if usleep blocks
+
+      // if we don't have any aplay instance start a new one
+      int status = -1;
+      if (ppid != -1)
+        waitpid(ppid, &status, WNOHANG);
+
+      if (ppid == -1 || WIFEXITED(status) || WIFSTOPPED(status) ||
+          WIFSIGNALED(status)) {
+        ppid = fork();
+        if (ppid < 0)
+          exit(-1);
+        else if (ppid == 0)
+          exit(execlp(tool, tool, fp, nullptr));
+      }
+    }
+    // stop the aplay instance if we got one
+    if (ppid != -1 && !kill(ppid, 0))
+      kill(ppid, SIGINT);
+
+    exit(0);
+  } else
+    return Error::none;
 }
 
-Engine::Audio::PlayerState Engine::Audio::status() {
-  // kill(pid, 0) returns 0 if the pid exists, therefore the thread is still
-  // running
-  if (pid != -1 && !kill(pid, 0))
-    return PlayerState::playing;
-  else {
-    pid = -1;
-    return PlayerState::stopped;
-  }
+Engine::Audio::State Engine::Audio::status() {
+  return (playing != nullptr && *playing) ? State::playing : State::stopped;
 }
 
 // quit NOT gracefully, we just want the audio to stop immediately
 void Engine::Audio::stop() {
-  if (status() == PlayerState::playing)
-    kill(pid, SIGINT);
+  if (status() == State::playing) {
+    *playing = false;
+    munmap(playing, sizeof *playing);
+    playing = nullptr;
+  }
 }

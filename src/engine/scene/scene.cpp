@@ -37,23 +37,23 @@ void Engine::Scene::Scene::draw() {
 
   // draw the world around the player
   // TODO: await proper implementation
-  auto pos = world.position;
+  auto pos = world.player.second;
   // the drawing of the map is handled in this way:
   // 1. compute the *first* chunk to be drawn
   // 2. adress the initial position of the player when there is no world to the
   // left
   // 3. draw from there on until we exceed the screen width
-  auto start = pos->fragment; // assume the player is in the first chunk
+  auto start = pos->get_fragment(); // assume the player is in the first chunk
   size_t first_offset = 0,
-         player_x = pos->x; // assuming the player is behind the threshold
-  if (pos->x > width / 2) {
+         player_x = pos->get_x(); // assuming the player is behind the threshold
+  if (pos->get_x() > width / 2) {
     // the chunk is wide enough to center the player
-    first_offset = pos->x - width / 2;
+    first_offset = pos->get_x() - width / 2;
     player_x = width / 2;
   } else if (*start != *world.environment.begin()) {
     // traverse backwards $n$ chunks until we have no more screen space left to
     // fill. then the value of space_left will be the offset of the first chunk
-    auto space_left = (width / 2) - pos->x;
+    auto space_left = (width / 2) - pos->get_x();
     start = std::prev(start);
     while ((space_left -= (*start).extent(1)) > 0)
       start = std::prev(start);
@@ -75,14 +75,16 @@ void Engine::Scene::Scene::draw() {
   // gather the background from the player's current fragment and the foreground
   // from the Hero class
   int pair = Engine::UI::color_pair(
-      color_to_short(world.player.foreground()),
-      color_to_short((*pos->fragment)[pos->y][pos->x].value()->background()));
+      color_to_short(world.player.first.foreground()),
+      color_to_short((*pos->get_fragment())[pos->get_y()][pos->get_x()]
+                         .value()
+                         ->background()));
   Engine::UI::start_color(window, pair);
-  mvwaddch(window, pos->y, player_x, world.player.character());
+  mvwaddch(window, pos->get_y(), player_x, world.player.first.character());
   Engine::UI::end_color(window, pair);
 
   // lastly render the HUD
-  Data::Pawns::Hero p = world.player;
+  auto p = world.player.first;
   HUD hud(p.currentHealth(), p.maxHealth(), p.currentMana(), p.maxMana(),
           p.score());
   hud.show(window, 0, Screen::lines - 1, Screen::columns, 1);
@@ -91,8 +93,8 @@ void Engine::Scene::Scene::draw() {
 }
 
 // TODO: y offsetting, when needed
-void Engine::Scene::Scene::draw_chunk(Nostd::Matrix<BlockTile *> chunk, int x,
-                                      int y, int offset_x, int offset_y) {
+void Engine::Scene::Scene::draw_chunk(Nostd::Matrix<Tile *> chunk, int x, int y,
+                                      int offset_x, int offset_y) {
   // draw until we're out of the screen
   size_t mx = offset_x, my = offset_y;
   int x_cpy = x;

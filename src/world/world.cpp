@@ -11,16 +11,24 @@
 
 #include "world.hpp"
 #include "chunk_assembler.hpp"
-#include <cstddef>
 
 using namespace Data;
+using namespace Nostd;
+using namespace Engine;
 
+using AChunk = World::World::AssembledChunk;
+
+// World::World constructor
 World::World::World(const Database &d) noexcept
-    : player{d.heroes()[0]}, assembler(d.map_chunks(), d.sceneries()) {
+    : player{d.heroes()[0], nullptr}, assembler(d.map_chunks(), d.sceneries()) {
+  add_chunk(DEFAULT_CHUNKS_REFILL);
+  this->player.second = new Position(&environment, environment.begin());
+}
 
-  for (size_t i{0}; i < this->LOADED_CHUNKS; i++) {
+// Add new assembled chunk to enviroment
+void World::World::add_chunk(const int &) noexcept {
+  for (size_t i{0}; i < this->DEFAULT_CHUNKS_REFILL; i++) {
     this->environment.push_back(this->assembler.get());
     this->assembler.next_chunk();
   }
-  this->position = new Position(this->environment);
 }

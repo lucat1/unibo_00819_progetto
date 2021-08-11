@@ -12,7 +12,6 @@
 #ifndef NOSTD_MATRIX_HPP
 #define NOSTD_MATRIX_HPP
 
-#include <cstddef>
 #include <initializer_list>
 #include <iterator>
 #include <valarray>
