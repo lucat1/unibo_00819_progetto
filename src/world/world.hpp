@@ -28,6 +28,7 @@ public:
   Nostd::Pair<Data::Pawns::Hero, Position *> player;
 
   World(const Data::Database &d) noexcept;
+  World(const Data::Database &d, Data::Pawns::Hero h) noexcept;
 
   // Add new assembled chunks to enviroment
   void add_chunk(const int &) noexcept;

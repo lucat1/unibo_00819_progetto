@@ -10,6 +10,7 @@
 */
 
 #include "world.hpp"
+#include "../data/pawns/hero.hpp"
 #include "chunk_assembler.hpp"
 
 using namespace Data;
@@ -17,11 +18,13 @@ using namespace Nostd;
 using namespace Engine;
 
 // World::World constructor
-World::World::World(const Database &d) noexcept
-    : player{d.heroes()[0], nullptr}, assembler(d.map_chunks(), d.sceneries()) {
+World::World::World(const Database &d, Data::Pawns::Hero h) noexcept
+    : player{h, nullptr}, assembler(d.map_chunks(), d.sceneries()) {
   add_chunk(DEFAULT_CHUNKS_REFILL);
   this->player.second = new Position(&environment, environment.begin());
 }
+
+World::World::World(const Database &d) noexcept : World(d, d.heroes()[0]) {}
 
 // Add new assembled chunk to enviroment
 void World::World::add_chunk(const int &) noexcept {
