@@ -12,6 +12,7 @@
 #include "game.hpp"
 #include "../engine/audio.hpp"
 #include "../engine/menu/main.hpp"
+#include "../engine/menu/results.hpp"
 #include "../engine/menu/select.hpp"
 #include "../engine/menu/settings.hpp"
 #include "../engine/scene/scene.hpp"
@@ -21,6 +22,7 @@
 using Engine::Audio;
 using Engine::Drawable;
 using Engine::Menu::Main;
+using Engine::Menu::Results;
 using Engine::Menu::Select;
 using Engine::Menu::Settings;
 using Engine::Scene::Scene;
@@ -78,17 +80,17 @@ bool Game::Game::change_content() {
           db.settings());
       break;
     case Main::Result::play:
-      // TODO: change me
-      /*screen.set_content<Menu::Results,
-                         const Nostd::List<Data::Pawns::Result>
-         &>(d.results());
-                         */
       screen.set_content<Select, const Nostd::Vector<Data::Pawns::Hero> &>(
           db.heroes());
       break;
     default:
       break;
     }
+  } else if (screen.is_content<Scene>()) {
+    update_scoreboard();
+    db.save_results();
+    screen.set_content<Results, const Nostd::List<Data::Pawns::Result> &>(
+        db.results());
   } else {
     // save settings if that was the previous menu
     if (screen.is_content<Settings>()) {

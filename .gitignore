@@ -1,4 +1,5 @@
 build
-/overengineered
+/overengineered*
+scoreboard.csv
 report.*
 !report.tex
