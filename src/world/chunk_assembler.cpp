@@ -148,12 +148,17 @@ ChunkAssembler::is_ground_or_platform(const MapUnit &u) const noexcept {
   return u == MapUnit::ground || u == MapUnit::platform;
 }
 
-Matrix<Tile *> ChunkAssembler::get() noexcept {
+Fragment ChunkAssembler::get() noexcept {
   const MapChunk *const c = this->current_chunk;
   this->chunks_assembled++;
   if (chunks_assembled % 10 == 0)
     next_scenery();
-  return assemble_scenery(c, this->current_scenery);
+  return Fragment{
+      current_chunk, assemble_scenery(c, current_scenery),
+      Matrix<Pawns::Enemy *>({current_chunk->height, current_chunk->width()},
+                             nullptr),
+      Matrix<Pawns::Item *>({current_chunk->height, current_chunk->width()},
+                            nullptr)};
 }
 
 const Scenery *ChunkAssembler::get_current_scenery() const noexcept {

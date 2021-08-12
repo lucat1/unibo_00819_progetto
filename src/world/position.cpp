@@ -11,41 +11,43 @@
 
 #include "position.hpp"
 #include "../data/map_chunk.hpp"
+#include "fragment.hpp"
 #include "world.hpp"
 
 using namespace Nostd;
 using namespace Engine;
 
+using World::Fragment;
 using World::Position;
 
-Position::Position(const List<Matrix<Tile *>> *environment,
-                   List<Matrix<Tile *>>::iterator fragment, int x, int y) {
+Position::Position(const List<Fragment> *environment,
+                   List<Fragment>::iterator fragment, int x, int y) {
   this->x = x;
   this->y = y;
   this->environment = environment;
   this->fragment = fragment;
 }
 
-List<Matrix<Tile *>>::iterator Position::get_fragment() const noexcept {
+List<Fragment>::iterator Position::get_fragment() const noexcept {
   return this->fragment;
 }
 
 bool Position::move_left() {
   if (x != 0)
     x--;
-  else if (*fragment != *environment->begin()) {
+  else if (fragment != environment->begin()) {
     fragment = std::prev(fragment);
-    x = (*fragment).extent(1) - 1;
+    x = fragment->tiles.extent(1) - 1;
   } else
     return false; // first column of the first chunk (and so we do nothing)
   return true;
 }
 
 bool Position::move_right() {
-  if ((size_t)x != (*fragment).extent(1) - 1)
+  if ((size_t)x != fragment->tiles.extent(1) - 1)
     x++;
   else {
-    if (*fragment == *environment->end())
+    if (fragment == environment->end())
       return false; // last column of the last chunk (and so we do nothing)
     fragment = std::next(fragment);
     x = 0;
