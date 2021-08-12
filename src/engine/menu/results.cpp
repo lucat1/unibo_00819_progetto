@@ -40,7 +40,7 @@ Box *Engine::Menu::Results::append_line(Box *parent, int rank, int score,
 
 Box::szu menu_padding = 12;
 Box::szu rank_size = 4;
-Box::szu nick_size = 38; // to leave 14 for the score size
+Box::szu nick_size = 14; // to leave 14 for the score size
 Box::szu score_size =
     Engine::Screen::columns - (2 * menu_padding) - rank_size - nick_size - 2;
 

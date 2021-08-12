@@ -21,7 +21,7 @@ private:
   Engine::Screen screen;
   bool running = true, in_game = false;
   Data::Database db;
-  World::World world;
+  World::World *world = nullptr;
   static void before_close(int);
   bool loop();
   bool change_content();

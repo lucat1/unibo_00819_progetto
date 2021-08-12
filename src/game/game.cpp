@@ -28,8 +28,7 @@ using Engine::Menu::Settings;
 using Engine::Scene::Scene;
 using std::cout;
 
-Game::Game::Game()
-    : db("overengineered.conf.csv", "assets", "scoreboard.csv"), world(db) {
+Game::Game::Game() : db("overengineered.conf.csv", "assets", "scoreboard.csv") {
   apply_settings();
   signal(SIGTERM, before_close);
 }
@@ -88,6 +87,8 @@ bool Game::Game::change_content() {
     }
   } else if (screen.is_content<Scene>()) {
     update_scoreboard();
+    delete world;
+    world = nullptr;
     db.save_results();
     screen.set_content<Results, const Nostd::List<Data::Pawns::Result> &>(
         db.results());
@@ -98,17 +99,15 @@ bool Game::Game::change_content() {
       db.save_settings();
       apply_settings();
     }
-    // TODO: write settings
     if (!screen.is_content<Select>()) {
       // go back to the main menu
       in_game = false;
       screen.set_content<Main>();
     } else {
       // otherwhise start a game
-      // TODO: use this to provide the world a context of the current hero
-      world.player.first = screen.get_content<Select>()->get_result();
+      world = new World::World(db, screen.get_content<Select>()->get_result());
       in_game = true;
-      screen.set_content<Scene, const World::World &>(world);
+      screen.set_content<Scene, const World::World &>(*world);
     }
   }
   return true;
@@ -132,7 +131,7 @@ void Game::Game::handle_keypress() {
     if (!in_game)
       screen.send_event(Drawable::Event::move_up);
     else
-      world.player.second->move_up();
+      world->player.second->move_up();
     break;
 
   case 'j':
@@ -140,7 +139,7 @@ void Game::Game::handle_keypress() {
     if (!in_game)
       screen.send_event(Drawable::Event::move_down);
     else
-      world.player.second->move_down();
+      world->player.second->move_down();
     break;
 
   case 'h':
@@ -148,7 +147,7 @@ void Game::Game::handle_keypress() {
     if (!in_game)
       screen.send_event(Drawable::Event::move_left);
     else
-      world.player.second->move_left();
+      world->player.second->move_left();
     break;
 
   case 'l':
@@ -156,7 +155,7 @@ void Game::Game::handle_keypress() {
     if (!in_game)
       screen.send_event(Drawable::Event::move_right);
     else
-      world.player.second->move_right();
+      world->player.second->move_right();
     break;
   case ERR:
     // ignore ncurses's getch errors
@@ -200,12 +199,12 @@ void Game::Game::apply_settings() {
 void Game::Game::update_scoreboard() {
   auto &scoreboard = db.results();
   if (scoreboard.size() == 0)
-    scoreboard.push_front(world.player.first);
+    scoreboard.push_front(world->player.first);
   else {
     Nostd::List<Data::Pawns::Result>::iterator p;
     for (p = scoreboard.begin();
-         p != scoreboard.end() && *p >= world.player.first.score(); p++)
+         p != scoreboard.end() && *p >= world->player.first.score(); p++)
       ;
-    scoreboard.insert(p, world.player.first);
+    scoreboard.insert(p, world->player.first);
   }
 }
