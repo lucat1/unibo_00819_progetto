@@ -11,8 +11,10 @@
 
 #include "fragment.hpp"
 
-World::Fragment::Fragment(const Nostd::Matrix<Data::MapUnit> *const mu,
-                          const Nostd::Matrix<Engine::Tile *> &t,
-                          const Nostd::Matrix<Data::Pawns::Enemy *> &e,
-                          const Nostd::Matrix<Data::Pawns::Item *> &i)
-    : map_units{mu}, tiles{t}, enemies{e}, items{i} {}
+using Nostd::Matrix;
+
+World::Fragment::Fragment(const Data::MapChunk *const mc,
+                          const Matrix<Engine::Tile *> &t,
+                          const Matrix<Data::Pawns::Enemy *> &e,
+                          const Matrix<Data::Pawns::Item *> &i)
+    : map_chunk{mc}, tiles{t}, enemies{e}, items{i} {}

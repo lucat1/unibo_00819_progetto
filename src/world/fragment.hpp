@@ -21,12 +21,14 @@
 namespace World {
 
 struct Fragment {
-  Fragment(const Nostd::Matrix<Data::MapUnit> *const,
-           const Nostd::Matrix<Engine::Tile *> &,
+  Fragment(const Data::MapChunk *const, const Nostd::Matrix<Engine::Tile *> &,
            const Nostd::Matrix<Data::Pawns::Enemy *> &,
            const Nostd::Matrix<Data::Pawns::Item *> &);
 
-  const Nostd::Matrix<Data::MapUnit> *const map_units;
+  /* Only a pointer to the original MapChunk is stored: there is no need to copy
+   * the whole thing.
+   */
+  const Data::MapChunk *const map_chunk;
   /* "To get runtime polymorphic behavior in C++, the member functions called
    * must be virtual and objects must be manipulated through pointers or
    * references." B. Stroustrup, The C++ Programming Language, 4th ed., Pearson
