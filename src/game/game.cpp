@@ -28,8 +28,10 @@ using Engine::Menu::Settings;
 using Engine::Scene::Scene;
 using std::cout;
 
-Game::Game::Game() : db("overengineered.conf.csv", "assets", "scoreboard.csv") {
-  apply_settings();
+Game::Game::Game()
+    : db("overengineered.conf.csv", "assets", "scoreboard.csv"),
+      settings_manager(db) {
+  settings_manager.apply_settings();
   signal(SIGTERM, before_close);
 }
 
@@ -52,7 +54,7 @@ int Game::Game::run() {
 
 bool Game::Game::loop() {
   // quit if usleep is blocked by an interrupt and the key is an ERR
-  if (usleep(1000000 / fps) == EINTR)
+  if (usleep(1000000 / settings_manager.get_fps()) == EINTR)
     return false;
 
   bool b;
@@ -97,7 +99,7 @@ bool Game::Game::change_content() {
     if (screen.is_content<Settings>()) {
       db.settings() = screen.get_content<Settings>()->get_result();
       db.save_settings();
-      apply_settings();
+      settings_manager.apply_settings();
     }
     if (!screen.is_content<Select>()) {
       // go back to the main menu
@@ -161,39 +163,6 @@ void Game::Game::handle_keypress() {
     // ignore ncurses's getch errors
     break;
   };
-}
-
-int Game::Game::play_soundtrack(const char fn[]) {
-  if (sound) {
-    auto fp = db.to_audio_filepath(fn);
-    switch (Audio::play(fp.c_str())) {
-    case Audio::Error::none:
-      return 0;
-    case Audio::Error::no_tool:
-      cout << "Could not play the soundtrack. Do you have aplay or afplay?\n";
-      return 1;
-    case Audio::Error::invalid_file:
-      cout << "Could not play the soundtrack: invalid file (" << fp << ").\n";
-      return 2;
-    default:
-      cout << "Could not play the soundtrack: unknown error.\n";
-      return 3;
-    }
-  }
-  return 0;
-}
-
-void Game::Game::apply_settings() {
-  for (auto x : db.settings()) {
-    if (x.label() == "Sounds") {
-      sound = *x.current_value();
-      if (!sound)
-        Audio::stop();
-      else if (Audio::status() == Audio::State::stopped)
-        play_soundtrack("main_menu");
-    } else if (x.label() == "Frames per second")
-      fps = *x.current_value();
-  }
 }
 
 void Game::Game::update_scoreboard() {
