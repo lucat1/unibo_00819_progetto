@@ -50,12 +50,12 @@ void Engine::Scene::Scene::draw() {
     // the chunk is wide enough to center the player
     first_offset = pos->get_x() - width / 2;
     player_x = width / 2;
-  } else if (*start != *world.environment.begin()) {
+  } else if (start != world.environment.begin()) {
     // traverse backwards $n$ chunks until we have no more screen space left to
     // fill. then the value of space_left will be the offset of the first chunk
     auto space_left = (width / 2) - pos->get_x();
     start = std::prev(start);
-    while ((space_left -= (*start).extent(1)) > 0)
+    while ((space_left -= start->tiles.extent(1)) > 0)
       start = std::prev(start);
 
     first_offset = std::abs(space_left);
@@ -64,8 +64,8 @@ void Engine::Scene::Scene::draw() {
   // phase 3: draw the chunks from the left-most until we have screen space
   size_t filled = 0;
   while (filled < width) {
-    draw_chunk(*start, filled, 0, first_offset);
-    filled += (*start).extent(1) - first_offset;
+    draw_chunk(start->tiles, filled, 0, first_offset);
+    filled += start->tiles.extent(1) - first_offset;
     start = std::next(start);
     if (first_offset != 0)
       first_offset = 0;
@@ -76,7 +76,8 @@ void Engine::Scene::Scene::draw() {
   // from the Hero class
   int pair = Engine::UI::color_pair(
       color_to_short(world.player.first.foreground()),
-      color_to_short((*pos->get_fragment())[pos->get_y()][pos->get_x()]
+      color_to_short(pos->get_fragment()
+                         ->tiles[pos->get_y()][pos->get_x()]
                          .value()
                          ->background()));
   Engine::UI::start_color(window, pair);
