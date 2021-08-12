@@ -40,7 +40,7 @@ Box *Engine::Menu::Results::append_line(Box *parent, int rank, int score,
 
 Box::szu menu_padding = 12;
 Box::szu rank_size = 4;
-Box::szu nick_size = 14;
+Box::szu nick_size = 38; // to leave 14 for the score size
 Box::szu score_size =
     Engine::Screen::columns - (2 * menu_padding) - rank_size - nick_size - 2;
 
@@ -48,17 +48,17 @@ Box *Engine::Menu::Results::append_line(Box *parent, const Nostd::String &rank,
                                         const Nostd::String &score,
                                         const Nostd::String &nick, bool color) {
   Nostd::String padded_rank = rank, padded_score = score, padded_nick = nick;
-  leftpad(rank_size, padded_rank);
-  padded_rank.append(" ");
+  leftpad(nick_size, padded_nick);
+  padded_nick.append(" ");
   leftpad(score_size, padded_score);
   padded_score.append(" ");
-  leftpad(nick_size, padded_nick);
+  leftpad(rank_size, padded_rank);
 
   auto line = parent->append<UI::Box>();
   line->propb(Box::Property::direction_horizontal, true);
   auto r = line->append<UI::TextBox, const Nostd::String &>(padded_rank);
-  auto s = line->append<UI::TextBox, const Nostd::String &>(padded_score);
   auto n = line->append<UI::TextBox, const Nostd::String &>(padded_nick);
+  auto s = line->append<UI::TextBox, const Nostd::String &>(padded_score);
   if (color) {
     r->propc(Box::Property::foreground, primary);
     s->propc(Box::Property::foreground, primary);
