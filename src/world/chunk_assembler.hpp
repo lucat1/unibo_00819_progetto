@@ -17,6 +17,7 @@
 #include "../engine/block_tile.hpp"
 #include "../nostd/matrix.hpp"
 #include "../nostd/vector.hpp"
+#include "fragment.hpp"
 #include "random_generator.hpp"
 #include <cstddef>
 
@@ -52,7 +53,7 @@ public:
   ChunkAssembler(const Nostd::Vector<Data::MapChunk> &,
                  const Nostd::Vector<Data::Scenery> &);
 
-  Nostd::Matrix<Engine::Tile *> get() noexcept;
+  Fragment get() noexcept;
 
   // Returns the next Data::MapChunk to draw
   void next_chunk() noexcept;
