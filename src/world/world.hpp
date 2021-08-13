@@ -12,7 +12,10 @@
 #define WORLD_WORLD_HPP
 
 #include "../data/database.hpp"
+#include "../data/pawns/enemy.hpp"
 #include "../data/pawns/hero.hpp"
+#include "../data/pawns/item.hpp"
+#include "../data/pawns/projectile.hpp"
 #include "../nostd/list.hpp"
 #include "../nostd/pair.hpp"
 #include "chunk_assembler.hpp"
@@ -25,7 +28,10 @@ public:
   static const size_t DEFAULT_CHUNKS_REFILL = 50;
 
   Nostd::List<Fragment> environment;
-  Nostd::Pair<Data::Pawns::Hero, Position *> player;
+  Nostd::Pair<Data::Pawns::Hero, Position> player;
+  Nostd::List<Nostd::Pair<Data::Pawns::Enemy, Position>> enemies;
+  Nostd::List<Nostd::Pair<Data::Pawns::Item, Position>> items;
+  Nostd::List<Nostd::Pair<Data::Pawns::Projectile, Position>> projectiles;
 
   World(const Data::Database &d) noexcept;
   World(const Data::Database &d, Data::Pawns::Hero h) noexcept;

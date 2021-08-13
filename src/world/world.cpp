@@ -19,9 +19,10 @@ using namespace Engine;
 
 // World::World constructor
 World::World::World(const Database &d, Data::Pawns::Hero h) noexcept
-    : player{h, nullptr}, assembler(d.map_chunks(), d.sceneries()) {
+    : player{h, {&environment, environment.begin()}},
+      assembler(d.map_chunks(), d.sceneries()) {
   add_chunk(DEFAULT_CHUNKS_REFILL);
-  this->player.second = new Position(&environment, environment.begin());
+  player.second = Position(&environment, environment.begin());
 }
 
 World::World::World(const Database &d) noexcept : World(d, d.heroes()[0]) {}

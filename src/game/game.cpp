@@ -133,7 +133,7 @@ void Game::Game::handle_keypress() {
     if (!in_game)
       screen.send_event(Drawable::Event::move_up);
     else
-      world->player.second->move_up();
+      world->player.second.move_up();
     break;
 
   case 'j':
@@ -141,7 +141,7 @@ void Game::Game::handle_keypress() {
     if (!in_game)
       screen.send_event(Drawable::Event::move_down);
     else
-      world->player.second->move_down();
+      world->player.second.move_down();
     break;
 
   case 'h':
@@ -149,7 +149,7 @@ void Game::Game::handle_keypress() {
     if (!in_game)
       screen.send_event(Drawable::Event::move_left);
     else
-      world->player.second->move_left();
+      world->player.second.move_left();
     break;
 
   case 'l':
@@ -157,7 +157,7 @@ void Game::Game::handle_keypress() {
     if (!in_game)
       screen.send_event(Drawable::Event::move_right);
     else
-      world->player.second->move_right();
+      world->player.second.move_right();
     break;
   case ERR:
     // ignore ncurses's getch errors

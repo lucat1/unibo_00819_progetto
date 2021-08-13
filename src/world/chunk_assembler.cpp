@@ -158,7 +158,9 @@ Fragment ChunkAssembler::get() noexcept {
       Matrix<Pawns::Enemy *>({current_chunk->height, current_chunk->width()},
                              nullptr),
       Matrix<Pawns::Item *>({current_chunk->height, current_chunk->width()},
-                            nullptr)};
+                            nullptr),
+      Matrix<Pawns::Projectile *>(
+          {current_chunk->height, current_chunk->width()}, nullptr)};
 }
 
 const Scenery *ChunkAssembler::get_current_scenery() const noexcept {
