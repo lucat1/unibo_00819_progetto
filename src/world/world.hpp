@@ -8,6 +8,7 @@
 
   world.hpp: World::World definition.
 */
+
 #ifndef WORLD_WORLD_HPP
 #define WORLD_WORLD_HPP
 
@@ -23,6 +24,7 @@
 #include "position.hpp"
 
 namespace World {
+
 class World {
 public:
   static const size_t DEFAULT_CHUNKS_REFILL = 50;

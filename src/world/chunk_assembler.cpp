@@ -6,7 +6,7 @@
   Mattia Girolimetto #977478
   04/22/2021
 
-  chunk_assembler.cpp: TODO.
+  chunk_assembler.cpp: implementation for World::ChunkAssembler.
 */
 
 #include "chunk_assembler.hpp"

@@ -6,7 +6,7 @@
   Mattia Girolimetto #977478
   01/08/2021
 
-  position.cpp: Implementation of World::WPosition.
+  position.cpp: implementation of World::Position.
 */
 
 #include "position.hpp"
@@ -14,8 +14,8 @@
 #include "fragment.hpp"
 #include "world.hpp"
 
-using namespace Nostd;
 using namespace Engine;
+using namespace Nostd;
 
 using World::Fragment;
 using World::Position;

@@ -6,8 +6,9 @@
   Mattia Girolimetto #977478
   04/23/2021
 
-  world.test.cpp: tests for World::Wold.
+  world.test.cpp: tests for World::World.
 */
+
 #include "world.hpp"
 #include "../data/database.hpp"
 #include "../nostd/test.hpp"

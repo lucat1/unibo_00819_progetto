@@ -6,8 +6,9 @@
   Mattia Girolimetto #977478
   01/08/2021
 
-  position.cpp: //TODO.
+  position.cpp: World::Position definition.
 */
+
 #ifndef WORLD_POSITION_HPP
 #define WORLD_POSITION_HPP
 
@@ -19,12 +20,12 @@
 #include <iterator>
 
 namespace World {
+
 class Position {
 private:
   const Nostd::List<Fragment> *environment;
-  Nostd::List<Fragment>::iterator fragment; // TODO const iterator
-  int x;
-  int y;
+  Nostd::List<Fragment>::iterator fragment;
+  int x, y;
   static const int INITIAL_Y = 19;
 
 public:
@@ -57,6 +58,7 @@ public:
 
   const char *what() const noexcept override { return message.c_str(); }
 };
+
 } // namespace World
 
 #endif // WORLD_POSITION_HPP

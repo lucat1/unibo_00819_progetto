@@ -6,7 +6,7 @@
   Mattia Girolimetto #977478
   07/18/2021
 
-  world.cpp: Implementation for World::World.
+  world.cpp: implementation for World::World.
 */
 
 #include "world.hpp"

@@ -1,4 +1,14 @@
-// 2 maggio
+/*
+  University of Bologna
+  First cicle degree in Computer Science
+  00819 - Programmazione
+
+  Mattia Girolimetto #977478
+  05/02/2021
+
+  random_generator.hpp: World::RandomGenerator definition.
+*/
+
 #ifndef WORLD_RANDOM_GENERATOR_HPP
 #define WORLD_RANDOM_GENERATOR_HPP
 

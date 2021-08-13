@@ -6,7 +6,7 @@
   Mattia Girolimetto #977478
   04/22/2021
 
-  chunk_assembler.hpp: description TODO.
+  chunk_assembler.hpp: World::ChunkAssembler definition.
 */
 
 #ifndef WORLD_CHUNK_ASSEMBLER_HPP
