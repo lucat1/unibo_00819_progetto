@@ -14,17 +14,18 @@
 #include "../data/database.hpp"
 #include "../engine/screen.hpp"
 #include "../world/world.hpp"
-#include "menu_manager.hpp"
+#include "gameplay_manager.hpp"
 namespace Game {
 class Game {
 private:
   Data::Database db;
   Engine::Screen screen;
   bool running = true;
+  int frame = 1;
   static void before_close(int);
   bool loop();
   void handle_keypress();
-  MenuManager menu_manager;
+  GameplayManager gameplay_manager;
 
 public:
   int run();

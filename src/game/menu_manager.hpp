@@ -31,6 +31,7 @@ public:
   void update_scoreboard();
   SettingsManager &get_settings_manager();
   bool is_in_game();
+  void set_in_game(bool);
   World::World &get_world();
 };
 } // namespace Game

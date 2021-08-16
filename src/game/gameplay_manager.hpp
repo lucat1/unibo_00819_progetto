@@ -16,13 +16,19 @@ namespace Game {
 class GameplayManager {
 private:
   Data::Database &db;
+  Engine::Screen &screen;
   MenuManager menu_manager;
 
 public:
   // TODO
   GameplayManager(Data::Database &, Engine::Screen &);
-
   MenuManager &get_menu_manager();
+  void gravity();
+  void move_left();
+  void move_right();
+  void move_up();
+  void move_down();
+  void die();
 };
 } // namespace Game
 #endif
