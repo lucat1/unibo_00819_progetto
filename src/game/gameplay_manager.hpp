@@ -16,6 +16,7 @@ namespace Game {
 class GameplayManager {
 private:
   Data::Database &db;
+  Engine::Screen &screen;
   MenuManager menu_manager;
 
 public:
@@ -27,6 +28,7 @@ public:
   void move_right();
   void move_up();
   void move_down();
+  void die();
 };
 } // namespace Game
 #endif

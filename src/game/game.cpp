@@ -97,7 +97,18 @@ void Game::Game::handle_keypress() {
     else
       gameplay_manager.move_up();
     break;
-
+  case 'q':
+    if (gameplay_manager.get_menu_manager().is_in_game()) {
+      gameplay_manager.move_up();
+      gameplay_manager.move_left();
+    }
+    break;
+  case 'e':
+    if (gameplay_manager.get_menu_manager().is_in_game()) {
+      gameplay_manager.move_up();
+      gameplay_manager.move_right();
+    }
+    break;
   case 'j':
   case 's':
   case KEY_DOWN:
