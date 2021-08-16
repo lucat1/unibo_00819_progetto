@@ -32,17 +32,7 @@ ChunkAssembler::ChunkAssembler(const Vector<MapChunk> *chunks,
 // and take the i-esim linked node.
 void ChunkAssembler::next_chunk() noexcept {
   auto rand = random_gen.get_random(this->chunks->size());
-  MapChunk *selected = new MapChunk(this->chunks->at(rand));
-
-  // Check for up or down shift DEPRECATED
-  /*const size_t oldHeight = this->current_chunk->ending_row();
-  const size_t lastHeight = selected->starting_row();
-  int diff = oldHeight - lastHeight;
-  if (abs(diff) > MAX_CHUNKS_HEIGHT_DIFFERECE) {
-    shift_chunk(selected, diff < 0 ? diff + MAX_CHUNKS_HEIGHT_DIFFERECE
-                                   : diff - MAX_CHUNKS_HEIGHT_DIFFERECE);
-  }*/
-  this->current_chunk = selected;
+  this->current_chunk = &this->chunks->at(rand);
 }
 
 void ChunkAssembler::next_scenery() noexcept {
@@ -56,9 +46,7 @@ void ChunkAssembler::next_scenery() noexcept {
 Matrix<Tile *>
 ChunkAssembler::assemble_scenery(const MapChunk *chunk,
                                  const Scenery *scenery) const noexcept {
-  BlockTile *nullPixel =
-      new BlockTile('?', Color::transparent, Color::transparent);
-  Matrix<Tile *> res({chunk->height, chunk->width()}, nullPixel);
+  Matrix<Tile *> res({chunk->height, chunk->width()});
   size_t sky_index = scenery->sky.size() - 1;
   size_t sky_counter = 2 * fib(sky_index);
   for (size_t i{0}; i < chunk->height; i++) {
@@ -94,8 +82,9 @@ ChunkAssembler::assemble_enemies(const MapChunk *chunk) const noexcept {
 
   for (size_t i{0}; i < chunk->height; i++) {
     for (size_t j{0}; j < chunk->width(); j++)
-      if (chunk->at(i)->at(j)->value() == MapUnit::enemy) {
-        list.push_back(enemies->at(0)); // TODO use random
+      if (chunk->at(i)->at(j)->value() == MapUnit::enemy &&
+          random_gen.get_random(2)) {
+        list.push_back(enemies->at(random_gen.get_random(enemies->size())));
         matrix.at(i)->at(j)->value() = &list.back();
       }
   }
@@ -109,8 +98,9 @@ ChunkAssembler::assemble_items(const MapChunk *chunk) const noexcept {
 
   for (size_t i{0}; i < chunk->height; i++) {
     for (size_t j{0}; j < chunk->width(); j++)
-      if (chunk->at(i)->at(j)->value() == MapUnit::item) {
-        list.push_back(items->at(0)); // TODO use random
+      if (chunk->at(i)->at(j)->value() == MapUnit::item &&
+          random_gen.get_random(2)) {
+        list.push_back(items->at(random_gen.get_random(items->size())));
         matrix.at(i)->at(j)->value() = &list.back();
       }
   }
@@ -132,12 +122,12 @@ inline size_t ChunkAssembler::fib(const size_t &n) const noexcept {
 
 char ChunkAssembler::elaborate_autotile(const MapChunk *chunk,
                                         const Scenery::Autotile *tile,
-                                        const int &x,
-                                        const int &y) const noexcept {
+                                        const size_t &x,
+                                        const size_t &y) const noexcept {
   if (y == 0 || !is_ground_or_platform(chunk->at(y - 1).at(x).value())) {
     if (x == 0)
       return tile->top_left;
-    else if (x == (int)chunk->width() - 1)
+    else if (x == chunk->width() - 1)
       return tile->top_right;
     if (is_ground_or_platform(chunk->at(y)->at(x - 1).value())) {
       if (is_ground_or_platform(chunk->at(y)->at(x + 1).value()))
@@ -150,7 +140,7 @@ char ChunkAssembler::elaborate_autotile(const MapChunk *chunk,
              !is_ground_or_platform(chunk->at(y + 1).at(x).value())) {
     if (x == 0)
       return tile->bottom_left;
-    else if (x == (int)chunk->width() - 1)
+    else if (x == chunk->width() - 1)
       return tile->bottom_right;
     if (is_ground_or_platform(chunk->at(y)->at(x - 1).value())) {
       if (is_ground_or_platform(chunk->at(y)->at(x + 1).value()))
@@ -162,7 +152,7 @@ char ChunkAssembler::elaborate_autotile(const MapChunk *chunk,
   } else {
     if (x == 0)
       return tile->left;
-    else if (x == (int)chunk->width() - 1)
+    else if (x == chunk->width() - 1)
       return tile->right;
     if (is_ground_or_platform(chunk->at(y)->at(x - 1).value())) {
       if (is_ground_or_platform(chunk->at(y)->at(x + 1).value()))
@@ -186,28 +176,23 @@ WorldExpansion ChunkAssembler::get() noexcept {
 
   auto enemies = assemble_enemies(current_chunk);
   auto items = assemble_items(current_chunk);
-  return WorldExpansion(enemies.second, enemies.first, items.second,
-                        items.first);
+  return WorldExpansion(
+      current_chunk, assemble_scenery(current_chunk, current_scenery),
+      enemies.second, enemies.first, items.second, items.first);
 }
-
+const MapChunk *ChunkAssembler::get_current_chunk(void) const noexcept {
+  return this->current_chunk;
+}
 const Scenery *ChunkAssembler::get_current_scenery() const noexcept {
   return this->current_scenery;
 }
 
-void ChunkAssembler::shift_chunk(MapChunk *chunk,
-                                 const int &shifting_factor) noexcept {
-  for (size_t i{0}; i < chunk->width(); i++) {
-    for (size_t j{0}; j < chunk->height; j++) {
-      int shifted_index = j + shifting_factor;
-      if (shifted_index >= 0 && shifted_index < (int)chunk->height) {
-        chunk->at(j).at(i)->value() = chunk->at(shifted_index).at(i)->value();
-      } else if (shifted_index < 0) {
-        chunk->at(j).at(i).value() = MapUnit::nothing;
-      } else if (shifted_index >= (int)chunk->height) {
-        chunk->at(j).at(i).value() = chunk->at(chunk->height - 1).at(i).value();
-      }
+void ChunkAssembler::dispose(Nostd::Matrix<Engine::Tile *> &x) noexcept {
+  for (auto &y : x)
+    for (auto &z : y) {
+      delete z.value();
+      z.value() = nullptr;
     }
-  }
 }
 
 #include "../nostd/matrix.cpp"

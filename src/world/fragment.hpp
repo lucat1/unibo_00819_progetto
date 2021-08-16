@@ -23,9 +23,9 @@ namespace World {
 
 struct Fragment {
   Fragment(const Data::MapChunk *const, const Nostd::Matrix<Engine::Tile *> &,
-           const Nostd::Matrix<Data::Pawns::Enemy *> &,
-           const Nostd::Matrix<Data::Pawns::Item *> &,
-           const Nostd::Matrix<Data::Pawns::Projectile *> &);
+           Nostd::Matrix<Data::Pawns::Enemy *> &,
+           Nostd::Matrix<Data::Pawns::Item *> &);
+  // TODO const Nostd::Matrix<Data::Pawns::Projectile *> &);
 
   /* Only a pointer to the original MapChunk is stored: there is no need to copy
    * the whole thing.
@@ -41,7 +41,7 @@ struct Fragment {
    * elemnts of the appropriate list. */
   Nostd::Matrix<Data::Pawns::Enemy *> enemies;
   Nostd::Matrix<Data::Pawns::Item *> items;
-  Nostd::Matrix<Data::Pawns::Projectile *> projectiles;
+  // Nostd::Matrix<Data::Pawns::Projectile *> projectiles;
 };
 
 } // namespace World

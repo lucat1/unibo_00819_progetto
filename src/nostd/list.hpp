@@ -250,7 +250,7 @@ public:
   void resize(size_t n, V val = V{}) {
     if (n > sz) {
       List l(n - sz, val);
-      splice(nullptr, l);
+      splice(end(), l);
     } else if (n < sz) {
       Item *fird = head;
 

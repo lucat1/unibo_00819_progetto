@@ -16,7 +16,7 @@
 #include "../data/pawns/enemy.hpp"
 #include "../data/pawns/item.hpp"
 #include "../data/scenery.hpp"
-#include "../engine/block_tile.hpp"
+#include "../engine/tile.hpp"
 #include "../nostd/matrix.hpp"
 #include "../nostd/vector.hpp"
 #include "fragment.hpp"
@@ -52,11 +52,9 @@ private:
               Nostd::Matrix<Data::Pawns::Item *>>
   assemble_items(const Data::MapChunk *) const noexcept;
 
-  char elaborate_autotile(const Data::MapChunk *chunk,
-                          const Data::Scenery::Autotile *tile, const int &x,
-                          const int &y) const noexcept;
-
-  void shift_chunk(Data::MapChunk *chunk, const int &shifting_factor) noexcept;
+  char elaborate_autotile(const Data::MapChunk *,
+                          const Data::Scenery::Autotile *, const size_t &,
+                          const size_t &) const noexcept;
 
   inline size_t fib(const size_t &) const noexcept;
   inline bool is_ground_or_platform(const Data::MapUnit &) const noexcept;
@@ -69,14 +67,17 @@ public:
                  const Nostd::Vector<Data::Pawns::Enemy> *,
                  const Nostd::Vector<Data::Pawns::Item> *);
 
-  WorldExpansion get() noexcept;
+  WorldExpansion get(void) noexcept;
 
   // Returns the next Data::MapChunk to draw
-  void next_chunk() noexcept;
+  void next_chunk(void) noexcept;
 
-  void next_scenery() noexcept;
+  void next_scenery(void) noexcept;
 
-  const Data::Scenery *get_current_scenery() const noexcept;
+  const Data::MapChunk *get_current_chunk(void) const noexcept;
+  const Data::Scenery *get_current_scenery(void) const noexcept;
+
+  void dispose(Nostd::Matrix<Engine::Tile *> &) noexcept;
 };
 
 } // namespace World

@@ -53,7 +53,7 @@ void Engine::Scene::Scene::draw() {
   } else if (start != world.environment.begin()) {
     // traverse backwards $n$ chunks until we have no more screen space left to
     // fill. then the value of space_left will be the offset of the first chunk
-    auto space_left = (width / 2) - pos.get_x();
+    int space_left = (width / 2) - pos.get_x();
     start = std::prev(start);
     while ((space_left -= start->tiles.extent(1)) > 0)
       start = std::prev(start);
