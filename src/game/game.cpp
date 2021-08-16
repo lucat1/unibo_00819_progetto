@@ -60,20 +60,20 @@ bool Game::Game::loop() {
     return false;
 
   bool b;
-  int frame = 1;
   if (screen.get_content()->is_over()) {
     if ((b = gameplay_manager.get_menu_manager().change_content()) != running)
       return b;
   } else if (gameplay_manager.get_menu_manager().is_in_game()) {
-    if (frame / (fps / 10) % 5 == 0) // eseguito 2 volte al secondo
+    if ((frame / (fps / 10)) % 3 == 0)
       gameplay_manager.gravity();
     screen.send_event(Engine::Drawable::Event::redraw);
-
-    frame++;
-    if (frame > fps)
-      frame = 1;
   }
+
   handle_keypress();
+
+  frame += 2;
+  if (frame > fps * 20)
+    frame = 1;
   return true;
 }
 
@@ -84,13 +84,13 @@ void Game::Game::handle_keypress() {
     if (!screen.reposition())
       running = false;
     break;
-
   case '\n':
   case KEY_ENTER: // enter key for the numpad
     screen.send_event(Drawable::Event::interact);
     break;
 
   case 'k':
+  case 'w':
   case KEY_UP:
     if (!gameplay_manager.get_menu_manager().is_in_game())
       screen.send_event(Drawable::Event::move_up);
@@ -99,6 +99,7 @@ void Game::Game::handle_keypress() {
     break;
 
   case 'j':
+  case 's':
   case KEY_DOWN:
     if (!gameplay_manager.get_menu_manager().is_in_game())
       screen.send_event(Drawable::Event::move_down);
@@ -107,6 +108,7 @@ void Game::Game::handle_keypress() {
     break;
 
   case 'h':
+  case 'a':
   case KEY_LEFT:
     if (!gameplay_manager.get_menu_manager().is_in_game())
       screen.send_event(Drawable::Event::move_left);
@@ -115,6 +117,7 @@ void Game::Game::handle_keypress() {
     break;
 
   case 'l':
+  case 'd':
   case KEY_RIGHT:
     if (!gameplay_manager.get_menu_manager().is_in_game())
       screen.send_event(Drawable::Event::move_right);

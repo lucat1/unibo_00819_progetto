@@ -21,6 +21,7 @@ private:
   Data::Database db;
   Engine::Screen screen;
   bool running = true;
+  int frame = 1;
   static void before_close(int);
   bool loop();
   void handle_keypress();

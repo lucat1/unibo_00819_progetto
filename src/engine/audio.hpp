@@ -31,10 +31,10 @@ public:
   enum class Error : int { none, no_thread, no_tool, invalid_file };
 
   // searches for the best tool to use to play audio. Choises are:
-  // - aplay (on Linux, for ALSA - Advanced Linux Sound Architecture) - afplay (on Darwin, aka OSX/MacOS)
-  // this function is mainly for internal use, but is kept public as it can
-  // be called in advance to play any software to avoid the delay (and thread
-  // blocking) caused by the use of this procedure
+  // - aplay (on Linux, for ALSA - Advanced Linux Sound Architecture) - afplay
+  // (on Darwin, aka OSX/MacOS) this function is mainly for internal use, but is
+  // kept public as it can be called in advance to play any software to avoid
+  // the delay (and thread blocking) caused by the use of this procedure
   static void fetch_tool();
 
   // play plays the given wav file using one of the available system tools
