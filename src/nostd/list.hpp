@@ -265,22 +265,22 @@ public:
   // and removes them from l, altering the sizes of both containers. The
   // operation does not involve the construction or destruction of any
   // element.
-  void splice(Item *pos, List &l) {
+  void splice(iterator pos, List &l) {
     for (Item *p = l.head; p != nullptr; p = p->next)
       p->list = this;
 
-    if (pos == head)
+    if (pos.item == head)
       head = l.head;
     else {
-      pos->prev->next = l.head;
-      l.head->prev = pos->prev;
+      pos.item->prev->next = l.head;
+      l.head->prev = pos.item->prev;
     }
 
-    if (pos == nullptr)
+    if (pos.item == nullptr)
       tail = l.tail;
     else {
-      l.tail->next = pos;
-      pos->prev = l.tail;
+      l.tail->next = pos.item;
+      pos.item->prev = l.tail;
     }
     sz += l.sz;
     l.sz = 0;

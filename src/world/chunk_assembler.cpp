@@ -11,21 +11,22 @@
 
 #include "chunk_assembler.hpp"
 #include "../nostd/matrix.hpp"
+#include "position.hpp"
 #include <cstddef>
 
 using namespace World;
 using namespace Nostd;
 using namespace Data;
 using namespace Engine;
+using namespace Data::Pawns;
 
-ChunkAssembler::ChunkAssembler(const Vector<MapChunk> &chunks,
-                               const Vector<Scenery> &sceneries) {
-  this->chunks = &chunks;
-  this->sceneries = &sceneries;
-  this->current_chunk = &this->chunks->at(0);
-  this->current_scenery = &this->sceneries->at(0);
-  this->chunks_assembled = 0;
-}
+ChunkAssembler::ChunkAssembler(const Vector<MapChunk> *chunks,
+                               const Vector<Scenery> *sceneries,
+                               const Vector<Enemy> *enemies,
+                               const Vector<Item> *items)
+    : chunks(chunks), sceneries(sceneries), enemies(enemies), items(items),
+      current_scenery(&sceneries->at(0)), current_chunk(&chunks->at(0)),
+      chunks_assembled(0) {}
 
 // Generate a random number i between 0 and the number of nodes liked to Current
 // and take the i-esim linked node.
@@ -84,6 +85,36 @@ ChunkAssembler::assemble_scenery(const MapChunk *chunk,
     }
   }
   return res;
+}
+
+Pair<List<Enemy>, Matrix<Enemy *>>
+ChunkAssembler::assemble_enemies(const MapChunk *chunk) const noexcept {
+  Matrix<Enemy *> matrix({chunk->height, chunk->width()}, nullptr);
+  List<Enemy> list;
+
+  for (size_t i{0}; i < chunk->height; i++) {
+    for (size_t j{0}; j < chunk->width(); j++)
+      if (chunk->at(i)->at(j)->value() == MapUnit::enemy) {
+        list.push_back(enemies->at(0)); // TODO use random
+        matrix.at(i)->at(j)->value() = &list.back();
+      }
+  }
+  return {list, matrix};
+}
+
+Pair<List<Item>, Matrix<Item *>>
+ChunkAssembler::assemble_items(const MapChunk *chunk) const noexcept {
+  Matrix<Item *> matrix({chunk->height, chunk->width()}, nullptr);
+  List<Item> list;
+
+  for (size_t i{0}; i < chunk->height; i++) {
+    for (size_t j{0}; j < chunk->width(); j++)
+      if (chunk->at(i)->at(j)->value() == MapUnit::item) {
+        list.push_back(items->at(0)); // TODO use random
+        matrix.at(i)->at(j)->value() = &list.back();
+      }
+  }
+  return {list, matrix};
 }
 
 inline size_t ChunkAssembler::fib(const size_t &n) const noexcept {
@@ -148,19 +179,15 @@ ChunkAssembler::is_ground_or_platform(const MapUnit &u) const noexcept {
   return u == MapUnit::ground || u == MapUnit::platform;
 }
 
-Fragment ChunkAssembler::get() noexcept {
-  const MapChunk *const c = this->current_chunk;
-  this->chunks_assembled++;
+WorldExpansion ChunkAssembler::get() noexcept {
+  chunks_assembled++;
   if (chunks_assembled % 10 == 0)
     next_scenery();
-  return Fragment{
-      current_chunk, assemble_scenery(c, current_scenery),
-      Matrix<Pawns::Enemy *>({current_chunk->height, current_chunk->width()},
-                             nullptr),
-      Matrix<Pawns::Item *>({current_chunk->height, current_chunk->width()},
-                            nullptr),
-      Matrix<Pawns::Projectile *>(
-          {current_chunk->height, current_chunk->width()}, nullptr)};
+
+  auto enemies = assemble_enemies(current_chunk);
+  auto items = assemble_items(current_chunk);
+  return WorldExpansion(enemies.second, enemies.first, items.second,
+                        items.first);
 }
 
 const Scenery *ChunkAssembler::get_current_scenery() const noexcept {

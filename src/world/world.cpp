@@ -20,7 +20,7 @@ using namespace Engine;
 // World::World constructor
 World::World::World(const Database &d, Data::Pawns::Hero h) noexcept
     : player{h, {&environment, environment.begin()}},
-      assembler(d.map_chunks(), d.sceneries()) {
+      assembler(&d.map_chunks(), &d.sceneries(), &d.enemies(), &d.items()) {
   add_chunk(DEFAULT_CHUNKS_REFILL);
   player.second = Position(&environment, environment.begin());
 }
@@ -30,7 +30,15 @@ World::World::World(const Database &d) noexcept : World(d, d.heroes()[0]) {}
 // Add new assembled chunk to enviroment
 void World::World::add_chunk(const int &) noexcept {
   for (size_t i{0}; i < this->DEFAULT_CHUNKS_REFILL; i++) {
-    this->environment.push_back(this->assembler.get());
+    //
+    // this->environment.push_back(this->assembler.get());
     this->assembler.next_chunk();
   }
+}
+
+World::World &World::World::operator+=(WorldExpansion &exp) noexcept {
+  enemies.splice(enemies.end(), exp.enemies);
+  items.splice(items.end(), exp.items);
+  environment.push_back(exp.fragment);
+  return *this;
 }
