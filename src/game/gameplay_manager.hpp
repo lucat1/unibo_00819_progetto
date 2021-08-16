@@ -21,8 +21,11 @@ private:
 public:
   // TODO
   GameplayManager(Data::Database &, Engine::Screen &);
-
   MenuManager &get_menu_manager();
+  void move_left();
+  void move_right();
+  void move_up();
+  void move_down();
 };
 } // namespace Game
 #endif

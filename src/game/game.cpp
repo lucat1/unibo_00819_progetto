@@ -30,8 +30,8 @@ using std::cout;
 
 Game::Game::Game()
     : db("overengineered.conf.csv", "assets", "scoreboard.csv"),
-      menu_manager(db, screen) {
-  menu_manager.get_settings_manager().apply_settings();
+      gameplay_manager(db, screen) {
+  gameplay_manager.get_menu_manager().get_settings_manager().apply_settings();
   signal(SIGTERM, before_close);
 }
 
@@ -54,14 +54,16 @@ int Game::Game::run() {
 
 bool Game::Game::loop() {
   // quit if usleep is blocked by an interrupt and the key is an ERR
-  if (usleep(1000000 / menu_manager.get_settings_manager().get_fps()) == EINTR)
+  if (usleep(1000000 / gameplay_manager.get_menu_manager()
+                           .get_settings_manager()
+                           .get_fps()) == EINTR)
     return false;
 
   bool b;
   if (screen.get_content()->is_over()) {
-    if ((b = menu_manager.change_content()) != running)
+    if ((b = gameplay_manager.get_menu_manager().change_content()) != running)
       return b;
-  } else if (menu_manager.is_in_game())
+  } else if (gameplay_manager.get_menu_manager().is_in_game())
     screen.send_event(Engine::Drawable::Event::redraw);
 
   handle_keypress();
@@ -83,34 +85,34 @@ void Game::Game::handle_keypress() {
 
   case 'k':
   case KEY_UP:
-    if (!menu_manager.is_in_game())
+    if (!gameplay_manager.get_menu_manager().is_in_game())
       screen.send_event(Drawable::Event::move_up);
     else
-      menu_manager.get_world().player.second.move_up();
+      gameplay_manager.move_up();
     break;
 
   case 'j':
   case KEY_DOWN:
-    if (!menu_manager.is_in_game())
+    if (!gameplay_manager.get_menu_manager().is_in_game())
       screen.send_event(Drawable::Event::move_down);
     else
-      menu_manager.get_world().player.second.move_down();
+      gameplay_manager.move_down();
     break;
 
   case 'h':
   case KEY_LEFT:
-    if (!menu_manager.is_in_game())
+    if (!gameplay_manager.get_menu_manager().is_in_game())
       screen.send_event(Drawable::Event::move_left);
     else
-      menu_manager.get_world().player.second.move_left();
+      gameplay_manager.move_left();
     break;
 
   case 'l':
   case KEY_RIGHT:
-    if (!menu_manager.is_in_game())
+    if (!gameplay_manager.get_menu_manager().is_in_game())
       screen.send_event(Drawable::Event::move_right);
     else
-      menu_manager.get_world().player.second.move_right();
+      gameplay_manager.move_right();
     break;
   case ERR:
     // ignore ncurses's getch errors
