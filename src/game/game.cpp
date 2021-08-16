@@ -53,19 +53,26 @@ int Game::Game::run() {
 }
 
 bool Game::Game::loop() {
+  int fps =
+      gameplay_manager.get_menu_manager().get_settings_manager().get_fps();
   // quit if usleep is blocked by an interrupt and the key is an ERR
-  if (usleep(1000000 / gameplay_manager.get_menu_manager()
-                           .get_settings_manager()
-                           .get_fps()) == EINTR)
+  if (usleep(1000000 / fps) == EINTR)
     return false;
 
   bool b;
+  int frame = 1;
   if (screen.get_content()->is_over()) {
     if ((b = gameplay_manager.get_menu_manager().change_content()) != running)
       return b;
-  } else if (gameplay_manager.get_menu_manager().is_in_game())
+  } else if (gameplay_manager.get_menu_manager().is_in_game()) {
+    if (frame / (fps / 10) % 5 == 0) // eseguito 2 volte al secondo
+      gameplay_manager.gravity();
     screen.send_event(Engine::Drawable::Event::redraw);
 
+    frame++;
+    if (frame > fps)
+      frame = 1;
+  }
   handle_keypress();
   return true;
 }
