@@ -23,6 +23,7 @@
 #include "fragment.hpp"
 #include "position.hpp"
 #include "world_expansion.hpp"
+#include <stdexcept>
 
 namespace World {
 
@@ -40,7 +41,7 @@ public:
   World(const Data::Database &, Data::Pawns::Hero) noexcept;
 
   // Add new assembled chunks to enviroment
-  void add_chunk(const int &) noexcept;
+  void add_chunk(const size_t &n = DEFAULT_CHUNKS_REFILL) noexcept;
 
   World &operator+=(WorldExpansion &) noexcept;
 

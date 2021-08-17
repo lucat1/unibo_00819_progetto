@@ -25,7 +25,6 @@ struct Fragment {
   Fragment(const Data::MapChunk *const, const Nostd::Matrix<Engine::Tile *> &,
            Nostd::Matrix<Data::Pawns::Enemy *> &,
            Nostd::Matrix<Data::Pawns::Item *> &);
-  // TODO const Nostd::Matrix<Data::Pawns::Projectile *> &);
 
   /* Only a pointer to the original MapChunk is stored: there is no need to copy
    * the whole thing.

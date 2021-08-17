@@ -22,13 +22,11 @@ private:
   const time_t seed;
 
 public:
-  using uint = size_t;
-
   // Init random with seed from current time
   RandomGenerator();
 
   // Get random number between 0 and bound parameter
-  const uint get_random(const uint &bound) const noexcept;
+  const size_t get_random(const size_t &bound) const noexcept;
 
   // Seed filed getter
   time_t get_seed() const noexcept;
