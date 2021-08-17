@@ -17,5 +17,6 @@ World::Fragment::Fragment(const Data::MapChunk *const mc,
                           const Matrix<Engine::Tile *> &t,
                           Matrix<Data::Pawns::Enemy *> &e,
                           Matrix<Data::Pawns::Item *> &i)
-    // TODO const Matrix<Data::Pawns::Projectile *> &p)
-    : map_chunk{mc}, tiles{t}, enemies{e}, items{i} /* TODO, projectiles{p}*/ {}
+    : map_chunk{mc}, tiles{t}, enemies{e}, items{i}, projectiles{{mc->height,
+                                                                  mc->width()},
+                                                                 nullptr} {}

@@ -23,13 +23,13 @@
 #include "fragment.hpp"
 #include "position.hpp"
 #include "world_expansion.hpp"
+#include <stdexcept>
 
 namespace World {
 
 class World {
 public:
   static const size_t DEFAULT_CHUNKS_REFILL = 50;
-
   Nostd::List<Fragment> environment;
   Nostd::Pair<Data::Pawns::Hero, Position> player;
   Nostd::List<Nostd::Pair<Data::Pawns::Enemy, Position>> enemies;
@@ -40,7 +40,7 @@ public:
   World(const Data::Database &, Data::Pawns::Hero) noexcept;
 
   // Add new assembled chunks to enviroment
-  void add_chunk(const int &) noexcept;
+  void add_chunk(const size_t &n = DEFAULT_CHUNKS_REFILL) noexcept;
 
   World &operator+=(WorldExpansion &) noexcept;
 

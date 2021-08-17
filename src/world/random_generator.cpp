@@ -15,8 +15,7 @@ using namespace World;
 
 RandomGenerator::RandomGenerator() : seed(time(nullptr)) { srand(this->seed); }
 
-const RandomGenerator::uint
-RandomGenerator::get_random(const uint &bound) const noexcept {
+const size_t RandomGenerator::get_random(const size_t &bound) const noexcept {
   return rand() % bound;
 }
 

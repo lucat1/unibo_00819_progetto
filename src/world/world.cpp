@@ -29,8 +29,8 @@ World::World::World(const Database &d, Data::Pawns::Hero h) noexcept
 World::World::World(const Database &d) noexcept : World(d, d.heroes()[0]) {}
 
 // Add new assembled chunk to enviroment
-void World::World::add_chunk(const int &) noexcept {
-  for (size_t i{0}; i < this->DEFAULT_CHUNKS_REFILL; i++) {
+void World::World::add_chunk(const size_t &n) noexcept {
+  for (size_t i{0}; i < n; i++) {
     WorldExpansion expansion = assembler.get();
     *this += expansion;
     this->assembler.next_chunk();
