@@ -92,7 +92,7 @@ Game::SettingsManager &MenuManager::get_settings_manager() {
   return settings_manager;
 }
 
-bool MenuManager::is_in_game() { return in_game; }
+bool MenuManager::is_in_game() { return in_game && world != nullptr; }
 void MenuManager::set_in_game(bool g) { in_game = g; }
 World::World &MenuManager::get_world() { return *world; }
 
