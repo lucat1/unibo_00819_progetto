@@ -64,7 +64,7 @@ void Engine::Scene::Scene::draw() {
   // phase 3: draw the chunks from the left-most until we have screen space
   size_t filled = 0;
   while (filled < width) {
-    draw_chunk(start->tiles, start->enemies, start->items, filled, 0,
+    draw_chunk(start->tiles, start->enemies, start->items, start->projectiles, filled, 0,
                first_offset);
     filled += start->tiles.extent(1) - first_offset;
     start = std::next(start);
@@ -96,8 +96,9 @@ void Engine::Scene::Scene::draw() {
 void Engine::Scene::Scene::draw_chunk(
     const Nostd::Matrix<Tile *> &tiles,
     const Nostd::Matrix<Data::Pawns::Enemy *> &enemies,
-    const Nostd::Matrix<Data::Pawns::Item *> &items, int x, int y, int offset_x,
-    int offset_y) {
+    const Nostd::Matrix<Data::Pawns::Item *> &items,
+    const Nostd::Matrix<Data::Pawns::Projectile *> &projectiles, int x, int y,
+    int offset_x, int offset_y) {
   // draw until we're out of the screen
   size_t mx = offset_x, my = offset_y;
   int x_cpy = x;
@@ -106,12 +107,15 @@ void Engine::Scene::Scene::draw_chunk(
       auto tile = tiles.at(my).at(mx).value();
       auto enemy = enemies.at(my).at(mx).value();
       auto item = items.at(my).at(mx).value();
+      auto projectile = projectiles.at(my).at(mx).value();
 
       Engine::Tile *t;
-      if(enemy != nullptr)
+      if (enemy != nullptr)
         t = enemy;
-      else if(item != nullptr)
+      else if (item != nullptr)
         t = item;
+      else if (projectile != nullptr)
+        t = projectile;
       else
         t = tile;
 

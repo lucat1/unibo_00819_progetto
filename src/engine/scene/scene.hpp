@@ -32,8 +32,9 @@ private:
   void draw();
   void draw_chunk(const Nostd::Matrix<Tile *> &tiles,
                   const Nostd::Matrix<Data::Pawns::Enemy *> &enemies,
-                  const Nostd::Matrix<Data::Pawns::Item *> &items, int x, int y,
-                  int offset_x = 0, int offset_y = 0);
+                  const Nostd::Matrix<Data::Pawns::Item *> &items,
+                  const Nostd::Matrix<Data::Pawns::Projectile *> &porjectiles,
+                  int x, int y, int offset_x = 0, int offset_y = 0);
 
 public:
   static const szu width = Screen::columns;
