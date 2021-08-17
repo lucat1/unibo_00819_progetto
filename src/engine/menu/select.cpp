@@ -95,8 +95,8 @@ Box *Engine::Menu::Select::generate() {
       data_wrapper->append<UI::StrictBox, Box::dim>({40, 1});
   data_restriction->propb(Box::Property::direction_horizontal, true);
   Nostd::String health = "health: ", mana = "mana: ";
-  Utils::stringify(heroes[focused].maxHealth(), health);
-  Utils::stringify(heroes[focused].maxMana(), mana);
+  Utils::stringify(heroes[focused].max_health(), health);
+  Utils::stringify(heroes[focused].max_mana(), mana);
   auto health_text =
       data_restriction->append<UI::TextBox, const Nostd::String &>(health);
   health_text->propc(Box::Property::foreground, Data::Palette::health);

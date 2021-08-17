@@ -33,6 +33,7 @@ void Game::GameplayManager::gravity() {
     if (can_stand(unit_below) && !player.second.move_down())
       die();
   }
+  menu_manager.set_message("gravity");
 }
 
 void Game::GameplayManager::move_left() {

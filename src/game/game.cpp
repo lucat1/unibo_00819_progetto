@@ -22,10 +22,6 @@
 using Engine::Audio;
 using Engine::Drawable;
 using Engine::Menu::Main;
-using Engine::Menu::Results;
-using Engine::Menu::Select;
-using Engine::Menu::Settings;
-using Engine::Scene::Scene;
 using std::cout;
 
 Game::Game::Game()

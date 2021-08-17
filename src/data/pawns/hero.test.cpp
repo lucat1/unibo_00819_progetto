@@ -26,16 +26,16 @@ int main() {
     assert(foxy.character() == 'f');
     assert(foxy.name() == "Foxy");
     assert(foxy.description() == "Neat guy.");
-    assert(foxy.currentHealth() == 5);
-    assert(foxy.maxHealth() == 5);
-    assert(!foxy.currentMana());
-    assert(foxy.maxMana() == 10);
+    assert(foxy.current_health() == 5);
+    assert(foxy.max_health() == 5);
+    assert(!foxy.current_mana());
+    assert(foxy.max_mana() == 10);
     assert(!foxy.score());
   });
   it("performs basic health/mana operations", [] {
     Hero foxy{Engine::Color::aqua, 'f', "Foxy", "Neat guy.", {}, {}, 5, 10};
-    assert(!foxy.isDead());
-    assert(!foxy.attemptSuperSkill());
+    assert(!foxy.is_dead());
+    assert(!foxy.attempt_super_skill());
   });
   it("reads a Hero from a stream", [] {
     Hero foxy{Engine::Color::transparent, u' ', "", "", {}, {}, 1, 1};
@@ -45,10 +45,10 @@ int main() {
     assert(foxy.character() == 'f');
     assert(foxy.name() == "Foxy");
     assert(foxy.description() == "Neat guy.");
-    assert(foxy.currentHealth() == 5);
-    assert(foxy.maxHealth() == 5);
-    assert(!foxy.currentMana());
-    assert(foxy.maxMana() == 10);
+    assert(foxy.current_health() == 5);
+    assert(foxy.max_health() == 5);
+    assert(!foxy.current_mana());
+    assert(foxy.max_mana() == 10);
     assert(!foxy.score());
   });
 }

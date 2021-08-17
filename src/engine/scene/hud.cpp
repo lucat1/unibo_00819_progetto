@@ -16,13 +16,12 @@
 #include "../utils.hpp"
 #include <cstring>
 
-Engine::Scene::HUD::HUD(int health, int max_health, int mana, int max_mana,
-                        int score) {
-  this->health = health;
-  this->max_health = max_health;
-  this->mana = mana;
-  this->max_mana = max_mana;
-  this->score = score;
+Engine::Scene::HUD::HUD(const Data::Pawns::Hero &player, const Nostd::String &message): message{message} {
+  this->health = player.current_health();
+  this->max_health = player.max_health();
+  this->mana = player.current_mana();
+  this->max_mana = player.max_mana();
+  this->score = player.score();
 }
 
 void Engine::Scene::HUD::bar(WINDOW *window, szu x, szu y, int value,
@@ -75,7 +74,10 @@ void Engine::Scene::HUD::show(WINDOW *window, szu x, szu y, szu max_width,
   Nostd::String scr = " ● ";
   Utils::stringify(score, scr);
   mvwaddstr(window, x + 24, y, scr.c_str());
-  // TODO: fight message, when we got that data actually
+  size_t space_left = Screen::columns - 24 - scr.length() - 2; // -2 for a space on both sides (r,l)
+  Nostd::String trimmed = message.substr(0, space_left < message.length() ? space_left : Nostd::String::npos);
+  mvwaddstr(window, x + 24 + scr.length() + 1, y, trimmed.c_str());
+
   wnoutrefresh(window);
 }
 

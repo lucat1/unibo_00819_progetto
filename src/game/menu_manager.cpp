@@ -67,11 +67,12 @@ bool MenuManager::change_content() {
       // otherwhise start a game
       world = new World::World(db, screen.get_content<Select>()->get_result());
       in_game = true;
-      screen.set_content<Scene, const World::World &>(*world);
+      screen.set_content<Scene, const World::World &, const Nostd::String &>(*world, message);
     }
   }
   return true;
 }
+
 void MenuManager::update_scoreboard() {
   auto &scoreboard = db.results();
   if (scoreboard.size() == 0)
@@ -84,8 +85,18 @@ void MenuManager::update_scoreboard() {
     scoreboard.insert(p, world->player.first);
   }
 }
+
 Game::SettingsManager &MenuManager::get_settings_manager() {
   return settings_manager;
 }
+
 bool MenuManager::is_in_game() { return in_game; }
 World::World &MenuManager::get_world() { return *world; }
+
+const Nostd::String Game::MenuManager::get_message() const {
+  return message;
+}
+
+void Game::MenuManager::set_message(const Nostd::String &str) {
+  message = str;
+}

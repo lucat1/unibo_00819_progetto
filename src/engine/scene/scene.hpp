@@ -16,7 +16,7 @@
 #define ENGINE_SCENE_SCRENE_HPP
 
 #include "../../world/world.hpp"
-#include "../drawable.hpp"
+#include "hud.hpp"
 
 namespace Engine {
 namespace Scene {
@@ -25,6 +25,8 @@ class Scene : public Drawable {
 private:
   static const int threshold = 10;
   const World::World &world;
+  const Nostd::String &message;
+  HUD hud;
   // TODO: remove this functionality, the world structure will contain a way to
   // notify us that the game has ended
   bool over = false;
@@ -41,7 +43,7 @@ public:
   void handle_event(Event e);
   bool is_over();
 
-  Scene(WINDOW *window, const World::World &world);
+  Scene(WINDOW *window, const World::World &world, const Nostd::String &message);
 };
 
 } // namespace Scene
