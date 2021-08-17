@@ -18,11 +18,13 @@ using namespace Data;
 using namespace Nostd;
 using namespace Engine;
 
+constexpr size_t World::World::default_chunks_refill;
+
 // World::World constructor
 World::World::World(const Database &d, Data::Pawns::Hero h) noexcept
     : player{h, {&environment, environment.begin()}},
       assembler(&d.map_chunks(), &d.sceneries(), &d.enemies(), &d.items()) {
-  add_chunk(DEFAULT_CHUNKS_REFILL);
+  add_chunk();
   player.second = Position(&environment, environment.begin());
 }
 
