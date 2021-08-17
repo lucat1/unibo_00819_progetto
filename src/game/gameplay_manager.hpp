@@ -15,7 +15,6 @@
 namespace Game {
 class GameplayManager {
 private:
-  Data::Database &db;
   Engine::Screen &screen;
   MenuManager menu_manager;
 
