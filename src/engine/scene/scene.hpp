@@ -25,7 +25,6 @@ class Scene : public Drawable {
 private:
   static const int threshold = 10;
   const World::World &world;
-  const Nostd::String &message;
   HUD hud;
   bool over = false;
 

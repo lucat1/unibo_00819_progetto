@@ -17,7 +17,7 @@
 Engine::Scene::Scene::Scene(WINDOW *window, const World::World &world,
                             const Nostd::String &message)
     : Drawable(window, Screen::columns, Screen::lines), world{world},
-      message{message}, hud{world.player.first, message} {}
+      hud{world.player.first, message} {}
 
 Engine::Drawable::Kind Engine::Scene::Scene::kind() const { return Kind::game; }
 
