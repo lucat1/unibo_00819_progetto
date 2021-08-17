@@ -74,7 +74,8 @@ public:
   }
   // updates the screen with a fresh drawing of a new content
   // NOTE: variant with a third arguent
-  template <typename T = Drawable, typename E, typename F> void set_content(E extra1, F extra2) {
+  template <typename T = Drawable, typename E, typename F>
+  void set_content(E extra1, F extra2) {
     clear_content();
     content = new T(container, extra1, extra2);
     send_event(Engine::Drawable::Event::redraw);

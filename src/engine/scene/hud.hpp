@@ -13,9 +13,9 @@
 #ifndef ENGINE_SCENE_HUD_HPP
 #define ENGINE_SCENE_HUD_HPP
 
-#include "../ui/box.hpp"
-#include "../../nostd/string.hpp"
 #include "../../data/pawns/hero.hpp"
+#include "../../nostd/string.hpp"
+#include "../ui/box.hpp"
 
 namespace Engine {
 namespace Scene {

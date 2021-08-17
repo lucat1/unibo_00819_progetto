@@ -16,7 +16,9 @@
 #include "../utils.hpp"
 #include <cstring>
 
-Engine::Scene::HUD::HUD(const Data::Pawns::Hero &player, const Nostd::String &message): message{message} {
+Engine::Scene::HUD::HUD(const Data::Pawns::Hero &player,
+                        const Nostd::String &message)
+    : message{message} {
   this->health = player.current_health();
   this->max_health = player.max_health();
   this->mana = player.current_mana();

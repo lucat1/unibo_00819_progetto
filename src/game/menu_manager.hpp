@@ -24,7 +24,7 @@ private:
   World::World *world = nullptr;
   SettingsManager settings_manager;
   bool in_game = false;
-  Nostd::String message = "dadada";
+  Nostd::String message = "";
 
 public:
   MenuManager(Data::Database &, Engine::Screen &);
