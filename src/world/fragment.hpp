@@ -40,7 +40,7 @@ struct Fragment {
    * elemnts of the appropriate list. */
   Nostd::Matrix<Data::Pawns::Enemy *> enemies;
   Nostd::Matrix<Data::Pawns::Item *> items;
-  // Nostd::Matrix<Data::Pawns::Projectile *> projectiles;
+  Nostd::Matrix<Data::Pawns::Projectile *> projectiles;
 };
 
 } // namespace World
