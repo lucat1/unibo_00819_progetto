@@ -119,8 +119,12 @@ void Engine::Scene::Scene::draw_chunk(
       else
         t = tile;
 
+      Color bg = t->background();
+      if(bg == Color::transparent)
+        bg = tile->background();
+
       int pair = Engine::UI::color_pair(color_to_short(t->foreground()),
-                                        color_to_short(t->background()));
+                                        color_to_short(bg));
       Engine::UI::start_color(window, pair);
       mvwaddch(window, y, x, t->character());
       Engine::UI::end_color(window, pair);
