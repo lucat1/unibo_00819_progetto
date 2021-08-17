@@ -12,11 +12,10 @@
 #include "scene.hpp"
 #include "../../world/world.hpp"
 #include "../screen.hpp"
-#include "hud.hpp"
 #include <exception>
 
-Engine::Scene::Scene::Scene(WINDOW *window, const World::World &world)
-    : Drawable(window, Screen::columns, Screen::lines), world{world} {}
+Engine::Scene::Scene::Scene(WINDOW *window, const World::World &world, const Nostd::String &message)
+    : Drawable(window, Screen::columns, Screen::lines), world{world}, message{message}, hud{world.player.first, message} {}
 
 Engine::Drawable::Kind Engine::Scene::Scene::kind() const { return Kind::game; }
 
@@ -86,8 +85,6 @@ void Engine::Scene::Scene::draw() {
 
   // lastly render the HUD
   auto p = world.player.first;
-  HUD hud(p.currentHealth(), p.maxHealth(), p.currentMana(), p.maxMana(),
-          p.score());
   hud.show(window, 0, Screen::lines - 1, Screen::columns, 1);
   wnoutrefresh(window);
   doupdate();

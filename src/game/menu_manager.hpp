@@ -24,6 +24,7 @@ private:
   World::World *world = nullptr;
   SettingsManager settings_manager;
   bool in_game = false;
+  Nostd::String message = "";
 
 public:
   MenuManager(Data::Database &, Engine::Screen &);
@@ -33,6 +34,9 @@ public:
   bool is_in_game();
   void set_in_game(bool);
   World::World &get_world();
+
+  const Nostd::String get_message() const;
+  void set_message(const Nostd::String &);
 };
 } // namespace Game
 

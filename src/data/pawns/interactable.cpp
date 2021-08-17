@@ -31,13 +31,13 @@ int Interactable::healthEffect(int currentHealth, int maxHealth) {
   return res;
 }
 
-int Interactable::manaEffect(int currentMana, int maxMana) {
-  if (maxMana <= 0)
+int Interactable::manaEffect(int currentMana, int max_mana) {
+  if (max_mana <= 0)
     throw std::invalid_argument("Maximum mana must be positive.");
-  if (currentMana < 0 || currentMana > maxMana)
+  if (currentMana < 0 || currentMana > max_mana)
     throw std::invalid_argument("Current mana out of range.");
-  const int res{uncheckedManaEffect(currentMana, maxMana)};
-  if (res < 0 || res > maxMana)
+  const int res{uncheckedManaEffect(currentMana, max_mana)};
+  if (res < 0 || res > max_mana)
     throw std::invalid_argument("New mana is invalid.");
   return res;
 }

@@ -32,7 +32,7 @@ class Hero : public Character {
 public:
   Hero(Engine::Color foreground, char character, const Nostd::String &name,
        const Nostd::String &description, Skill skill, Skill superSkill,
-       int maxHealth, int maxMana);
+       int max_health, int max_mana);
   Hero(Hero &&) = default;
   Hero &operator=(Hero &&) = default;
   Hero(const Hero &) = default;
@@ -46,13 +46,13 @@ public:
   const Mugshot &mugshot() const noexcept;
   Skill superSkill() const noexcept;
   void interact(Interactable &); // applies the effect of an Interactable
-  int currentHealth() const noexcept;
-  int maxHealth() const noexcept;
-  bool isDead() const noexcept; // checks if the game is over
-  int currentMana() const noexcept;
-  int maxMana() const noexcept;
+  int current_health() const noexcept;
+  int max_health() const noexcept;
+  bool is_dead() const noexcept; // checks if the game is over
+  int current_mana() const noexcept;
+  int max_mana() const noexcept;
   // if mana is full, sets it to zero and returns true
-  bool attemptSuperSkill() noexcept;
+  bool attempt_super_skill() noexcept;
   int score() const noexcept;
 
   friend std::basic_ostream<char> &operator>>(std::basic_ostream<char> &,
