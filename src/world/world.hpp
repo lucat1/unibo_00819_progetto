@@ -22,6 +22,7 @@
 #include "chunk_assembler.hpp"
 #include "fragment.hpp"
 #include "position.hpp"
+#include "world_expansion.hpp"
 
 namespace World {
 
@@ -35,11 +36,13 @@ public:
   Nostd::List<Nostd::Pair<Data::Pawns::Item, Position>> items;
   Nostd::List<Nostd::Pair<Data::Pawns::Projectile, Position>> projectiles;
 
-  World(const Data::Database &d) noexcept;
-  World(const Data::Database &d, Data::Pawns::Hero h) noexcept;
+  World(const Data::Database &) noexcept;
+  World(const Data::Database &, Data::Pawns::Hero) noexcept;
 
   // Add new assembled chunks to enviroment
   void add_chunk(const int &) noexcept;
+
+  World &operator+=(WorldExpansion &) noexcept;
 
 private:
   ChunkAssembler assembler;

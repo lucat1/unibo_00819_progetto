@@ -4,7 +4,7 @@
   00819 - Programmazione
 
   Mattia Girolimetto #977478
-  01/08/2021
+  08/01/2021
 
   position.cpp: World::Position definition.
 */
@@ -25,16 +25,17 @@ class Position {
 private:
   const Nostd::List<Fragment> *environment;
   Nostd::List<Fragment>::iterator fragment;
-  int x, y;
-  static const int INITIAL_Y = 19;
+  size_t x;
+  size_t y;
+  static const size_t INITIAL_Y = 19;
 
 public:
   Position(const Nostd::List<Fragment> *environment,
-           Nostd::List<Fragment>::iterator fragment, int x = 0,
-           int y = INITIAL_Y);
+           Nostd::List<Fragment>::iterator fragment, size_t x = 0,
+           size_t y = INITIAL_Y);
 
-  int get_x() const noexcept;
-  int get_y() const noexcept;
+  size_t get_x() const noexcept;
+  size_t get_y() const noexcept;
   Nostd::List<Fragment>::iterator get_fragment() const noexcept;
 
   bool move_left();

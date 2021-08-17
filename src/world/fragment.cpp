@@ -15,7 +15,7 @@ using Nostd::Matrix;
 
 World::Fragment::Fragment(const Data::MapChunk *const mc,
                           const Matrix<Engine::Tile *> &t,
-                          const Matrix<Data::Pawns::Enemy *> &e,
-                          const Matrix<Data::Pawns::Item *> &i,
-                          const Matrix<Data::Pawns::Projectile *> &p)
-    : map_chunk{mc}, tiles{t}, enemies{e}, items{i}, projectiles{p} {}
+                          Matrix<Data::Pawns::Enemy *> &e,
+                          Matrix<Data::Pawns::Item *> &i)
+    // TODO const Matrix<Data::Pawns::Projectile *> &p)
+    : map_chunk{mc}, tiles{t}, enemies{e}, items{i} /* TODO, projectiles{p}*/ {}
