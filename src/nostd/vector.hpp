@@ -1,3 +1,14 @@
+/*
+  University of Bologna
+  First cicle degree in Computer Science
+  00819 - Programmazione
+
+  Andreea Scrob #989372
+  03/14/2021
+
+  vector.hpp:  implementation of Nostd::Vector.
+*/
+
 #ifndef NOSTD_VECTOR_HPP
 #define NOSTD_VECTOR_HPP
 
