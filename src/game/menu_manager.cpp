@@ -49,6 +49,7 @@ bool MenuManager::change_content() {
     update_scoreboard();
     delete world;
     world = nullptr;
+    in_game = true;
     db.save_results();
     screen.set_content<Results, const Nostd::List<Data::Pawns::Result> &>(
         db.results());
@@ -59,15 +60,16 @@ bool MenuManager::change_content() {
       db.save_settings();
       settings_manager.apply_settings();
     }
-    if (!screen.is_content<Select>()) {
-      // go back to the main menu
-      in_game = false;
-      screen.set_content<Main>();
-    } else {
-      // otherwhise start a game
+    if (screen.is_content<Select>()) {
+      // start a game
       world = new World::World(db, screen.get_content<Select>()->get_result());
       in_game = true;
-      screen.set_content<Scene, const World::World &, const Nostd::String &>(*world, message);
+      screen.set_content<Scene, const World::World &, const Nostd::String &>(
+          *world, message);
+    } else {
+      // every other menu leads back to the main one
+      in_game = false;
+      screen.set_content<Main>();
     }
   }
   return true;
@@ -90,13 +92,10 @@ Game::SettingsManager &MenuManager::get_settings_manager() {
   return settings_manager;
 }
 
-bool MenuManager::is_in_game() { return in_game; }
+bool MenuManager::is_in_game() { return in_game && world != nullptr; }
+void MenuManager::set_in_game(bool g) { in_game = g; }
 World::World &MenuManager::get_world() { return *world; }
 
-const Nostd::String Game::MenuManager::get_message() const {
-  return message;
-}
+const Nostd::String Game::MenuManager::get_message() const { return message; }
 
-void Game::MenuManager::set_message(const Nostd::String &str) {
-  message = str;
-}
+void Game::MenuManager::set_message(const Nostd::String &str) { message = str; }

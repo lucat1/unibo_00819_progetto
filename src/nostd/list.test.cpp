@@ -1,3 +1,14 @@
+/*
+  University of Bologna
+  First cicle degree in Computer Science
+  00819 - Programmazione
+
+  Andreea Scrob #989372
+  03/27/2021
+
+  list.test.hpp: tests for Nostd::List
+*/
+
 #include "list.hpp"
 #include "test.hpp"
 #include <cassert>

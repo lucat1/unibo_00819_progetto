@@ -16,7 +16,9 @@
 #include "../utils.hpp"
 #include <cstring>
 
-Engine::Scene::HUD::HUD(const Data::Pawns::Hero &player, const Nostd::String &message): message{message} {
+Engine::Scene::HUD::HUD(const Data::Pawns::Hero &player,
+                        const Nostd::String &message)
+    : message{message} {
   this->health = player.current_health();
   this->max_health = player.max_health();
   this->mana = player.current_mana();
@@ -73,12 +75,9 @@ void Engine::Scene::HUD::show(WINDOW *window, szu x, szu y, szu max_width,
   bar(window, x + 12, y, mana, max_mana, " ↑ ", Data::Palette::mana);
   Nostd::String scr = " ● ";
   Utils::stringify(score, scr);
+  scr.append("   ");
+  scr.append(message);
   mvwaddstr(window, x + 24, y, scr.c_str());
-  size_t space_left = Screen::columns - 24 - scr.length() - 2; // -2 for a space on both sides (r,l)
-  Nostd::String trimmed = message.substr(0, space_left < message.length() ? space_left : Nostd::String::npos);
-  mvwaddstr(window, x + 24 + scr.length() + 1, y, trimmed.c_str());
-
-  wnoutrefresh(window);
 }
 
 // we're going to display the HUD in one single line on the bottom of the screen

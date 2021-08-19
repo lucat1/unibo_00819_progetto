@@ -14,17 +14,18 @@
 #include "../screen.hpp"
 #include <exception>
 
-Engine::Scene::Scene::Scene(WINDOW *window, const World::World &world, const Nostd::String &message)
-    : Drawable(window, Screen::columns, Screen::lines), world{world}, message{message}, hud{world.player.first, message} {}
+Engine::Scene::Scene::Scene(WINDOW *window, const World::World &world,
+                            const Nostd::String &message)
+    : Drawable(window, Screen::columns, Screen::lines), world{world},
+      hud{world.player.first, message} {}
 
 Engine::Drawable::Kind Engine::Scene::Scene::kind() const { return Kind::game; }
 
 void Engine::Scene::Scene::handle_event(Event e) {
+  // when we recieve an event different from the usual redraw message we know
+  // the game has ended and we can close this drawable.
   if (e != Event::redraw)
     over = true;
-  // TODO: restore, this is the proper mechanic
-  /* throw std::invalid_argument("Engine::Scene::Scene only handles " */
-  /*                             "Engine::Drawable::Event::redraw events"); */
   draw();
 }
 
@@ -63,7 +64,8 @@ void Engine::Scene::Scene::draw() {
   // phase 3: draw the chunks from the left-most until we have screen space
   size_t filled = 0;
   while (filled < width) {
-    draw_chunk(start->tiles, filled, 0, first_offset);
+    draw_chunk(start->tiles, start->enemies, start->items, start->projectiles, filled, 0,
+               first_offset);
     filled += start->tiles.extent(1) - first_offset;
     start = std::next(start);
     if (first_offset != 0)
@@ -91,18 +93,40 @@ void Engine::Scene::Scene::draw() {
 }
 
 // TODO: y offsetting, when needed
-void Engine::Scene::Scene::draw_chunk(Nostd::Matrix<Tile *> chunk, int x, int y,
-                                      int offset_x, int offset_y) {
+void Engine::Scene::Scene::draw_chunk(
+    const Nostd::Matrix<Tile *> &tiles,
+    const Nostd::Matrix<Data::Pawns::Enemy *> &enemies,
+    const Nostd::Matrix<Data::Pawns::Item *> &items,
+    const Nostd::Matrix<Data::Pawns::Projectile *> &projectiles, int x, int y,
+    int offset_x, int offset_y) {
   // draw until we're out of the screen
   size_t mx = offset_x, my = offset_y;
   int x_cpy = x;
-  while (y < height && my < chunk.extent(0)) {
-    while (x < width && mx < chunk.extent(1)) {
-      auto tile = chunk[my][mx].value();
-      int pair = Engine::UI::color_pair(color_to_short(tile->foreground()),
-                                        color_to_short(tile->background()));
+  while (y < height && my < tiles.extent(0)) {
+    while (x < width && mx < tiles.extent(1)) {
+      auto tile = tiles.at(my).at(mx).value();
+      auto enemy = enemies.at(my).at(mx).value();
+      auto item = items.at(my).at(mx).value();
+      auto projectile = projectiles.at(my).at(mx).value();
+
+      Engine::Tile *t;
+      if (enemy != nullptr)
+        t = enemy;
+      else if (item != nullptr)
+        t = item;
+      else if (projectile != nullptr)
+        t = projectile;
+      else
+        t = tile;
+
+      Color bg = t->background();
+      if(bg == Color::transparent)
+        bg = tile->background();
+
+      int pair = Engine::UI::color_pair(color_to_short(t->foreground()),
+                                        color_to_short(bg));
       Engine::UI::start_color(window, pair);
-      mvwaddch(window, y, x, tile->character());
+      mvwaddch(window, y, x, t->character());
       Engine::UI::end_color(window, pair);
       x++;
       mx++;

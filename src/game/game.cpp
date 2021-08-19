@@ -82,7 +82,8 @@ void Game::Game::handle_keypress() {
     break;
   case '\n':
   case KEY_ENTER: // enter key for the numpad
-    screen.send_event(Drawable::Event::interact);
+    if (!gameplay_manager.get_menu_manager().is_in_game())
+      screen.send_event(Drawable::Event::interact);
     break;
 
   case 'k':

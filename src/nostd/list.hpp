@@ -4,9 +4,9 @@
   00819 - Programmazione
 
   Andreea Scrob #989372
-  0?/??/2021
+  03/24/2021
 
-  list.hpp: .
+  list.hpp: implementation of Nostd::List.
 */
 #ifndef NOSTD_LIST_HPP
 #define NOSTD_LIST_HPP
@@ -288,7 +288,8 @@ public:
     l.tail = nullptr;
   }
 
-  // TODO:commento
+  // The container is extended by inserting new elements before the
+  // element at the specified position.
   iterator insert(const_iterator position, V ele) {
     if (position == end())
       push_back(ele);

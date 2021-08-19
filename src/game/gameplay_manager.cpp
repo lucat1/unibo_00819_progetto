@@ -13,7 +13,7 @@
 using Game::GameplayManager;
 
 GameplayManager::GameplayManager(Data::Database &datab, Engine::Screen &scr)
-    : db(datab), screen(scr), menu_manager(datab, scr) {}
+    : screen(scr), menu_manager(datab, scr) {}
 
 Game::MenuManager &GameplayManager::get_menu_manager() { return menu_manager; }
 
@@ -33,7 +33,6 @@ void Game::GameplayManager::gravity() {
     if (can_stand(unit_below) && !player.second.move_down())
       die();
   }
-  menu_manager.set_message("gravity");
 }
 
 void Game::GameplayManager::move_left() {
