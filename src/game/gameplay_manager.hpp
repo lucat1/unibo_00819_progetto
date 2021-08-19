@@ -28,6 +28,7 @@ public:
   void move_up();
   void move_down();
   void die();
+  void move_dig();
 };
 } // namespace Game
 #endif

@@ -26,6 +26,7 @@ private:
   bool loop();
   void handle_keypress();
   GameplayManager gameplay_manager;
+  char last_key = '\0';
 
 public:
   int run();

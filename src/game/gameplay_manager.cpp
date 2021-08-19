@@ -83,3 +83,17 @@ void Game::GameplayManager::die() {
   // TODO: fill
   screen.send_event(Engine::Drawable::Event::interact);
 }
+inline bool can_dig(Data::MapUnit u) {
+  return can_stand(u) || u == Data::MapUnit::platform;
+}
+
+void Game::GameplayManager::move_dig() {
+  auto &player = menu_manager.get_world().player;
+  auto &chunk = player.second.get_fragment()->map_chunk;
+  auto unit_below =
+      chunk->at(player.second.get_y() + 1).at(player.second.get_x()).value();
+  if (!can_dig(unit_below))
+    return;
+
+  menu_manager.get_world().player.second.move_down();
+}

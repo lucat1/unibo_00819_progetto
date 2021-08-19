@@ -75,6 +75,12 @@ bool Game::Game::loop() {
 
 void Game::Game::handle_keypress() {
   int key = getch();
+  if (gameplay_manager.get_menu_manager().is_in_game()) {
+    if (last_key == 'e')
+      gameplay_manager.move_right();
+    else if (last_key == 'q')
+      gameplay_manager.move_left();
+  }
   switch (key) {
   case KEY_RESIZE:
     if (!screen.reposition())
@@ -111,8 +117,10 @@ void Game::Game::handle_keypress() {
   case KEY_DOWN:
     if (!gameplay_manager.get_menu_manager().is_in_game())
       screen.send_event(Drawable::Event::move_down);
-    else
-      gameplay_manager.move_down();
+    else {
+      gameplay_manager.move_dig();
+      gameplay_manager.move_dig();
+    }
     break;
 
   case 'h':
@@ -136,4 +144,5 @@ void Game::Game::handle_keypress() {
     // ignore ncurses's getch errors
     break;
   };
+  last_key = key;
 }
