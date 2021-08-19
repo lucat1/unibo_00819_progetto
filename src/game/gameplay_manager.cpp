@@ -58,6 +58,11 @@ void Game::GameplayManager::move_right() {
 void Game::GameplayManager::move_up() {
   auto &player = menu_manager.get_world().player;
   auto &chunk = player.second.get_fragment()->map_chunk;
+  auto unit_below =
+      chunk->at(player.second.get_y() + 1).at(player.second.get_x()).value();
+
+  if (player.second.get_y() == 0 || can_stand(unit_below))
+    return;
   auto unit_above =
       chunk->at(player.second.get_y() - 1).at(player.second.get_x()).value();
   if (unit_above == Data::MapUnit::platform) {
@@ -104,4 +109,23 @@ void Game::GameplayManager::move_dig() {
     return;
 
   menu_manager.get_world().player.second.move_down();
+}
+
+Data::Pawns::Item *Game::GameplayManager::overlapped_item() {
+  auto &position = menu_manager.get_world().player.second;
+  return position.get_fragment()
+      ->items[position.get_y()][position.get_x()]
+      .value();
+}
+
+void Game::GameplayManager::manage_items() {
+  auto item = overlapped_item();
+  if (item != nullptr) {
+    menu_manager.get_world().player.first.interact(*item);
+    menu_manager.set_message(
+        Nostd::String(menu_manager.get_world().player.first.name())
+            .append(" found ")
+            .append(item->name()));
+    // TODO: distruggere l'oggetto "mangiato"
+  }
 }

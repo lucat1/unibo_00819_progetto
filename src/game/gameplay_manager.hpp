@@ -19,7 +19,6 @@ private:
   MenuManager menu_manager;
 
 public:
-  // TODO
   GameplayManager(Data::Database &, Engine::Screen &);
   MenuManager &get_menu_manager();
   void gravity();
@@ -29,6 +28,9 @@ public:
   void move_down();
   void die();
   void move_dig();
+
+  Data::Pawns::Item *overlapped_item();
+  void manage_items();
 };
 } // namespace Game
 #endif
