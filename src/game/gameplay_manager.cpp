@@ -58,14 +58,22 @@ void Game::GameplayManager::move_right() {
 void Game::GameplayManager::move_up() {
   auto &player = menu_manager.get_world().player;
   auto &chunk = player.second.get_fragment()->map_chunk;
-  int i = 3;
-  while (player.second.get_y() > 0 && i > 0) {
-    auto unit_above =
-        chunk->at(player.second.get_y() - 1).at(player.second.get_x()).value();
-    if (!can_stand(unit_above))
-      break;
+  auto unit_above =
+      chunk->at(player.second.get_y() - 1).at(player.second.get_x()).value();
+  if (unit_above == Data::MapUnit::platform) {
     menu_manager.get_world().player.second.move_up();
-    i--;
+    menu_manager.get_world().player.second.move_up();
+  } else {
+    int i = 3;
+    while (player.second.get_y() > 0 && i > 0) {
+      unit_above = chunk->at(player.second.get_y() - 1)
+                       .at(player.second.get_x())
+                       .value();
+      if (!can_stand(unit_above))
+        break;
+      menu_manager.get_world().player.second.move_up();
+      i--;
+    }
   }
 }
 void Game::GameplayManager::move_down() {
