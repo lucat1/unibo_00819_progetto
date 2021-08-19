@@ -23,6 +23,9 @@ using Data::Palette::slider;
 using Data::Palette::unfocused;
 using Engine::UI::Box;
 
+#include <iostream>
+using namespace std;
+
 void Engine::Menu::Settings::alloc_updated(
     Nostd::Vector<Data::Setting> &settings) {
   for (auto setting : settings)
@@ -30,9 +33,9 @@ void Engine::Menu::Settings::alloc_updated(
 }
 
 Nostd::Vector<Data::Setting> Engine::Menu::Settings::dereference_updated() {
-  Nostd::Vector<Data::Setting> res(updated.size());
+  Nostd::Vector<Data::Setting> res;
   for (size_t i = 0; i < updated.size(); i++)
-    res[i] = Data::Setting(*updated[i]);
+    res.push_back(*updated.at(i));
 
   return res;
 }

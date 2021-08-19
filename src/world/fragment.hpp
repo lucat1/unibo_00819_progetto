@@ -15,6 +15,7 @@
 #include "../data/map_chunk.hpp"
 #include "../data/pawns/enemy.hpp"
 #include "../data/pawns/item.hpp"
+#include "../data/pawns/projectile.hpp"
 #include "../engine/tile.hpp"
 #include "../nostd/matrix.hpp"
 
@@ -22,8 +23,8 @@ namespace World {
 
 struct Fragment {
   Fragment(const Data::MapChunk *const, const Nostd::Matrix<Engine::Tile *> &,
-           const Nostd::Matrix<Data::Pawns::Enemy *> &,
-           const Nostd::Matrix<Data::Pawns::Item *> &);
+           Nostd::Matrix<Data::Pawns::Enemy *> &,
+           Nostd::Matrix<Data::Pawns::Item *> &);
 
   /* Only a pointer to the original MapChunk is stored: there is no need to copy
    * the whole thing.
@@ -39,6 +40,7 @@ struct Fragment {
    * elemnts of the appropriate list. */
   Nostd::Matrix<Data::Pawns::Enemy *> enemies;
   Nostd::Matrix<Data::Pawns::Item *> items;
+  Nostd::Matrix<Data::Pawns::Projectile *> projectiles;
 };
 
 } // namespace World

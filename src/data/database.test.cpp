@@ -18,9 +18,6 @@
 using Data::Database;
 using Nostd::it;
 
-#include <iostream>
-using namespace std;
-
 int main() {
   it("loads a database from the filesystem", [] {
     Database d("tests/overengineered.conf.csv", "tests/assets",
@@ -95,7 +92,6 @@ int main() {
   it("generates valid audio file paths", [] {
     Database d("tests/overengineered.conf.csv", "tests/assets",
                "tests/scoreboard.csv");
-    cout << d.to_audio_filepath("main_menu") << endl;
     assert(strcmp(d.to_audio_filepath("main_menu").c_str(),
                   "tests/assets/sounds/main_menu.wav") == 0);
   });

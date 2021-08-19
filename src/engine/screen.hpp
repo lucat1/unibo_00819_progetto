@@ -72,6 +72,14 @@ public:
     content = new T(container, extra);
     send_event(Engine::Drawable::Event::redraw);
   }
+  // updates the screen with a fresh drawing of a new content
+  // NOTE: variant with a third arguent
+  template <typename T = Drawable, typename E, typename F>
+  void set_content(E extra1, F extra2) {
+    clear_content();
+    content = new T(container, extra1, extra2);
+    send_event(Engine::Drawable::Event::redraw);
+  }
   // returns the current drawable being displayed on the screen
   template <typename T = Drawable> T *get_content() {
     return static_cast<T *>(content);

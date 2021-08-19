@@ -15,6 +15,8 @@ using Nostd::Matrix;
 
 World::Fragment::Fragment(const Data::MapChunk *const mc,
                           const Matrix<Engine::Tile *> &t,
-                          const Matrix<Data::Pawns::Enemy *> &e,
-                          const Matrix<Data::Pawns::Item *> &i)
-    : map_chunk{mc}, tiles{t}, enemies{e}, items{i} {}
+                          Matrix<Data::Pawns::Enemy *> &e,
+                          Matrix<Data::Pawns::Item *> &i)
+    : map_chunk{mc}, tiles{t}, enemies{e}, items{i}, projectiles{{mc->height,
+                                                                  mc->width()},
+                                                                 nullptr} {}

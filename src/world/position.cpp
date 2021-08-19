@@ -4,9 +4,9 @@
   00819 - Programmazione
 
   Mattia Girolimetto #977478
-  01/08/2021
+  08/01/2021
 
-  position.cpp: Implementation of World::WPosition.
+  position.cpp: implementation of World::Position.
 */
 
 #include "position.hpp"
@@ -14,14 +14,14 @@
 #include "fragment.hpp"
 #include "world.hpp"
 
-using namespace Nostd;
 using namespace Engine;
+using namespace Nostd;
 
 using World::Fragment;
 using World::Position;
 
 Position::Position(const List<Fragment> *environment,
-                   List<Fragment>::iterator fragment, int x, int y) {
+                   List<Fragment>::iterator fragment, size_t x, size_t y) {
   this->x = x;
   this->y = y;
   this->environment = environment;
@@ -44,7 +44,7 @@ bool Position::move_left() {
 }
 
 bool Position::move_right() {
-  if ((size_t)x != fragment->tiles.extent(1) - 1)
+  if (x != fragment->tiles.extent(1) - 1)
     x++;
   else {
     if (fragment == environment->end())
@@ -63,12 +63,12 @@ bool Position::move_up() {
 }
 
 bool Position::move_down() {
-  if (y == (int)Data::MapChunk::height - 1) // last row (and so we do nothing)
+  if (y == Data::MapChunk::height - 1) // last row (and so we do nothing)
     return false;
   ++y;
   return true;
 }
 
-int Position::get_x() const noexcept { return this->x; }
+size_t Position::get_x() const noexcept { return this->x; }
 
-int Position::get_y() const noexcept { return this->y; }
+size_t Position::get_y() const noexcept { return this->y; }

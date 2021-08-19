@@ -8,30 +8,41 @@
 
   world.hpp: World::World definition.
 */
+
 #ifndef WORLD_WORLD_HPP
 #define WORLD_WORLD_HPP
 
 #include "../data/database.hpp"
+#include "../data/pawns/enemy.hpp"
 #include "../data/pawns/hero.hpp"
+#include "../data/pawns/item.hpp"
+#include "../data/pawns/projectile.hpp"
 #include "../nostd/list.hpp"
 #include "../nostd/pair.hpp"
 #include "chunk_assembler.hpp"
 #include "fragment.hpp"
 #include "position.hpp"
+#include "world_expansion.hpp"
+#include <stdexcept>
 
 namespace World {
+
 class World {
 public:
-  static const size_t DEFAULT_CHUNKS_REFILL = 50;
-
+  constexpr static size_t default_chunks_refill{50};
   Nostd::List<Fragment> environment;
-  Nostd::Pair<Data::Pawns::Hero, Position *> player;
+  Nostd::Pair<Data::Pawns::Hero, Position> player;
+  Nostd::List<Nostd::Pair<Data::Pawns::Enemy, Position>> enemies;
+  Nostd::List<Nostd::Pair<Data::Pawns::Item, Position>> items;
+  Nostd::List<Nostd::Pair<Data::Pawns::Projectile, Position>> projectiles;
 
-  World(const Data::Database &d) noexcept;
-  World(const Data::Database &d, Data::Pawns::Hero h) noexcept;
+  World(const Data::Database &) noexcept;
+  World(const Data::Database &, Data::Pawns::Hero) noexcept;
 
   // Add new assembled chunks to enviroment
-  void add_chunk(const int &) noexcept;
+  void add_chunk(const size_t &n = default_chunks_refill) noexcept;
+
+  World &operator+=(WorldExpansion &) noexcept;
 
 private:
   ChunkAssembler assembler;

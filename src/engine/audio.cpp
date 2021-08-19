@@ -67,7 +67,7 @@ Engine::Audio::Error Engine::Audio::play(const char *fp) {
   if (access(fp, R_OK) != 0)
     return Error::invalid_file;
 
-  if(status() == State::playing)
+  if (status() == State::playing)
     stop();
 
   // keep shared memory across threads with mman functions
@@ -124,7 +124,7 @@ void Engine::Audio::stop() {
     wait(nullptr);
 
     // cleanup
-    if(playing != nullptr)
+    if (playing != nullptr)
       munmap(playing, sizeof *playing);
     playing = nullptr;
     pid = -1;

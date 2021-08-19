@@ -52,17 +52,17 @@ void Hero::interact(Interactable &i) {
   scr = i.scoreEffect(scr);
 }
 
-int Hero::currentHealth() const noexcept { return curH; }
+int Hero::current_health() const noexcept { return curH; }
 
-int Hero::maxHealth() const noexcept { return maxH; }
+int Hero::max_health() const noexcept { return maxH; }
 
-bool Hero::isDead() const noexcept { return !curH; }
+bool Hero::is_dead() const noexcept { return !curH; }
 
-int Hero::currentMana() const noexcept { return curM; }
+int Hero::current_mana() const noexcept { return curM; }
 
-int Hero::maxMana() const noexcept { return maxM; }
+int Hero::max_mana() const noexcept { return maxM; }
 
-bool Hero::attemptSuperSkill() noexcept {
+bool Hero::attempt_super_skill() noexcept {
   if (curM < maxM)
     return false;
   curM = 0;
@@ -83,11 +83,11 @@ std::basic_istream<char> &Data::Pawns::operator>>(std::basic_istream<char> &is,
   Skill skill, superSkill;
   (is >> skill).ignore();
   (is >> superSkill).ignore();
-  int maxHealth, maxMana;
+  int maxHealth, max_mana;
   (is >> maxHealth).ignore();
-  if (is >> maxMana) {
+  if (is >> max_mana) {
     h = Hero(Engine::short_to_color(foreground), character, name, description,
-             skill, superSkill, maxHealth, maxMana);
+             skill, superSkill, maxHealth, max_mana);
     is.ignore();
   }
   return is;

@@ -16,7 +16,7 @@
 #define ENGINE_SCENE_SCRENE_HPP
 
 #include "../../world/world.hpp"
-#include "../drawable.hpp"
+#include "hud.hpp"
 
 namespace Engine {
 namespace Scene {
@@ -25,13 +25,15 @@ class Scene : public Drawable {
 private:
   static const int threshold = 10;
   const World::World &world;
-  // TODO: remove this functionality, the world structure will contain a way to
-  // notify us that the game has ended
+  HUD hud;
   bool over = false;
 
   void draw();
-  void draw_chunk(Nostd::Matrix<Tile *> chunk, int x, int y, int offset_x = 0,
-                  int offset_y = 0);
+  void draw_chunk(const Nostd::Matrix<Tile *> &tiles,
+                  const Nostd::Matrix<Data::Pawns::Enemy *> &enemies,
+                  const Nostd::Matrix<Data::Pawns::Item *> &items,
+                  const Nostd::Matrix<Data::Pawns::Projectile *> &porjectiles,
+                  int x, int y, int offset_x = 0, int offset_y = 0);
 
 public:
   static const szu width = Screen::columns;
@@ -41,7 +43,8 @@ public:
   void handle_event(Event e);
   bool is_over();
 
-  Scene(WINDOW *window, const World::World &world);
+  Scene(WINDOW *window, const World::World &world,
+        const Nostd::String &message);
 };
 
 } // namespace Scene
