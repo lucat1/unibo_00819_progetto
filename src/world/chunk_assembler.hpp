@@ -35,9 +35,9 @@ private:
   const Nostd::Vector<Data::Scenery> *const sceneries;
   const Nostd::Vector<Data::Pawns::Enemy> *const enemies;
   const Nostd::Vector<Data::Pawns::Item> *const items;
-  const World::RandomGenerator random_gen;
   const Data::Scenery *current_scenery;
   const Data::MapChunk *current_chunk;
+  RandomGenerator random_gen;
   size_t chunks_assembled;
 
   Nostd::Matrix<Engine::Tile *>
@@ -46,11 +46,11 @@ private:
 
   Nostd::Pair<Nostd::List<Data::Pawns::Enemy>,
               Nostd::Matrix<Data::Pawns::Enemy *>>
-  assemble_enemies(const Data::MapChunk *) const noexcept;
+  assemble_enemies(const Data::MapChunk *) noexcept;
 
   Nostd::Pair<Nostd::List<Data::Pawns::Item>,
               Nostd::Matrix<Data::Pawns::Item *>>
-  assemble_items(const Data::MapChunk *) const noexcept;
+  assemble_items(const Data::MapChunk *) noexcept;
 
   char elaborate_autotile(const Data::MapChunk *,
                           const Data::Scenery::Autotile *, const size_t &,

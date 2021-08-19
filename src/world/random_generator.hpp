@@ -6,6 +6,9 @@
   Mattia Girolimetto #977478
   05/02/2021
 
+  Stefano Volpe #969766
+  08/19/21
+
   random_generator.hpp: World::RandomGenerator definition.
 */
 
@@ -29,13 +32,15 @@ public:
   RandomGenerator();
 
   // Get random number between 0 and bound parameter
-  const size_t get_random(size_t bound) const noexcept;
+  size_t get_random(size_t bound) const noexcept;
 
   // Designed for items
-  const size_t get_poisson_random(size_t mean, size_t bound);
+  size_t get_poisson_random(size_t mean, size_t bound);
 
-  // Designed for enemies
-  const size_t get_poisson_random_reverse(size_t mean, size_t bound);
+  // Designed for enemies and chunks
+  size_t get_poisson_random_reverse(size_t mean, size_t bound);
+
+  static size_t calculate_mean(size_t len, size_t bound);
 
   // Seed filed getter
   time_t get_seed() const noexcept;
