@@ -12,7 +12,6 @@
 #include "list.hpp"
 #include "test.hpp"
 #include <cassert>
-#include <iostream>
 
 using namespace Nostd;
 

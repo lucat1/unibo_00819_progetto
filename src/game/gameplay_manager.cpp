@@ -37,8 +37,8 @@ void GameplayManager::gravity() {
 
 void GameplayManager::move_left() {
   auto &player = menu_manager.get_world().player;
-  auto &chunk = player.second.get_fragment()->map_chunk;
   if (player.second.move_left()) {
+    auto &chunk = player.second.get_fragment()->map_chunk;
     auto unit =
         chunk->at(player.second.get_y()).at(player.second.get_x()).value();
     if (!can_stand(unit))
@@ -48,8 +48,8 @@ void GameplayManager::move_left() {
 
 void GameplayManager::move_right() {
   auto &player = menu_manager.get_world().player;
-  auto &chunk = player.second.get_fragment()->map_chunk;
   if (player.second.move_right()) {
+    auto &chunk = player.second.get_fragment()->map_chunk;
     auto unit =
         chunk->at(player.second.get_y()).at(player.second.get_x()).value();
     if (!can_stand(unit))

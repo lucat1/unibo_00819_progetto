@@ -11,7 +11,6 @@
 #ifndef NOSTD_LIST_HPP
 #define NOSTD_LIST_HPP
 
-#include <iostream>
 #include <iterator>
 #include <stddef.h>
 #include <stdexcept>
@@ -242,7 +241,6 @@ public:
       last.item->prev = first.item->prev;
 
     for (iterator p = first; p != last;) {
-      std::cerr << "p = (" << p.item << ", " << p.end << ")\n";
       Item *del = p.item;
       ++p;
       delete del;
