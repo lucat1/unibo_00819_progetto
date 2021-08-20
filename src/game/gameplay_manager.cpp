@@ -114,6 +114,7 @@ void GameplayManager::move_dig() {
 
   menu_manager.get_world().player.second.move_down();
 }
+
 Nostd::Matrix<Data::Pawns::Item *>::iterator
 GameplayManager::overlapped_item() {
   auto &position = menu_manager.get_world().player.second;
@@ -132,9 +133,9 @@ void GameplayManager::manage_items() {
     auto &items = menu_manager.get_world().items;
     for (auto p = items.begin(); p != items.end(); p++)
       if (item.value() == &p->first) {
+        item.value() = nullptr;
         items.erase(p, std::next(p));
         break;
       }
-    item.value() = nullptr;
   }
 }
