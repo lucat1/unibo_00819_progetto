@@ -129,6 +129,6 @@ void GameplayManager::manage_items() {
                                  .append(" found ")
                                  .append(item.value()->name())
                                  .append("!"));
-    item.value() = nullptr;
+    // TODO: distruggere l'oggetto mangiato
   }
 }
