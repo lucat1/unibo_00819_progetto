@@ -17,12 +17,12 @@ GameplayManager::GameplayManager(Data::Database &datab, Engine::Screen &scr)
 
 Game::MenuManager &GameplayManager::get_menu_manager() { return menu_manager; }
 
-inline bool can_stand(Data::MapUnit u) {
+inline bool GameplayManager::can_stand(Data::MapUnit u) {
   return u == Data::MapUnit::nothing || u == Data::MapUnit::item ||
          u == Data::MapUnit::enemy;
 }
 
-void Game::GameplayManager::gravity() {
+void GameplayManager::gravity() {
   auto &player = menu_manager.get_world().player;
   auto &chunk = player.second.get_fragment()->map_chunk;
   if ((size_t)player.second.get_y() >= Data::MapChunk::height - 1)
@@ -35,7 +35,7 @@ void Game::GameplayManager::gravity() {
   }
 }
 
-void Game::GameplayManager::move_left() {
+void GameplayManager::move_left() {
   auto &player = menu_manager.get_world().player;
   auto &chunk = player.second.get_fragment()->map_chunk;
   if (player.second.move_left()) {
@@ -45,7 +45,8 @@ void Game::GameplayManager::move_left() {
       player.second.move_right();
   }
 }
-void Game::GameplayManager::move_right() {
+
+void GameplayManager::move_right() {
   auto &player = menu_manager.get_world().player;
   auto &chunk = player.second.get_fragment()->map_chunk;
   if (player.second.move_right()) {
@@ -55,7 +56,8 @@ void Game::GameplayManager::move_right() {
       player.second.move_left();
   }
 }
-void Game::GameplayManager::move_up() {
+
+void GameplayManager::move_up() {
   auto &player = menu_manager.get_world().player;
   auto &chunk = player.second.get_fragment()->map_chunk;
   auto unit_below =
@@ -81,7 +83,8 @@ void Game::GameplayManager::move_up() {
     }
   }
 }
-void Game::GameplayManager::move_down() {
+
+void GameplayManager::move_down() {
   auto &player = menu_manager.get_world().player;
   auto &chunk = player.second.get_fragment()->map_chunk;
   auto unit_below =
@@ -92,15 +95,16 @@ void Game::GameplayManager::move_down() {
   menu_manager.get_world().player.second.move_down();
 }
 
-void Game::GameplayManager::die() {
-  // TODO: fill
+void GameplayManager::die() {
+  menu_manager.set_message(Nostd::String());
   screen.send_event(Engine::Drawable::Event::interact);
 }
-inline bool can_dig(Data::MapUnit u) {
+
+inline bool GameplayManager::can_dig(Data::MapUnit u) {
   return can_stand(u) || u == Data::MapUnit::platform;
 }
 
-void Game::GameplayManager::move_dig() {
+void GameplayManager::move_dig() {
   auto &player = menu_manager.get_world().player;
   auto &chunk = player.second.get_fragment()->map_chunk;
   auto unit_below =
@@ -110,22 +114,21 @@ void Game::GameplayManager::move_dig() {
 
   menu_manager.get_world().player.second.move_down();
 }
-
-Data::Pawns::Item *Game::GameplayManager::overlapped_item() {
+Nostd::Matrix<Data::Pawns::Item *>::iterator
+GameplayManager::overlapped_item() {
   auto &position = menu_manager.get_world().player.second;
-  return position.get_fragment()
-      ->items[position.get_y()][position.get_x()]
-      .value();
+  return position.get_fragment()->items[position.get_y()][position.get_x()];
 }
 
-void Game::GameplayManager::manage_items() {
+void GameplayManager::manage_items() {
   auto item = overlapped_item();
-  if (item != nullptr) {
-    menu_manager.get_world().player.first.interact(*item);
-    menu_manager.set_message(
-        Nostd::String(menu_manager.get_world().player.first.name())
-            .append(" found ")
-            .append(item->name()));
-    // TODO: distruggere l'oggetto "mangiato"
+  if (item.value() != nullptr) {
+    auto &hero = menu_manager.get_world().player.first;
+    hero.interact(*item.value());
+    menu_manager.set_message(Nostd::String(hero.name())
+                                 .append(" found ")
+                                 .append(item.value()->name())
+                                 .append("!"));
+    item.value() = nullptr;
   }
 }

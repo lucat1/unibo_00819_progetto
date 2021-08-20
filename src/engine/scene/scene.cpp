@@ -64,8 +64,8 @@ void Engine::Scene::Scene::draw() {
   // phase 3: draw the chunks from the left-most until we have screen space
   size_t filled = 0;
   while (filled < width) {
-    draw_chunk(start->tiles, start->enemies, start->items, start->projectiles, filled, 0,
-               first_offset);
+    draw_chunk(start->tiles, start->enemies, start->items, start->projectiles,
+               filled, 0, first_offset);
     filled += start->tiles.extent(1) - first_offset;
     start = std::next(start);
     if (first_offset != 0)
@@ -86,7 +86,6 @@ void Engine::Scene::Scene::draw() {
   Engine::UI::end_color(window, pair);
 
   // lastly render the HUD
-  auto p = world.player.first;
   hud.show(window, 0, Screen::lines - 1, Screen::columns, 1);
   wnoutrefresh(window);
   doupdate();
@@ -120,7 +119,7 @@ void Engine::Scene::Scene::draw_chunk(
         t = tile;
 
       Color bg = t->background();
-      if(bg == Color::transparent)
+      if (bg == Color::transparent)
         bg = tile->background();
 
       int pair = Engine::UI::color_pair(color_to_short(t->foreground()),

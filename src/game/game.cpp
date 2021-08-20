@@ -66,6 +66,8 @@ bool Game::Game::loop() {
   }
 
   handle_keypress();
+  if (gameplay_manager.get_menu_manager().is_in_game())
+    gameplay_manager.manage_items();
 
   frame += 2;
   if (frame > fps * 20)
@@ -139,6 +141,9 @@ void Game::Game::handle_keypress() {
       screen.send_event(Drawable::Event::move_right);
     else
       gameplay_manager.move_right();
+    break;
+  case '\33': // ESC key = suicide
+    gameplay_manager.die();
     break;
   case ERR:
     // ignore ncurses's getch errors
