@@ -129,6 +129,12 @@ void GameplayManager::manage_items() {
                                  .append(" found ")
                                  .append(item.value()->name())
                                  .append("!"));
-    // TODO: distruggere l'oggetto mangiato
+    auto &items = menu_manager.get_world().items;
+    for (auto p = items.begin(); p != items.end(); p++)
+      if (item.value() == &p->first) {
+        items.erase(p, std::next(p));
+        break;
+      }
+    item.value() = nullptr;
   }
 }
