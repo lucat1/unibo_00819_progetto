@@ -41,6 +41,8 @@ public:
     iterator &operator=(const iterator &it) = default;
 
     bool operator==(iterator it) const {
+      if (end && it.end)
+        return true;
       return item == it.item && end == it.end;
     }
 
@@ -51,11 +53,10 @@ public:
 
     iterator &operator++() {
       if (!end) {
-        std::cerr << item->list << "?";
-        if (item == item->list->tail)
-          end = true;
-        else
+        if (item->next)
           item = item->next;
+        else
+          end = true;
       }
       return *this;
     }
@@ -233,18 +234,19 @@ public:
     if (first == begin())
       head = last == end() ? nullptr : last.item;
     else
-      first.item->prev->next = last.item;
+      first.item->prev->next = last == end() ? nullptr : last.item;
 
     if (last == end())
       tail = first.item->prev;
     else
       last.item->prev = first.item->prev;
 
-    for (iterator p = first; p != last; ++p) {
+    for (iterator p = first; p != last;) {
+      std::cerr << "p = (" << p.item << ", " << p.end << ")\n";
       Item *del = p.item;
+      ++p;
       delete del;
       sz--;
-      std::cerr << "!!!!" << sz << '\n';
     }
     return last;
   }
