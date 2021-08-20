@@ -6,7 +6,7 @@
   Mattia Girolimetto #977478
   07/18/2021
 
-  world.hpp: World::World definition. This class rappresent the World module
+  world.hpp: World::World definition. This class represent the World module
   interface with the rest of the modules. It manages the creation of new parts
   of the map (via a World::ChunkAssembler instance) and provides players,
   enemies, items and projectiles positions.

@@ -48,7 +48,7 @@ void World::World::add_chunk(const size_t &n) noexcept {
 // Vector. Same thing is done with items. It also add a new World::Fragment to
 // World::World.enviroment.
 World::World &World::World::operator+=(WorldExpansion &exp) noexcept {
-  Fragment fragment(exp.map_chunk, exp.tiles, exp.enemies_matrix,
+  Fragment fragment(exp.map_chunk, exp.chunk_assembled, exp.enemies_matrix,
                     exp.items_matrix);
   environment.push_back(fragment);
 
