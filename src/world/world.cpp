@@ -28,9 +28,11 @@ World::World::World(const Database &d, Data::Pawns::Hero h) noexcept
   player.second = Position(&environment, environment.begin());
 }
 
+// World::World constructor
 World::World::World(const Database &d) noexcept : World(d, d.heroes()[0]) {}
 
-// Add new assembled chunk to enviroment
+// Add new assembled chunk to enviroment. For each new chunk an instance of
+// World::WorldExpansion is added to this World::World
 void World::World::add_chunk(const size_t &n) noexcept {
   for (size_t i{0}; i < n; i++) {
     WorldExpansion expansion = assembler.get();
@@ -39,6 +41,12 @@ void World::World::add_chunk(const size_t &n) noexcept {
   }
 }
 
+// This operator describes how a World::WorldExpansion is added to a
+// World::World. Basically for each enemy inside
+// World::WorldExpansion.enemies_matrix it adds a new instance of
+// Nostd::Pair<Data::Pawns::Enemy*, World::Position> to the World::World.enemies
+// Vector. Same thing is done with items. It also add a new World::Fragment to
+// World::World.enviroment.
 World::World &World::World::operator+=(WorldExpansion &exp) noexcept {
   Fragment fragment(exp.map_chunk, exp.tiles, exp.enemies_matrix,
                     exp.items_matrix);
