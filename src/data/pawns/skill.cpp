@@ -13,7 +13,6 @@
 
 #include <algorithm>
 #include <cstdlib>
-#include <iostream> // TODO: remove me
 #include <istream>
 
 #include "../../nostd/unordered_map.hpp"
@@ -65,7 +64,6 @@ std::basic_istream<char> &Data::Pawns::operator>>(std::basic_istream<char> &is,
   bool healthMode;
   if (is >> healthMode)
     s = Skill(name, projectiles, healthEffect, healthMode);
-  std::cerr << s.name();
   return is;
 }
 
