@@ -26,7 +26,8 @@ using std::cout;
 
 Game::Game::Game()
     : db("overengineered.conf.csv", "assets", "scoreboard.csv"),
-      gameplay_manager(db, screen) {
+      gameplay_manager(db, screen),
+      combat_manager(gameplay_manager.get_menu_manager()) {
   gameplay_manager.get_menu_manager().get_settings_manager().apply_settings();
   signal(SIGTERM, before_close);
 }
@@ -66,9 +67,11 @@ bool Game::Game::loop() {
   }
 
   handle_keypress();
-  if (gameplay_manager.get_menu_manager().is_in_game())
-    gameplay_manager.manage_items();
-
+  if (gameplay_manager.get_menu_manager().is_in_game()) {
+    combat_manager.manage_items();
+    combat_manager.manage_projectiles();
+    combat_manager.manage_enemies();
+  }
   frame += 2;
   if (frame > fps * 20)
     frame = 1;
