@@ -16,8 +16,11 @@
 using Data::Pawns::Character;
 
 Character::Character(const Nostd::String &name, char character,
-                     Engine::Color foreground, Skill skill)
-    : Pawn{name, character, foreground}, sk{skill} {}
+                     Engine::Color foreground, Skill skill, bool player)
+    : Pawn{name, character, foreground}, sk{skill} {
+  for (auto &x : sk.projectiles())
+    x->second.set_caster(player);
+}
 
 Character &Character::operator=(Character &&c) {
   Pawn::operator=(c);

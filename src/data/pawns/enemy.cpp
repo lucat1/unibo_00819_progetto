@@ -51,22 +51,26 @@ int Enemy::unchecked_score_effect(int currentScore) {
 
 std::basic_istream<char> &Data::Pawns::operator>>(std::basic_istream<char> &is,
                                                   Enemy &e) {
-  short foreground;
-  (is >> foreground).ignore();
-  char character;
-  (is >> character).ignore();
-  Nostd::String name;
-  Data::get_CSV_String(is, name);
-  Skill skill;
-  int health_damage, mana_damage, score_damage, behavior;
-  (is >> skill).ignore();
-  (is >> health_damage).ignore();
-  (is >> mana_damage).ignore();
-  (is >> score_damage).ignore();
-  if (is >> behavior) {
-    e = Enemy(Engine::short_to_color(foreground), character, name, skill,
-              health_damage, mana_damage, score_damage, behavior);
-    is.ignore();
+  if (is) {
+    short foreground;
+    (is >> foreground).ignore();
+    char character;
+    (is >> character).ignore();
+    Nostd::String name;
+    Data::get_CSV_String(is, name);
+    if (is) {
+      Skill skill;
+      (is >> skill).ignore();
+      int health_damage, mana_damage, score_damage, behavior;
+      (is >> health_damage).ignore();
+      (is >> mana_damage).ignore();
+      (is >> score_damage).ignore();
+      if (is >> behavior) {
+        e = Enemy(Engine::short_to_color(foreground), character, name, skill,
+                  health_damage, mana_damage, score_damage, behavior);
+        is.ignore();
+      }
+    }
   }
   return is;
 }

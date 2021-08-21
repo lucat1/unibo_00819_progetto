@@ -27,7 +27,8 @@ class Character : public virtual Pawn {
 public:
   Character() = default;
   Character(const Nostd::String &, char = u' ',
-            Engine::Color = Engine::Color::transparent, Skill = {});
+            Engine::Color = Engine::Color::transparent, Skill = {},
+            bool player = false);
   Character(Character &&) = default;
   Character &operator=(Character &&);
   Character(const Character &) = default;

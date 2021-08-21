@@ -33,14 +33,12 @@ Skill::Skill(const Nostd::String &name,
     if (std::abs(x) > 1 || std::abs(y) > 1)
       throw std::invalid_argument("Must spawn projectile in an adjacent cell.");
   }
-  if (he < 0)
-    throw std::invalid_argument("Health effect must be non-negative.");
   if (hm && he > 100)
     throw std::invalid_argument("Health effect cannot be > 100%.");
 }
 
-const Nostd::UnorderedMap<Nostd::Pair<int, int>, Projectile> &
-Skill::projectiles() const noexcept {
+Nostd::UnorderedMap<Nostd::Pair<int, int>, Projectile> &
+Skill::projectiles() noexcept {
   return p;
 }
 

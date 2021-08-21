@@ -37,6 +37,7 @@ Projectile::Projectile(Engine::Color foreground, char character,
 
 bool Projectile::was_casted_by_player() const noexcept { return cbp; }
 
+void Projectile::set_caster(bool caster) noexcept { cbp = caster; }
 void Projectile::count_movement() {
   if (is_expired())
     throw std::logic_error("This projectile is already expired.");

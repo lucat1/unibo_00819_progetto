@@ -38,6 +38,7 @@ public:
   ~Projectile() = default;
 
   bool was_casted_by_player() const noexcept;
+  void set_caster(bool) noexcept;
   void count_movement();
   bool is_expired() const noexcept;
 
