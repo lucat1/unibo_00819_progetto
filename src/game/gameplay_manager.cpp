@@ -71,7 +71,7 @@ void GameplayManager::move_up() {
     menu_manager.get_world().player.second.move_up();
     menu_manager.get_world().player.second.move_up();
   } else {
-    int i = 3;
+    int i = 2;
     while (player.second.get_y() > 0 && i > 0) {
       unit_above = chunk->at(player.second.get_y() - 1)
                        .at(player.second.get_x())

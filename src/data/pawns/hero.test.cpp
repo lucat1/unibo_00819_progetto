@@ -39,7 +39,8 @@ int main() {
   });
   it("reads a Hero from a stream", [] {
     Hero foxy{Engine::Color::transparent, u' ', "", "", {}, {}, 1, 1};
-    std::istringstream iss{"6,f,Foxy,Neat guy.,0,0,0,0,0,0,5,10\n"};
+    std::istringstream iss{
+        "6,f,Foxy,Neat guy.,Tackle,0,0,0,Wait for it,0,0,0,5,10\n"};
     iss >> foxy;
     assert(foxy.foreground() == Engine::Color::teal);
     assert(foxy.character() == 'f');

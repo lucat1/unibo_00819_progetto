@@ -13,17 +13,20 @@
 
 #include <algorithm>
 #include <cstdlib>
+#include <iostream> // TODO: remove me
 #include <istream>
 
 #include "../../nostd/unordered_map.hpp"
+#include "../database.hpp"
 #include "projectile.hpp"
 
 using Data::Pawns::Projectile;
 using Data::Pawns::Skill;
 
-Skill::Skill(Nostd::UnorderedMap<Nostd::Pair<int, int>, Projectile> projectiles,
+Skill::Skill(const Nostd::String &name,
+             Nostd::UnorderedMap<Nostd::Pair<int, int>, Projectile> projectiles,
              int healthEffect, bool healthMode)
-    : p{projectiles}, hE{healthEffect}, hM{healthMode} {
+    : Pawn{name}, p{projectiles}, hE{healthEffect}, hM{healthMode} {
   for (auto pair : projectiles) {
     const int x{pair->first.first}, y{pair->first.second};
     if (!x && !y)
@@ -44,6 +47,8 @@ Skill::projectiles() const noexcept {
 
 std::basic_istream<char> &Data::Pawns::operator>>(std::basic_istream<char> &is,
                                                   Skill &s) {
+  Nostd::String name;
+  get_CSV_String(is, name);
   int n; // number of projectiles
   (is >> n).ignore();
   Nostd::UnorderedMap<Nostd::Pair<int, int>, Projectile> projectiles{};
@@ -59,7 +64,8 @@ std::basic_istream<char> &Data::Pawns::operator>>(std::basic_istream<char> &is,
   (is >> healthEffect).ignore();
   bool healthMode;
   if (is >> healthMode)
-    s = Skill(projectiles, healthEffect, healthMode);
+    s = Skill(name, projectiles, healthEffect, healthMode);
+  std::cerr << s.name();
   return is;
 }
 

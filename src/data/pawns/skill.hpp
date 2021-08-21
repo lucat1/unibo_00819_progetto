@@ -30,7 +30,8 @@ namespace Pawns {
 class Skill : public Interactable {
 public:
   Skill() = default; // uneffective skill: does nothing at all
-  Skill(Nostd::UnorderedMap<Nostd::Pair<int, int>, Projectile> projectiles,
+  Skill(const Nostd::String &,
+        Nostd::UnorderedMap<Nostd::Pair<int, int>, Projectile> projectiles,
         int healthEffect, bool healthMode);
   Skill(Skill &&) = default;
   Skill &operator=(Skill &&) = default;
