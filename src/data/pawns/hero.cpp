@@ -44,7 +44,7 @@ Mugshot &Hero::mugshot() noexcept { return mug; }
 
 const Mugshot &Hero::mugshot() const noexcept { return mug; }
 
-Skill Hero::superSkill() const noexcept { return ssk; }
+Skill Hero::superskill() const noexcept { return ssk; }
 
 void Hero::interact(Interactable &i) {
   curH = i.healthEffect(curH, maxH);
@@ -80,14 +80,14 @@ std::basic_istream<char> &Data::Pawns::operator>>(std::basic_istream<char> &is,
   Nostd::String name, description;
   Data::get_CSV_String(is, name);
   Data::get_CSV_String(is, description);
-  Skill skill, superSkill;
+  Skill skill, superskill;
   (is >> skill).ignore();
-  (is >> superSkill).ignore();
+  (is >> superskill).ignore();
   int maxHealth, max_mana;
   (is >> maxHealth).ignore();
   if (is >> max_mana) {
     h = Hero(Engine::short_to_color(foreground), character, name, description,
-             skill, superSkill, maxHealth, max_mana);
+             skill, superskill, maxHealth, max_mana);
     is.ignore();
   }
   return is;

@@ -44,3 +44,25 @@ void CombatManager::manage_projectiles() {
 void CombatManager::manage_enemies() {
   // TODO
 }
+void CombatManager::use_skill() {
+  auto &hero = menu_manager.get_world().player.first;
+  // TODO
+  menu_manager.set_message(Nostd::String(hero.name())
+                               .append(" used ")
+                               .append(hero.skill().name())
+                               .append("."));
+}
+void CombatManager::use_superskill() {
+  auto &hero = menu_manager.get_world().player.first;
+  if (hero.attempt_super_skill()) {
+    // TODO
+    menu_manager.set_message(Nostd::String(hero.name())
+                                 .append(" used ")
+                                 .append(hero.superskill().name())
+                                 .append("!"));
+  } else
+    menu_manager.set_message(Nostd::String(hero.name())
+                                 .append(" lacks the mana for ")
+                                 .append(hero.superskill().name())
+                                 .append("..."));
+}

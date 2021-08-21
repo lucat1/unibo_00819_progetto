@@ -27,7 +27,7 @@ namespace Pawns {
   A Skill specifies the way Projectiles can be spawned and their effects on the
   agent spawning them.
 */
-class Skill : Interactable {
+class Skill : public Interactable {
 public:
   Skill() = default; // uneffective skill: does nothing at all
   Skill(Nostd::UnorderedMap<Nostd::Pair<int, int>, Projectile> projectiles,

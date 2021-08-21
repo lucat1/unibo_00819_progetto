@@ -25,6 +25,8 @@ public:
   void manage_items();
   void manage_projectiles();
   void manage_enemies();
+  void use_skill();
+  void use_superskill();
 };
 } // namespace Game
 
