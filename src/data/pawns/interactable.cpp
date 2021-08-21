@@ -20,45 +20,45 @@ Interactable &Interactable::operator=(Interactable &&i) {
   return *this;
 }
 
-int Interactable::healthEffect(int currentHealth, int maxHealth) {
+int Interactable::health_effect(int currentHealth, int maxHealth) {
   if (maxHealth <= 0)
     throw std::invalid_argument("Maximum health must be positive.");
   if (currentHealth < 0 || currentHealth > maxHealth)
     throw std::invalid_argument("Current health out of range.");
-  const int res{uncheckedHealthEffect(currentHealth, maxHealth)};
+  const int res{unchecked_health_effect(currentHealth, maxHealth)};
   if (res < 0 || res > maxHealth)
     throw std::invalid_argument("New health is invalid.");
   return res;
 }
 
-int Interactable::manaEffect(int currentMana, int max_mana) {
+int Interactable::mana_effect(int currentMana, int max_mana) {
   if (max_mana <= 0)
     throw std::invalid_argument("Maximum mana must be positive.");
   if (currentMana < 0 || currentMana > max_mana)
     throw std::invalid_argument("Current mana out of range.");
-  const int res{uncheckedManaEffect(currentMana, max_mana)};
+  const int res{unchecked_mana_effect(currentMana, max_mana)};
   if (res < 0 || res > max_mana)
     throw std::invalid_argument("New mana is invalid.");
   return res;
 }
 
-int Interactable::scoreEffect(int currentScore) {
+int Interactable::score_effect(int currentScore) {
   if (currentScore < 0)
     throw std::invalid_argument("Current score cannot be negative.");
-  const int res{uncheckedScoreEffect(currentScore)};
+  const int res{unchecked_score_effect(currentScore)};
   if (res < 0)
     throw std::invalid_argument("New score is invalid.");
   return res;
 }
 
-int Interactable::uncheckedHealthEffect(int currentHealth, int) {
+int Interactable::unchecked_health_effect(int currentHealth, int) {
   return currentHealth;
 }
 
-int Interactable::uncheckedManaEffect(int currentMana, int) {
+int Interactable::unchecked_mana_effect(int currentMana, int) {
   return currentMana;
 }
 
-int Interactable::uncheckedScoreEffect(int currentScore) {
+int Interactable::unchecked_score_effect(int currentScore) {
   return currentScore;
 }

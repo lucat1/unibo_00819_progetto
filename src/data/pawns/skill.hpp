@@ -45,11 +45,12 @@ public:
   projectiles() const noexcept;
 
 protected:
-  int uncheckedHealthEffect(int currentHealth, int maxHealth) override final;
+  int unchecked_health_effect(int current_health,
+                              int max_health) override final;
 
 private:
   Nostd::UnorderedMap<Nostd::Pair<int, int>, Projectile> p{};
-  int hE{0}, hM{false};
+  int he{0}, hm{false};
 };
 
 std::basic_istream<char> &operator>>(std::basic_istream<char> &, Skill &);
