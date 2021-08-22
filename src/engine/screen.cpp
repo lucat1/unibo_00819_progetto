@@ -33,7 +33,7 @@ Engine::Drawable::Kind Engine::Screen::get_state() {
 }
 bool Engine::Screen::is_over() {
   if (content == nullptr)
-    return false; // undefined behaviour TODO: exception
+    return false; // undefined behaviour
   return content->is_over();
 }
 

@@ -1,15 +1,16 @@
 # Overengineered
 
 The game is implemented in C++ and built with the gcc/make toolchain. Clang/LLVM
-should compile just fine, but hasn't been tested. The Makefile automatically
+have been tested and compile just fine on Darwin. The Makefile automatically
 compiles the needed source files and rebuilds only what's needed.
 
 ## Building, Running and Testing
 
-For the purpose of this step, be aware that compile flags can be changed via
-exporting the `CXXFLAGS` and `LDFLAGS` variables. Furthermore the compiler
-can be set via the `CXX` enrionment variable. `g++` is used by default.
-Directly editing the `Makefile` source code also works, but is not advised.
+For the purpose of this step, be aware that compile flags can be changed by
+providing make with the `CXXFLAGS` and `LDFLAGS` variables. Furthermore the
+compiler can be set via the `CXX` variable. `g++` is used by default
+(i.e. `make CXX=clang++`). Directly editing the `Makefile` source code also
+works, but is not advised.
 
 To compile and link the game binary run:
 
