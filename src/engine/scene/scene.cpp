@@ -13,6 +13,7 @@
 #include "../../world/world.hpp"
 #include "../screen.hpp"
 #include <exception>
+#include <ncurses.h>
 
 Engine::Scene::Scene::Scene(WINDOW *window, const World::World &world,
                             const Nostd::String &message)
