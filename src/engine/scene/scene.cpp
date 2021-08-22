@@ -118,7 +118,7 @@ void Engine::Scene::Scene::draw_chunk(
         attr = A_BOLD;
       } else if (item != nullptr) {
         t = item;
-        attr = A_ITALIC;
+        attr = NCURSES_BITS(1U, 23); // hardcoded value for A_ITALIC on macos
       } else if (projectile != nullptr) {
         t = projectile;
         attr = A_BLINK;
