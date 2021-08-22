@@ -3,13 +3,13 @@ INT_DIR  = build
 TEST_DIR = build/test
 TARGET   = overengineered
 
-CXX := g++
+CXX = g++
 ## -MMD creates dependency list, but ignores system includes ## -MF specifies where to create the dependency file name
 ## -MP creates phony targets for headers (deals with deleted headers after
 ##  obj file has been compiled)
 ## -MT specifies the dependency target (path qualified obj file name)
-CXXFLAGS := -std=c++11 -MT $@ -MMD -MP -MF $(@:.o=.d) -Wall -Werror
-LDFLAGS := -lstdc++
+CXXFLAGS = -std=c++11 -MT $@ -MMD -MP -MF $(@:.o=.d) -Wall -Werror
+LDFLAGS = -lstdc++
 # conditional linker flags based on OS (Linux (tested on Ubuntu, Elementary and void), Darwin = MacOS)
 UNAME := $(shell uname)
 ifeq ($(UNAME), Linux)
