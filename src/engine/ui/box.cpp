@@ -18,11 +18,11 @@
 #include <exception>
 #include <stdexcept>
 
-// this map for colors _could_ be avoided if we have
-// alloc_pair, free_pair, find_pair on macos
-// TODO: lower memory usage with an ordered map when available
+// this map for colors _could_ have been avoided if we had
+// alloc_pair, free_pair, find_pair on macos (ty Apple)
+// NOTE: we could lower memory usage with an ordered map
 // (its gonna increase computation time toughfrom O(1) to O(log n)
-// but n will be a small number still (in the 10-30s range)
+// but n would still be a small number still (in the 10-30s range)
 short map[256 + (100 * 257)] = {0};
 short i = 1;
 

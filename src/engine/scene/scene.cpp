@@ -6,13 +6,16 @@
   Luca Tagliavini #971133
   07/02/2021
 
-  scene.cpp: TODO as we properly render stuff here
+  scene.cpp: renders the world view around the main hero. The entities are
+  rendered on top of one another with the following priorities: player, enemies,
+  items and tiles
 */
 
 #include "scene.hpp"
 #include "../../world/world.hpp"
 #include "../screen.hpp"
 #include <exception>
+#include <ncurses.h>
 
 Engine::Scene::Scene::Scene(WINDOW *window, const World::World &world,
                             const Nostd::String &message)
@@ -36,7 +39,6 @@ void Engine::Scene::Scene::draw() {
   werase(window);
 
   // draw the world around the player
-  // TODO: await proper implementation
   auto pos = world.player.second;
   // the drawing of the map is handled in this way:
   // 1. compute the *first* chunk to be drawn
@@ -93,7 +95,6 @@ void Engine::Scene::Scene::draw() {
   doupdate();
 }
 
-// TODO: y offsetting, when needed
 void Engine::Scene::Scene::draw_chunk(
     const Nostd::Matrix<Tile *> &tiles,
     const Nostd::Matrix<Data::Pawns::Enemy *> &enemies,
