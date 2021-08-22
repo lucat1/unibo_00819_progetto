@@ -82,7 +82,9 @@ void Engine::Scene::Scene::draw() {
                          .value()
                          ->background()));
   Engine::UI::start_color(window, pair);
+  wattron(window, A_BOLD);
   mvwaddch(window, pos.get_y(), player_x, world.player.first.character());
+  wattroff(window, A_BOLD);
   Engine::UI::end_color(window, pair);
 
   // lastly render the HUD
