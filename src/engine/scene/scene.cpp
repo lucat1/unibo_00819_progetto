@@ -6,7 +6,9 @@
   Luca Tagliavini #971133
   07/02/2021
 
-  scene.cpp: TODO as we properly render stuff here
+  scene.cpp: renders the world view around the main hero. The entities are
+  rendered on top of one another with the following priorities: player, enemies,
+  items and tiles
 */
 
 #include "scene.hpp"
@@ -37,7 +39,6 @@ void Engine::Scene::Scene::draw() {
   werase(window);
 
   // draw the world around the player
-  // TODO: await proper implementation
   auto pos = world.player.second;
   // the drawing of the map is handled in this way:
   // 1. compute the *first* chunk to be drawn
@@ -65,8 +66,8 @@ void Engine::Scene::Scene::draw() {
   // phase 3: draw the chunks from the left-most until we have screen space
   size_t filled = 0;
   while (filled < width) {
-    draw_chunk(start->tiles, start->enemies, start->items, start->projectiles, filled, 0,
-               first_offset);
+    draw_chunk(start->tiles, start->enemies, start->items, start->projectiles,
+               filled, 0, first_offset);
     filled += start->tiles.extent(1) - first_offset;
     start = std::next(start);
     if (first_offset != 0)
@@ -93,7 +94,6 @@ void Engine::Scene::Scene::draw() {
   doupdate();
 }
 
-// TODO: y offsetting, when needed
 void Engine::Scene::Scene::draw_chunk(
     const Nostd::Matrix<Tile *> &tiles,
     const Nostd::Matrix<Data::Pawns::Enemy *> &enemies,
@@ -121,7 +121,7 @@ void Engine::Scene::Scene::draw_chunk(
         t = tile;
 
       Color bg = t->background();
-      if(bg == Color::transparent)
+      if (bg == Color::transparent)
         bg = tile->background();
 
       int pair = Engine::UI::color_pair(color_to_short(t->foreground()),

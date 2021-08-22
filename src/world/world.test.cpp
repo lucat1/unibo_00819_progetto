@@ -30,10 +30,5 @@ int main() {
     auto m = assembler.get();
     // TODO
   });
-  it("does something better no ask", [] {
-    Database d("tests/overengineered.conf.csv", "tests/assets/",
-               "tests/scoreboard.csv");
-    World::World w(d);
-  });
   return 0;
 }
