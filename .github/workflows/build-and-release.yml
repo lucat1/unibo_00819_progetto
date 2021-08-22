@@ -24,7 +24,7 @@ jobs:
 
       - name: install ncurses on macos
         if: startsWith(matrix.platform, 'macos-latest')
-        run: brew install ncurses
+        run: brew install gcc ncurses
 
       - name: 'make clean test'
         run: make clean test
