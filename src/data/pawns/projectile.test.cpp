@@ -30,10 +30,10 @@ int main() {
   it("constructs a Projectile", [] {
     Projectile fireball{Engine::Color::red, 'f', "Fireball", 2, 0, 50, 5};
     for (int i{5}; i > 0; --i) {
-      assert(!fireball.isExpired());
-      fireball.countMovement();
+      assert(!fireball.is_expired());
+      fireball.count_movement();
     }
-    assert(fireball.isExpired());
+    assert(fireball.is_expired());
   });
   it("reads a Projectile from a stream", [] {
     Projectile fireball{Engine::Color::transparent, u' ', "", 0, 0, 0, 0};

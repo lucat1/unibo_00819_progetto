@@ -28,8 +28,8 @@ namespace Pawns {
 class Projectile : public Interactable {
 public:
   Projectile(Engine::Color foreground, char character,
-             const Nostd::String &name, int healthDamage, int manaDamage,
-             int scoreDamage, int range);
+             const Nostd::String &name, int health_damage, int mana_damage,
+             int score_damage, int range, bool casted_by_player = false);
   Projectile(Projectile &&) = default;
   Projectile &operator=(Projectile &&) = default;
   Projectile(const Projectile &) = default;
@@ -37,19 +37,24 @@ public:
 
   ~Projectile() = default;
 
-  void countMovement();
-  bool isExpired() const noexcept;
+  bool was_casted_by_player() const noexcept;
+  void set_caster(bool) noexcept;
+  void count_movement();
+  bool is_expired() const noexcept;
 
   friend std::basic_ostream<char> &operator>>(std::basic_ostream<char> &,
                                               const Projectile &);
 
 protected:
-  int uncheckedHealthEffect(int currentHealth, int maxHealth) override final;
-  int uncheckedManaEffect(int currentMana, int maxMana) override final;
-  int uncheckedScoreEffect(int currentScore) override final;
+  int unchecked_health_effect(int current_health,
+                              int max_health) const override final;
+  int unchecked_mana_effect(int current_mana,
+                            int max_mana) const override final;
+  int unchecked_score_effect(int current_score) const override final;
 
 private:
-  int hD, mD, sD, rng;
+  int hd, md, sd, rng;
+  bool cbp;
 };
 
 std::basic_istream<char> &operator>>(std::basic_istream<char> &, Projectile &);

@@ -71,6 +71,8 @@ bool Game::Game::loop() {
     combat_manager.manage_items();
     combat_manager.manage_projectiles();
     combat_manager.manage_enemies();
+    if (gameplay_manager.get_menu_manager().get_world().player.first.is_dead())
+      gameplay_manager.die();
   }
   frame += 2;
   if (frame > fps * 20)
@@ -144,6 +146,14 @@ void Game::Game::handle_keypress() {
       screen.send_event(Drawable::Event::move_right);
     else
       gameplay_manager.move_right();
+    break;
+  case 'o':
+    if (gameplay_manager.get_menu_manager().is_in_game())
+      combat_manager.use_skill();
+    break;
+  case 'p':
+    if (gameplay_manager.get_menu_manager().is_in_game())
+      combat_manager.use_superskill();
     break;
   case '\33': // ESC key = suicide
     gameplay_manager.die();

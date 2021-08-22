@@ -31,8 +31,8 @@ namespace Pawns {
 class Item : public Interactable {
 public:
   Item(Engine::Color foreground, char character, const Nostd::String &name,
-       int healthBonus, bool healthMode, int manaBonus, bool manaMode,
-       int scoreBonus);
+       int health_bonus, bool health_mode, int mana_bonus, bool mana_mode,
+       int score_bonus);
   Item(Item &&) = default;
   Item &operator=(Item &&) = default;
   Item(const Item &) = default;
@@ -44,13 +44,15 @@ public:
                                               const Item &);
 
 protected:
-  int uncheckedHealthEffect(int currentHealth, int maxHealth) override final;
-  int uncheckedManaEffect(int currentMana, int maxMana) override final;
-  int uncheckedScoreEffect(int currentScore) override final;
+  int unchecked_health_effect(int current_health,
+                              int max_health) const override final;
+  int unchecked_mana_effect(int current_mana,
+                            int max_mana) const override final;
+  int unchecked_score_effect(int current_score) const override final;
 
 private:
-  int hB, mB, sB;
-  bool hM, mM;
+  int hb, mb, sb;
+  bool hm, mm;
 };
 
 std::basic_istream<char> &operator>>(std::basic_istream<char> &, Item &);

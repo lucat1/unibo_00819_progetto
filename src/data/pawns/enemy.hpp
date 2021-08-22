@@ -30,7 +30,7 @@ namespace Pawns {
 class Enemy : public Character, public Interactable {
 public:
   Enemy(Engine::Color foreground, char character, const Nostd::String &name,
-        Skill skill, int healthDamage, int manaDamage, int scoreDamage,
+        Skill skill, int health_damage, int mana_damage, int score_damage,
         int behavior);
   Enemy(Enemy &&) = default;
   Enemy &operator=(Enemy &&) = default;
@@ -55,12 +55,14 @@ public:
                                               const Enemy &);
 
 protected:
-  int uncheckedHealthEffect(int currentHealth, int maxHealth) override final;
-  int uncheckedManaEffect(int currentMana, int maxMana) override final;
-  int uncheckedScoreEffect(int currentScore) override final;
+  int unchecked_health_effect(int current_health,
+                              int max_health) const override final;
+  int unchecked_mana_effect(int current_mana,
+                            int max_mana) const override final;
+  int unchecked_score_effect(int current_score) const override final;
 
 private:
-  int hD, mD, sD;
+  int hd, md, sd;
   int bhv;
 };
 
