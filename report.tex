@@ -29,7 +29,7 @@
 
 \section{Funzionalit\`a}
 
-\emph{Overengineered} \`e un videogioco a piattaforme a scorrimento laterale con
+\emph{Overengineered} \`e un videogioco di piattaforme a scorrimento laterale con
 mappa illimitata implementato in \verb!C++!. L'esecuzione avviene all'interno di
 un terminale: l'interfaccia \`e perci\`o realizzata tramite una grafica ASCII.
 La mappa \`e generata in modo incrementale tramite l'unione di frammenti
@@ -73,7 +73,7 @@ richieste, \`e stato necessario includere un ulteriore modulo, denominato
 \verb!Nostd!. Esso emula alcuni strumenti della libreria standard, integrandoli
 secondo le necessit\`a del progetto. \verb!Nostd! \`e stato realizzato
 congiuntamente dall'intera squadra: a ciascun membro del gruppo \`e stata
-affidata una parte delle sue intestazioni. In cima a ciascun \emph{file} \`e
+affidata una parte delle sue intestazioni. In cima ad ogni \emph{file} \`e
 comunque presente il nominativo del programmatore per esso responsabile.
 
 \subsection{Miscellanei}
@@ -106,7 +106,7 @@ per ottenere prestazioni relativamente soddisfacenti.
 \verb!Nostd! (re)implementa liste, vettori, stringhe, matrici e mappe, ovvero i
 contenitori utili al resto del progetto. Fedelt\`a alla \emph{STL},
 semplicit\`a e pragmatismo ne hanno guidato la progettazione. Proprio come la
-libreria a cui si ispira, \verb!Nostd! supporta i tipi di iteratori appropriati:
+libreria a cui si ispira, \verb!Nostd! fornisce appositi tipi di iteratori:
 questo porta a diversi vantaggi, fra cui la possibilit\`a di usare sia
 l'istruzione \emph{range-for} che \verb!<algorithm>!. \verb!<allocator.hpp>!,
 \verb!<concepts.hpp>! e \verb!<pair.hpp>!, infine, hanno funto da intestazioni
@@ -134,9 +134,9 @@ Tutte le schermate ad eccezione della scena di gioco sono composte da una serie
 di elementi visuali contenuti in \verb!Engine::UI!. Essi vengono inseriti in una
 struttura arborescente che ricorda quella di un \emph{Document Object Model}:
 questo permette, oltre al riutilizzo del codice, una più netta separazione tra
-contenuto e logica dei menu.
-La schermata di gioco scorre la lista di frammenti del mondo vicini al giocatore
-per mostrarli a schermo sovrapponendovi entit\`a e proiettili.
+contenuto e logica dei menu. La schermata di gioco scorre la lista di frammenti
+del mondo vicini al giocatore per mostrarli a schermo sovrapponendovi entit\`a
+e proiettili.
 
 \subsection{World}
 
