@@ -46,7 +46,7 @@ public:
 
 protected:
   int unchecked_health_effect(int current_health,
-                              int max_health) override final;
+                              int max_health) const override final;
 
 private:
   Nostd::UnorderedMap<Nostd::Pair<int, int>, Projectile> p{};

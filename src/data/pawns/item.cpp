@@ -35,16 +35,16 @@ Item::Item(Engine::Color foreground, char character, const Nostd::String &name,
     throw std::invalid_argument("Score bonus must be non-negative.");
 }
 
-int Item::unchecked_health_effect(int current_health, int max_health) {
+int Item::unchecked_health_effect(int current_health, int max_health) const {
   return std::min(max_health,
                   current_health + (hm ? max_health * hb / 100 : hb));
 }
 
-int Item::unchecked_mana_effect(int current_mana, int max_mana) {
+int Item::unchecked_mana_effect(int current_mana, int max_mana) const {
   return std::min(max_mana, current_mana + (mm ? max_mana * mb / 100 : mb));
 }
 
-int Item::unchecked_score_effect(int current_score) {
+int Item::unchecked_score_effect(int current_score) const {
   return current_score + sb;
 }
 

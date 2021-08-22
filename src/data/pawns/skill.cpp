@@ -65,7 +65,7 @@ std::basic_istream<char> &Data::Pawns::operator>>(std::basic_istream<char> &is,
   return is;
 }
 
-int Skill::unchecked_health_effect(int current_health, int max_health) {
+int Skill::unchecked_health_effect(int current_health, int max_health) const {
   return std::min(max_health,
                   current_health + (hm ? max_health * he / 100 : he));
 }

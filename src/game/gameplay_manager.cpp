@@ -17,7 +17,7 @@ GameplayManager::GameplayManager(Data::Database &datab, Engine::Screen &scr)
 
 Game::MenuManager &GameplayManager::get_menu_manager() { return menu_manager; }
 
-inline bool GameplayManager::can_stand(Data::MapUnit u) {
+bool GameplayManager::can_stand(Data::MapUnit u) {
   return u == Data::MapUnit::nothing || u == Data::MapUnit::item ||
          u == Data::MapUnit::enemy;
 }
@@ -100,7 +100,7 @@ void GameplayManager::die() {
   screen.send_event(Engine::Drawable::Event::interact);
 }
 
-inline bool GameplayManager::can_dig(Data::MapUnit u) {
+bool GameplayManager::can_dig(Data::MapUnit u) {
   return can_stand(u) || u == Data::MapUnit::platform;
 }
 

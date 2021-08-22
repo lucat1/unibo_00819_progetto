@@ -33,16 +33,16 @@ public:
 
   // These methods validate their argument and return the new stats after the
   // interaction.
-  int health_effect(int currentHealth, int maxHealth);
-  int mana_effect(int currentMana, int maxMana);
-  int score_effect(int currentScore);
+  int health_effect(int currentHealth, int maxHealth) const;
+  int mana_effect(int currentMana, int maxMana) const;
+  int score_effect(int currentScore) const;
 
 protected:
   // These methods do not validare their argument and return the new stats after
   // the interaction.
-  virtual int unchecked_health_effect(int currentHealth, int maxHealth);
-  virtual int unchecked_mana_effect(int currentMana, int maxMana);
-  virtual int unchecked_score_effect(int currentScore);
+  virtual int unchecked_health_effect(int currentHealth, int maxHealth) const;
+  virtual int unchecked_mana_effect(int currentMana, int maxMana) const;
+  virtual int unchecked_score_effect(int currentScore) const;
 };
 
 } // namespace Pawns

@@ -45,7 +45,7 @@ public:
   Mugshot &mugshot() noexcept;
   const Mugshot &mugshot() const noexcept;
   Skill superskill() const noexcept;
-  void interact(Interactable &); // applies the effect of an Interactable
+  void interact(const Interactable &); // applies the effect of an Interactable
   int current_health() const noexcept;
   int max_health() const noexcept;
   bool is_dead() const noexcept; // checks if the game is over

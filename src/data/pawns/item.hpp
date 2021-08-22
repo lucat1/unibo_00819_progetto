@@ -45,9 +45,10 @@ public:
 
 protected:
   int unchecked_health_effect(int current_health,
-                              int max_health) override final;
-  int unchecked_mana_effect(int current_mana, int max_mana) override final;
-  int unchecked_score_effect(int current_score) override final;
+                              int max_health) const override final;
+  int unchecked_mana_effect(int current_mana,
+                            int max_mana) const override final;
+  int unchecked_score_effect(int current_score) const override final;
 
 private:
   int hb, mb, sb;

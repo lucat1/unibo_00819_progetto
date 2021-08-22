@@ -19,6 +19,8 @@ class CombatManager {
 private:
   Nostd::Matrix<Data::Pawns::Item *>::iterator overlapped_item();
   MenuManager &menu_manager;
+  Data::MapUnit get_mapunit(World::Position);
+  void cast_skill(Data::Pawns::Skill, World::Position);
 
 public:
   CombatManager(MenuManager &);

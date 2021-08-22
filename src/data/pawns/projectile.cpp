@@ -46,15 +46,15 @@ void Projectile::count_movement() {
 
 bool Projectile::is_expired() const noexcept { return !rng; }
 
-int Projectile::unchecked_health_effect(int current_health, int) {
+int Projectile::unchecked_health_effect(int current_health, int) const {
   return std::max(0, current_health - hd);
 }
 
-int Projectile::unchecked_mana_effect(int current_mana, int) {
+int Projectile::unchecked_mana_effect(int current_mana, int) const {
   return std::max(0, current_mana - md);
 }
 
-int Projectile::unchecked_score_effect(int current_score) {
+int Projectile::unchecked_score_effect(int current_score) const {
   return std::max(0, current_score - sd);
 }
 

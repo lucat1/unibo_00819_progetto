@@ -37,15 +37,15 @@ bool Enemy::has_behavior(Behavior b) const noexcept {
   return bhv & static_cast<int>(b);
 }
 
-int Enemy::unchecked_health_effect(int currentHealth, int) {
+int Enemy::unchecked_health_effect(int currentHealth, int) const {
   return std::max(0, currentHealth - hd);
 }
 
-int Enemy::unchecked_mana_effect(int currentMana, int) {
+int Enemy::unchecked_mana_effect(int currentMana, int) const {
   return std::max(0, currentMana - md);
 }
 
-int Enemy::unchecked_score_effect(int currentScore) {
+int Enemy::unchecked_score_effect(int currentScore) const {
   return std::max(0, currentScore - sd);
 }
 

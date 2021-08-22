@@ -48,7 +48,7 @@ const Mugshot &Hero::mugshot() const noexcept { return mug; }
 
 Skill Hero::superskill() const noexcept { return ssk; }
 
-void Hero::interact(Interactable &i) {
+void Hero::interact(const Interactable &i) {
   curH = i.health_effect(curH, maxH);
   curM = i.mana_effect(curM, maxM);
   scr = i.score_effect(scr);

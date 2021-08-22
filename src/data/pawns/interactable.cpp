@@ -20,7 +20,7 @@ Interactable &Interactable::operator=(Interactable &&i) {
   return *this;
 }
 
-int Interactable::health_effect(int currentHealth, int maxHealth) {
+int Interactable::health_effect(int currentHealth, int maxHealth) const {
   if (maxHealth <= 0)
     throw std::invalid_argument("Maximum health must be positive.");
   if (currentHealth < 0 || currentHealth > maxHealth)
@@ -31,7 +31,7 @@ int Interactable::health_effect(int currentHealth, int maxHealth) {
   return res;
 }
 
-int Interactable::mana_effect(int currentMana, int max_mana) {
+int Interactable::mana_effect(int currentMana, int max_mana) const {
   if (max_mana <= 0)
     throw std::invalid_argument("Maximum mana must be positive.");
   if (currentMana < 0 || currentMana > max_mana)
@@ -42,7 +42,7 @@ int Interactable::mana_effect(int currentMana, int max_mana) {
   return res;
 }
 
-int Interactable::score_effect(int currentScore) {
+int Interactable::score_effect(int currentScore) const {
   if (currentScore < 0)
     throw std::invalid_argument("Current score cannot be negative.");
   const int res{unchecked_score_effect(currentScore)};
@@ -51,14 +51,14 @@ int Interactable::score_effect(int currentScore) {
   return res;
 }
 
-int Interactable::unchecked_health_effect(int currentHealth, int) {
+int Interactable::unchecked_health_effect(int currentHealth, int) const {
   return currentHealth;
 }
 
-int Interactable::unchecked_mana_effect(int currentMana, int) {
+int Interactable::unchecked_mana_effect(int currentMana, int) const {
   return currentMana;
 }
 
-int Interactable::unchecked_score_effect(int currentScore) {
+int Interactable::unchecked_score_effect(int currentScore) const {
   return currentScore;
 }
