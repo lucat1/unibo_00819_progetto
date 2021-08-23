@@ -133,45 +133,52 @@ char ChunkAssembler::elaborate_autotile(const MapChunk *chunk,
                                         const Scenery::Autotile *tile,
                                         const size_t &x,
                                         const size_t &y) const noexcept {
-  if (y == 0 || !is_ground_or_platform(chunk->at(y - 1).at(x).value())) {
-    if (x == 0)
+                                        // gop = ground or platform
+  if (y == 0 || !is_ground_or_platform(chunk->at(y - 1).at(x).value())) {  // chunk top or anything upon us  
+    if (x == 0)  // chunk start
       return tile->top_left;
-    else if (x == chunk->width() - 1)
+    else if (x == chunk->width() - 1) // chunk end
       return tile->top_right;
-    if (is_ground_or_platform(chunk->at(y)->at(x - 1).value())) {
-      if (is_ground_or_platform(chunk->at(y)->at(x + 1).value()))
+    if (is_ground_or_platform(chunk->at(y)->at(x - 1).value())) { // gop left
+      if (is_ground_or_platform(chunk->at(y)->at(x + 1).value())) // gop right
         return tile->top;
       else
         return tile->top_right;
     } else
       return tile->top_left;
-  } else if (y == chunk->height - 1 ||
+  } else if (y == chunk->height - 1 ||     // chunk bottom or anything under 
              !is_ground_or_platform(chunk->at(y + 1).at(x).value())) {
-    if (x == 0)
+    if (x == 0)  // chunk start
       return tile->bottom_left;
-    else if (x == chunk->width() - 1)
+    else if (x == chunk->width() - 1)  // chunk end
       return tile->bottom_right;
-    if (is_ground_or_platform(chunk->at(y)->at(x - 1).value())) {
-      if (is_ground_or_platform(chunk->at(y)->at(x + 1).value()))
+    if (is_ground_or_platform(chunk->at(y)->at(x - 1).value())) { // gop left
+      if (is_ground_or_platform(chunk->at(y)->at(x + 1).value())) // gop right
         return tile->bottom;
       else
         return tile->bottom_right;
     } else
       return tile->bottom_left;
-  } else {
-    if (x == 0)
+  } else {   // something upon and something under 
+    if (x == 0) // start of chunk 
       return tile->left;
-    else if (x == chunk->width() - 1)
+    else if (x == chunk->width() - 1)  // end of chunk
       return tile->right;
-    if (is_ground_or_platform(chunk->at(y)->at(x - 1).value())) {
-      if (is_ground_or_platform(chunk->at(y)->at(x + 1).value()))
-        return tile->center;
+    if (is_ground_or_platform(chunk->at(y)->at(x - 1).value())) { // gop left
+      if (is_ground_or_platform(chunk->at(y)->at(x + 1).value())) // gop right
+        return tile->center; 
       else
         return tile->right;
     } else
       return tile->left;
   }
 }
+
+/*
+-x
+xx
+-x
+*/
 
 inline bool
 ChunkAssembler::is_ground_or_platform(const MapUnit &u) const noexcept {
