@@ -23,7 +23,6 @@ using Data::Palette::slider;
 using Data::Palette::unfocused;
 using Engine::UI::Box;
 
-#include <iostream>
 using namespace std;
 
 void Engine::Menu::Settings::alloc_updated(

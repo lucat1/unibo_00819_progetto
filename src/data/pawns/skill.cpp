@@ -11,58 +11,43 @@
 
 #include "skill.hpp"
 
-#include <algorithm>
 #include <cstdlib>
 #include <istream>
 
-#include "../../nostd/unordered_map.hpp"
-#include "projectile.hpp"
+#include "../database.hpp"
 
 using Data::Pawns::Projectile;
 using Data::Pawns::Skill;
 
-Skill::Skill(Nostd::UnorderedMap<Nostd::Pair<int, int>, Projectile> projectiles,
-             int healthEffect, bool healthMode)
-    : p{projectiles}, hE{healthEffect}, hM{healthMode} {
-  for (auto pair : projectiles) {
-    const int x{pair->first.first}, y{pair->first.second};
-    if (!x && !y)
-      throw std::invalid_argument("Cannot spawn projectile on user.");
-    if (std::abs(x) > 1 || std::abs(y) > 1)
-      throw std::invalid_argument("Must spawn projectile in an adjacent cell.");
-  }
-  if (hE < 0)
-    throw std::invalid_argument("Health effect must be non-negative.");
-  if (hM && hE > 100)
+Skill::Skill(const Nostd::String &name,
+             const Nostd::Vector<Projectile> &projectiles, int healthEffect,
+             bool healthMode)
+    : Pawn{name}, p{projectiles}, he{healthEffect}, hm{healthMode} {
+  if (hm && he > 100)
     throw std::invalid_argument("Health effect cannot be > 100%.");
 }
 
-const Nostd::UnorderedMap<Nostd::Pair<int, int>, Projectile> &
-Skill::projectiles() const noexcept {
-  return p;
-}
+Nostd::Vector<Projectile> &Skill::projectiles() noexcept { return p; }
 
 std::basic_istream<char> &Data::Pawns::operator>>(std::basic_istream<char> &is,
                                                   Skill &s) {
+  Nostd::String name;
+  get_CSV_String(is, name);
   int n; // number of projectiles
   (is >> n).ignore();
-  Nostd::UnorderedMap<Nostd::Pair<int, int>, Projectile> projectiles{};
-  for (int i{0}; i < n; ++i) {
-    int x, y;
-    (is >> x).ignore();
-    (is >> y).ignore();
-    Projectile p{Engine::Color::transparent, u' ', "", 0, 0, 0, 0};
+  Nostd::Vector<Projectile> projectiles(
+      n, {Engine::Color::transparent, u' ', "", 0, 0, 0, 0});
+  for (auto &p : projectiles)
     (is >> p).ignore();
-    projectiles.put({x, y}, p);
-  }
-  int healthEffect;
-  (is >> healthEffect).ignore();
-  bool healthMode;
-  if (is >> healthMode)
-    s = Skill(projectiles, healthEffect, healthMode);
+  int health_effect;
+  (is >> health_effect).ignore();
+  bool health_mode;
+  if (is >> health_mode)
+    s = Skill(name, projectiles, health_effect, health_mode);
   return is;
 }
 
-int Skill::uncheckedHealthEffect(int currentHealth, int maxHealth) {
-  return std::min(maxHealth, currentHealth + (hM ? maxHealth * hE / 100 : hE));
+int Skill::unchecked_health_effect(int current_health, int max_health) const {
+  return std::min(max_health,
+                  current_health + (hm ? max_health * he / 100 : he));
 }

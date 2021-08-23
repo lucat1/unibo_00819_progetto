@@ -1,8 +1,8 @@
-8,@,boulder,0,0,0,2,0,100,1
-2,2,snake,0,0,0,1,1,150,3
-4,~,bird,0,0,0,0,3,200,7
-0,*,mosquito,0,0,0,1,1,100,5
-15,8,snowman,0,0,0,1,3,300,0
-6,%,butterfly,0,0,0,2,2,400,15
-52,.,ant,0,0,0,1,0,100,3
+15,8,snowman,Idling,0,0,0,1,3,300,0
+8,@,boulder,Rolling Stone,0,0,0,2,0,100,1
+52,.,ant,Bite,1,-1,0,52,>,an ant,1,0,50,2,0,0,1,0,100,3
+0,*,mosquito,Idling,0,0,0,1,1,100,5
+8,~,bird,Bald Attack,1,0,-1,7,*,waste products,1,1,200,40,0,0,1,1,100,7
+6,%,butterfly,Pheromones,4,-1,0,3,:,pheromones,1,1,50,5,1,0,3,:,pheromones,1,1,50,5,0,1,3,:,pheromones,1,1,50,5,0,-1,3,:,pheromones,1,1,50,5,0,0,2,2,400,15
+2,2,snake,Sneaky Attack,3,-1,0,5,-,some poison,1,2,75,4,-1,0,5,-,some poison,1,2,75,3,-1,1,5,-,some poison,1,2,75,3,0,0,1,1,150,3
 

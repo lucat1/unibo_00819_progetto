@@ -17,12 +17,12 @@ GameplayManager::GameplayManager(Data::Database &datab, Engine::Screen &scr)
 
 Game::MenuManager &GameplayManager::get_menu_manager() { return menu_manager; }
 
-inline bool can_stand(Data::MapUnit u) {
+bool GameplayManager::can_stand(Data::MapUnit u) {
   return u == Data::MapUnit::nothing || u == Data::MapUnit::item ||
          u == Data::MapUnit::enemy;
 }
 
-void Game::GameplayManager::gravity() {
+void GameplayManager::gravity() {
   auto &player = menu_manager.get_world().player;
   auto &chunk = player.second.get_fragment()->map_chunk;
   if ((size_t)player.second.get_y() >= Data::MapChunk::height - 1)
@@ -35,40 +35,56 @@ void Game::GameplayManager::gravity() {
   }
 }
 
-void Game::GameplayManager::move_left() {
+void GameplayManager::move_left() {
   auto &player = menu_manager.get_world().player;
-  auto &chunk = player.second.get_fragment()->map_chunk;
   if (player.second.move_left()) {
+    auto &chunk = player.second.get_fragment()->map_chunk;
     auto unit =
         chunk->at(player.second.get_y()).at(player.second.get_x()).value();
     if (!can_stand(unit))
       player.second.move_right();
   }
 }
-void Game::GameplayManager::move_right() {
+
+void GameplayManager::move_right() {
   auto &player = menu_manager.get_world().player;
-  auto &chunk = player.second.get_fragment()->map_chunk;
   if (player.second.move_right()) {
+    auto &chunk = player.second.get_fragment()->map_chunk;
     auto unit =
         chunk->at(player.second.get_y()).at(player.second.get_x()).value();
     if (!can_stand(unit))
       player.second.move_left();
   }
 }
-void Game::GameplayManager::move_up() {
+
+void GameplayManager::move_up() {
   auto &player = menu_manager.get_world().player;
   auto &chunk = player.second.get_fragment()->map_chunk;
-  int i = 3;
-  while (player.second.get_y() > 0 && i > 0) {
-    auto unit_above =
-        chunk->at(player.second.get_y() - 1).at(player.second.get_x()).value();
-    if (!can_stand(unit_above))
-      break;
+  auto unit_below =
+      chunk->at(player.second.get_y() + 1).at(player.second.get_x()).value();
+
+  if (player.second.get_y() == 0 || can_stand(unit_below))
+    return;
+  auto unit_above =
+      chunk->at(player.second.get_y() - 1).at(player.second.get_x()).value();
+  if (unit_above == Data::MapUnit::platform) {
     menu_manager.get_world().player.second.move_up();
-    i--;
+    menu_manager.get_world().player.second.move_up();
+  } else {
+    int i = 2;
+    while (player.second.get_y() > 0 && i > 0) {
+      unit_above = chunk->at(player.second.get_y() - 1)
+                       .at(player.second.get_x())
+                       .value();
+      if (!can_stand(unit_above))
+        break;
+      menu_manager.get_world().player.second.move_up();
+      i--;
+    }
   }
 }
-void Game::GameplayManager::move_down() {
+
+void GameplayManager::move_down() {
   auto &player = menu_manager.get_world().player;
   auto &chunk = player.second.get_fragment()->map_chunk;
   auto unit_below =
@@ -79,7 +95,22 @@ void Game::GameplayManager::move_down() {
   menu_manager.get_world().player.second.move_down();
 }
 
-void Game::GameplayManager::die() {
-  // TODO: fill
+void GameplayManager::die() {
+  menu_manager.set_message(Nostd::String());
   screen.send_event(Engine::Drawable::Event::interact);
+}
+
+bool GameplayManager::can_dig(Data::MapUnit u) {
+  return can_stand(u) || u == Data::MapUnit::platform;
+}
+
+void GameplayManager::move_dig() {
+  auto &player = menu_manager.get_world().player;
+  auto &chunk = player.second.get_fragment()->map_chunk;
+  auto unit_below =
+      chunk->at(player.second.get_y() + 1).at(player.second.get_x()).value();
+  if (!can_dig(unit_below))
+    return;
+
+  menu_manager.get_world().player.second.move_down();
 }

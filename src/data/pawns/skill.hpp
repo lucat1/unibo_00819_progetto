@@ -13,9 +13,8 @@
 #define DATA_PAWNS_SKILL_HPP
 
 #include <istream>
+#include <vector>
 
-#include "../../nostd/pair.hpp"
-#include "../../nostd/unordered_map.hpp"
 #include "interactable.hpp"
 #include "projectile.hpp"
 
@@ -27,10 +26,10 @@ namespace Pawns {
   A Skill specifies the way Projectiles can be spawned and their effects on the
   agent spawning them.
 */
-class Skill : Interactable {
+class Skill : public Interactable {
 public:
   Skill() = default; // uneffective skill: does nothing at all
-  Skill(Nostd::UnorderedMap<Nostd::Pair<int, int>, Projectile> projectiles,
+  Skill(const Nostd::String &, const Nostd::Vector<Projectile> &projectiles,
         int healthEffect, bool healthMode);
   Skill(Skill &&) = default;
   Skill &operator=(Skill &&) = default;
@@ -39,16 +38,15 @@ public:
 
   ~Skill() = default;
 
-  // Each Projectile's key is its spawning coordinates relative to the caster.
-  const Nostd::UnorderedMap<Nostd::Pair<int, int>, Projectile> &
-  projectiles() const noexcept;
+  Nostd::Vector<Projectile> &projectiles() noexcept;
 
 protected:
-  int uncheckedHealthEffect(int currentHealth, int maxHealth) override final;
+  int unchecked_health_effect(int current_health,
+                              int max_health) const override final;
 
 private:
-  Nostd::UnorderedMap<Nostd::Pair<int, int>, Projectile> p{};
-  int hE{0}, hM{false};
+  Nostd::Vector<Projectile> p{};
+  int he{0}, hm{false};
 };
 
 std::basic_istream<char> &operator>>(std::basic_istream<char> &, Skill &);

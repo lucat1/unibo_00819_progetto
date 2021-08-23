@@ -1,3 +1,14 @@
+/*
+  University of Bologna
+  First cicle degree in Computer Science
+  00819 - Programmazione
+
+  Andreea Scrob #989372
+  03/27/2021
+
+  list.test.hpp: tests for Nostd::List
+*/
+
 #include "list.hpp"
 #include "test.hpp"
 #include <cassert>
@@ -44,6 +55,7 @@ int main() {
     List<int> l;
     l.push_back(7);
     l.push_back(27);
+    assert(l.size() == 2);
     l.pop_back();
     assert(l.size() == 1);
     assert(l.front() == 7);

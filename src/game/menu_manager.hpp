@@ -11,13 +11,16 @@
 
 #ifndef GAME_MENUMANAGER_HPP
 #define GAME_MENUMANAGER_HPP
+
 #include "../data/database.hpp"
 #include "../engine/screen.hpp"
 #include "../world/world.hpp"
 #include "settings_manager.hpp"
 
 namespace Game {
+
 class MenuManager {
+
 private:
   Data::Database &db;
   Engine::Screen &screen;
@@ -38,6 +41,7 @@ public:
   const Nostd::String get_message() const;
   void set_message(const Nostd::String &);
 };
+
 } // namespace Game
 
 #endif

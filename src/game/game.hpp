@@ -14,6 +14,7 @@
 #include "../data/database.hpp"
 #include "../engine/screen.hpp"
 #include "../world/world.hpp"
+#include "combat_manager.hpp"
 #include "gameplay_manager.hpp"
 namespace Game {
 class Game {
@@ -26,6 +27,8 @@ private:
   bool loop();
   void handle_keypress();
   GameplayManager gameplay_manager;
+  char last_key = '\0';
+  CombatManager combat_manager;
 
 public:
   int run();

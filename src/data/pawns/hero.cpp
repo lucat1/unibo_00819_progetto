@@ -28,12 +28,14 @@ Hero::Hero(Engine::Color foreground, char character, const Nostd::String &name,
            int health, int mana)
     : Engine::EntityTile{character, foreground}, Pawn{name, character,
                                                       foreground},
-      Character{name, character, foreground, skill}, dsc{description},
+      Character{name, character, foreground, skill, true}, dsc{description},
       ssk{superSkill}, curH{health}, maxH{health}, curM{0}, maxM{mana}, scr{0} {
   if (maxH <= 0)
     throw std::invalid_argument("Health must be positive.");
   if (maxM <= 0)
     throw std::invalid_argument("Mana must be positive.");
+  for (auto &p : ssk.projectiles())
+    p.set_caster(true);
 }
 
 void Hero::rename(const Nostd::String &s) { Pawn::nm = s; }
@@ -44,12 +46,12 @@ Mugshot &Hero::mugshot() noexcept { return mug; }
 
 const Mugshot &Hero::mugshot() const noexcept { return mug; }
 
-Skill Hero::superSkill() const noexcept { return ssk; }
+Skill Hero::superskill() const noexcept { return ssk; }
 
-void Hero::interact(Interactable &i) {
-  curH = i.healthEffect(curH, maxH);
-  curM = i.manaEffect(curM, maxM);
-  scr = i.scoreEffect(scr);
+void Hero::interact(const Interactable &i) {
+  curH = i.health_effect(curH, maxH);
+  curM = i.mana_effect(curM, maxM);
+  scr = i.score_effect(scr);
 }
 
 int Hero::current_health() const noexcept { return curH; }
@@ -62,6 +64,11 @@ int Hero::current_mana() const noexcept { return curM; }
 
 int Hero::max_mana() const noexcept { return maxM; }
 
+void Hero::increase_mana() noexcept {
+  if (curM != maxM)
+    ++curM;
+}
+
 bool Hero::attempt_super_skill() noexcept {
   if (curM < maxM)
     return false;
@@ -73,22 +80,26 @@ int Hero::score() const noexcept { return scr; }
 
 std::basic_istream<char> &Data::Pawns::operator>>(std::basic_istream<char> &is,
                                                   Hero &h) {
-  short foreground;
-  (is >> foreground).ignore();
-  char character;
-  (is >> character).ignore();
-  Nostd::String name, description;
-  Data::get_CSV_String(is, name);
-  Data::get_CSV_String(is, description);
-  Skill skill, superSkill;
-  (is >> skill).ignore();
-  (is >> superSkill).ignore();
-  int maxHealth, max_mana;
-  (is >> maxHealth).ignore();
-  if (is >> max_mana) {
-    h = Hero(Engine::short_to_color(foreground), character, name, description,
-             skill, superSkill, maxHealth, max_mana);
-    is.ignore();
+  if (is) {
+    short foreground;
+    (is >> foreground).ignore();
+    char character;
+    (is >> character).ignore();
+    Nostd::String name, description;
+    Data::get_CSV_String(is, name);
+    Data::get_CSV_String(is, description);
+    if (is) {
+      Skill skill, superskill;
+      (is >> skill).ignore();
+      (is >> superskill).ignore();
+      int maxHealth, max_mana;
+      (is >> maxHealth).ignore();
+      if (is >> max_mana) {
+        h = Hero(Engine::short_to_color(foreground), character, name,
+                 description, skill, superskill, maxHealth, max_mana);
+        is.ignore();
+      }
+    }
   }
   return is;
 }

@@ -44,13 +44,14 @@ public:
   const Nostd::String &description() const noexcept;
   Mugshot &mugshot() noexcept;
   const Mugshot &mugshot() const noexcept;
-  Skill superSkill() const noexcept;
-  void interact(Interactable &); // applies the effect of an Interactable
+  Skill superskill() const noexcept;
+  void interact(const Interactable &); // applies the effect of an Interactable
   int current_health() const noexcept;
   int max_health() const noexcept;
   bool is_dead() const noexcept; // checks if the game is over
   int current_mana() const noexcept;
   int max_mana() const noexcept;
+  void increase_mana() noexcept;
   // if mana is full, sets it to zero and returns true
   bool attempt_super_skill() noexcept;
   int score() const noexcept;

@@ -33,7 +33,7 @@ int main() {
   });
   it("reads an Enemy from a stream", [] {
     Enemy goomba{Engine::Color::transparent, u' ', "", {}, 0, 0, 0, 1};
-    std::istringstream iss{"1,m,Goomba,0,0,0,1,0,50,1\n"};
+    std::istringstream iss{"1,m,Goomba,Tackle,0,0,0,1,0,50,1\n"};
     iss >> goomba;
     assert(goomba.foreground() == Engine::Color::maroon);
     assert(goomba.character() == 'm');

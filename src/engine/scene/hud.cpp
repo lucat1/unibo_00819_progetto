@@ -18,13 +18,7 @@
 
 Engine::Scene::HUD::HUD(const Data::Pawns::Hero &player,
                         const Nostd::String &message)
-    : message{message} {
-  this->health = player.current_health();
-  this->max_health = player.max_health();
-  this->mana = player.current_mana();
-  this->max_mana = player.max_mana();
-  this->score = player.score();
-}
+    : player{player}, message{message} {}
 
 void Engine::Scene::HUD::bar(WINDOW *window, szu x, szu y, int value,
                              int max_value, const char icon[5], Color c) {
@@ -71,10 +65,12 @@ void Engine::Scene::HUD::bar(WINDOW *window, szu x, szu y, int value,
 // will be shown as the HUD visual interface
 void Engine::Scene::HUD::show(WINDOW *window, szu x, szu y, szu max_width,
                               szu max_height) {
-  bar(window, x, y, health, max_health, " ♡ ", Data::Palette::health);
-  bar(window, x + 12, y, mana, max_mana, " ↑ ", Data::Palette::mana);
+  bar(window, x, y, player.current_health(), player.max_health(), " ♡ ",
+      Data::Palette::health);
+  bar(window, x + 12, y, player.current_mana(), player.max_mana(), " ↑ ",
+      Data::Palette::mana);
   Nostd::String scr = " ● ";
-  Utils::stringify(score, scr);
+  Utils::stringify(player.score(), scr);
   scr.append("   ");
   scr.append(message);
   mvwaddstr(window, x + 24, y, scr.c_str());

@@ -26,7 +26,8 @@ using std::cout;
 
 Game::Game::Game()
     : db("overengineered.conf.csv", "assets", "scoreboard.csv"),
-      gameplay_manager(db, screen) {
+      gameplay_manager(db, screen),
+      combat_manager(gameplay_manager.get_menu_manager()) {
   gameplay_manager.get_menu_manager().get_settings_manager().apply_settings();
   signal(SIGTERM, before_close);
 }
@@ -65,6 +66,15 @@ bool Game::Game::loop() {
     screen.send_event(Engine::Drawable::Event::redraw);
   }
 
+  if (gameplay_manager.get_menu_manager().is_in_game()) {
+    combat_manager.manage_items();
+    if ((frame / (fps / 10)) % 2 == 0) {
+      combat_manager.manage_projectiles();
+      combat_manager.manage_enemies();
+    }
+    if (gameplay_manager.get_menu_manager().get_world().player.first.is_dead())
+      gameplay_manager.die();
+  }
   handle_keypress();
 
   frame += 2;
@@ -75,6 +85,12 @@ bool Game::Game::loop() {
 
 void Game::Game::handle_keypress() {
   int key = getch();
+  if (gameplay_manager.get_menu_manager().is_in_game()) {
+    if (last_key == 'e')
+      gameplay_manager.move_right();
+    else if (last_key == 'q')
+      gameplay_manager.move_left();
+  }
   switch (key) {
   case KEY_RESIZE:
     if (!screen.reposition())
@@ -111,8 +127,10 @@ void Game::Game::handle_keypress() {
   case KEY_DOWN:
     if (!gameplay_manager.get_menu_manager().is_in_game())
       screen.send_event(Drawable::Event::move_down);
-    else
-      gameplay_manager.move_down();
+    else {
+      gameplay_manager.move_dig();
+      gameplay_manager.move_dig();
+    }
     break;
 
   case 'h':
@@ -132,8 +150,20 @@ void Game::Game::handle_keypress() {
     else
       gameplay_manager.move_right();
     break;
+  case 'o':
+    if (gameplay_manager.get_menu_manager().is_in_game())
+      combat_manager.use_skill();
+    break;
+  case 'p':
+    if (gameplay_manager.get_menu_manager().is_in_game())
+      combat_manager.use_superskill();
+    break;
+  case '\33': // ESC key = suicide
+    gameplay_manager.die();
+    break;
   case ERR:
     // ignore ncurses's getch errors
     break;
   };
+  last_key = key;
 }
