@@ -110,7 +110,11 @@ void CombatManager::manage_projectiles() {
           get_enemy(p->second);
       if (enemy.value() != nullptr && p->first.was_casted_by_player()) {
         enemy.value()->kill();
-        menu_manager.get_world().player.first.increase_mana();
+        menu_manager.get_world().player.first.award();
+        menu_manager.set_message(Nostd::String(enemy.value()->name())
+                                     .append(" was hit by ")
+                                     .append(p->first.name())
+                                     .append("."));
         enemy.value() = nullptr;
       }
       Nostd::Matrix<Data::Pawns::Projectile *>::iterator projectile_pointer =
