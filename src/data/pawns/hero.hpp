@@ -51,6 +51,7 @@ public:
   bool is_dead() const noexcept; // checks if the game is over
   int current_mana() const noexcept;
   int max_mana() const noexcept;
+  void increase_mana() noexcept;
   // if mana is full, sets it to zero and returns true
   bool attempt_super_skill() noexcept;
   int score() const noexcept;

@@ -68,8 +68,10 @@ bool Game::Game::loop() {
 
   if (gameplay_manager.get_menu_manager().is_in_game()) {
     combat_manager.manage_items();
-    combat_manager.manage_projectiles();
-    combat_manager.manage_enemies();
+    if ((frame / (fps / 10)) % 2 == 0) {
+      combat_manager.manage_projectiles();
+      combat_manager.manage_enemies();
+    }
     if (gameplay_manager.get_menu_manager().get_world().player.first.is_dead())
       gameplay_manager.die();
   }

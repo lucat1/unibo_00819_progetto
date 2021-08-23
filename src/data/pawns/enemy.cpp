@@ -33,6 +33,10 @@ Enemy::Enemy(Engine::Color foreground, char character,
     throw std::invalid_argument("Score damage must be positive.");
 }
 
+bool Enemy::is_dead() const noexcept { return dead; }
+
+void Enemy::kill() noexcept { dead = true; }
+
 bool Enemy::has_behavior(Behavior b) const noexcept {
   return bhv & static_cast<int>(b);
 }

@@ -17,9 +17,13 @@ namespace Game {
 
 class CombatManager {
 private:
-  Nostd::Matrix<Data::Pawns::Item *>::iterator overlapped_item();
+  Nostd::Matrix<Data::Pawns::Item *>::iterator get_item();
   MenuManager &menu_manager;
   Data::MapUnit get_mapunit(World::Position);
+  Nostd::Matrix<Data::Pawns::Enemy *>::iterator get_enemy(World::Position);
+  Nostd::Matrix<Data::Pawns::Projectile *>::iterator
+      get_projectile(World::Position);
+  bool move_projectiles(Data::Pawns::Projectile, World::Position *);
   void cast_skill(Data::Pawns::Skill, World::Position);
 
 public:

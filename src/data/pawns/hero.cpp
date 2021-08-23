@@ -64,6 +64,11 @@ int Hero::current_mana() const noexcept { return curM; }
 
 int Hero::max_mana() const noexcept { return maxM; }
 
+void Hero::increase_mana() noexcept {
+  if (curM != maxM)
+    ++curM;
+}
+
 bool Hero::attempt_super_skill() noexcept {
   if (curM < maxM)
     return false;

@@ -39,6 +39,9 @@ public:
 
   ~Enemy() = default;
 
+  bool is_dead() const noexcept;
+  void kill() noexcept;
+
   // A Behavior is a bitmask
   enum class Behavior {
     none = 0,
@@ -62,8 +65,8 @@ protected:
   int unchecked_score_effect(int current_score) const override final;
 
 private:
-  int hd, md, sd;
-  int bhv;
+  int hd, md, sd, bhv;
+  bool dead = false;
 };
 
 // If either a or b has a certain behavior, then so does a | b (and vice versa).

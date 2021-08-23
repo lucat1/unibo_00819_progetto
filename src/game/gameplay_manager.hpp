@@ -34,7 +34,7 @@ public:
   void die();
   void move_dig();
 
-  Nostd::Matrix<Data::Pawns::Item *>::iterator overlapped_item();
+  Nostd::Matrix<Data::Pawns::Item *>::iterator get_item();
   void manage_items();
 };
 
