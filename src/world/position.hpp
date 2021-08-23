@@ -47,7 +47,7 @@ public:
   // Fragment iterator getter
   Nostd::List<Fragment>::iterator get_fragment() const noexcept;
 
-  // Methods used to move the coordinates
+  // Methods used to move the coordinates in the four directions
   bool move_left(void);
 
   bool move_right(void);
@@ -55,19 +55,6 @@ public:
   bool move_down(void);
 
   bool move_up(void);
-};
-
-class InvalidPositionException : public std::exception {
-private:
-  std::string message;
-
-public:
-  InvalidPositionException(const int &x, const int &y) {
-    this->message = "(" + std::to_string(x) + " " + std::to_string(y) +
-                    ") isn't a valid position";
-  }
-
-  const char *what() const noexcept override { return message.c_str(); }
 };
 
 } // namespace World
