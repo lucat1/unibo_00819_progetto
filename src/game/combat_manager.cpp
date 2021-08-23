@@ -28,9 +28,9 @@ Data::MapUnit CombatManager::get_mapunit(World::Position position) {
 
 void CombatManager::cast_skill(Data::Pawns::Skill skill,
                                World::Position position) {
-  for (auto pair : skill.projectiles()) {
+  for (auto projectile : skill.projectiles()) {
     World::Position projectile_position = position;
-    switch (pair->first.first) { // x
+    switch (projectile.get_x()) { // x
     case -1:
       if (!projectile_position.move_left())
         continue;
@@ -42,7 +42,7 @@ void CombatManager::cast_skill(Data::Pawns::Skill skill,
       }
     }
 
-    switch (pair->first.second) { // y
+    switch (projectile.get_y()) { // y
     case -1:
       if (!projectile_position.move_up())
         continue;
@@ -54,7 +54,7 @@ void CombatManager::cast_skill(Data::Pawns::Skill skill,
 
     if (GameplayManager::can_dig(get_mapunit(projectile_position))) {
       menu_manager.get_world().projectiles.push_back(
-          {pair->second, projectile_position});
+          {projectile, projectile_position});
       projectile_position.get_fragment()
           ->projectiles.at(projectile_position.get_y())
           .at(projectile_position.get_x())

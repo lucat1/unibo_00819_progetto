@@ -11,36 +11,23 @@
 
 #include "skill.hpp"
 
-#include <algorithm>
 #include <cstdlib>
 #include <istream>
 
-#include "../../nostd/unordered_map.hpp"
 #include "../database.hpp"
-#include "projectile.hpp"
 
 using Data::Pawns::Projectile;
 using Data::Pawns::Skill;
 
 Skill::Skill(const Nostd::String &name,
-             Nostd::UnorderedMap<Nostd::Pair<int, int>, Projectile> projectiles,
-             int healthEffect, bool healthMode)
+             const Nostd::Vector<Projectile> &projectiles, int healthEffect,
+             bool healthMode)
     : Pawn{name}, p{projectiles}, he{healthEffect}, hm{healthMode} {
-  for (auto pair : projectiles) {
-    const int x{pair->first.first}, y{pair->first.second};
-    if (!x && !y)
-      throw std::invalid_argument("Cannot spawn projectile on user.");
-    if (std::abs(x) > 1 || std::abs(y) > 1)
-      throw std::invalid_argument("Must spawn projectile in an adjacent cell.");
-  }
   if (hm && he > 100)
     throw std::invalid_argument("Health effect cannot be > 100%.");
 }
 
-Nostd::UnorderedMap<Nostd::Pair<int, int>, Projectile> &
-Skill::projectiles() noexcept {
-  return p;
-}
+Nostd::Vector<Projectile> &Skill::projectiles() noexcept { return p; }
 
 std::basic_istream<char> &Data::Pawns::operator>>(std::basic_istream<char> &is,
                                                   Skill &s) {
@@ -48,15 +35,10 @@ std::basic_istream<char> &Data::Pawns::operator>>(std::basic_istream<char> &is,
   get_CSV_String(is, name);
   int n; // number of projectiles
   (is >> n).ignore();
-  Nostd::UnorderedMap<Nostd::Pair<int, int>, Projectile> projectiles{};
-  for (int i{0}; i < n; ++i) {
-    int x, y;
-    (is >> x).ignore();
-    (is >> y).ignore();
-    Projectile p{Engine::Color::transparent, u' ', "", 0, 0, 0, 0};
+  Nostd::Vector<Projectile> projectiles(
+      n, {Engine::Color::transparent, u' ', "", 0, 0, 0, 0});
+  for (auto &p : projectiles)
     (is >> p).ignore();
-    projectiles.put({x, y}, p);
-  }
   int health_effect;
   (is >> health_effect).ignore();
   bool health_mode;

@@ -34,8 +34,8 @@ Hero::Hero(Engine::Color foreground, char character, const Nostd::String &name,
     throw std::invalid_argument("Health must be positive.");
   if (maxM <= 0)
     throw std::invalid_argument("Mana must be positive.");
-  for (auto &x : ssk.projectiles())
-    x->second.set_caster(true);
+  for (auto &p : ssk.projectiles())
+    p.set_caster(true);
 }
 
 void Hero::rename(const Nostd::String &s) { Pawn::nm = s; }

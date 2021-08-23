@@ -29,7 +29,8 @@ class Projectile : public Interactable {
 public:
   Projectile(Engine::Color foreground, char character,
              const Nostd::String &name, int health_damage, int mana_damage,
-             int score_damage, int range, bool casted_by_player = false);
+             int score_damage, int range, bool casted_by_player = false,
+             int x = 0, int y = 0);
   Projectile(Projectile &&) = default;
   Projectile &operator=(Projectile &&) = default;
   Projectile(const Projectile &) = default;
@@ -38,6 +39,8 @@ public:
   ~Projectile() = default;
 
   bool was_casted_by_player() const noexcept;
+  int get_x() const noexcept;
+  int get_y() const noexcept;
   void set_caster(bool) noexcept;
   void count_movement();
   bool is_expired() const noexcept;
@@ -53,7 +56,7 @@ protected:
   int unchecked_score_effect(int current_score) const override final;
 
 private:
-  int hd, md, sd, rng;
+  int hd, md, sd, rng, x, y;
   bool cbp;
 };
 

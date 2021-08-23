@@ -66,7 +66,6 @@ bool Game::Game::loop() {
     screen.send_event(Engine::Drawable::Event::redraw);
   }
 
-  handle_keypress();
   if (gameplay_manager.get_menu_manager().is_in_game()) {
     combat_manager.manage_items();
     combat_manager.manage_projectiles();
@@ -74,6 +73,8 @@ bool Game::Game::loop() {
     if (gameplay_manager.get_menu_manager().get_world().player.first.is_dead())
       gameplay_manager.die();
   }
+  handle_keypress();
+
   frame += 2;
   if (frame > fps * 20)
     frame = 1;

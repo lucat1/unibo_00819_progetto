@@ -11,7 +11,7 @@
 
 #include "projectile.hpp"
 
-#include <algorithm>
+#include <cmath>
 
 #include "../../engine/colorable.hpp"
 #include "../database.hpp"
@@ -21,10 +21,12 @@ using Data::Pawns::Projectile;
 Projectile::Projectile(Engine::Color foreground, char character,
                        const Nostd::String &name, int health_damage,
                        int mana_damage, int score_damage, int range,
-                       bool casted_by_player)
+                       bool casted_by_player, int x, int y)
     : Engine::EntityTile{character, foreground},
       Pawn{name, character, foreground}, hd{health_damage}, md{mana_damage},
-      sd{score_damage}, rng{range}, cbp{casted_by_player} {
+      sd{score_damage}, rng{range}, x{x}, y{y}, cbp{casted_by_player} {
+  if (std::abs(x) > 1 || std::abs(y) > 1)
+    throw std::invalid_argument("Must spawn projectile in an adjacent cell.");
   if (hd < 0)
     throw std::invalid_argument("Health damage must be positive or zero.");
   if (md < 0)
@@ -37,7 +39,12 @@ Projectile::Projectile(Engine::Color foreground, char character,
 
 bool Projectile::was_casted_by_player() const noexcept { return cbp; }
 
+int Projectile::get_x() const noexcept { return x; }
+
+int Projectile::get_y() const noexcept { return y; }
+
 void Projectile::set_caster(bool caster) noexcept { cbp = caster; }
+
 void Projectile::count_movement() {
   if (is_expired())
     throw std::logic_error("This projectile is already expired.");
@@ -60,6 +67,10 @@ int Projectile::unchecked_score_effect(int current_score) const {
 
 std::basic_istream<char> &Data::Pawns::operator>>(std::basic_istream<char> &is,
                                                   Projectile &p) {
+  int x;
+  (is >> x).ignore();
+  int y;
+  (is >> y).ignore();
   short foreground;
   (is >> foreground).ignore();
   char character;
@@ -72,6 +83,7 @@ std::basic_istream<char> &Data::Pawns::operator>>(std::basic_istream<char> &is,
   (is >> score_damage).ignore();
   if (is >> range)
     p = Projectile(Engine::short_to_color(foreground), character, name,
-                   health_damage, mana_damage, score_damage, range);
+                   health_damage, mana_damage, score_damage, range, false, x,
+                   y);
   return is;
 }

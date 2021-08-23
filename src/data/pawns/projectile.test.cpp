@@ -37,7 +37,7 @@ int main() {
   });
   it("reads a Projectile from a stream", [] {
     Projectile fireball{Engine::Color::transparent, u' ', "", 0, 0, 0, 0};
-    std::istringstream iss{"9,f,Fireball,2,0,50,5\n"};
+    std::istringstream iss{"0,0,9,f,Fireball,2,0,50,5\n"};
     iss >> fireball;
     assert(fireball.foreground() == Engine::Color::red);
     assert(fireball.character() == 'f');

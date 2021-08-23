@@ -13,9 +13,8 @@
 #define DATA_PAWNS_SKILL_HPP
 
 #include <istream>
+#include <vector>
 
-#include "../../nostd/pair.hpp"
-#include "../../nostd/unordered_map.hpp"
 #include "interactable.hpp"
 #include "projectile.hpp"
 
@@ -30,8 +29,7 @@ namespace Pawns {
 class Skill : public Interactable {
 public:
   Skill() = default; // uneffective skill: does nothing at all
-  Skill(const Nostd::String &,
-        Nostd::UnorderedMap<Nostd::Pair<int, int>, Projectile> projectiles,
+  Skill(const Nostd::String &, const Nostd::Vector<Projectile> &projectiles,
         int healthEffect, bool healthMode);
   Skill(Skill &&) = default;
   Skill &operator=(Skill &&) = default;
@@ -40,16 +38,14 @@ public:
 
   ~Skill() = default;
 
-  // Each Projectile's key is its spawning coordinates relative to the caster.
-  Nostd::UnorderedMap<Nostd::Pair<int, int>, Projectile> &
-  projectiles() noexcept;
+  Nostd::Vector<Projectile> &projectiles() noexcept;
 
 protected:
   int unchecked_health_effect(int current_health,
                               int max_health) const override final;
 
 private:
-  Nostd::UnorderedMap<Nostd::Pair<int, int>, Projectile> p{};
+  Nostd::Vector<Projectile> p{};
   int he{0}, hm{false};
 };
 
