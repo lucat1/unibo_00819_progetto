@@ -29,14 +29,14 @@
 
 \section{Funzionalit\`a}
 
-\emph{Overengineered} \`e un videogioco di piattaforme a scorrimento laterale con
-mappa illimitata implementato in \verb!C++!. L'esecuzione avviene all'interno di
-un terminale: l'interfaccia \`e perci\`o realizzata tramite una grafica ASCII.
-La mappa \`e generata in modo incrementale tramite l'unione di frammenti
-presviluppati. La possibilit\`a di scegliere tra pi\`u personaggi, unita alla
-variet\`a di nemici ed oggetti, rende il sistema di combattimento una sintesi
-fra scontri corpo a corpo e a distanza. Ciascun evento degno di nota viene
-inoltre descritto al giocatore in forma didascalica in tempo reale.
+\emph{Overengineered} \`e un videogioco di piattaforme a scorrimento laterale
+con mappa illimitata implementato in \verb!C++!. L'esecuzione avviene
+all'interno di un terminale: l'interfaccia \`e perci\`o realizzata tramite una
+grafica ASCII. La mappa \`e generata in modo incrementale tramite l'unione di
+frammenti presviluppati. La possibilit\`a di scegliere tra pi\`u personaggi,
+unita alla variet\`a di nemici ed oggetti, rende il sistema di combattimento una
+sintesi fra scontri corpo a corpo e a distanza. Ciascun evento degno di nota
+viene inoltre descritto al giocatore in forma didascalica in tempo reale.
 
 \section{Spartizione dei ruoli}
 
@@ -79,8 +79,8 @@ comunque presente il nominativo del programmatore per esso responsabile.
 \subsection{Miscellanei}
 
 La cartella \verb!assets! raccoglie le risorse (file di estensioni \verb!.txt! e
-\verb!.csv!) caricate dalla base di dati.
-Esse sono classificabili in quattro categorie.
+\verb!.csv!) caricate dalla base di dati. Esse sono classificabili in quattro
+categorie.
 
 \begin{itemize}
   \item Progettazione (S. Volpe): creazione dei frammenti della mappa e delle
@@ -98,17 +98,20 @@ Esse sono classificabili in quattro categorie.
 I paradigmi di programmazione usati come modello nella stesura del codice
 sorgente sono quello procedurale, orientato agli oggetti e generico. Il
 linguaggio scelto ci ha permesso di coniugare l'uso di potenti strumenti
-linguistici e concettuali per l'astrazione con accorgimenti di basso livello
-per ottenere prestazioni relativamente soddisfacenti.
+linguistici e concettuali per l'astrazione con accorgimenti di basso livello per
+ottenere prestazioni relativamente soddisfacenti.
 
 \subsection{Nostd}
 
 \verb!Nostd! (re)implementa liste, vettori, stringhe, matrici e mappe, ovvero i
-contenitori utili al resto del progetto. Fedelt\`a alla \emph{STL},
-semplicit\`a e pragmatismo ne hanno guidato la progettazione. Proprio come la
-libreria a cui si ispira, \verb!Nostd! fornisce appositi tipi di iteratori:
-questo porta a diversi vantaggi, fra cui la possibilit\`a di usare sia
-l'istruzione \emph{range-for} che \verb!<algorithm>!. \verb!<allocator.hpp>!,
+contenitori utili al resto del progetto. Fedelt\`a alla \emph{STL}, semplicit\`a
+e pragmatismo ne hanno guidato la progettazione. Proprio come la libreria a cui
+si ispira, \verb!Nostd! fornisce appositi tipi di iteratori: questo porta a
+diversi vantaggi, fra cui la possibilit\`a di usare sia l'istruzione
+\emph{range-for} che \verb!<algorithm>!. Per parametrizzare rispetto ad uno o
+pi\`u tipi di dato i costrutti definiti, si \`e fatto talvolta uso di
+programmazione generica e metaprogrammazione, raggiungendo cos\`i il punto pi\`u
+alto delle capacit\`a espressive del linguaggio. \verb!<allocator.hpp>!,
 \verb!<concepts.hpp>! e \verb!<pair.hpp>!, infine, hanno funto da intestazioni
 ausiliarie.
 
@@ -123,10 +126,12 @@ quasi totalità delle informazioni della base di dati viene memorizzata in
 vettori del tipo appropriato. Fa eccezione \verb!Result!, le cui istanze sono
 memorizzate in una lista per privilegiare inserimenti interni durante
 l'iterazione su esse. Molte delle classi coinvolte, inoltre, appartengono ad
-un'unica gerarchia circoscritta dal sottospazio dei nomi \verb!Data::Pawns!.
-L'interazione con il disco \`e regolata da sovraccaricamenti degli operatori di
-slittamento a sinistra (\verb!<<!) e a destra (\verb!>>!) specifici per ciascun
-tipo di ente trattato dalla base di dati.
+un'unica gerarchia circoscritta dal sottospazio dei nomi \verb!Data::Pawns!. In
+essa, un uso ragionato di metodi e basi virtuali ha portato esempi di
+\emph{dispatch} statico e dinamico alla convivenza. L'interazione con il disco,
+invece, \`e regolata da sovraccaricamenti degli operatori di slittamento a
+sinistra (\verb!<<!) e a destra (\verb!>>!) specifici per ciascun tipo di ente
+trattato dalla base di dati.
 
 \subsection{Engine}
 
@@ -140,12 +145,19 @@ e proiettili.
 
 \subsection{World}
 
-Sia la mappa di gioco che l'insieme degli agenti che la popolano sono
-rappresentati da liste. In questo modo, vengono semplificate le operazioni di
-accodamento ed eliminazione da effettuare con il progredire del gioco. Le
-coordinate di ciascun agente sono espresse da un iteratore facente riferimento
-alla matrice in cui esso si trova, nonch\'e dagli indici della riga e della
-colonna relative.
+Sia la mappa di gioco che l'insieme degli agenti che la popolano sono conservati
+in apposite liste. Le operazioni di accodamento ed eliminazione da effettuare
+con il progredire del gioco risultano cos\`i semplificate, ma lo stesso non vale
+per la ricerca di eventuali enti in una data posizione del mondo. Per agevolare
+quest'ultimo compito, ciascun frammento di mappa offre matrici di puntatori
+a eventuali elementi delle suddette liste. Le coordinate di ciascun agente sono
+quindi rappresentabili da un iteratore facente riferimento alla matrice
+appropriata e dagli indici della riga e della colonna relative. Per assicurare
+un livello di difficolt\`a sempre crescente man mano che la partita prosegue,
+viene applicata una distribuzione di Poisson a un generatore di interi
+pseudoaleatori. Cos\`i facendo, le probabilità di uscita di ciascun nemico,
+oggetto o mappa sono deterministicamente regolate in base alla lunghezza della
+mappa esplorata fino all'istante corrente.
 
 \subsection{Game}
 
@@ -154,9 +166,11 @@ base di dati specificando i percorsi da cui recuperare le risorse necessarie.
 In seguito, affinch\'e il modulo possa gestire il \emph{game loop}, ad ogni
 aggiornamento dello stato della partita la lista degli agenti viene scorsa per
 intero una ed una sola volta. Tale processo prevede spostamenti sulla mappa,
-controlli di collisioni, modifiche alle statistice e distruzioni. Ogni
+controlli di collisioni, modifiche alle statistice e distruzioni; ogni
 avvenimento rilevante per il flusso del gioco innesca la composizione dinamica
-di un messaggio di commento da mostrare a schermo.
+di un messaggio di commento da mostrare a schermo. Per gestire questo intricato
+meccanismo vengono istanziati appositi gestori innestati: ciascuno di essi \`e
+caratterizzato da una distinta area di competenza.
 
 \subsection{Unit testing}
 
