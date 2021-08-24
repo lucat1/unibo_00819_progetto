@@ -26,13 +26,17 @@ ChunkAssembler::ChunkAssembler(const Vector<MapChunk> *chunks,
                                const Vector<Enemy> *enemies,
                                const Vector<Item> *items)
     : chunks(chunks), sceneries(sceneries), enemies(enemies), items(items),
-      current_scenery(&sceneries->at(0)), current_chunk(&chunks->at(0)),
-      chunks_assembled(0) {}
+      current_scenery(nullptr), current_chunk(nullptr), chunks_assembled(0) {}
 
 // Step 1 implementation (a): select the next MapChunk to assemble using
 // Poisson's distribution in order to chose a random number keeping track of the
-// difficulty of the game
+// difficulty of the game. The first chosen is always the first of the chunks
+// vector
 void ChunkAssembler::next_chunk() noexcept {
+  if (current_chunk == nullptr) {
+    this->current_chunk = &this->chunks->at(0);
+    return;
+  }
   auto rand = random_gen.get_poisson_random(
       RandomGenerator::calculate_mean(chunks_assembled, chunks->size()),
       chunks->size());
@@ -40,8 +44,12 @@ void ChunkAssembler::next_chunk() noexcept {
 }
 
 // Step 1 implementation (b): select randomly which Scenery will be used next by
-// the assembler
+// the assembler. The first chosen is always the first of the sceneries vector
 void ChunkAssembler::next_scenery() noexcept {
+  if (current_scenery == nullptr) {
+    this->current_scenery = &this->sceneries->at(0);
+    return;
+  }
   auto rand = random_gen.get_random(this->sceneries->size());
   this->current_scenery = &this->sceneries->at(rand);
 }
@@ -191,11 +199,11 @@ ChunkAssembler::is_ground_or_platform(const MapUnit &u) const noexcept {
 
 // Get a World::WorldExpansion by combining all the assembling steps
 WorldExpansion ChunkAssembler::get() noexcept {
-  chunks_assembled++;
   // Step 1
   next_chunk();
   if (chunks_assembled % 10 == 0)
     next_scenery();
+  chunks_assembled++;
   // Step 3
   auto enemies = assemble_enemies(current_chunk);
   // Step 4
