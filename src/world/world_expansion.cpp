@@ -13,11 +13,13 @@
 
 #include "world_expansion.hpp"
 
-using namespace World;
-using namespace Nostd;
-using namespace Data;
-using namespace Engine;
-using namespace Data::Pawns;
+using Data::MapChunk;
+using Data::Pawns::Enemy;
+using Data::Pawns::Item;
+using Engine::Tile;
+using Nostd::List;
+using Nostd::Matrix;
+using World::WorldExpansion;
 
 WorldExpansion::WorldExpansion(const MapChunk *const map_chunk,
                                const Matrix<Tile *> &chunk_assembled,
