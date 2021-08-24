@@ -10,24 +10,34 @@
 */
 #ifndef GAME_GAMEPLAYMANAGER_HPP
 #define GAME_GAMEPLAYMANAGER_HPP
+
 #include "menu_manager.hpp"
 
 namespace Game {
+
 class GameplayManager {
 private:
   Engine::Screen &screen;
   MenuManager menu_manager;
 
 public:
-  // TODO
   GameplayManager(Data::Database &, Engine::Screen &);
   MenuManager &get_menu_manager();
+
+  inline bool can_stand(Data::MapUnit);
+  inline bool can_dig(Data::MapUnit);
   void gravity();
   void move_left();
   void move_right();
   void move_up();
   void move_down();
   void die();
+  void move_dig();
+
+  Nostd::Matrix<Data::Pawns::Item *>::iterator overlapped_item();
+  void manage_items();
 };
+
 } // namespace Game
+
 #endif

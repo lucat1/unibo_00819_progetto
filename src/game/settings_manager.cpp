@@ -31,6 +31,7 @@ void SettingsManager::apply_settings() {
       fps = *x.current_value();
   }
 }
+
 int SettingsManager::play_soundtrack(const char fn[]) {
   if (sound) {
     auto fp = db.to_audio_filepath(fn);
@@ -52,4 +53,5 @@ int SettingsManager::play_soundtrack(const char fn[]) {
 }
 
 int SettingsManager::get_fps() { return fps; }
+
 bool SettingsManager::get_sound() { return sound; }

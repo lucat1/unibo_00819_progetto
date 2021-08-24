@@ -42,7 +42,7 @@ private:
   const Nostd::Vector<Data::Pawns::Item> *const items;
   // Random number generator. Used to get the randomness needed from the
   // assembler to produce a good map
-  const World::RandomGenerator random_gen;
+  World::RandomGenerator random_gen;
   // Reference to the Data::Scenery the assembler is using at the moment
   const Data::Scenery *current_scenery;
   // Reference to the Data::MapChunk the assembler is using at the moment
@@ -64,13 +64,13 @@ private:
   // inside the chunk and their positions
   Nostd::Pair<Nostd::List<Data::Pawns::Enemy>,
               Nostd::Matrix<Data::Pawns::Enemy *>>
-  assemble_enemies(const Data::MapChunk *) const noexcept;
+  assemble_enemies(const Data::MapChunk *) noexcept;
 
   // Taken a Data::MapChunk reference in input it will returns all the items
   // inside the chunk and their positions
   Nostd::Pair<Nostd::List<Data::Pawns::Item>,
               Nostd::Matrix<Data::Pawns::Item *>>
-  assemble_items(const Data::MapChunk *) const noexcept;
+  assemble_items(const Data::MapChunk *) noexcept;
 
   // Given a Data::MapChunk, a Data::Scenery::Autotile* and the coordinates of a
   // chunk's cell it will return a char representing the cell graphically

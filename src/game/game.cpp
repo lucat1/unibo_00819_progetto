@@ -66,6 +66,8 @@ bool Game::Game::loop() {
   }
 
   handle_keypress();
+  if (gameplay_manager.get_menu_manager().is_in_game())
+    gameplay_manager.manage_items();
 
   frame += 2;
   if (frame > fps * 20)
@@ -75,6 +77,12 @@ bool Game::Game::loop() {
 
 void Game::Game::handle_keypress() {
   int key = getch();
+  if (gameplay_manager.get_menu_manager().is_in_game()) {
+    if (last_key == 'e')
+      gameplay_manager.move_right();
+    else if (last_key == 'q')
+      gameplay_manager.move_left();
+  }
   switch (key) {
   case KEY_RESIZE:
     if (!screen.reposition())
@@ -111,8 +119,10 @@ void Game::Game::handle_keypress() {
   case KEY_DOWN:
     if (!gameplay_manager.get_menu_manager().is_in_game())
       screen.send_event(Drawable::Event::move_down);
-    else
-      gameplay_manager.move_down();
+    else {
+      gameplay_manager.move_dig();
+      gameplay_manager.move_dig();
+    }
     break;
 
   case 'h':
@@ -132,8 +142,12 @@ void Game::Game::handle_keypress() {
     else
       gameplay_manager.move_right();
     break;
+  case '\33': // ESC key = suicide
+    gameplay_manager.die();
+    break;
   case ERR:
     // ignore ncurses's getch errors
     break;
   };
+  last_key = key;
 }

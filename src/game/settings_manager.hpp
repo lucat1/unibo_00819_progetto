@@ -17,6 +17,7 @@
 #include "../nostd/vector.hpp"
 
 namespace Game {
+
 class SettingsManager {
 private:
   const Data::Database &db;
@@ -30,5 +31,7 @@ public:
   int get_fps();
   bool get_sound();
 };
+
 } // namespace Game
+
 #endif
