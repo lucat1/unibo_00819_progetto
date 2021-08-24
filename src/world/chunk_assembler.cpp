@@ -33,7 +33,7 @@ ChunkAssembler::ChunkAssembler(const Vector<MapChunk> *chunks,
 // Poisson's distribution in order to chose a random number keeping track of the
 // difficulty of the game
 void ChunkAssembler::next_chunk() noexcept {
-  auto rand = random_gen.get_poisson_random_reverse(
+  auto rand = random_gen.get_poisson_random(
       RandomGenerator::calculate_mean(chunks_assembled, chunks->size()),
       chunks->size());
   this->current_chunk = &this->chunks->at(rand);
@@ -90,7 +90,7 @@ ChunkAssembler::assemble_enemies(const MapChunk *chunk) noexcept {
 
   for (size_t i{0}; i < chunk->height; i++) {
     for (size_t j{0}; j < chunk->width(); j++) {
-      size_t r = random_gen.get_poisson_random_reverse(
+      size_t r = random_gen.get_poisson_random(
           RandomGenerator::calculate_mean(chunks_assembled, enemies->size()),
           enemies->size());
       if (chunk->at(i)->at(j)->value() == MapUnit::enemy &&
@@ -112,7 +112,7 @@ ChunkAssembler::assemble_items(const MapChunk *chunk) noexcept {
 
   for (size_t i{0}; i < chunk->height; i++) {
     for (size_t j{0}; j < chunk->width(); j++) {
-      size_t r = random_gen.get_poisson_random(
+      size_t r = random_gen.get_poisson_random_reverse(
           RandomGenerator::calculate_mean(chunks_assembled, items->size()),
           items->size());
       if (chunk->at(i)->at(j)->value() == MapUnit::item && r != items->size()) {

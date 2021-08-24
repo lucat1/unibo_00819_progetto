@@ -48,14 +48,18 @@ World::World &World::World::operator+=(WorldExpansion &exp) noexcept {
 
   for (size_t y{0}; y < exp.enemies_matrix.extent(0); y++)
     for (size_t x{0}; x < exp.enemies_matrix.extent(1); x++)
-      if (exp.enemies_matrix.at(y).at(x).value() != nullptr)
+      if (exp.enemies_matrix.at(y).at(x).value() != nullptr) {
         enemies.push_back({*(exp.enemies_matrix.at(y).at(x).value()),
                            Position(&environment, --environment.end(), x, y)});
+        environment.back().enemies.at(y).at(x).value() = &enemies.back().first;
+      }
 
   for (size_t y{0}; y < exp.items_matrix.extent(0); y++)
     for (size_t x{0}; x < exp.items_matrix.extent(1); x++)
-      if (exp.items_matrix.at(y).at(x).value() != nullptr)
+      if (exp.items_matrix.at(y).at(x).value() != nullptr) {
         items.push_back({*(exp.items_matrix.at(y).at(x).value()),
                          Position(&environment, --environment.end(), x, y)});
+        environment.back().items.at(y).at(x).value() = &items.back().first;
+      }
   return *this;
 }

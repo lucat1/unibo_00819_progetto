@@ -22,6 +22,10 @@ jobs:
         if: startsWith(matrix.platform, 'ubuntu-latest')
         run: sudo apt-get install libncurses5-dev libncursesw5-dev -y
 
+      - name: install ncurses on macos
+        if: startsWith(matrix.platform, 'macos-latest')
+        run: brew install ncurses
+
       - name: 'make clean test'
         run: make clean test
 

@@ -34,10 +34,10 @@ public:
   // Get random number between 0 and bound parameter
   size_t get_random(size_t bound) const noexcept;
 
-  // Designed for items
+  // Designed for enemies and chunks
   size_t get_poisson_random(size_t mean, size_t bound);
 
-  // Designed for enemies and chunks
+  // Designed for items
   size_t get_poisson_random_reverse(size_t mean, size_t bound);
 
   static size_t calculate_mean(size_t len, size_t bound);

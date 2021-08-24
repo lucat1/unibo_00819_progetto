@@ -26,7 +26,8 @@ using std::cout;
 
 Game::Game::Game()
     : db("overengineered.conf.csv", "assets", "scoreboard.csv"),
-      gameplay_manager(db, screen) {
+      gameplay_manager(db, screen),
+      combat_manager(gameplay_manager.get_menu_manager()) {
   gameplay_manager.get_menu_manager().get_settings_manager().apply_settings();
   signal(SIGTERM, before_close);
 }
@@ -65,9 +66,16 @@ bool Game::Game::loop() {
     screen.send_event(Engine::Drawable::Event::redraw);
   }
 
+  if (gameplay_manager.get_menu_manager().is_in_game()) {
+    combat_manager.manage_items();
+    if ((frame / (fps / 10)) % 2 == 0) {
+      combat_manager.manage_projectiles();
+      combat_manager.manage_enemies();
+    }
+    if (gameplay_manager.get_menu_manager().get_world().player.first.is_dead())
+      gameplay_manager.die();
+  }
   handle_keypress();
-  if (gameplay_manager.get_menu_manager().is_in_game())
-    gameplay_manager.manage_items();
 
   frame += 2;
   if (frame > fps * 20)
@@ -141,6 +149,14 @@ void Game::Game::handle_keypress() {
       screen.send_event(Drawable::Event::move_right);
     else
       gameplay_manager.move_right();
+    break;
+  case 'o':
+    if (gameplay_manager.get_menu_manager().is_in_game())
+      combat_manager.use_skill();
+    break;
+  case 'p':
+    if (gameplay_manager.get_menu_manager().is_in_game())
+      combat_manager.use_superskill();
     break;
   case '\33': // ESC key = suicide
     gameplay_manager.die();

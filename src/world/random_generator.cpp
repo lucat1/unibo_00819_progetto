@@ -34,8 +34,8 @@ size_t RandomGenerator::get_poisson_random(size_t mean, size_t bound) {
     throw std::invalid_argument(
         "Invalid mean: mean can't be 0 or greater than bound");
   std::poisson_distribution<size_t> distribution(mean);
-  const int n = bound - distribution(random_engine) - 1;
-  return n < 0 ? bound : n;
+  const auto n = bound - distribution(random_engine) - 1;
+  return n < 0 ? bound : n >= bound ? bound - 1 : n;
 }
 
 size_t RandomGenerator::get_poisson_random_reverse(size_t mean, size_t bound) {

@@ -95,8 +95,9 @@ Engine::Audio::Error Engine::Audio::play(const char *fp) {
       if (ppid != -1)
         waitpid(ppid, &status, WNOHANG);
 
-      if (ppid == -1 || WIFEXITED(status) || WIFSTOPPED(status) ||
-          WIFSIGNALED(status)) {
+      if (ppid == -1 ||
+          (status != -1 &&
+           (WIFEXITED(status) || WIFSTOPPED(status) || WIFSIGNALED(status)))) {
         ppid = fork();
         if (ppid < 0)
           exit(-1);

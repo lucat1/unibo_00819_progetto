@@ -12,7 +12,6 @@
 #include "list.hpp"
 #include "test.hpp"
 #include <cassert>
-#include <iostream>
 
 using namespace Nostd;
 
@@ -49,9 +48,6 @@ int main() {
     l.push_front(7);
     l.push_back(8);
     l.pop_front();
-    for (auto x : l)
-      std::cerr << "~" << x;
-    std::cerr << "=" << l.size() << '\n';
     assert(l.front() == 5);
   });
 

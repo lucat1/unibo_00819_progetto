@@ -6,13 +6,16 @@
   Luca Tagliavini #971133
   07/02/2021
 
-  scene.cpp: TODO as we properly render stuff here
+  scene.cpp: renders the world view around the main hero. The entities are
+  rendered on top of one another with the following priorities: player, enemies,
+  items and tiles
 */
 
 #include "scene.hpp"
 #include "../../world/world.hpp"
 #include "../screen.hpp"
 #include <exception>
+#include <ncurses.h>
 
 Engine::Scene::Scene::Scene(WINDOW *window, const World::World &world,
                             const Nostd::String &message)
@@ -36,7 +39,6 @@ void Engine::Scene::Scene::draw() {
   werase(window);
 
   // draw the world around the player
-  // TODO: await proper implementation
   auto pos = world.player.second;
   // the drawing of the map is handled in this way:
   // 1. compute the *first* chunk to be drawn
@@ -82,7 +84,9 @@ void Engine::Scene::Scene::draw() {
                          .value()
                          ->background()));
   Engine::UI::start_color(window, pair);
+  wattron(window, A_BOLD);
   mvwaddch(window, pos.get_y(), player_x, world.player.first.character());
+  wattroff(window, A_BOLD);
   Engine::UI::end_color(window, pair);
 
   // lastly render the HUD
@@ -91,7 +95,6 @@ void Engine::Scene::Scene::draw() {
   doupdate();
 }
 
-// TODO: y offsetting, when needed
 void Engine::Scene::Scene::draw_chunk(
     const Nostd::Matrix<Tile *> &tiles,
     const Nostd::Matrix<Data::Pawns::Enemy *> &enemies,
@@ -109,13 +112,17 @@ void Engine::Scene::Scene::draw_chunk(
       auto projectile = projectiles.at(my).at(mx).value();
 
       Engine::Tile *t;
-      if (enemy != nullptr)
+      int attr = 0;
+      if (enemy != nullptr) {
         t = enemy;
-      else if (item != nullptr)
+        attr = A_BOLD;
+      } else if (item != nullptr) {
         t = item;
-      else if (projectile != nullptr)
+        attr = NCURSES_BITS(1U, 23); // hardcoded value for A_ITALIC on macos
+      } else if (projectile != nullptr) {
         t = projectile;
-      else
+        attr = A_BLINK;
+      } else
         t = tile;
 
       Color bg = t->background();
@@ -125,8 +132,12 @@ void Engine::Scene::Scene::draw_chunk(
       int pair = Engine::UI::color_pair(color_to_short(t->foreground()),
                                         color_to_short(bg));
       Engine::UI::start_color(window, pair);
+      if (attr != 0)
+        wattron(window, attr);
       mvwaddch(window, y, x, t->character());
       Engine::UI::end_color(window, pair);
+      if (attr != 0)
+        wattroff(window, attr);
       x++;
       mx++;
     }

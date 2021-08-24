@@ -24,8 +24,8 @@ public:
   GameplayManager(Data::Database &, Engine::Screen &);
   MenuManager &get_menu_manager();
 
-  inline bool can_stand(Data::MapUnit);
-  inline bool can_dig(Data::MapUnit);
+  static bool can_stand(Data::MapUnit);
+  static bool can_dig(Data::MapUnit);
   void gravity();
   void move_left();
   void move_right();
@@ -34,7 +34,7 @@ public:
   void die();
   void move_dig();
 
-  Nostd::Matrix<Data::Pawns::Item *>::iterator overlapped_item();
+  Nostd::Matrix<Data::Pawns::Item *>::iterator get_item();
   void manage_items();
 };
 
