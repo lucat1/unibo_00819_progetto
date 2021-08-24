@@ -45,6 +45,10 @@ public:
   bool move_down();
 
   bool move_up();
+
+  bool operator==(Position) const;
+
+  bool operator!=(Position) const;
 };
 
 class InvalidPositionException : public std::exception {

@@ -82,6 +82,45 @@ void CombatManager::cast_skill(Data::Pawns::Skill skill,
   }
 }
 
+void CombatManager::enemy_act(
+    Nostd::List<Nostd::Pair<Data::Pawns::Enemy, World::Position>>::iterator e) {
+  using Behavior = Data::Pawns::Enemy::Behavior;
+  using Data::MapUnit;
+  auto old_enemy_pointer = get_enemy(e->second);
+  switch (random_generator.get_random(10)) {
+  case 0: // move left
+    if (e->second.move_left()) {
+      if (e->first.has_behavior(Behavior::moving) &&
+          GameplayManager::can_stand(get_mapunit(e->second))) {
+        World::Position below_enemy = e->second;
+        if (e->first.has_behavior(Behavior::flying) ||
+            (below_enemy.move_down() &&
+             !GameplayManager::can_stand(get_mapunit(below_enemy)))) {
+          get_enemy(e->second).value() = &e->first;
+          old_enemy_pointer.value() = nullptr;
+          break;
+        }
+      }
+      e->second.move_right();
+    }
+  case 1: // move right
+    if (e->second.move_right()) {
+      if (e->first.has_behavior(Behavior::moving) &&
+          GameplayManager::can_stand(get_mapunit(e->second))) {
+        World::Position below_enemy = e->second;
+        if (e->first.has_behavior(Behavior::flying) ||
+            (below_enemy.move_down() &&
+             !GameplayManager::can_stand(get_mapunit(below_enemy)))) {
+          get_enemy(e->second).value() = &e->first;
+          old_enemy_pointer.value() = nullptr;
+          break;
+        }
+      }
+      e->second.move_left();
+    }
+  }
+}
+
 void CombatManager::manage_items() {
   auto item = get_item();
   if (item.value() != nullptr) {
@@ -140,11 +179,32 @@ void CombatManager::manage_projectiles() {
   }
 }
 void CombatManager::manage_enemies() {
-  // TODO
+  auto &enemies = menu_manager.get_world().enemies;
+  auto &hero = menu_manager.get_world().player.first;
+  for (auto e = enemies.begin(); e != enemies.end();) {
+    bool to_be_destroyed = e->first.is_dead();
+    auto enemy_pointer = get_enemy(e->second);
+    if (!to_be_destroyed) {
+      if (e->second == menu_manager.get_world().player.second) {
+        hero.interact(e->first);
+        menu_manager.set_message(Nostd::String(hero.name())
+                                     .append(" was hit by ")
+                                     .append(e->first.name())
+                                     .append("!"));
+        to_be_destroyed = true;
+      } else
+        enemy_act(e);
+      // TODO
+    }
+    if (to_be_destroyed) {
+      e = enemies.erase(e, std::next(e));
+      enemy_pointer.value() = nullptr;
+    } else
+      e++;
+  }
 }
 void CombatManager::use_skill() {
   auto &hero = menu_manager.get_world().player.first;
-  // TODO
   hero.interact(hero.skill());
   menu_manager.set_message(Nostd::String(hero.name())
                                .append(" used ")
@@ -155,7 +215,6 @@ void CombatManager::use_skill() {
 void CombatManager::use_superskill() {
   auto &hero = menu_manager.get_world().player.first;
   if (hero.attempt_super_skill()) {
-    // TODO
     hero.interact(hero.superskill());
     menu_manager.set_message(Nostd::String(hero.name())
                                  .append(" used ")
