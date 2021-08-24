@@ -35,13 +35,13 @@ public:
   // Default number of new chunks loaded on request
   constexpr static size_t default_chunks_refill{50};
   Nostd::List<Fragment> environment;
-  // Player and his position
+  // Player and his position. Updated when world expands
   Nostd::Pair<Data::Pawns::Hero, Position> player;
-  // Enemies and their positions
+  // Enemies and their positions. Updated when world expands
   Nostd::List<Nostd::Pair<Data::Pawns::Enemy, Position>> enemies;
-  // Items and their positions
+  // Items and their positions. Updated when world expands
   Nostd::List<Nostd::Pair<Data::Pawns::Item, Position>> items;
-  // Projectiles and their positions
+  // Projectiles and their positions. Updated by Game module
   Nostd::List<Nostd::Pair<Data::Pawns::Projectile, Position>> projectiles;
 
   World(const Data::Database &) noexcept;
