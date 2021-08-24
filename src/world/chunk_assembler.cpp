@@ -29,8 +29,8 @@ ChunkAssembler::ChunkAssembler(const Vector<MapChunk> *chunks,
       current_scenery(&sceneries->at(0)), current_chunk(&chunks->at(0)),
       chunks_assembled(0) {}
 
-// Generate a random number i between 0 and the number of nodes liked to Current
-// and take the i-esim linked node.
+// Select the next MapChunk to assemble using Poisson's distribution in order to
+// chose a random number keeping track of the difficulty of the game
 void ChunkAssembler::next_chunk() noexcept {
   auto rand = random_gen.get_poisson_random_reverse(
       RandomGenerator::calculate_mean(chunks_assembled, chunks->size()),
@@ -38,6 +38,7 @@ void ChunkAssembler::next_chunk() noexcept {
   this->current_chunk = &this->chunks->at(rand);
 }
 
+// Select randomly which Scenery will be used next by the assembler
 void ChunkAssembler::next_scenery() noexcept {
   auto rand = random_gen.get_random(this->sceneries->size());
   this->current_scenery = &this->sceneries->at(rand);
@@ -78,6 +79,7 @@ ChunkAssembler::assemble_scenery(const MapChunk *chunk,
   return res;
 }
 
+// Given a MapChunk in input Checks enemies presence and location
 Pair<List<Enemy>, Matrix<Enemy *>>
 ChunkAssembler::assemble_enemies(const MapChunk *chunk) noexcept {
   Matrix<Enemy *> matrix({chunk->height, chunk->width()}, nullptr);
