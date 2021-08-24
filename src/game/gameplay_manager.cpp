@@ -54,6 +54,9 @@ void GameplayManager::move_right() {
         chunk->at(player.second.get_y()).at(player.second.get_x()).value();
     if (!can_stand(unit))
       player.second.move_left();
+    else if (std::next(player.second.get_fragment()) ==
+             menu_manager.get_world().environment.end())
+      menu_manager.get_world().add_chunk(1);
   }
 }
 
@@ -87,12 +90,15 @@ void GameplayManager::move_up() {
 void GameplayManager::move_down() {
   auto &player = menu_manager.get_world().player;
   auto &chunk = player.second.get_fragment()->map_chunk;
-  auto unit_below =
-      chunk->at(player.second.get_y() + 1).at(player.second.get_x()).value();
-  if (!can_stand(unit_below))
-    return;
-
-  menu_manager.get_world().player.second.move_down();
+  if (player.second.get_y() + 1 ==
+      player.second.get_fragment()->map_chunk->height)
+    die();
+  else {
+    auto unit_below =
+        chunk->at(player.second.get_y() + 1).at(player.second.get_x()).value();
+    if (can_stand(unit_below))
+      menu_manager.get_world().player.second.move_down();
+  }
 }
 
 void GameplayManager::die() {

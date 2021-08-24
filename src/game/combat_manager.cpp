@@ -90,10 +90,10 @@ void CombatManager::enemy_act(
   switch (random_generator.get_random(10)) {
   case 0: // move left
     if (e->second.move_left()) {
-      if (e->first.has_behavior(Behavior::moving) &&
+      if (e->first.has_behavior(Behavior::walking) &&
           GameplayManager::can_stand(get_mapunit(e->second))) {
         World::Position below_enemy = e->second;
-        if (e->first.has_behavior(Behavior::flying) ||
+        if (e->first.has_behavior(Behavior::horizontal_flying) ||
             (below_enemy.move_down() &&
              !GameplayManager::can_stand(get_mapunit(below_enemy)))) {
           get_enemy(e->second).value() = &e->first;
@@ -105,10 +105,10 @@ void CombatManager::enemy_act(
     }
   case 1: // move right
     if (e->second.move_right()) {
-      if (e->first.has_behavior(Behavior::moving) &&
+      if (e->first.has_behavior(Behavior::walking) &&
           GameplayManager::can_stand(get_mapunit(e->second))) {
         World::Position below_enemy = e->second;
-        if (e->first.has_behavior(Behavior::flying) ||
+        if (e->first.has_behavior(Behavior::horizontal_flying) ||
             (below_enemy.move_down() &&
              !GameplayManager::can_stand(get_mapunit(below_enemy)))) {
           get_enemy(e->second).value() = &e->first;

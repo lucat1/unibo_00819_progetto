@@ -45,10 +45,10 @@ public:
   // A Behavior is a bitmask
   enum class Behavior {
     none = 0,
-    moving = 1,
-    gap_aware = 2,
-    flying = 4,
-    vertical = 8
+    walking = 1,
+    horizontal_flying = 2,
+    vertical_flying = 4,
+    attacking = 8
   };
 
   // Checks whether this Enemy does indeed have a certain behavior
