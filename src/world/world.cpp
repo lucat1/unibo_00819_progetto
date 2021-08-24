@@ -10,18 +10,12 @@
 */
 
 #include "world.hpp"
-#include "../data/pawns/hero.hpp"
-#include "chunk_assembler.hpp"
 #include "world_expansion.hpp"
-
-using namespace Data;
-using namespace Nostd;
-using namespace Engine;
 
 constexpr size_t World::World::default_chunks_refill;
 
 // World::World constructor
-World::World::World(const Database &d, Data::Pawns::Hero h) noexcept
+World::World::World(const Data::Database &d, Data::Pawns::Hero h) noexcept
     : player{h, {&environment, environment.begin()}},
       assembler(&d.map_chunks(), &d.sceneries(), &d.enemies(), &d.items()) {
   add_chunk();
@@ -29,7 +23,8 @@ World::World::World(const Database &d, Data::Pawns::Hero h) noexcept
 }
 
 // World::World constructor
-World::World::World(const Database &d) noexcept : World(d, d.heroes()[0]) {}
+World::World::World(const Data::Database &d) noexcept
+    : World(d, d.heroes()[0]) {}
 
 // Add new assembled chunk to enviroment. For each new chunk an instance of
 // World::WorldExpansion is added to this World::World
