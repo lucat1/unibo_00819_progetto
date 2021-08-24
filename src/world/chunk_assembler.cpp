@@ -12,13 +12,14 @@
 #include "chunk_assembler.hpp"
 #include "../nostd/matrix.hpp"
 #include "position.hpp"
-#include <cstddef>
 
+using Data::Pawns::Enemy;
+using Data::Pawns::Item;
+using Engine::BlockTile;
+using Engine::Tile;
 using namespace World;
 using namespace Nostd;
 using namespace Data;
-using namespace Engine;
-using namespace Data::Pawns;
 
 ChunkAssembler::ChunkAssembler(const Vector<MapChunk> *chunks,
                                const Vector<Scenery> *sceneries,
@@ -54,8 +55,8 @@ ChunkAssembler::assemble_scenery(const MapChunk *chunk,
       MapUnit map_unit = chunk->at(i).at(j).value();
       if (map_unit == MapUnit::nothing || map_unit == MapUnit::enemy ||
           map_unit == MapUnit::item)
-        res.at(i).at(j).value() =
-            new BlockTile(' ', Color::transparent, scenery->sky[sky_index]);
+        res.at(i).at(j).value() = new BlockTile(' ', Engine::Color::transparent,
+                                                scenery->sky[sky_index]);
       else if (map_unit == MapUnit::ground)
         res.at(i).at(j).value() = new BlockTile(
             elaborate_autotile(chunk, &scenery->ground, j, i),
@@ -187,7 +188,7 @@ const Scenery *ChunkAssembler::get_current_scenery() const noexcept {
   return this->current_scenery;
 }
 
-void ChunkAssembler::dispose(Nostd::Matrix<Engine::Tile *> &x) noexcept {
+void ChunkAssembler::dispose(Matrix<Tile *> &x) noexcept {
   for (auto &y : x)
     for (auto &z : y) {
       delete z.value();
