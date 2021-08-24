@@ -32,7 +32,6 @@ void World::World::add_chunk(const size_t &n) noexcept {
   for (size_t i{0}; i < n; i++) {
     WorldExpansion expansion = assembler.get();
     *this += expansion;
-    this->assembler.next_chunk();
   }
 }
 

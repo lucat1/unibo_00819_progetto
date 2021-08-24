@@ -29,8 +29,9 @@ ChunkAssembler::ChunkAssembler(const Vector<MapChunk> *chunks,
       current_scenery(&sceneries->at(0)), current_chunk(&chunks->at(0)),
       chunks_assembled(0) {}
 
-// Select the next MapChunk to assemble using Poisson's distribution in order to
-// chose a random number keeping track of the difficulty of the game
+// Step 1 implementation (a): select the next MapChunk to assemble using
+// Poisson's distribution in order to chose a random number keeping track of the
+// difficulty of the game
 void ChunkAssembler::next_chunk() noexcept {
   auto rand = random_gen.get_poisson_random_reverse(
       RandomGenerator::calculate_mean(chunks_assembled, chunks->size()),
@@ -38,15 +39,16 @@ void ChunkAssembler::next_chunk() noexcept {
   this->current_chunk = &this->chunks->at(rand);
 }
 
-// Select randomly which Scenery will be used next by the assembler
+// Step 1 implementation (b): select randomly which Scenery will be used next by
+// the assembler
 void ChunkAssembler::next_scenery() noexcept {
   auto rand = random_gen.get_random(this->sceneries->size());
   this->current_scenery = &this->sceneries->at(rand);
 }
 
-// Combine a Data::MapChunk with a Data::Scenery to make a
-// Nostd::Matrix<World::MapPixel>.
-// Sky color is chosen using Fibonacci's sequence.
+// Step 2 implementation: combine a Data::MapChunk with a Data::Scenery to make
+// a Nostd::Matrix<World::MapPixel> iterating through each MapUnit. Sky gradient
+// is chosen using Fibonacci's sequence.
 Matrix<Tile *>
 ChunkAssembler::assemble_scenery(const MapChunk *chunk,
                                  const Scenery *scenery) const noexcept {
@@ -79,7 +81,8 @@ ChunkAssembler::assemble_scenery(const MapChunk *chunk,
   return res;
 }
 
-// Given a MapChunk in input Checks enemies presence and location
+// Step 3 implementation: given a MapChunk in input checks enemies presence and
+// location
 Pair<List<Enemy>, Matrix<Enemy *>>
 ChunkAssembler::assemble_enemies(const MapChunk *chunk) noexcept {
   Matrix<Enemy *> matrix({chunk->height, chunk->width()}, nullptr);
@@ -100,6 +103,8 @@ ChunkAssembler::assemble_enemies(const MapChunk *chunk) noexcept {
   return {list, matrix};
 }
 
+// Step 4 implementation: given a MapChunk in input checks items presence and
+// location
 Pair<List<Item>, Matrix<Item *>>
 ChunkAssembler::assemble_items(const MapChunk *chunk) noexcept {
   Matrix<Item *> matrix({chunk->height, chunk->width()}, nullptr);
@@ -119,6 +124,9 @@ ChunkAssembler::assemble_items(const MapChunk *chunk) noexcept {
   return {list, matrix};
 }
 
+// Fibonacci's function helper. It isn't the fastest impementation (\theta(n)
+// instead of \theta(log n)) but it's a good compromise beetween performances
+// and coding complexity.
 inline size_t ChunkAssembler::fib(const size_t &n) const noexcept {
   if (n == 0 || n == 1)
     return 1;
@@ -181,24 +189,32 @@ ChunkAssembler::is_ground_or_platform(const MapUnit &u) const noexcept {
   return u == MapUnit::ground || u == MapUnit::platform;
 }
 
+// Get a World::WorldExpansion by combining all the assembling steps
 WorldExpansion ChunkAssembler::get() noexcept {
   chunks_assembled++;
+  // Step 1
+  next_chunk();
   if (chunks_assembled % 10 == 0)
     next_scenery();
-
+  // Step 3
   auto enemies = assemble_enemies(current_chunk);
+  // Step 4
   auto items = assemble_items(current_chunk);
+  // Step 2
   return WorldExpansion(
       current_chunk, assemble_scenery(current_chunk, current_scenery),
       enemies.second, enemies.first, items.second, items.first);
 }
+
+// Getters
 const MapChunk *ChunkAssembler::get_current_chunk(void) const noexcept {
   return this->current_chunk;
 }
-const Scenery *ChunkAssembler::get_current_scenery() const noexcept {
+const Scenery *ChunkAssembler::get_current_scenery(void) const noexcept {
   return this->current_scenery;
 }
 
+// Clear the clutter
 void ChunkAssembler::dispose(Matrix<Tile *> &x) noexcept {
   for (auto &y : x)
     for (auto &z : y) {
