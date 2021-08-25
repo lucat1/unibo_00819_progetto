@@ -1,8 +1,8 @@
 15,8,Snowman,Idling,0,0,0,1,3,300,0
 8,@,Boulder,Idling,0,0,0,2,0,100,1
-52,.,Ant,Bite,1,-1,0,52,>,an ant,1,0,50,2,0,0,1,0,100,9
+9,_,Ant,Bite,1,-1,0,52,>,an ant,1,0,50,2,0,0,1,0,100,9
 0,*,Mosquito,Idling,0,0,0,1,1,100,3
+11,^,Bee,Bald Attack,1,0,1,7,*,waste products,1,1,200,40,0,0,1,1,100,15
 6,%,Butterfly,Pheromones,4,-1,0,3,:,pheromones,1,1,50,5,1,0,3,:,pheromones,1,1,50,5,0,1,3,:,pheromones,1,1,50,5,0,-1,3,:,pheromones,1,1,50,5,0,0,2,2,400,13
 8,~,Bird,Bald Attack,1,0,1,7,*,waste products,1,1,200,40,0,0,1,1,100,15
 2,2,Snake,Sneaky Attack,3,-1,-1,5,-,some poison,1,2,75,4,-1,0,5,-,some poison,1,2,75,3,-1,1,5,-,some poison,1,2,75,3,0,0,1,1,150,9
-
