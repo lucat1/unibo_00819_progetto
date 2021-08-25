@@ -55,8 +55,21 @@ void GameplayManager::move_right() {
     if (!can_stand(unit))
       player.second.move_left();
     else if (std::next(player.second.get_fragment()) ==
-             menu_manager.get_world().environment.end())
+             menu_manager.get_world().environment.end()) {
       menu_manager.get_world().add_chunk(1);
+      size_t world_length = menu_manager.get_world().environment.size();
+      if (world_length % 60 == 0)
+        switch ((world_length / 60) % 3) {
+        case 0:
+          menu_manager.get_settings_manager().play_soundtrack("theme1");
+          break;
+        case 1:
+          menu_manager.get_settings_manager().play_soundtrack("theme2");
+          break;
+        case 2:
+          menu_manager.get_settings_manager().play_soundtrack("theme3");
+        }
+    }
   }
 }
 
@@ -103,6 +116,7 @@ void GameplayManager::move_down() {
 
 void GameplayManager::die() {
   menu_manager.set_message(Nostd::String());
+  menu_manager.get_settings_manager().play_soundtrack("main_menu");
   screen.send_event(Engine::Drawable::Event::interact);
 }
 

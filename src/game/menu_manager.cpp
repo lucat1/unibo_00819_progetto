@@ -62,6 +62,7 @@ bool MenuManager::change_content() {
     }
     if (screen.is_content<Select>()) {
       // start a game
+      settings_manager.play_soundtrack("theme1");
       world = new World::World(db, screen.get_content<Select>()->get_result());
       in_game = true;
       screen.set_content<Scene, const World::World &, const Nostd::String &>(
