@@ -28,7 +28,6 @@ ChunkAssembler::ChunkAssembler(const Vector<MapChunk> *chunks,
     : chunks(chunks), sceneries(sceneries), enemies(enemies), items(items),
       current_scenery(nullptr), current_chunk(nullptr), chunks_assembled(0) {}
 
-
 constexpr size_t ChunkAssembler::sceneries_duration;
 
 // Step 1 implementation (a): select the next MapChunk to assemble using
@@ -47,12 +46,8 @@ void ChunkAssembler::next_chunk() noexcept {
 }
 
 // Step 1 implementation (b): select randomly which Scenery will be used next by
-// the assembler. The first chosen is always the first of the sceneries vector
+// the assembler
 void ChunkAssembler::next_scenery() noexcept {
-  if (current_scenery == nullptr) {
-    this->current_scenery = &this->sceneries->at(0);
-    return;
-  }
   auto rand = random_gen.get_random(this->sceneries->size());
   this->current_scenery = &this->sceneries->at(rand);
 }
