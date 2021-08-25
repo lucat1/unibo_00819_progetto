@@ -80,26 +80,28 @@ void GameplayManager::move_right() {
 void GameplayManager::move_up() {
   auto &player = menu_manager.get_world().player;
   auto &chunk = player.second.get_fragment()->map_chunk;
-  auto unit_below =
-      chunk->at(player.second.get_y() + 1).at(player.second.get_x()).value();
-
-  if (player.second.get_y() == 0 || can_stand(unit_below))
-    return;
-  auto unit_above =
-      chunk->at(player.second.get_y() - 1).at(player.second.get_x()).value();
-  if (unit_above == Data::MapUnit::platform) {
-    menu_manager.get_world().player.second.move_up();
-    menu_manager.get_world().player.second.move_up();
-  } else {
-    int i = 2;
-    while (player.second.get_y() > 0 && i > 0) {
-      unit_above = chunk->at(player.second.get_y() - 1)
-                       .at(player.second.get_x())
-                       .value();
-      if (!can_stand(unit_above))
-        break;
-      menu_manager.get_world().player.second.move_up();
-      i--;
+  if (player.second.get_y() + 1 < chunk->height) {
+    auto unit_below =
+        chunk->at(player.second.get_y() + 1).at(player.second.get_x()).value();
+    if (player.second.get_y() != 0 && !can_stand(unit_below)) {
+      auto unit_above = chunk->at(player.second.get_y() - 1)
+                            .at(player.second.get_x())
+                            .value();
+      if (unit_above == Data::MapUnit::platform) { // dig platform
+        menu_manager.get_world().player.second.move_up();
+        menu_manager.get_world().player.second.move_up();
+      } else { // attempt traditional jump
+        int i = 2;
+        while (player.second.get_y() > 0 && i > 0) {
+          unit_above = chunk->at(player.second.get_y() - 1)
+                           .at(player.second.get_x())
+                           .value();
+          if (!can_stand(unit_above))
+            break;
+          menu_manager.get_world().player.second.move_up();
+          i--;
+        }
+      }
     }
   }
 }
