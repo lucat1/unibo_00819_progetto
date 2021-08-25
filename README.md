@@ -2,7 +2,7 @@
 
 The game is implemented in C++ and built with the gcc/make toolchain. Clang/LLVM
 have been tested and compile just fine on Darwin. The Makefile automatically
-compiles the needed source files and rebuilds only what's needed.
+compiles the needed source files and rebuilds only what has changed.
 
 ## Building, Running and Testing
 
