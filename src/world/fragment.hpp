@@ -6,7 +6,9 @@
   Mattia Girolimetto #977478
   08/11/2021
 
-  fragment.hpp: user interface for World::Fragment.
+  fragment.hpp: user interface for World::Fragment. This struct represents the
+  fragment of the map the user is capable to see on the screen, so it stores an
+  assembled chunk and all the interactables (items, enemies and projectiles).
 */
 
 #ifndef WORLD_FRAGMENT_HPP
