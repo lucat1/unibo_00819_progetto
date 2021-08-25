@@ -10,6 +10,9 @@
 */
 
 #include "gameplay_manager.hpp"
+
+#include "../world/chunk_assembler.hpp"
+
 using Game::GameplayManager;
 
 GameplayManager::GameplayManager(Data::Database &datab, Engine::Screen &scr)
@@ -57,9 +60,10 @@ void GameplayManager::move_right() {
     else if (std::next(player.second.get_fragment()) ==
              menu_manager.get_world().environment.end()) {
       menu_manager.get_world().add_chunk(1);
-      size_t world_length = menu_manager.get_world().environment.size();
-      if (world_length % 60 == 0)
-        switch ((world_length / 60) % 3) {
+      const size_t world_length = menu_manager.get_world().environment.size(),
+                   music_duration = World::ChunkAssembler::sceneries_duration;
+      if (world_length % music_duration == 0)
+        switch ((world_length / music_duration) % 3) {
         case 0:
           menu_manager.get_settings_manager().play_soundtrack("theme1");
           break;

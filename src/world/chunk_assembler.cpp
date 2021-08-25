@@ -28,6 +28,9 @@ ChunkAssembler::ChunkAssembler(const Vector<MapChunk> *chunks,
       current_scenery(&sceneries->at(0)), current_chunk(&chunks->at(0)),
       chunks_assembled(0) {}
 
+// The number of fragments each scenery is supposed to last.
+constexpr size_t ChunkAssembler::sceneries_duration;
+
 // Generate a random number i between 0 and the number of nodes liked to Current
 // and take the i-esim linked node.
 void ChunkAssembler::next_chunk() noexcept {
@@ -180,7 +183,7 @@ ChunkAssembler::is_ground_or_platform(const MapUnit &u) const noexcept {
 
 WorldExpansion ChunkAssembler::get() noexcept {
   chunks_assembled++;
-  if (chunks_assembled % 10 == 0)
+  if (chunks_assembled % sceneries_duration == 0)
     next_scenery();
 
   auto enemies = assemble_enemies(current_chunk);
