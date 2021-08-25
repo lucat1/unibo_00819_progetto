@@ -42,11 +42,13 @@ protected:
   szu pl = 0, pr = 0, pt = 0, pb = 0;
   // direction vertical, float right, should we paint custom colors
   bool dh = false, fr = false;
+  // child-parent-sibling tree pointers
+  Box *first_child = nullptr, *last_child = nullptr, *sibling = nullptr,
+      *parent = nullptr;
 
   // adds a child to the tail of the list of children
   void add_child(Box *child);
-
-  // color values
+// color values
   short fg = color_to_short(Colorable::foreground()),
         bg = color_to_short(Colorable::background());
   // returns a ncurses color pair to draw the content in the approriate color
@@ -72,10 +74,6 @@ public:
     background,
   };
 
-  // child-parent-sibling relation values;
-  Box *first_child = nullptr, *last_child = nullptr, *sibling = nullptr,
-      *parent = nullptr;
-
   // Engine::UI::Box has nothing to do with ncurses's box function
   // We use Box as a UI primitive to build interfaces. For example each block
   // (be it a List, a Button, a Checkbox) extends the box class, which provides
@@ -85,6 +83,11 @@ public:
   // frees its children list recursively (as deleted children will do the same
   // and so on)
   ~Box();
+
+  Box *get_first_child() const;
+  Box *get_last_child() const;
+  Box *get_parent() const;
+  Box *get_sibling() const;
 
   Engine::Color foreground() const;
   Engine::Color background() const;
@@ -96,7 +99,7 @@ public:
   void props(Box::Property key, szu value);
   // returns the n-th child of this node, or null if an invalid index is
   // provided
-  Box *child(size_t n);
+  Box *child(size_t n) const;
 
   // Engine::UI::Box is merely a container, therefore we are only interested in
   // displaying its children and most importantly _how_ we display then. When

@@ -23,22 +23,22 @@ using Nostd::it;
 int main() {
   Box *box = new Box();
   it("constructs a box properly", [box] {
-    assert(box->first_child == nullptr);
-    assert(box->last_child == nullptr);
-    assert(box->sibling == nullptr);
-    assert(box->parent == nullptr);
+    assert(box->get_first_child() == nullptr);
+    assert(box->get_last_child() == nullptr);
+    assert(box->get_sibling() == nullptr);
+    assert(box->get_parent() == nullptr);
   });
 
   auto child = box->append<Box>();
   it("adds a new child", [box, child] {
-    assert(box->sibling == nullptr);
-    assert(box->first_child == child);
-    assert(box->last_child == child);
-    assert(child->parent == box);
+    assert(box->get_sibling() == nullptr);
+    assert(box->get_first_child() == child);
+    assert(box->get_last_child() == child);
+    assert(child->get_parent() == box);
 
-    assert(child->sibling == nullptr);
-    assert(child->first_child == nullptr);
-    assert(child->last_child == nullptr);
+    assert(child->get_sibling() == nullptr);
+    assert(child->get_first_child() == nullptr);
+    assert(child->get_last_child() == nullptr);
   });
 
   it("properly returns the first child", [] {
@@ -51,11 +51,11 @@ int main() {
 
   auto snd_child = box->append<Box>();
   it("adds a second child", [box, child, snd_child] {
-    assert(box->first_child == child);
-    assert(box->last_child == snd_child);
-    assert(snd_child->parent == box);
-    assert(child->sibling == snd_child);
-    assert(snd_child->sibling == nullptr);
+    assert(box->get_first_child() == child);
+    assert(box->get_last_child() == snd_child);
+    assert(snd_child->get_parent() == box);
+    assert(child->get_sibling() == snd_child);
+    assert(snd_child->get_sibling() == nullptr);
   });
 
   Box *box1 = new Box();

@@ -45,7 +45,7 @@ void Engine::UI::Center::show(WINDOW *window, szu x, szu y, szu max_width,
               : 0,
       remaining_width = max_width, remaining_height = max_height;
 
-  for (Box *it = first_child; it != nullptr; it = it->sibling) {
+  for (Box *it = first_child; it != nullptr; it = it->get_sibling()) {
     auto size = it->size(remaining_width, remaining_width);
     it->show(window, x + rel_x, y + rel_y, size.first, size.second);
 
