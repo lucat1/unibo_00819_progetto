@@ -23,12 +23,15 @@ RandomGenerator::RandomGenerator() : seed(time(nullptr)), random_engine(seed) {
   srand(seed);
 }
 
+// Get C style random number
 size_t RandomGenerator::get_random(size_t bound) const noexcept {
   return rand() % bound;
 }
 
+// Seed getter
 time_t RandomGenerator::get_seed() const noexcept { return seed; }
 
+// TODO
 size_t RandomGenerator::get_poisson_random(size_t mean, size_t bound) {
   if (!mean || mean > bound)
     throw std::invalid_argument(
@@ -38,10 +41,12 @@ size_t RandomGenerator::get_poisson_random(size_t mean, size_t bound) {
   return n < 0 ? bound : n >= bound ? bound - 1 : n;
 }
 
+// TODO
 size_t RandomGenerator::get_poisson_random_reverse(size_t mean, size_t bound) {
   return get_poisson_random(bound - mean, bound);
 }
 
+// TODO
 size_t RandomGenerator::calculate_mean(size_t x, size_t b) {
   if (b <= 1)
     throw std::invalid_argument("Bound must be greater than 1");
