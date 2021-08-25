@@ -87,8 +87,9 @@ void CombatManager::enemy_act(
   using Behavior = Data::Pawns::Enemy::Behavior;
   using Data::MapUnit;
   auto old_enemy_pointer = get_enemy(e->second);
-  switch (random_generator.get_random(10)) {
+  switch (random_generator.get_random(20)) {
   case 0: // move left
+  case 1:
     if (e->second.move_left()) {
       if (e->first.has_behavior(Behavior::walking) &&
           GameplayManager::can_stand(get_mapunit(e->second))) {
@@ -103,7 +104,8 @@ void CombatManager::enemy_act(
       }
       e->second.move_right();
     }
-  case 1: // move right
+  case 2: // move right
+  case 3:
     if (e->second.move_right()) {
       if (e->first.has_behavior(Behavior::walking) &&
           GameplayManager::can_stand(get_mapunit(e->second))) {
@@ -118,7 +120,8 @@ void CombatManager::enemy_act(
       }
       e->second.move_left();
     }
-  case 2: // move up
+  case 4: // move up
+  case 5:
     if (e->second.move_up() &&
         GameplayManager::can_stand(get_mapunit(e->second)) &&
         e->first.has_behavior(Behavior::vertical_flying)) {
@@ -127,7 +130,8 @@ void CombatManager::enemy_act(
       break;
     }
     e->second.move_down();
-  case 3: // move down
+  case 6: // move down
+  case 7:
     if (e->second.move_down() &&
         GameplayManager::can_stand(get_mapunit(e->second)) &&
         e->first.has_behavior(Behavior::vertical_flying)) {
@@ -136,6 +140,9 @@ void CombatManager::enemy_act(
       break;
     }
     e->second.move_up();
+  case 8: // use skill
+    if (e->first.has_behavior(Behavior::attacking))
+      cast_skill(e->first.skill(), e->second);
   }
 }
 
@@ -160,34 +167,50 @@ void CombatManager::manage_items() {
 
 void CombatManager::manage_projectiles() {
   auto &projectiles = menu_manager.get_world().projectiles;
+  auto &player = menu_manager.get_world().player;
   for (auto p = projectiles.begin(); p != projectiles.end();) {
     bool to_be_destroyed = p->first.is_expired();
     if (!to_be_destroyed) {
       Nostd::Matrix<Data::Pawns::Enemy *>::iterator enemy =
           get_enemy(p->second);
-      if (enemy.value() != nullptr && p->first.was_casted_by_player()) {
-        enemy.value()->kill();
-        menu_manager.get_world().player.first.award();
-        menu_manager.set_message(Nostd::String(enemy.value()->name())
+      if (p->first.was_casted_by_player()) {
+        // hit enemy
+        if (enemy.value() != nullptr) {
+          enemy.value()->kill();
+          player.first.award();
+          menu_manager.set_message(Nostd::String(enemy.value()->name())
+                                       .append(" was hit by ")
+                                       .append(p->first.name())
+                                       .append("."));
+          enemy.value() = nullptr;
+        }
+      } else if (p->second == player.second) {
+        // hit player
+        player.first.interact(p->first);
+        to_be_destroyed = true;
+        menu_manager.set_message(Nostd::String(player.first.name())
                                      .append(" was hit by ")
                                      .append(p->first.name())
-                                     .append("."));
-        enemy.value() = nullptr;
+                                     .append("!"));
       }
-      Nostd::Matrix<Data::Pawns::Projectile *>::iterator projectile_pointer =
-          get_projectile(p->second);
-      projectile_pointer.value() = nullptr;
-      if (move_projectiles(p->first, &p->second) &&
-          GameplayManager::can_dig(get_mapunit(p->second))) {
-        projectile_pointer = get_projectile(p->second);
-        if (projectile_pointer.value() == nullptr)
-          projectile_pointer.value() = &p->first;
-        else
+      if (!to_be_destroyed) {
+        // move projectile
+        Nostd::Matrix<Data::Pawns::Projectile *>::iterator projectile_pointer =
+            get_projectile(p->second);
+        projectile_pointer.value() = nullptr;
+        if (move_projectiles(p->first, &p->second) &&
+            GameplayManager::can_dig(get_mapunit(p->second))) {
+          projectile_pointer = get_projectile(p->second);
+          if (projectile_pointer.value() == nullptr)
+            projectile_pointer.value() = &p->first;
+          else
+            to_be_destroyed = true;
+        } else
           to_be_destroyed = true;
-      } else
-        to_be_destroyed = true;
+      }
     }
     if (to_be_destroyed) {
+      // destroy projectile
       get_projectile(p->second).value() = nullptr;
       p = projectiles.erase(p, std::next(p));
     } else {
@@ -196,6 +219,7 @@ void CombatManager::manage_projectiles() {
     }
   }
 }
+
 void CombatManager::manage_enemies() {
   auto &enemies = menu_manager.get_world().enemies;
   auto &hero = menu_manager.get_world().player.first;
