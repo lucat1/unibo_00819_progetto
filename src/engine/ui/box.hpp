@@ -48,7 +48,7 @@ protected:
 
   // adds a child to the tail of the list of children
   void add_child(Box *child);
-// color values
+  // color values
   short fg = color_to_short(Colorable::foreground()),
         bg = color_to_short(Colorable::background());
   // returns a ncurses color pair to draw the content in the approriate color

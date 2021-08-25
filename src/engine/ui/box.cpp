@@ -68,17 +68,11 @@ Engine::UI::Box *Engine::UI::Box::get_first_child() const {
   return first_child;
 }
 
-Engine::UI::Box *Engine::UI::Box::get_last_child() const {
-  return last_child;
-}
+Engine::UI::Box *Engine::UI::Box::get_last_child() const { return last_child; }
 
-Engine::UI::Box *Engine::UI::Box::get_parent() const {
-  return parent;
-}
+Engine::UI::Box *Engine::UI::Box::get_parent() const { return parent; }
 
-Engine::UI::Box *Engine::UI::Box::get_sibling() const {
-  return sibling;
-}
+Engine::UI::Box *Engine::UI::Box::get_sibling() const { return sibling; }
 
 void Engine::UI::Box::add_child(Box *new_box) {
   if (last_child != nullptr)
@@ -165,7 +159,8 @@ void Engine::UI::Box::show(WINDOW *window, szu x, szu y, szu max_width,
   start_color(window);
   // fill the box's space with the provided background color
   auto sz = size(max_width, max_height);
-  for (szu i = 0; i < sz.second; i++) mvwhline(window, y + i, x, ' ', sz.first);
+  for (szu i = 0; i < sz.second; i++)
+    mvwhline(window, y + i, x, ' ', sz.first);
 
   // positioning and with values updated as we loop trough child rendering
   szu rel_x = pl, rel_y = pt, remaining_width = max_width - pl - pr,

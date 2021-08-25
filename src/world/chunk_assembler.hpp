@@ -111,7 +111,7 @@ public:
                  const Nostd::Vector<Data::Pawns::Enemy> *,
                  const Nostd::Vector<Data::Pawns::Item> *);
 
-// The number of fragments each scenery is supposed to last.
+  // The number of fragments each scenery is supposed to last.
   constexpr static size_t sceneries_duration = 25;
 
   // Point of communication with World::World. It returns an instance of
