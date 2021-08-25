@@ -67,6 +67,8 @@ public:
                  const Nostd::Vector<Data::Pawns::Enemy> *,
                  const Nostd::Vector<Data::Pawns::Item> *);
 
+  constexpr static size_t sceneries_duration = 25;
+
   WorldExpansion get(void) noexcept;
 
   // Returns the next Data::MapChunk to draw

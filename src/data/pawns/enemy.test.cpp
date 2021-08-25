@@ -28,8 +28,8 @@ int main() {
   });
   it("checks an Enemy's behavior", [] {
     Enemy goomba{Engine::Color::maroon, 'm', "Goomba", {}, 1, 0, 50, 1};
-    assert(goomba.has_behavior(Enemy::Behavior::moving));
-    assert(!goomba.has_behavior(Enemy::Behavior::flying));
+    assert(goomba.has_behavior(Enemy::Behavior::walking));
+    assert(!goomba.has_behavior(Enemy::Behavior::horizontal_flying));
   });
   it("reads an Enemy from a stream", [] {
     Enemy goomba{Engine::Color::transparent, u' ', "", {}, 0, 0, 0, 1};
@@ -38,7 +38,7 @@ int main() {
     assert(goomba.foreground() == Engine::Color::maroon);
     assert(goomba.character() == 'm');
     assert(goomba.name() == "Goomba");
-    assert(goomba.has_behavior(Enemy::Behavior::moving));
-    assert(!goomba.has_behavior(Enemy::Behavior::flying));
+    assert(goomba.has_behavior(Enemy::Behavior::walking));
+    assert(!goomba.has_behavior(Enemy::Behavior::horizontal_flying));
   });
 }

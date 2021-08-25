@@ -29,7 +29,7 @@ namespace World {
 
 class World {
 public:
-  constexpr static size_t default_chunks_refill{50};
+  constexpr static size_t default_chunks_refill{5};
   Nostd::List<Fragment> environment;
   Nostd::Pair<Data::Pawns::Hero, Position> player;
   Nostd::List<Nostd::Pair<Data::Pawns::Enemy, Position>> enemies;
