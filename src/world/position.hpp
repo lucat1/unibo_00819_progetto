@@ -6,7 +6,8 @@
   Mattia Girolimetto #977478
   08/01/2021
 
-  position.cpp: World::Position definition.
+  position.cpp: World::Position definition. The aim of this class is to store
+  and manage the position of an interactable (e.g. player, enemies, items ...).
 */
 
 #ifndef WORLD_POSITION_HPP
@@ -23,10 +24,15 @@ namespace World {
 
 class Position {
 private:
+  // Reference to World::World enviroment: used to be able to move between one
+  // fragment and another
   const Nostd::List<Fragment> *environment;
+  // List iterator to the current fragment
   Nostd::List<Fragment>::iterator fragment;
+  // Coordinates
   size_t x;
   size_t y;
+  // Default rendering y
   static const size_t INITIAL_Y = 19;
 
 public:
@@ -34,30 +40,21 @@ public:
            Nostd::List<Fragment>::iterator fragment, size_t x = 0,
            size_t y = INITIAL_Y);
 
-  size_t get_x() const noexcept;
-  size_t get_y() const noexcept;
+  // Coordinates getters
+  size_t get_x(void) const noexcept;
+  size_t get_y(void) const noexcept;
+
+  // Fragment iterator getter
   Nostd::List<Fragment>::iterator get_fragment() const noexcept;
 
-  bool move_left();
+  // Methods used to move the coordinates in the four directions
+  bool move_left(void);
 
-  bool move_right();
+  bool move_right(void);
 
-  bool move_down();
+  bool move_down(void);
 
-  bool move_up();
-};
-
-class InvalidPositionException : public std::exception {
-private:
-  std::string message;
-
-public:
-  InvalidPositionException(const int &x, const int &y) {
-    this->message = "(" + std::to_string(x) + " " + std::to_string(y) +
-                    ") isn't a valid position";
-  }
-
-  const char *what() const noexcept override { return message.c_str(); }
+  bool move_up(void);
 };
 
 } // namespace World

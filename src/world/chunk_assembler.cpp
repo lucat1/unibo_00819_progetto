@@ -12,39 +12,51 @@
 #include "chunk_assembler.hpp"
 #include "../nostd/matrix.hpp"
 #include "position.hpp"
-#include <cstddef>
 
+using Data::Pawns::Enemy;
+using Data::Pawns::Item;
+using Engine::BlockTile;
+using Engine::Tile;
 using namespace World;
 using namespace Nostd;
 using namespace Data;
-using namespace Engine;
-using namespace Data::Pawns;
 
 ChunkAssembler::ChunkAssembler(const Vector<MapChunk> *chunks,
                                const Vector<Scenery> *sceneries,
                                const Vector<Enemy> *enemies,
                                const Vector<Item> *items)
     : chunks(chunks), sceneries(sceneries), enemies(enemies), items(items),
-      current_scenery(&sceneries->at(0)), current_chunk(&chunks->at(0)),
-      chunks_assembled(0) {}
+      current_scenery(nullptr), current_chunk(nullptr), chunks_assembled(0) {}
 
-// Generate a random number i between 0 and the number of nodes liked to Current
-// and take the i-esim linked node.
+// Step 1 implementation (a): select the next MapChunk to assemble using
+// Poisson's distribution in order to chose a random number keeping track of the
+// difficulty of the game. The first chosen is always the first of the chunks
+// vector
 void ChunkAssembler::next_chunk() noexcept {
+  if (current_chunk == nullptr) {
+    this->current_chunk = &this->chunks->at(0);
+    return;
+  }
   auto rand = random_gen.get_poisson_random(
       RandomGenerator::calculate_mean(chunks_assembled, chunks->size()),
       chunks->size());
   this->current_chunk = &this->chunks->at(rand);
 }
 
+// Step 1 implementation (b): select randomly which Scenery will be used next by
+// the assembler. The first chosen is always the first of the sceneries vector
 void ChunkAssembler::next_scenery() noexcept {
+  if (current_scenery == nullptr) {
+    this->current_scenery = &this->sceneries->at(0);
+    return;
+  }
   auto rand = random_gen.get_random(this->sceneries->size());
   this->current_scenery = &this->sceneries->at(rand);
 }
 
-// Combine a Data::MapChunk with a Data::Scenery to make a
-// Nostd::Matrix<World::MapPixel>.
-// Sky color is chosen using Fibonacci's sequence.
+// Step 2 implementation: combine a Data::MapChunk with a Data::Scenery to make
+// a Nostd::Matrix<World::MapPixel> iterating through each MapUnit. Sky gradient
+// is chosen using Fibonacci's sequence.
 Matrix<Tile *>
 ChunkAssembler::assemble_scenery(const MapChunk *chunk,
                                  const Scenery *scenery) const noexcept {
@@ -56,8 +68,8 @@ ChunkAssembler::assemble_scenery(const MapChunk *chunk,
       MapUnit map_unit = chunk->at(i).at(j).value();
       if (map_unit == MapUnit::nothing || map_unit == MapUnit::enemy ||
           map_unit == MapUnit::item)
-        res.at(i).at(j).value() =
-            new BlockTile(' ', Color::transparent, scenery->sky[sky_index]);
+        res.at(i).at(j).value() = new BlockTile(' ', Engine::Color::transparent,
+                                                scenery->sky[sky_index]);
       else if (map_unit == MapUnit::ground)
         res.at(i).at(j).value() = new BlockTile(
             elaborate_autotile(chunk, &scenery->ground, j, i),
@@ -77,6 +89,8 @@ ChunkAssembler::assemble_scenery(const MapChunk *chunk,
   return res;
 }
 
+// Step 3 implementation: given a MapChunk in input checks enemies presence and
+// location
 Pair<List<Enemy>, Matrix<Enemy *>>
 ChunkAssembler::assemble_enemies(const MapChunk *chunk) noexcept {
   Matrix<Enemy *> matrix({chunk->height, chunk->width()}, nullptr);
@@ -97,6 +111,8 @@ ChunkAssembler::assemble_enemies(const MapChunk *chunk) noexcept {
   return {list, matrix};
 }
 
+// Step 4 implementation: given a MapChunk in input checks items presence and
+// location
 Pair<List<Item>, Matrix<Item *>>
 ChunkAssembler::assemble_items(const MapChunk *chunk) noexcept {
   Matrix<Item *> matrix({chunk->height, chunk->width()}, nullptr);
@@ -116,6 +132,9 @@ ChunkAssembler::assemble_items(const MapChunk *chunk) noexcept {
   return {list, matrix};
 }
 
+// Fibonacci's function helper. It isn't the fastest impementation (\theta(n)
+// instead of \theta(log n)) but it's a good compromise beetween performances
+// and coding complexity.
 inline size_t ChunkAssembler::fib(const size_t &n) const noexcept {
   if (n == 0 || n == 1)
     return 1;
@@ -187,25 +206,33 @@ ChunkAssembler::is_ground_or_platform(const MapUnit &u) const noexcept {
   return u == MapUnit::ground || u == MapUnit::platform;
 }
 
+// Get a World::WorldExpansion by combining all the assembling steps
 WorldExpansion ChunkAssembler::get() noexcept {
-  chunks_assembled++;
+  // Step 1
+  next_chunk();
   if (chunks_assembled % 10 == 0)
     next_scenery();
-
+  chunks_assembled++;
+  // Step 3
   auto enemies = assemble_enemies(current_chunk);
+  // Step 4
   auto items = assemble_items(current_chunk);
+  // Step 2
   return WorldExpansion(
       current_chunk, assemble_scenery(current_chunk, current_scenery),
       enemies.second, enemies.first, items.second, items.first);
 }
+
+// Getters
 const MapChunk *ChunkAssembler::get_current_chunk(void) const noexcept {
   return this->current_chunk;
 }
-const Scenery *ChunkAssembler::get_current_scenery() const noexcept {
+const Scenery *ChunkAssembler::get_current_scenery(void) const noexcept {
   return this->current_scenery;
 }
 
-void ChunkAssembler::dispose(Nostd::Matrix<Engine::Tile *> &x) noexcept {
+// Clear the clutter
+void ChunkAssembler::dispose(Matrix<Tile *> &x) noexcept {
   for (auto &y : x)
     for (auto &z : y) {
       delete z.value();
