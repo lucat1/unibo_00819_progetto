@@ -53,6 +53,8 @@ jobs:
           name: overengineered-${{ matrix.platform }}-static
           path: |
             overengineered
-            assets/**/*
+            assets/csv/*
+            assets/img/*
+            assets/sounds/*.wav
             overengineered.conf.csv
             scoreboard.csv
