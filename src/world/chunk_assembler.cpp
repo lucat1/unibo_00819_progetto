@@ -185,21 +185,24 @@ char ChunkAssembler::elaborate_autotile(const MapChunk *chunk,
       return tile->left;
     else if (x == chunk->width() - 1) // end of chunk
       return tile->right;
-    if (is_ground_or_platform(chunk->at(y)->at(x - 1).value())) { // gop left
-      if (is_ground_or_platform(chunk->at(y)->at(x + 1).value())) // gop right
-        return tile->center;
-      else
+    if (is_ground_or_platform(chunk->at(y)->at(x - 1).value())) {   // gop left
+      if (is_ground_or_platform(chunk->at(y)->at(x + 1).value())) { // gop right
+        if (!is_ground_or_platform(chunk->at(y - 1)->at(x - 1).value()))
+          return tile->concave_top_left;
+        else if (!is_ground_or_platform(chunk->at(y - 1)->at(x + 1).value()))
+          return tile->concave_top_right;
+        else if (!is_ground_or_platform(chunk->at(y + 1)->at(x - 1).value()))
+          return tile->concave_bottom_left;
+        else if (!is_ground_or_platform(chunk->at(y + 1)->at(x + 1).value()))
+          return tile->concave_bottom_right;
+        else
+          return tile->center;
+      } else
         return tile->right;
     } else
       return tile->left;
   }
 }
-
-/*
--x
-xx
--x
-*/
 
 inline bool
 ChunkAssembler::is_ground_or_platform(const MapUnit &u) const noexcept {
