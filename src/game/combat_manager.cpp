@@ -118,6 +118,24 @@ void CombatManager::enemy_act(
       }
       e->second.move_left();
     }
+  case 2: // move up
+    if (e->second.move_up() &&
+        GameplayManager::can_stand(get_mapunit(e->second)) &&
+        e->first.has_behavior(Behavior::vertical_flying)) {
+      get_enemy(e->second).value() = &e->first;
+      old_enemy_pointer.value() = nullptr;
+      break;
+    }
+    e->second.move_down();
+  case 3: // move down
+    if (e->second.move_down() &&
+        GameplayManager::can_stand(get_mapunit(e->second)) &&
+        e->first.has_behavior(Behavior::vertical_flying)) {
+      get_enemy(e->second).value() = &e->first;
+      old_enemy_pointer.value() = nullptr;
+      break;
+    }
+    e->second.move_up();
   }
 }
 
