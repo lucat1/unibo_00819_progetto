@@ -87,9 +87,11 @@ void CombatManager::enemy_act(
   using Behavior = Data::Pawns::Enemy::Behavior;
   using Data::MapUnit;
   auto old_enemy_pointer = get_enemy(e->second);
-  switch (random_generator.get_random(20)) {
+  switch (random_generator.get_random(40)) {
   case 0: // move left
   case 1:
+  case 2:
+  case 3:
     if (e->second.move_left()) {
       if (e->first.has_behavior(Behavior::walking) &&
           GameplayManager::can_stand(get_mapunit(e->second))) {
@@ -104,8 +106,11 @@ void CombatManager::enemy_act(
       }
       e->second.move_right();
     }
-  case 2: // move right
-  case 3:
+    break;
+  case 4: // move right
+  case 5:
+  case 6:
+  case 7:
     if (e->second.move_right()) {
       if (e->first.has_behavior(Behavior::walking) &&
           GameplayManager::can_stand(get_mapunit(e->second))) {
@@ -120,8 +125,12 @@ void CombatManager::enemy_act(
       }
       e->second.move_left();
     }
-  case 4: // move up
-  case 5:
+    break;
+
+  case 8: // move up
+  case 9:
+  case 10:
+  case 11:
     if (e->second.move_up() &&
         GameplayManager::can_stand(get_mapunit(e->second)) &&
         e->first.has_behavior(Behavior::vertical_flying)) {
@@ -130,8 +139,10 @@ void CombatManager::enemy_act(
       break;
     }
     e->second.move_down();
-  case 6: // move down
-  case 7:
+  case 12: // move down
+  case 13:
+  case 14:
+  case 15:
     if (e->second.move_down() &&
         GameplayManager::can_stand(get_mapunit(e->second)) &&
         e->first.has_behavior(Behavior::vertical_flying)) {
@@ -140,7 +151,9 @@ void CombatManager::enemy_act(
       break;
     }
     e->second.move_up();
-  case 8: // use skill
+    break;
+
+  case 16: // use skill
     if (e->first.has_behavior(Behavior::attacking))
       cast_skill(e->first.skill(), e->second);
   }
