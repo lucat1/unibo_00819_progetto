@@ -33,7 +33,7 @@ namespace World {
 class World {
 public:
   // Default number of new chunks loaded on request
-  constexpr static size_t default_chunks_refill{50};
+  constexpr static size_t default_chunks_refill{5};
   Nostd::List<Fragment> environment;
   // Player and his position. Updated when world expands
   Nostd::Pair<Data::Pawns::Hero, Position> player;

@@ -33,6 +33,8 @@ private:
 public:
   int run();
   Game();
+  ~Game();
+  ;
 };
 
 } // namespace Game

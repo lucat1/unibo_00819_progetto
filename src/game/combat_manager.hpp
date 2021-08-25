@@ -11,6 +11,7 @@
 #ifndef GAME_COMBATMANAGER_HPP
 #define GAME_COMBATMANAGER_HPP
 
+#include "../world/random_generator.hpp"
 #include "../world/world.hpp"
 #include "menu_manager.hpp"
 namespace Game {
@@ -23,8 +24,11 @@ private:
   Nostd::Matrix<Data::Pawns::Enemy *>::iterator get_enemy(World::Position);
   Nostd::Matrix<Data::Pawns::Projectile *>::iterator
       get_projectile(World::Position);
+  World::RandomGenerator random_generator;
   bool move_projectiles(Data::Pawns::Projectile, World::Position *);
   void cast_skill(Data::Pawns::Skill, World::Position);
+  void enemy_act(
+      Nostd::List<Nostd::Pair<Data::Pawns::Enemy, World::Position>>::iterator);
 
 public:
   CombatManager(MenuManager &);

@@ -16,13 +16,12 @@
 #include "../engine/menu/select.hpp"
 #include "../engine/menu/settings.hpp"
 #include "../engine/scene/scene.hpp"
-#include <iostream>
 #include <signal.h>
+#include <stdexcept>
 #include <unistd.h>
 using Engine::Audio;
 using Engine::Drawable;
 using Engine::Menu::Main;
-using std::cout;
 
 Game::Game::Game()
     : db("overengineered.conf.csv", "assets", "scoreboard.csv"),
@@ -30,22 +29,23 @@ Game::Game::Game()
       combat_manager(gameplay_manager.get_menu_manager()) {
   gameplay_manager.get_menu_manager().get_settings_manager().apply_settings();
   signal(SIGTERM, before_close);
+  if (!screen.open())
+    throw std::runtime_error(
+        "Could not open screen. Perhaps your terminal is too small?");
+}
+
+Game::Game::~Game() {
+  screen.close();
+  before_close(0); // useless parameter
 }
 
 void Game::Game::before_close(int) { Audio::stop(); }
 
 int Game::Game::run() {
-  if (!screen.open()) {
-    cout << "Could not open screen. Perhaps your terminal is too small?\n";
-    return 1;
-  }
-
   screen.set_content<Main>();
   while (running) {
     running = loop();
   }
-  screen.close();
-  before_close(0); // useless parameter
   return 0;
 }
 

@@ -23,6 +23,9 @@ using Data::Pawns::Hero;
 using Data::Pawns::Interactable;
 using Data::Pawns::Skill;
 
+constexpr int Hero::score_award;
+static_assert(Hero::score_award > 0, "score_award must be strictly positive.");
+
 Hero::Hero(Engine::Color foreground, char character, const Nostd::String &name,
            const Nostd::String &description, Skill skill, Skill superSkill,
            int health, int mana)
@@ -64,9 +67,10 @@ int Hero::current_mana() const noexcept { return curM; }
 
 int Hero::max_mana() const noexcept { return maxM; }
 
-void Hero::increase_mana() noexcept {
+void Hero::award() noexcept {
   if (curM != maxM)
     ++curM;
+  scr += score_award;
 }
 
 bool Hero::attempt_super_skill() noexcept {

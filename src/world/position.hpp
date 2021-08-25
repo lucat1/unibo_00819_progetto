@@ -55,6 +55,11 @@ public:
   bool move_down(void);
 
   bool move_up(void);
+
+  // Operators
+  bool operator==(Position) const;
+
+  bool operator!=(Position) const;
 };
 
 } // namespace World

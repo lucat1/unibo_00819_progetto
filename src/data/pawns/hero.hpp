@@ -30,6 +30,7 @@ namespace Pawns {
 */
 class Hero : public Character {
 public:
+  constexpr static int score_award = 100; // points awarded per kill
   Hero(Engine::Color foreground, char character, const Nostd::String &name,
        const Nostd::String &description, Skill skill, Skill superSkill,
        int max_health, int max_mana);
@@ -51,7 +52,7 @@ public:
   bool is_dead() const noexcept; // checks if the game is over
   int current_mana() const noexcept;
   int max_mana() const noexcept;
-  void increase_mana() noexcept;
+  void award() noexcept;
   // if mana is full, sets it to zero and returns true
   bool attempt_super_skill() noexcept;
   int score() const noexcept;

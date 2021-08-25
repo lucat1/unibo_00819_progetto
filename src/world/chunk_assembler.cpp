@@ -28,6 +28,9 @@ ChunkAssembler::ChunkAssembler(const Vector<MapChunk> *chunks,
     : chunks(chunks), sceneries(sceneries), enemies(enemies), items(items),
       current_scenery(nullptr), current_chunk(nullptr), chunks_assembled(0) {}
 
+
+constexpr size_t ChunkAssembler::sceneries_duration;
+
 // Step 1 implementation (a): select the next MapChunk to assemble using
 // Poisson's distribution in order to chose a random number keeping track of the
 // difficulty of the game. The first chosen is always the first of the chunks
@@ -213,7 +216,7 @@ ChunkAssembler::is_ground_or_platform(const MapUnit &u) const noexcept {
 WorldExpansion ChunkAssembler::get() noexcept {
   // Step 1
   next_chunk();
-  if (chunks_assembled % 10 == 0)
+  if (chunks_assembled % sceneries_duration == 0)
     next_scenery();
   chunks_assembled++;
   // Step 3

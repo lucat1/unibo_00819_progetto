@@ -69,6 +69,15 @@ bool Position::move_down() {
   return true;
 }
 
+bool Position::operator==(Position position) const {
+  return environment == position.environment && fragment == position.fragment &&
+         x == position.x && y == position.y;
+}
+
+bool Position::operator!=(Position position) const {
+  return !(*this == position);
+}
+
 size_t Position::get_x() const noexcept { return this->x; }
 
 size_t Position::get_y() const noexcept { return this->y; }
