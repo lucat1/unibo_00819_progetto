@@ -159,7 +159,8 @@ void Game::Game::handle_keypress() {
       combat_manager.use_superskill();
     break;
   case '\33': // ESC key = suicide
-    gameplay_manager.die();
+    if (gameplay_manager.get_menu_manager().is_in_game())
+      gameplay_manager.die();
     break;
   case ERR:
     // ignore ncurses's getch errors
