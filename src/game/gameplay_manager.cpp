@@ -61,7 +61,8 @@ void GameplayManager::move_right() {
              menu_manager.get_world().environment.end()) {
       menu_manager.get_world().add_chunk(1);
       const size_t world_length = menu_manager.get_world().environment.size(),
-                   music_duration = World::ChunkAssembler::sceneries_duration;
+                   music_duration =
+                       2 * World::ChunkAssembler::sceneries_duration;
       if (world_length % music_duration == 0)
         switch ((world_length / music_duration) % 3) {
         case 0:
