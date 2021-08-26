@@ -39,7 +39,8 @@ int SettingsManager::play_soundtrack(const char fn[]) {
     case Audio::Error::none:
       return 0;
     case Audio::Error::no_tool:
-      cout << "Could not play the soundtrack. Do you have aplay or afplay?\n";
+      // cout << "Could not play the soundtrack. Do you have aplay or
+      // "afplay?\n";
       return 1;
     case Audio::Error::invalid_file:
       cout << "Could not play the soundtrack: invalid file (" << fp << ").\n";
