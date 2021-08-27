@@ -16,9 +16,11 @@
 #include "../engine/menu/select.hpp"
 #include "../engine/menu/settings.hpp"
 #include "../engine/scene/scene.hpp"
+
 #include <signal.h>
 #include <stdexcept>
 #include <unistd.h>
+
 using Engine::Audio;
 using Engine::Drawable;
 using Engine::Menu::Main;
@@ -38,8 +40,6 @@ Game::Game::~Game() {
   screen.close();
   before_close(0); // useless parameter
 }
-
-void Game::Game::before_close(int) { Audio::stop(); }
 
 int Game::Game::run() {
   screen.set_content<Main>();
@@ -167,3 +167,5 @@ void Game::Game::handle_keypress() {
   };
   last_key = key;
 }
+
+void Game::Game::before_close(int) { Audio::stop(); }

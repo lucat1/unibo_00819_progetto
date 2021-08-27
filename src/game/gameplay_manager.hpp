@@ -16,26 +16,26 @@
 namespace Game {
 
 class GameplayManager {
-private:
-  Engine::Screen &screen;
-  MenuManager menu_manager;
-
 public:
   GameplayManager(Data::Database &, Engine::Screen &);
+
   MenuManager &get_menu_manager();
 
   static bool can_stand(Data::MapUnit);
   static bool can_dig(Data::MapUnit);
+
   void gravity();
   void move_left();
   void move_right();
   void move_up();
   void move_down();
-  void die();
   void move_dig();
+  void die();
 
-  Nostd::Matrix<Data::Pawns::Item *>::iterator get_item();
-  void manage_items();
+private:
+  MenuManager menu_manager;
+
+  Engine::Screen &screen;
 };
 
 } // namespace Game

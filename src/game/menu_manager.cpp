@@ -26,6 +26,14 @@ using Game::MenuManager;
 MenuManager::MenuManager(Data::Database &datab, Engine::Screen &scr)
     : db(datab), screen(scr), settings_manager(datab) {}
 
+Game::SettingsManager &MenuManager::get_settings_manager() {
+  return settings_manager;
+}
+
+World::World &MenuManager::get_world() { return *world; }
+
+const Nostd::String Game::MenuManager::get_message() const { return message; }
+
 bool MenuManager::change_content() {
   if (screen.is_content<Main>()) {
     // do something when the main menu is exited
@@ -76,6 +84,8 @@ bool MenuManager::change_content() {
   return true;
 }
 
+bool MenuManager::is_in_game() { return in_game && world != nullptr; }
+
 void MenuManager::update_scoreboard() {
   auto &scoreboard = db.results();
   if (scoreboard.size() == 0)
@@ -89,14 +99,6 @@ void MenuManager::update_scoreboard() {
   }
 }
 
-Game::SettingsManager &MenuManager::get_settings_manager() {
-  return settings_manager;
-}
-
-bool MenuManager::is_in_game() { return in_game && world != nullptr; }
 void MenuManager::set_in_game(bool g) { in_game = g; }
-World::World &MenuManager::get_world() { return *world; }
-
-const Nostd::String Game::MenuManager::get_message() const { return message; }
 
 void Game::MenuManager::set_message(const Nostd::String &str) { message = str; }

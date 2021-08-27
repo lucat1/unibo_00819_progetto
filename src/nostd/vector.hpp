@@ -13,6 +13,7 @@
 #define NOSTD_VECTOR_HPP
 
 #include "allocator.hpp"
+
 #include <algorithm>
 #include <iterator>
 #include <stdexcept>

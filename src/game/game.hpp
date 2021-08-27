@@ -11,30 +11,39 @@
 
 #ifndef GAME_GAME_HPP
 #define GAME_GAME_HPP
+
 #include "../data/database.hpp"
 #include "../engine/screen.hpp"
 #include "../world/world.hpp"
 #include "combat_manager.hpp"
 #include "gameplay_manager.hpp"
-namespace Game {
-class Game {
-private:
-  Data::Database db;
-  Engine::Screen screen;
-  bool running = true;
-  int frame = 1;
-  static void before_close(int);
-  bool loop();
-  void handle_keypress();
-  GameplayManager gameplay_manager;
-  char last_key = '\0';
-  CombatManager combat_manager;
 
+namespace Game {
+
+class Game {
 public:
-  int run();
   Game();
   ~Game();
-  ;
+
+  int run();
+
+private:
+  GameplayManager gameplay_manager;
+  CombatManager combat_manager;
+
+  Data::Database db;
+  Engine::Screen screen;
+
+  bool running = true;
+  bool loop();
+
+  char last_key = '\0';
+
+  int frame = 1;
+
+  void handle_keypress();
+
+  static void before_close(int);
 };
 
 } // namespace Game

@@ -14,29 +14,36 @@
 #include "../world/random_generator.hpp"
 #include "../world/world.hpp"
 #include "menu_manager.hpp"
+
 namespace Game {
 
 class CombatManager {
-private:
-  Nostd::Matrix<Data::Pawns::Item *>::iterator get_item();
-  MenuManager &menu_manager;
-  Data::MapUnit get_mapunit(World::Position);
-  Nostd::Matrix<Data::Pawns::Enemy *>::iterator get_enemy(World::Position);
-  Nostd::Matrix<Data::Pawns::Projectile *>::iterator
-      get_projectile(World::Position);
-  World::RandomGenerator random_generator;
-  bool move_projectiles(Data::Pawns::Projectile, World::Position *);
-  void cast_skill(Data::Pawns::Skill, World::Position);
-  void enemy_act(
-      Nostd::List<Nostd::Pair<Data::Pawns::Enemy, World::Position>>::iterator);
-
 public:
   CombatManager(MenuManager &);
+
   void manage_items();
   void manage_projectiles();
   void manage_enemies();
   void use_skill();
   void use_superskill();
+
+private:
+  MenuManager &menu_manager;
+
+  World::RandomGenerator random_generator;
+
+  Data::MapUnit get_mapunit(World::Position);
+
+  Nostd::Matrix<Data::Pawns::Item *>::iterator get_item();
+  Nostd::Matrix<Data::Pawns::Projectile *>::iterator
+      get_projectile(World::Position);
+  Nostd::Matrix<Data::Pawns::Enemy *>::iterator get_enemy(World::Position);
+
+  bool move_projectiles(Data::Pawns::Projectile, World::Position *);
+
+  void cast_skill(Data::Pawns::Skill, World::Position);
+  void enemy_act(
+      Nostd::List<Nostd::Pair<Data::Pawns::Enemy, World::Position>>::iterator);
 };
 } // namespace Game
 

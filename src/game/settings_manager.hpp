@@ -19,19 +19,23 @@
 namespace Game {
 
 class SettingsManager {
-private:
-  const Data::Database &db;
-  int fps = 60;
-  bool sound = true;
-
 public:
   SettingsManager(const Data::Database &);
-  int play_soundtrack(const char[]);
-  void apply_settings();
-  int get_fps();
-  bool get_sound();
-};
 
+  bool get_sound();
+
+  int play_soundtrack(const char[]);
+  int get_fps();
+
+  void apply_settings();
+
+private:
+  const Data::Database &db;
+
+  bool sound = true;
+
+  int fps = 60;
+};
 } // namespace Game
 
 #endif

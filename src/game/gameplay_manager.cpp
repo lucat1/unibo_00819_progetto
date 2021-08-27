@@ -10,6 +10,7 @@
 */
 
 #include "gameplay_manager.hpp"
+
 using Game::GameplayManager;
 
 GameplayManager::GameplayManager(Data::Database &datab, Engine::Screen &scr)
@@ -20,6 +21,10 @@ Game::MenuManager &GameplayManager::get_menu_manager() { return menu_manager; }
 bool GameplayManager::can_stand(Data::MapUnit u) {
   return u == Data::MapUnit::nothing || u == Data::MapUnit::item ||
          u == Data::MapUnit::enemy;
+}
+
+bool GameplayManager::can_dig(Data::MapUnit u) {
+  return can_stand(u) || u == Data::MapUnit::platform;
 }
 
 void GameplayManager::gravity() {
@@ -114,16 +119,6 @@ void GameplayManager::move_down() {
   }
 }
 
-void GameplayManager::die() {
-  menu_manager.set_message(Nostd::String());
-  menu_manager.get_settings_manager().play_soundtrack("main_menu");
-  screen.send_event(Engine::Drawable::Event::interact);
-}
-
-bool GameplayManager::can_dig(Data::MapUnit u) {
-  return can_stand(u) || u == Data::MapUnit::platform;
-}
-
 void GameplayManager::move_dig() {
   auto &player = menu_manager.get_world().player;
   auto &chunk = player.second.get_fragment()->map_chunk;
@@ -133,4 +128,10 @@ void GameplayManager::move_dig() {
     return;
 
   menu_manager.get_world().player.second.move_down();
+}
+
+void GameplayManager::die() {
+  menu_manager.set_message(Nostd::String());
+  menu_manager.get_settings_manager().play_soundtrack("main_menu");
+  screen.send_event(Engine::Drawable::Event::interact);
 }
