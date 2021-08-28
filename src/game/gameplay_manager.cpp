@@ -11,6 +11,9 @@
 
 #include "gameplay_manager.hpp"
 
+#include "../world/chunk_assembler.hpp"
+
+
 using Game::GameplayManager;
 
 GameplayManager::GameplayManager(Data::Database &datab, Engine::Screen &scr)
@@ -62,9 +65,11 @@ void GameplayManager::move_right() {
     else if (std::next(player.second.get_fragment()) ==
              menu_manager.get_world().environment.end()) {
       menu_manager.get_world().add_chunk(1);
-      size_t world_length = menu_manager.get_world().environment.size();
-      if (world_length % 60 == 0)
-        switch ((world_length / 60) % 3) {
+      const size_t world_length = menu_manager.get_world().environment.size(),
+                   music_duration =
+                       2 * World::ChunkAssembler::sceneries_duration;
+      if (world_length % music_duration == 0)
+        switch ((world_length / music_duration) % 3) {
         case 0:
           menu_manager.get_settings_manager().play_soundtrack("theme1");
           break;
@@ -81,26 +86,28 @@ void GameplayManager::move_right() {
 void GameplayManager::move_up() {
   auto &player = menu_manager.get_world().player;
   auto &chunk = player.second.get_fragment()->map_chunk;
-  auto unit_below =
-      chunk->at(player.second.get_y() + 1).at(player.second.get_x()).value();
-
-  if (player.second.get_y() == 0 || can_stand(unit_below))
-    return;
-  auto unit_above =
-      chunk->at(player.second.get_y() - 1).at(player.second.get_x()).value();
-  if (unit_above == Data::MapUnit::platform) {
-    menu_manager.get_world().player.second.move_up();
-    menu_manager.get_world().player.second.move_up();
-  } else {
-    int i = 2;
-    while (player.second.get_y() > 0 && i > 0) {
-      unit_above = chunk->at(player.second.get_y() - 1)
-                       .at(player.second.get_x())
-                       .value();
-      if (!can_stand(unit_above))
-        break;
-      menu_manager.get_world().player.second.move_up();
-      i--;
+  if (player.second.get_y() + 1 < chunk->height) {
+    auto unit_below =
+        chunk->at(player.second.get_y() + 1).at(player.second.get_x()).value();
+    if (player.second.get_y() != 0 && !can_stand(unit_below)) {
+      auto unit_above = chunk->at(player.second.get_y() - 1)
+                            .at(player.second.get_x())
+                            .value();
+      if (unit_above == Data::MapUnit::platform) { // dig platform
+        menu_manager.get_world().player.second.move_up();
+        menu_manager.get_world().player.second.move_up();
+      } else { // attempt traditional jump
+        int i = 2;
+        while (player.second.get_y() > 0 && i > 0) {
+          unit_above = chunk->at(player.second.get_y() - 1)
+                           .at(player.second.get_x())
+                           .value();
+          if (!can_stand(unit_above))
+            break;
+          menu_manager.get_world().player.second.move_up();
+          i--;
+        }
+      }
     }
   }
 }

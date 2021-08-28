@@ -64,6 +64,16 @@ Engine::UI::Box::~Box() {
   }
 }
 
+Engine::UI::Box *Engine::UI::Box::get_first_child() const {
+  return first_child;
+}
+
+Engine::UI::Box *Engine::UI::Box::get_last_child() const { return last_child; }
+
+Engine::UI::Box *Engine::UI::Box::get_parent() const { return parent; }
+
+Engine::UI::Box *Engine::UI::Box::get_sibling() const { return sibling; }
+
 void Engine::UI::Box::add_child(Box *new_box) {
   if (last_child != nullptr)
     last_child->sibling = new_box;
@@ -136,7 +146,7 @@ void Engine::UI::Box::props(Box::Property key, szu value) {
   }
 }
 
-Engine::UI::Box *Engine::UI::Box::child(size_t n) {
+Engine::UI::Box *Engine::UI::Box::child(size_t n) const {
   Box *it = first_child;
   while (it != nullptr && n--) {
     it = it->sibling;

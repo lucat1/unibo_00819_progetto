@@ -4,7 +4,12 @@
 \usepackage[T1]{fontenc}
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{enumerate}
+
 \usepackage{epigraph}
+\renewcommand{\epigraphrule}{0pt}
+\renewcommand{\textflush}{flushepinormal}
+\setlength{\epigraphwidth}{0.3\textwidth}
+\renewenvironment{flushepinormal}{}{\vspace*{-\baselineskip}}
 
 \title{Overengineered \\
 \large Relazione del progetto per l'insegnamento di Programmazione}
@@ -23,6 +28,7 @@
 \begin{document}
 
 \maketitle
+\thispagestyle{empty}
 
 \epigraph{Il tempo che vi divertite a sprecare non è tempo sprecato.}
 {\textit{Bertrand Russell}}
@@ -34,15 +40,15 @@ con mappa illimitata implementato in \verb!C++!. L'esecuzione avviene
 all'interno di un terminale: l'interfaccia \`e perci\`o realizzata tramite una
 grafica ASCII. La mappa \`e generata in modo incrementale tramite l'unione di
 frammenti presviluppati. La possibilit\`a di scegliere tra pi\`u personaggi,
-unita alla variet\`a di nemici ed oggetti, rende il sistema di combattimento una
+unita alla variet\`a di nemici e oggetti, rende il sistema di combattimento una
 sintesi fra scontri corpo a corpo e a distanza. Ciascun evento degno di nota
 viene inoltre descritto al giocatore in forma didascalica in tempo reale.
 
 \section{Spartizione dei ruoli}
 
-Il lavoro \`e stato diviso tra i membri del gruppo sia sotto il piano della
-programmazione che delle figure di contorno richieste per la creazione di un
-videogioco.
+Il lavoro \`e stato diviso tra i membri del gruppo sia sul piano della
+programmazione che su quello delle figure di contorno richieste per la creazione
+di un videogioco.
 
 \subsection{Programmazione}
 
@@ -66,6 +72,7 @@ diverso per ciascuno di questi moduli.
     di combattimento, e la navigazione tra menu diversi.
 \end{itemize}
 
+\noindent
 Le specifiche del progetto prevedono serie limitazioni sull'uso della
 \emph{Standard Template Library}. I contenitori come \verb!vector!, \verb!list!
 e \verb!map! e \verb!string!, per esempio, sono vietati. Per far fronte a tali
@@ -73,10 +80,10 @@ richieste, \`e stato necessario includere un ulteriore modulo, denominato
 \verb!Nostd!. Esso emula alcuni strumenti della libreria standard, integrandoli
 secondo le necessit\`a del progetto. \verb!Nostd! \`e stato realizzato
 congiuntamente dall'intera squadra: a ciascun membro del gruppo \`e stata
-affidata una parte delle sue intestazioni. In cima ad ogni \emph{file} \`e
-comunque presente il nominativo del programmatore per esso responsabile.
+affidata una parte delle intestazioni. In cima ad ogni \emph{file} \`e
+comunque presente il nominativo del programmatore che ne \'e esso responsabile.
 
-\subsection{Miscellanei}
+\subsection{Miscellanea}
 
 La cartella \verb!assets! raccoglie le risorse (file di estensioni \verb!.txt! e
 \verb!.csv!) caricate dalla base di dati. Esse sono classificabili in quattro
@@ -95,8 +102,13 @@ categorie.
 
 \section{Scelte implementative}
 
-I paradigmi di programmazione usati come modello nella stesura del codice
-sorgente sono quello procedurale, orientato agli oggetti e generico. Il
+Nella stesura del codice sorgente, sono stati usati come punti di riferimento i
+"paradigmi"\footnote{\label{note1} \guillemotleft [...] la parola "paradigma" mi
+mette a disagio in quanto pretenziosa e (secondo la definizione originale di
+Kuhn) con implicite pretese di esclusivit\`a\guillemotright (B. Stroustrup,
+\emph{C++. Linguaggio, libreria standard, principi di programmazione}, 4. ed.,
+trad. it. di Giulia Maselli e Paolo Postinghel, Pearson Italia, Milano 2015,
+p. 11).} di programmazione procedurale, orientato agli oggetti e generico. Il
 linguaggio scelto ci ha permesso di coniugare l'uso di potenti strumenti
 linguistici e concettuali per l'astrazione con accorgimenti di basso livello per
 ottenere prestazioni relativamente soddisfacenti.
@@ -106,32 +118,31 @@ ottenere prestazioni relativamente soddisfacenti.
 \verb!Nostd! (re)implementa liste, vettori, stringhe, matrici e mappe, ovvero i
 contenitori utili al resto del progetto. Fedelt\`a alla \emph{STL}, semplicit\`a
 e pragmatismo ne hanno guidato la progettazione. Proprio come la libreria a cui
-si ispira, \verb!Nostd! fornisce appositi tipi di iteratori: questo porta a
+si ispira, \verb!Nostd! fornisce appositi tipi di iteratori; questo porta a
 diversi vantaggi, fra cui la possibilit\`a di usare sia l'istruzione
 \emph{range-for} che \verb!<algorithm>!. Per parametrizzare rispetto ad uno o
 pi\`u tipi di dato i costrutti definiti, si \`e fatto talvolta uso di
 programmazione generica e metaprogrammazione, raggiungendo cos\`i il punto pi\`u
-alto delle capacit\`a espressive del linguaggio. \verb!<allocator.hpp>!,
-\verb!<concepts.hpp>! e \verb!<pair.hpp>!, infine, hanno funto da intestazioni
+alto delle capacit\`a espressive del linguaggio. Infine, \verb!<allocator.hpp>!,
+\verb!<concepts.hpp>! e \verb!<pair.hpp>! hanno funto da intestazioni
 ausiliarie.
 
 \subsection{Data}
 
-Così come prescritto da B. Stroustrup (\guillemotleft A meno che esista una
-buona ragione per non farlo, usate \verb!vector!.\guillemotright\footnote{
-\label{note1} Vedi B. Stroustrup, \emph{C++.
-Linguaggio, libreria standard, principi di programmazione}, 4. ed., trad. it. di
-Giulia Maselli e Paolo Postinghel, Pearson Italia, Milano, 2015, p. 810.}), la
-quasi totalità delle informazioni della base di dati viene memorizzata in
-vettori del tipo appropriato. Fa eccezione \verb!Result!, le cui istanze sono
-memorizzate in una lista per privilegiare inserimenti interni durante
-l'iterazione su esse. Molte delle classi coinvolte, inoltre, appartengono ad
-un'unica gerarchia circoscritta dal sottospazio dei nomi \verb!Data::Pawns!. In
-essa, un uso ragionato di metodi e basi virtuali ha portato esempi di
-\emph{dispatch} statico e dinamico alla convivenza. L'interazione con il disco,
-invece, \`e regolata da sovraccaricamenti degli operatori di slittamento a
-sinistra (\verb!<<!) e a destra (\verb!>>!) specifici per ciascun tipo di ente
-trattato dalla base di dati.
+Come prescritto da Bjarne Stroustrup (\guillemotleft A meno che esista una buona
+ragione per non farlo, usate \verb!vector! \guillemotright \footnote{
+\label{note2} B. Stroustrup, \emph{C++. Linguaggio, libreria standard, principi
+di programmazione}, 4. ed., trad. it. di Giulia Maselli e Paolo Postinghel,
+Pearson Italia, Milano 2015, p. 810.}), la quasi totalità delle informazioni
+della base di dati viene memorizzata in vettori del tipo appropriato. Fa
+eccezione \verb!Result!, le cui istanze sono memorizzate in una lista per
+privilegiare inserimenti interni durante l'iterazione su esse. Molte delle
+classi coinvolte, inoltre, appartengono ad un'unica gerarchia circoscritta dal
+sottospazio dei nomi \verb!Data::Pawns!. In essa, un uso ragionato di metodi e
+basi virtuali ha fatto convivere esempi di \emph{dispatch} statico e dinamico.
+L'interazione con il disco, invece, \`e regolata da sovraccaricamenti degli
+operatori di slittamento a sinistra (\verb!<<!) e a destra (\verb!>>!) specifici
+per ciascun tipo di ente trattato dalla base di dati.
 
 \subsection{Engine}
 
@@ -139,9 +150,9 @@ Tutte le schermate ad eccezione della scena di gioco sono composte da una serie
 di elementi visuali contenuti in \verb!Engine::UI!. Essi vengono inseriti in una
 struttura arborescente che ricorda quella di un \emph{Document Object Model}:
 questo permette, oltre al riutilizzo del codice, una più netta separazione tra
-contenuto e logica dei menu. La schermata di gioco scorre la lista di frammenti
-del mondo vicini al giocatore per mostrarli a schermo sovrapponendovi entit\`a
-e proiettili.
+contenuto e logica dei men\`u. La schermata di gioco scorre la lista di
+frammenti del mondo vicini al giocatore per mostrarli a schermo sovrapponendovi
+entit\`a e proiettili.
 
 \subsection{World}
 
@@ -174,8 +185,8 @@ caratterizzato da una distinta area di competenza.
 
 \subsection{Unit testing}
 
-La natura interconnessa dei moduli del progetto ha fin da subito messo in luce
-il bisogno di poter verificare il funzionamento del codice per garantirne
+La natura interconnessa dei moduli del progetto ha da subito messo in luce il
+bisogno di poter verificare il funzionamento del codice per garantirne
 l'affidabilit\`a sul lungo periodo. A tal fine si fa uso della funzione
 ausiliaria \verb!Nostd::test! e del comando \verb!make test! per compilare ed
 eseguire tutti i file per il \emph{testing} d'unit\`a.

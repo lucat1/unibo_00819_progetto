@@ -1,8 +1,8 @@
 9,m,Small Mushroom,1,0,0,0,50
-9,m,Mushroom,2,0,0,0,100
-9,m,Big Mushroom,3,0,0,0,150
+196,m,Mushroom,2,0,0,0,100
+197,m,Big Mushroom,3,0,0,0,150
 13,p,Tequila Shot,0,0,25,1,25
-13,p,Beer,0,0,50,1,100
-13,p|Vodka,0,0,100,1,175
-11,$|Coin,0,0,0,0,500
+173,p,Beer,0,0,50,1,100
+174,p|Vodka,0,0,100,1,175
+3,$|Coin,0,0,0,0,500
 

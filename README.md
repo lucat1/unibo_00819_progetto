@@ -2,7 +2,7 @@
 
 The game is implemented in C++ and built with the gcc/make toolchain. Clang/LLVM
 have been tested and compile just fine on Darwin. The Makefile automatically
-compiles the needed source files and rebuilds only what's needed.
+compiles the needed source files and rebuilds only what has changed.
 
 ## Building, Running and Testing
 
@@ -33,6 +33,19 @@ $ make test
 For the final release binaries please keep in mind that the game needs the `assets`
 folder and its contents to run. Therefore always include this folder at the same
 level sa the binary executable when packaging release tarballs.
+
+## Commands
+
+Walking, jumping, and crossing platforms can be achieved with any of the following:
+* `wasd` keys
+* `hjkl` keys (vim-style)
+* arrow keys
+
+Additionally, you can use `q` or `e` for a diagonal jump in one of two directions.
+
+Simply pressing `o` at any time activates your character's standard skill. Using `p` while their mana gauge is full will empty it and unleash a high-level move.
+
+The `ESC` button lets you abandon the current game, potentially updating the leaderboard with your score.
 
 ## Support
 
