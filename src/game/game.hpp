@@ -28,11 +28,11 @@ public:
   int run();
 
 private:
-  GameplayManager gameplay_manager;
-  CombatManager combat_manager;
-
   Data::Database db;
   Engine::Screen screen;
+
+  GameplayManager gameplay_manager;
+  CombatManager combat_manager;
 
   bool running = true;
   bool loop();

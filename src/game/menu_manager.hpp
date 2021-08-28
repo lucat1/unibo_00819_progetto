@@ -20,6 +20,16 @@
 namespace Game {
 
 class MenuManager {
+private:
+  Data::Database &db;
+  Engine::Screen &screen;
+  World::World *world = nullptr;
+  Nostd::String message = "";
+
+  SettingsManager settings_manager;
+
+  bool in_game = false;
+
 public:
   MenuManager(Data::Database &, Engine::Screen &);
 
@@ -27,7 +37,7 @@ public:
 
   World::World &get_world();
 
-  const Nostd::String get_message() const;
+  Nostd::String get_message() const;
 
   bool change_content();
   bool is_in_game();
@@ -35,16 +45,6 @@ public:
   void update_scoreboard();
   void set_in_game(bool);
   void set_message(const Nostd::String &);
-
-private:
-  SettingsManager settings_manager;
-
-  Data::Database &db;
-  Engine::Screen &screen;
-  World::World *world = nullptr;
-  Nostd::String message = "";
-
-  bool in_game = false;
 };
 } // namespace Game
 

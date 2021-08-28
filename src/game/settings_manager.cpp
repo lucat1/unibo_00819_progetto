@@ -19,7 +19,7 @@ using std::cout;
 
 SettingsManager::SettingsManager(const Data::Database &datab) : db(datab) {}
 
-bool SettingsManager::get_sound() { return sound; }
+bool SettingsManager::is_sound_on() { return sound; }
 
 int SettingsManager::play_soundtrack(const char fn[]) {
   if (sound) {

@@ -22,7 +22,7 @@ class SettingsManager {
 public:
   SettingsManager(const Data::Database &);
 
-  bool get_sound();
+  bool is_sound_on();
 
   int play_soundtrack(const char[]);
   int get_fps();

@@ -33,11 +33,10 @@ public:
   void die();
 
 private:
-  MenuManager menu_manager;
-
   Engine::Screen &screen;
-};
 
+  MenuManager menu_manager;
+};
 } // namespace Game
 
 #endif

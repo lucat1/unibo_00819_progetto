@@ -32,7 +32,7 @@ Game::SettingsManager &MenuManager::get_settings_manager() {
 
 World::World &MenuManager::get_world() { return *world; }
 
-const Nostd::String Game::MenuManager::get_message() const { return message; }
+Nostd::String Game::MenuManager::get_message() const { return message; }
 
 bool MenuManager::change_content() {
   if (screen.is_content<Main>()) {

@@ -26,6 +26,7 @@ void CombatManager::manage_items() {
                                  .append(item.value()->name())
                                  .append("!"));
     auto &items = menu_manager.get_world().items;
+    // erase the Item which is being consumed
     for (auto p = items.begin(); p != items.end(); p++)
       if (item.value() == &p->first) {
         item.value() = nullptr;
@@ -68,7 +69,7 @@ void CombatManager::manage_projectiles() {
         Nostd::Matrix<Data::Pawns::Projectile *>::iterator projectile_pointer =
             get_projectile(p->second);
         projectile_pointer.value() = nullptr;
-        if (move_projectiles(p->first, &p->second) &&
+        if (move_projectile(p->first, &p->second) &&
             GameplayManager::can_dig(get_mapunit(p->second))) {
           projectile_pointer = get_projectile(p->second);
           if (projectile_pointer.value() == nullptr)
@@ -98,6 +99,7 @@ void CombatManager::manage_enemies() {
     auto enemy_pointer = get_enemy(e->second);
     if (!to_be_destroyed) {
       if (e->second == menu_manager.get_world().player.second) {
+        // the Enemy bumps into the player
         hero.interact(e->first);
         menu_manager.set_message(Nostd::String(hero.name())
                                      .append(" was hit by ")
@@ -107,6 +109,7 @@ void CombatManager::manage_enemies() {
       } else
         enemy_act(e);
     }
+    // destroy Enemy
     if (to_be_destroyed) {
       e = enemies.erase(e, std::next(e));
       enemy_pointer.value() = nullptr;
@@ -167,8 +170,8 @@ CombatManager::get_enemy(World::Position position) {
       .at(position.get_x());
 }
 
-bool CombatManager::move_projectiles(Data::Pawns::Projectile projectile,
-                                     World::Position *position) {
+bool CombatManager::move_projectile(Data::Pawns::Projectile projectile,
+                                    World::Position *position) {
   switch (projectile.get_x()) { // x
   case -1:
     if (!position->move_left())
@@ -197,8 +200,9 @@ void CombatManager::cast_skill(Data::Pawns::Skill skill,
                                World::Position position) {
   for (auto projectile : skill.projectiles()) {
     World::Position projectile_position = position;
-    if (move_projectiles(projectile, &projectile_position) &&
+    if (move_projectile(projectile, &projectile_position) &&
         GameplayManager::can_dig(get_mapunit(projectile_position))) {
+      // the Projectile can be spawned
       menu_manager.get_world().projectiles.push_back(
           {projectile, projectile_position});
       projectile_position.get_fragment()
