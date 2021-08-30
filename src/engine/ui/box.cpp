@@ -23,7 +23,7 @@
 // NOTE: we could lower memory usage with an ordered map
 // (its gonna increase computation time toughfrom O(1) to O(log n)
 // but n would still be a small number still (in the 10-30s range)
-short map[256 + (100 * 257)] = {0};
+short map[257 * 256] = {0};
 short i = 1;
 
 // returns a new color_pair based on the fg and bg arguments
@@ -35,7 +35,8 @@ int Engine::UI::color_pair(short fg, short bg) {
       short_to_color(bg) == Color::transparent)
     return -1;
 
-  short hash = fg + (100 * (bg + 1));
+  // +1 as we also gotta handle Color::transparent which is -1
+  size_t hash = fg + (256 * (size_t)(bg + 1));
   if (map[hash] != 0)
     return map[hash];
 
