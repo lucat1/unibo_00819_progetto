@@ -23,12 +23,15 @@ RandomGenerator::RandomGenerator() : seed(time(nullptr)), random_engine(seed) {
   srand(seed);
 }
 
+// C-style random
 size_t RandomGenerator::get_random(size_t bound) const noexcept {
   return rand() % bound;
 }
 
+// Seed getter
 time_t RandomGenerator::get_seed() const noexcept { return seed; }
 
+// Here we make use of Poisson's distribution via std::poisson_distribution
 size_t RandomGenerator::get_poisson_random(size_t mean, size_t bound) {
   if (!mean || mean > bound)
     throw std::invalid_argument(
@@ -43,6 +46,7 @@ size_t RandomGenerator::get_poisson_random_reverse(size_t antimean,
   return get_poisson_random(bound - antimean, bound);
 }
 
+// Custom function implementation with input checking
 size_t RandomGenerator::calculate_mean(size_t x, size_t b) {
   if (x == 0)
     throw std::invalid_argument("Length must be non-null");
