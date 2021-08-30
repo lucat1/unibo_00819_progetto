@@ -69,35 +69,35 @@ info:
 	@echo
 
 clean:
-	@echo "RMRF\tbuild $(TARGET)"
+	@echo -e "RMRF\tbuild $(TARGET)"
 	@rm -rf build $(TARGET)
 
 format:
 	clang-format -i $(ALL_FILES) $(ALL_HEADER_FILES)
 
 run: all
-	@echo "RUN\t$(TARGET)"
+	@echo -e "RUN\t$(TARGET)"
 	@./$(TARGET)
 
 $(TEST_TARGETS): $(TEST_DIR)/%: $(INT_DIR)/%.o | $(ALL_OBJ_FILES)
-	@echo "LD\t$<"
+	@echo -e "LD\t$<"
 	@$(CXX) $^ $(AUX_OBJ_FILES) $(LDFLAGS) -o $@
-	@echo "RUN\t$@"
+	@echo -e "RUN\t$@"
 	@$@
-	@echo "SUCCESS\t$@"
+	@echo -e "SUCCESS\t$@"
 
 $(ALL_OBJ_FILES): $(INT_DIR)/%.o: $(SRC_DIR)/%.cpp $(INT_DIR)/%.d | $(OBJ_FOLDERS)
-	@echo "CC\t$<"
+	@echo -e "CC\t$<"
 	@$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 $(TARGET): $(CPP_OBJ_FILES)
-	@echo "LD\t$@"
+	@echo -e "LD\t$@"
 	@$(CXX) $^ $(LDFLAGS) -o $@
 
 $(DEP_FILES): $(INT_DIR)/%.d: ;
 
 $(OBJ_FOLDERS):
-	@echo "MKDIR\t$@"
+	@echo -e "MKDIR\t$@"
 	@mkdir -p $@
 
 -include $(DEP_FILES)
