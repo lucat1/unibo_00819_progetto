@@ -22,21 +22,21 @@ Engine::Scene::HUD::HUD(const Data::Pawns::Hero &player,
 
 void Engine::Scene::HUD::bar(WINDOW *window, szu x, szu y, int value,
                              int max_value, const char icon[5], Color c) {
-  int pair = Engine::UI::color_pair(color_to_short(Data::Palette::unfocused),
-                                    color_to_short(c)),
-      pairi = Engine::UI::color_pair(color_to_short(c),
-                                     color_to_short(Data::Palette::unfocused));
+  int pair = Screen::color_pair(color_to_short(Data::Palette::unfocused),
+                                color_to_short(c)),
+      pairi = Screen::color_pair(color_to_short(c),
+                                 color_to_short(Data::Palette::unfocused));
 
   int mid =
       ((float)value / max_value) * 9; // value percentage drawn in 9 char cells
   int icon_pair =
-      Engine::UI::color_pair(color_to_short(c), color_to_short(Color::black));
-  Engine::UI::start_color(window, icon_pair);
+      Screen::color_pair(color_to_short(c), color_to_short(Color::black));
+  Screen::start_color(window, icon_pair);
   mvwaddstr(window, y, x, icon);
   x = x + 3; // hardcoded as strlen doesn't give proper output on unicode chars
 
   for (int i = 0; i < 9; i++) {
-    Engine::UI::start_color(window, i < mid ? pair : pairi);
+    Screen::start_color(window, i < mid ? pair : pairi);
     if (i < 2) {
       mvwaddch(window, y, x + i, ' ');
     } else if (i == 2 && value > 9) {
@@ -57,7 +57,7 @@ void Engine::Scene::HUD::bar(WINDOW *window, szu x, szu y, int value,
     } else {
       mvwaddch(window, y, x + i, ' ');
     }
-    Engine::UI::end_color(window, i < mid ? pair : pairi);
+    Screen::end_color(window, i < mid ? pair : pairi);
   }
 }
 

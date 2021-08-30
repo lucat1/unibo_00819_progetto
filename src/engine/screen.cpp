@@ -14,15 +14,50 @@
 #include "screen.hpp"
 #include "menu/main.hpp"
 #include <ncurses.h>
+#include <algorithm>
+
+const int Engine::Screen::n_of_colors;
+int Engine::Screen::color_map[Engine::Screen::n_of_colors]
+                               [Engine::Screen::n_of_colors];
+size_t Engine::Screen::color_count;
 
 Engine::Screen::Screen() {
-  this->content = nullptr;
-  this->stdscreen = nullptr;
-  this->container = nullptr;
+  content = nullptr;
+  stdscreen = nullptr;
+  container = nullptr;
+
+  for (int i = 0; i < n_of_colors; i++)
+    for (int j = 0; j < n_of_colors; j++)
+      color_map[i][j] = -1;
 }
+
 Engine::Screen::~Screen() {
   close();
   clear_content();
+}
+
+// returns a new color_pair based on the fg and bg arguments
+// we cache already initializes color pairs.
+int Engine::Screen::color_pair(short fg, short bg) {
+  if (short_to_color(bg) == Color::transparent)
+    bg = color_to_short(Color::black);
+
+  if(color_map[fg+1][bg+1] == -1) {
+    int n = color_count++;
+    init_extended_pair(n, fg, bg);
+    color_map[fg+1][bg+1] = COLOR_PAIR(n);
+  }
+  return color_map[fg+1][bg+1];
+}
+
+void Engine::Screen::start_color(WINDOW *window, int pair) {
+  if (pair != -1)
+    wattron(window, pair);
+}
+
+void Engine::Screen::end_color(WINDOW *window, int pair) {
+  if (pair != -1)
+    wattroff(window, pair);
 }
 
 Engine::Drawable::Kind Engine::Screen::get_state() {
@@ -31,6 +66,7 @@ Engine::Drawable::Kind Engine::Screen::get_state() {
 
   return content->kind();
 }
+
 bool Engine::Screen::is_over() {
   if (content == nullptr)
     return false; // undefined behaviour
@@ -60,7 +96,7 @@ bool Engine::Screen::open() {
   // allow printing unicode symbols
   setlocale(LC_ALL, "");
   stdscreen = initscr();
-  if (stdscreen == nullptr || start_color())
+  if (stdscreen == nullptr || ::start_color())
     return false;
 
   // NOTE: look at man curses(3) for documentation on these functions

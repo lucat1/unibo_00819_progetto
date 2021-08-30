@@ -11,6 +11,7 @@
 */
 
 #include "choice.hpp"
+#include "../screen.hpp"
 #include "../utils.hpp"
 #include <ncurses.h>
 
@@ -40,61 +41,61 @@ Data::Setting *Engine::UI::Choice::get_setting() { return setting; }
 void Engine::UI::Choice::show(WINDOW *window, szu abs_x, szu y, szu max_width,
                               szu max_height) {
   szu x = abs_x + (fr ? max_width - width : 0);
-  int color_on = UI::color_pair(fg, color_to_short(parent->background())),
-      color_off = UI::color_pair(bg, color_to_short(parent->background()));
+  int color_on = Screen::color_pair(fg, color_to_short(parent->background())),
+      color_off = Screen::color_pair(bg, color_to_short(parent->background()));
 
   if (boolean) {
     bool on = *setting->current_value() == 1;
-    UI::start_color(window, color_off);
+    Screen::start_color(window, color_off);
     mvwaddstr(window, y, x, "<");
-    UI::end_color(window, color_off);
+    Screen::end_color(window, color_off);
 
-    UI::start_color(window, !on ? color_on : color_off);
+    Screen::start_color(window, !on ? color_on : color_off);
     mvwaddstr(window, y, x + 2, "off");
-    UI::end_color(window, !on ? color_on : color_off);
+    Screen::end_color(window, !on ? color_on : color_off);
 
-    UI::start_color(window, color_off);
+    Screen::start_color(window, color_off);
     mvwaddstr(window, y, x + 6, "/");
-    UI::end_color(window, color_off);
+    Screen::end_color(window, color_off);
 
-    UI::start_color(window, on ? color_on : color_off);
+    Screen::start_color(window, on ? color_on : color_off);
     mvwaddstr(window, y, x + 8, "on");
-    UI::end_color(window, on ? color_on : color_off);
+    Screen::end_color(window, on ? color_on : color_off);
 
-    UI::start_color(window, color_off);
+    Screen::start_color(window, color_off);
     mvwaddstr(window, y, x + 11, ">");
-    UI::end_color(window, color_off);
+    Screen::end_color(window, color_off);
   } else {
     szu next_x = x + 2 * digits(setting->last()) + 2;
 
-    UI::start_color(window, color_on);
+    Screen::start_color(window, color_on);
     Nostd::String str;
     stringify(*setting->current_value(), str);
     str.push_back(u'/');
     stringify(setting->last(), str);
     str.push_back(u' ');
     mvwaddstr(window, y, x, str.c_str());
-    UI::end_color(window, color_on);
+    Screen::end_color(window, color_on);
 
     // val : 10 = max : min
     int val = (10 * *setting->current_value()) / setting->last();
 
-    UI::start_color(window, color_off);
+    Screen::start_color(window, color_off);
     mvwaddch(window, y, next_x, '<');
-    UI::end_color(window, color_off);
+    Screen::end_color(window, color_off);
 
-    UI::start_color(window, color_on);
+    Screen::start_color(window, color_on);
     for (int i = 0; i < val; i++)
       mvwaddch(window, y, next_x + 1 + i, '=');
-    UI::end_color(window, color_on);
-    UI::start_color(window, color_off);
+    Screen::end_color(window, color_on);
+    Screen::start_color(window, color_off);
     for (int i = val; i <= 10; i++)
       mvwaddch(window, y, next_x + 1 + i, '=');
-    UI::end_color(window, color_off);
+    Screen::end_color(window, color_off);
 
-    UI::start_color(window, color_off);
+    Screen::start_color(window, color_off);
     mvwaddch(window, y, next_x + 11, '>');
-    UI::end_color(window, color_off);
+    Screen::end_color(window, color_off);
   }
 }
 

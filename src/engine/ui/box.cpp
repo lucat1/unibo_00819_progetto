@@ -18,44 +18,6 @@
 #include <exception>
 #include <stdexcept>
 
-// this map for colors _could_ have been avoided if we had
-// alloc_pair, free_pair, find_pair on macos (ty Apple)
-// NOTE: we could lower memory usage with an ordered map
-// (its gonna increase computation time toughfrom O(1) to O(log n)
-// but n would still be a small number still (in the 10-30s range)
-short map[257 * 256] = {0};
-short i = 1;
-
-// returns a new color_pair based on the fg and bg arguments
-// we cache already initializes color pairs.
-int Engine::UI::color_pair(short fg, short bg) {
-  // check if fg == white and bg == transparent and in this case just return as
-  // we are not coloring this box.
-  if (short_to_color(fg) == Color::white &&
-      short_to_color(bg) == Color::transparent)
-    return -1;
-
-  // +1 as we also gotta handle Color::transparent which is -1
-  size_t hash = fg + (256 * (size_t)(bg + 1));
-  if (map[hash] != 0)
-    return map[hash];
-
-  int k = i++;
-  init_pair(k, fg, bg);
-  map[hash] = COLOR_PAIR(k);
-  return map[hash];
-}
-
-void Engine::UI::start_color(WINDOW *window, int pair) {
-  if (pair != -1)
-    wattron(window, pair);
-}
-
-void Engine::UI::end_color(WINDOW *window, int pair) {
-  if (pair != -1)
-    wattroff(window, pair);
-}
-
 Engine::UI::Box::~Box() {
   Box *it = first_child;
   while (it != nullptr) {
@@ -86,14 +48,14 @@ void Engine::UI::Box::add_child(Box *new_box) {
     first_child = new_box;
 }
 
-int Engine::UI::Box::color_pair() { return UI::color_pair(fg, bg); }
+int Engine::UI::Box::color_pair() { return Screen::color_pair(fg, bg); }
 
 void Engine::UI::Box::start_color(WINDOW *window) {
-  UI::start_color(window, color_pair());
+  Screen::start_color(window, color_pair());
 }
 
 void Engine::UI::Box::end_color(WINDOW *window) {
-  UI::end_color(window, color_pair());
+  Screen::end_color(window, color_pair());
 }
 
 Engine::Color Engine::UI::Box::foreground() const { return short_to_color(fg); }

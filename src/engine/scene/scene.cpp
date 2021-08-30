@@ -77,17 +77,17 @@ void Engine::Scene::Scene::draw() {
   // draw the player charter
   // gather the background from the player's current fragment and the foreground
   // from the Hero class
-  int pair = Engine::UI::color_pair(
+  int pair = Engine::Screen::color_pair(
       color_to_short(world.player.first.foreground()),
       color_to_short(pos.get_fragment()
                          ->tiles[pos.get_y()][pos.get_x()]
                          .value()
                          ->background()));
-  Engine::UI::start_color(window, pair);
+  Screen::start_color(window, pair);
   wattron(window, A_BOLD);
   mvwaddch(window, pos.get_y(), player_x, world.player.first.character());
   wattroff(window, A_BOLD);
-  Engine::UI::end_color(window, pair);
+  Screen::end_color(window, pair);
 
   // lastly render the HUD
   hud.show(window, 0, Screen::lines - 1, Screen::columns, 1);
@@ -129,13 +129,13 @@ void Engine::Scene::Scene::draw_chunk(
       if (bg == Color::transparent)
         bg = tile->background();
 
-      int pair = Engine::UI::color_pair(color_to_short(t->foreground()),
-                                        color_to_short(bg));
-      Engine::UI::start_color(window, pair);
+      int pair = Screen::color_pair(color_to_short(t->foreground()),
+                                    color_to_short(bg));
+      Screen::start_color(window, pair);
       if (attr != 0)
         wattron(window, attr);
       mvwaddch(window, y, x, t->character());
-      Engine::UI::end_color(window, pair);
+      Screen::end_color(window, pair);
       if (attr != 0)
         wattroff(window, attr);
       x++;

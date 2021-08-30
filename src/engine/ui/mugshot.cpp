@@ -11,6 +11,7 @@
 */
 
 #include "mugshot.hpp"
+#include "../screen.hpp"
 
 Engine::UI::Mugshot::Mugshot(const Data::Mugshot &mugshot) : mugshot{mugshot} {}
 
@@ -30,10 +31,10 @@ void Engine::UI::Mugshot::show(WINDOW *window, szu x, szu y, szu max_width,
         break;
 
       short pixel_color = color_to_short(cell.value());
-      int color = Engine::UI::color_pair(pixel_color, pixel_color);
-      Engine::UI::start_color(window, color);
+      int color = Screen::color_pair(pixel_color, pixel_color);
+      Screen::start_color(window, color);
       mvwaddch(window, y + y_inc, x + x_inc, u' ');
-      Engine::UI::end_color(window, color);
+      Screen::end_color(window, color);
       x_inc++;
     }
     x_inc = 0;

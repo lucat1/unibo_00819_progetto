@@ -30,6 +30,15 @@ namespace Engine {
 // and a general redraw event for the game content
 class Screen {
 private:
+  // this map for colors _could_ have been avoided if we had
+  // alloc_pair, free_pair, find_pair on macos (ty Apple)
+  // NOTE: we could lower memory usage with an ordered map
+  // (its gonna increase computation time toughfrom O(1) to O(log n)
+  // but n would still be a small number still (in the 10-30s range)
+  static constexpr int n_of_colors = 257;
+  static size_t color_count;
+  static int color_map[n_of_colors][n_of_colors];
+
   // stdscreen refers to the WINDOW* returns by initscr, whereas container is
   // the main ncurses window where all content is drawn. The container borders
   // are marked with ncurses' box function
@@ -55,6 +64,10 @@ public:
 
   Screen();
   ~Screen();
+
+  static int color_pair(short fg, short bg);
+  static void start_color(WINDOW *window, int pair);
+  static void end_color(WINDOW *window, int pair);
 
   // returns the "state" of the screen, meaning wheter we are displaying the
   // game, a menu or none (therefore we use Drawable::Kind)
