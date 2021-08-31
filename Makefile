@@ -99,7 +99,7 @@ $(TARGET): $(CPP_OBJ_FILES)
 
 static-darwin: $(CPP_OBJ_FILES)
 	@echo -e "LD\t$@"
-	$(CXX) $(STATICNCURSES) $^ -o $(TARGET)
+	@$(CXX) $(STATICNCURSES) $^ -o $(TARGET)
 
 $(DEP_FILES): $(INT_DIR)/%.d: ;
 
