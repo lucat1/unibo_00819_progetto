@@ -7,10 +7,10 @@ compiles the needed source files and rebuilds only what has changed.
 ## Dependencies
 
 The game depens on the C++ standard library, the C standard library (for unix
-system calls) and `ncurses` which must be of version `>= 6`. Please note that
-the default version shipped with OSX/Darwin is `5.2` at the time of writing,
-and it is therefore mandatory to install the library manually or using a package
-manager like [homebrew](https://brew.sh).
+system calls) and `ncurses` which must have a version greater or equal than `6`.
+Please note that, at the time of writing, the default version shipped with OSX
+is `5.2` and it is therefore mandatory to install the library manually or via
+a package manager such as [homebrew](https://brew.sh).
 
 ## Building, Running and Testing
 
