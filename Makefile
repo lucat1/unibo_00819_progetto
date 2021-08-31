@@ -1,3 +1,7 @@
+# force bash to use the -e argument with echo. Can be removed
+# at the expense of visual beauty
+SHELL := /bin/bash
+
 SRC_DIR  = src
 INT_DIR  = build
 TEST_DIR = build/test
