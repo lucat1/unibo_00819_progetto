@@ -12,28 +12,27 @@ CXXFLAGS = -std=c++11 -MT $@ -MMD -MP -MF $(@:.o=.d) -Wall -Werror
 LDFLAGS = -lstdc++
 # conditional linker flags based on OS (Linux (tested on Ubuntu, Elementary and void), Darwin = MacOS)
 UNAME := $(shell uname)
-ifeq ($(UNAME), Linux)
-	HAS_CURSESW6 := $(shell command -v ncursesw6-config 2> /dev/null)
-	HAS_CURSESW5 := $(shell command -v ncursesw5-config 2> /dev/null)
 
-	# use ncursesw6-config utility to find libraries when available
-	# therwhise go for a best guess
-	ifdef HAS_CURSESW6
-	CXXFLAGS += $(shell ncursesw6-config --cflags)
-	LDFLAGS += $(shell ncursesw6-config --libs)
+HAS_CURSESW6 := $(shell command -v ncursesw6-config 2> /dev/null)
+HAS_CURSESW5 := $(shell command -v ncursesw5-config 2> /dev/null)
+
+# use ncursesw6-config utility to find libraries when available
+# therwhise go for a best guess
+ifdef HAS_CURSESW6
+CXXFLAGS += $(shell ncursesw6-config --cflags)
+LDFLAGS += $(shell ncursesw6-config --libs)
+STATICNCURSES = $(shell ncursesw6-config --libdir)/libncurses.a
+else
+	ifdef HAS_CURSESW5
+	CXXFLAGS += $(shell ncursesw5-config --cflags)
+	LDFLAGS += $(shell ncursesw5-config --libs)
+	STATICNCURSES = $(shell ncursesw5-config --libdir)/libncurses.a
 	else
-		ifdef HAS_CURSESW5
-		CXXFLAGS += $(shell ncursesw5-config --cflags)
-		LDFLAGS += $(shell ncursesw5-config --libs)
-		else
-		LDFLAGS += -lncurses -lncursesw
-		endif
+	CXXFLAGS += -D_XOPEN_SOURCE_EXTENDED
+	LDFLAGS += -lncurses -lncursesw
+	# mock of a likely location on Darwin for the ncurses static binary
+	STATICNCURSES = /usr/local/Cellar/ncurses/6.2/lib/libncurses.a
 	endif
-endif
-
-ifeq ($(UNAME), Darwin)
-LDFLAGS += -lncurses
-CXXFLAGS += -D_XOPEN_SOURCE_EXTENDED
 endif
 
 # Things to build
@@ -52,14 +51,14 @@ TEST_TARGETS := $(TEST_OBJ_FILES:$(INT_DIR)/%.o=$(TEST_DIR)/%)
 
 SUB_FOLDERS := $(filter-out src, $(patsubst src/%,%, $(shell find src -type d)))
 OBJ_FOLDERS := $(addprefix build/, $(SUB_FOLDERS)) $(addprefix build/test/, $(SUB_FOLDERS))
-.PHONY: test debug info clean format run $(TEST_TARGETS)
+.PHONY: test debug info clean format run $(TEST_TARGETS) static-darwin
 
 all: info $(TARGET)
 test: info $(TEST_TARGETS)
 debug: CXXFLAGS += -ggdb
 debug: clean all test
-static: LDFLAGS += -static -static-libstdc++ -static-libgcc
-static: info all
+static-linux: LDFLAGS += -static -static-libstdc++ -static-libgcc
+static-linux: info all
 
 info:
 	@echo
@@ -93,6 +92,10 @@ $(ALL_OBJ_FILES): $(INT_DIR)/%.o: $(SRC_DIR)/%.cpp $(INT_DIR)/%.d | $(OBJ_FOLDER
 $(TARGET): $(CPP_OBJ_FILES)
 	@echo -e "LD\t$@"
 	@$(CXX) $^ $(LDFLAGS) -o $@
+
+static-darwin: $(CPP_OBJ_FILES)
+	@echo -e "LD\t$@"
+	$(CXX) $(STATICNCURSES) $^ -o $(TARGET)
 
 $(DEP_FILES): $(INT_DIR)/%.d: ;
 
