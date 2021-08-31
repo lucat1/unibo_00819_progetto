@@ -24,12 +24,12 @@ jobs:
 
       - name: install ncurses on macos
         if: startsWith(matrix.platform, 'macos-latest')
-        run: |
-          brew install ncurses
-          export PATH="/usr/local/opt/ncurses/bin:$PATH"
+        run: brew install ncurses
 
       - name: 'make clean test'
-        run: make clean test
+        run: | # the export is useless on ubuntu
+          export PATH="/usr/local/opt/ncurses/bin:$PATH"
+          make clean test
 
       - name: 'make clean static-linux'
         if: startsWith(matrix.platform, 'ubuntu-latest')
@@ -37,7 +37,9 @@ jobs:
 
       - name: 'make clean static-darwin'
         if: startsWith(matrix.platform, 'macos-latest')
-        run: make clean static-darwin
+        run: |
+          export PATH="/usr/local/opt/ncurses/bin:$PATH"
+          make clean static-darwin
 
       - name: upload artifact
         uses: actions/upload-artifact@v2
