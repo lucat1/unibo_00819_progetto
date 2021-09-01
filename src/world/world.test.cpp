@@ -31,7 +31,7 @@ int main() {
                              &d.items());
     auto m = assembler.get();
   });
-  it("tests the creation of a new World::World", [] {
+  it("Creates a new World::World", [] {
     Database d("tests/overengineered.conf.csv", "tests/assets/",
                "tests/scoreboard.csv");
     World::World w(d);

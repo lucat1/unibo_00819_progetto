@@ -6,15 +6,15 @@
   Mattia Girolimetto #977478
   04/22/2021
 
-  chunk_assembler.hpp: World::ChunkAssembler definition. This class represent
+  chunk_assembler.hpp: World::ChunkAssembler definition. This class represents
   the core of the World module. It has been designed to take an instance of
-  Data::Database in input and produce an output for Engine and Game
+  Data::Database in input and produce an output for the Engine and Game
   modules. It has four steps to complete:
     1. Chose which chunk and scenery must be used.
     2. Combine them to describe how the map looks like.
     3. Chose how often enemies appear and describe where they are located.
     4. Chose how often items appear and describe where they are located.
-  All these randomly and keeping track of the increasing game difficulty.
+  All performed randomly while keeping track of the increasing game difficulty.
 */
 
 #ifndef WORLD_CHUNK_ASSEMBLER_HPP
