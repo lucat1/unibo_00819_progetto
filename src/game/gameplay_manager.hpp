@@ -21,6 +21,7 @@ public:
 
   MenuManager &get_menu_manager();
 
+  // Returns whether the player can stand/dig on the given MapUnit
   static bool can_stand(Data::MapUnit);
   static bool can_dig(Data::MapUnit);
 

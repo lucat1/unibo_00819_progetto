@@ -23,7 +23,7 @@ namespace Game {
 class Game {
 public:
   Game();
-  ~Game();
+  ~Game(); // destroyer
 
   int run();
 

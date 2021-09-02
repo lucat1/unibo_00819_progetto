@@ -89,12 +89,14 @@ bool MenuManager::is_in_game() { return in_game && world != nullptr; }
 void MenuManager::update_scoreboard() {
   auto &scoreboard = db.results();
   if (scoreboard.size() == 0)
+    // there are no other scores
     scoreboard.push_front(world->player.first);
   else {
     Nostd::List<Data::Pawns::Result>::iterator p;
     for (p = scoreboard.begin();
          p != scoreboard.end() && *p >= world->player.first.score(); p++)
-      ;
+      ; // comparison between the new score and the old ones to put it
+    // it in the right position
     scoreboard.insert(p, world->player.first);
   }
 }

@@ -37,6 +37,7 @@ public:
 
   World::World &get_world();
 
+  // Return a message
   Nostd::String get_message() const;
 
   bool change_content();
