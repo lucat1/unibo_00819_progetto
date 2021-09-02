@@ -17,13 +17,13 @@
 #include <random>
 #include <stdexcept>
 
-using namespace World;
+using World::RandomGenerator;
 
 RandomGenerator::RandomGenerator() : seed(time(nullptr)), random_engine(seed) {
   srand(seed);
 }
 
-// Get C style random number
+// C-style random
 size_t RandomGenerator::get_random(size_t bound) const noexcept {
   return rand() % bound;
 }
@@ -31,7 +31,7 @@ size_t RandomGenerator::get_random(size_t bound) const noexcept {
 // Seed getter
 time_t RandomGenerator::get_seed() const noexcept { return seed; }
 
-// TODO
+// Here we make use of Poisson's distribution via std::poisson_distribution
 size_t RandomGenerator::get_poisson_random(size_t mean, size_t bound) {
   if (!mean || mean > bound)
     throw std::invalid_argument(
@@ -41,14 +41,16 @@ size_t RandomGenerator::get_poisson_random(size_t mean, size_t bound) {
   return n < 0 ? bound : n >= bound ? bound - 1 : n;
 }
 
-// TODO
-size_t RandomGenerator::get_poisson_random_reverse(size_t mean, size_t bound) {
-  return get_poisson_random(bound - mean, bound);
+size_t RandomGenerator::get_poisson_random_reverse(size_t antimean,
+                                                   size_t bound) {
+  return get_poisson_random(bound - antimean, bound);
 }
 
-// TODO
+// Custom function implementation with input checking
 size_t RandomGenerator::calculate_mean(size_t x, size_t b) {
+  if (x == 0)
+    throw std::invalid_argument("Length must be non-null");
   if (b <= 1)
     throw std::invalid_argument("Bound must be greater than 1");
-  return (1 - static_cast<long double>(b)) / (x * b - x + 1) + b;
+  return (1 - static_cast<long double>(b)) / (x * b - x - b + 2) + b;
 }

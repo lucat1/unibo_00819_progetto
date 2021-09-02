@@ -13,13 +13,20 @@
 #include "../nostd/matrix.hpp"
 #include "position.hpp"
 
+using Data::MapChunk;
+using Data::MapUnit;
+using Data::Scenery;
+
 using Data::Pawns::Enemy;
 using Data::Pawns::Item;
-using Engine::BlockTile;
+
 using Engine::Tile;
-using namespace World;
-using namespace Nostd;
-using namespace Data;
+
+using Nostd::List;
+using Nostd::Matrix;
+using Nostd::Vector;
+
+using World::ChunkAssembler;
 
 ChunkAssembler::ChunkAssembler(const Vector<MapChunk> *chunks,
                                const Vector<Scenery> *sceneries,
@@ -64,6 +71,7 @@ ChunkAssembler::assemble_scenery(const MapChunk *chunk,
   for (size_t i{0}; i < chunk->height; i++) {
     for (size_t j{0}; j < chunk->width(); j++) {
       MapUnit map_unit = chunk->at(i).at(j).value();
+      using Engine::BlockTile;
       if (map_unit == MapUnit::nothing || map_unit == MapUnit::enemy ||
           map_unit == MapUnit::item)
         res.at(i).at(j).value() = new BlockTile(' ', Engine::Color::transparent,
@@ -89,7 +97,7 @@ ChunkAssembler::assemble_scenery(const MapChunk *chunk,
 
 // Step 3 implementation: given a MapChunk in input checks enemies presence and
 // location
-Pair<List<Enemy>, Matrix<Enemy *>>
+Nostd::Pair<List<Enemy>, Matrix<Enemy *>>
 ChunkAssembler::assemble_enemies(const MapChunk *chunk) noexcept {
   Matrix<Enemy *> matrix({chunk->height, chunk->width()}, nullptr);
   List<Enemy> list;
@@ -111,7 +119,7 @@ ChunkAssembler::assemble_enemies(const MapChunk *chunk) noexcept {
 
 // Step 4 implementation: given a MapChunk in input checks items presence and
 // location
-Pair<List<Item>, Matrix<Item *>>
+Nostd::Pair<List<Item>, Matrix<Item *>>
 ChunkAssembler::assemble_items(const MapChunk *chunk) noexcept {
   Matrix<Item *> matrix({chunk->height, chunk->width()}, nullptr);
   List<Item> list;
@@ -208,7 +216,7 @@ ChunkAssembler::is_ground_or_platform(const MapUnit &u) const noexcept {
 }
 
 // Get a World::WorldExpansion by combining all the assembling steps
-WorldExpansion ChunkAssembler::get() noexcept {
+World::WorldExpansion ChunkAssembler::get() noexcept {
   // Step 1
   next_chunk();
   if (chunks_assembled % sceneries_duration == 0)
