@@ -39,8 +39,10 @@ public:
 
   UnorderedMap() {}
 
-  // Add new key and value to the map
-  void put(K key, V value) override {
+  /*
+    Add new key and value to the map
+   */
+  void put(K key, V value) noexcept override {
     for (size_t i = 0; i < data.size(); i++) {
       Nostd::Pair<const K, V> *x = data[i];
       if (x->first == key) {
@@ -51,7 +53,10 @@ public:
     data.push_back(new Nostd::Pair<const K, V>(key, value));
   }
 
-  void remove(K key) override {
+  /*
+    Removes a key and its value form the map
+   */
+  void remove(K key) noexcept override {
     for (size_t i = 0; i < this->data.size(); i++)
       if (data[i]->first == key) {
         delete data[i];
@@ -60,52 +65,80 @@ public:
       }
   }
 
-  bool empty() const override { return this->data.empty(); }
+  /*
+    Checks wheter the map is empty or not
+   */
+  bool empty(void) const noexcept override { return this->data.empty(); }
 
-  bool contains(K key) const override {
+  /*
+    Checks wheter the map contains the key given in input
+   */
+  bool contains(const K &key) const noexcept override {
     for (size_t i = 0; i < this->data.size(); i++)
       if (key == data[i]->first)
         return true;
     return false;
   }
 
-  size_t size() const override { return this->data.size(); }
+  /*
+    Returns the number of keys inside the map
+   */
+  size_t size(void) const noexcept override { return this->data.size(); }
 
-  Nostd::Vector<V> get_values() const override {
+  /*
+    Returns a Nostd::Vector with all the values stored into the map
+   */
+  Nostd::Vector<V> get_values(void) const noexcept override {
     Nostd::Vector<V> res(this->data.size());
     for (size_t i = 0; i < this->data.size(); i++)
       res[i] = data[i]->second;
     return res;
   }
 
-  Nostd::Vector<Nostd::Pair<const K, V> *> as_vector() const override {
+  /*
+    Returns a Vector representation of the map
+   */
+  Nostd::Vector<Nostd::Pair<const K, V> *>
+  as_vector(void) const noexcept override {
     return this->data;
   }
 
-  void clear() override { data.clear(); }
+  /*
+    Removes all the keys and values from the map
+   */
+  void clear(void) noexcept override { data.clear(); }
 
-  V &operator[](K key) override {
+  /*
+    Access the value of the key given in input
+   */
+  V &operator[](const K &key) override {
     for (size_t i = 0; i < this->data.size(); i++)
       if (data[i]->first == key)
         return data[i]->second;
     throw std::invalid_argument("UnorderedMap: No value found for that key");
   }
 
-  const V &operator[](K key) const override {
+  /*
+    Access the value of the key given in input
+   */
+  const V &operator[](const K &key) const override {
     for (size_t i = 0; i < this->data.size(); i++)
       if (data[i]->first == key)
         return data[i]->second;
     throw std::invalid_argument("UnorderedMap: No value found for that key");
   }
 
-  iterator begin() { return this->data.begin(); }
-  iterator end() { return this->data.end(); }
+  /*
+    Iterator methods
+   */
+  iterator begin(void) noexcept { return this->data.begin(); }
+  iterator end(void) noexcept { return this->data.end(); }
 
-  const_iterator cbegin() const { return this->data.cbegin(); }
-  const_iterator cend() const { return this->data.cend(); }
+  const_iterator cbegin(void) const noexcept { return this->data.cbegin(); }
+  const_iterator cend(void) const noexcept { return this->data.cend(); }
 
-  reverse_iterator rbegin() const { return this->data.rbegin(); }
-  reverse_iterator rend() const { return this->data.rend(); }
+  reverse_iterator rbegin(void) const noexcept { return this->data.rbegin(); }
+  reverse_iterator rend(void) const noexcept { return this->data.rend(); }
 };
 
 } // namespace Nostd
