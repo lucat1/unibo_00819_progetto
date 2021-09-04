@@ -23,8 +23,9 @@ namespace Game {
 class Game {
 public:
   Game();
-  ~Game(); // destroyer
+  ~Game();
 
+  // Execuies the main game loop and returns the exit codeo9
   int run();
 
 private:
@@ -35,6 +36,7 @@ private:
   CombatManager combat_manager;
 
   bool running = true;
+  // the main game loop
   bool loop();
 
   char last_key = '\0';

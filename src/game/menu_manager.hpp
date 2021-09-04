@@ -20,6 +20,29 @@
 namespace Game {
 
 class MenuManager {
+public:
+  MenuManager(Data::Database &, Engine::Screen &);
+
+  // Returns a reference to the settings manager
+  SettingsManager &get_settings_manager();
+
+  // Returns a reference to the world
+  World::World &get_world();
+
+  // Returns the currently displayed message
+  Nostd::String get_message() const;
+
+  // Gets called when a menu is closed.Decides what to display next
+  bool change_content();
+  // Returns true if the player is in the game
+  bool is_in_game();
+
+  void update_scoreboard();
+  // Updates the value of in_game
+  void set_in_game(bool);
+  // Updates the massage showed on the display
+  void set_message(const Nostd::String &);
+
 private:
   Data::Database &db;
   Engine::Screen &screen;
@@ -29,23 +52,6 @@ private:
   SettingsManager settings_manager;
 
   bool in_game = false;
-
-public:
-  MenuManager(Data::Database &, Engine::Screen &);
-
-  SettingsManager &get_settings_manager();
-
-  World::World &get_world();
-
-  // Return a message
-  Nostd::String get_message() const;
-
-  bool change_content();
-  bool is_in_game();
-
-  void update_scoreboard();
-  void set_in_game(bool);
-  void set_message(const Nostd::String &);
 };
 } // namespace Game
 

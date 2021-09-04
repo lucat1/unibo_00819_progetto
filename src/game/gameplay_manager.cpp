@@ -13,7 +13,6 @@
 
 #include "../world/chunk_assembler.hpp"
 
-
 using Game::GameplayManager;
 
 GameplayManager::GameplayManager(Data::Database &datab, Engine::Screen &scr)
@@ -34,11 +33,15 @@ void GameplayManager::gravity() {
   auto &player = menu_manager.get_world().player;
   auto &chunk = player.second.get_fragment()->map_chunk;
   if ((size_t)player.second.get_y() >= Data::MapChunk::height - 1)
+    // check the player's position is at the end of the screen
     die();
   else {
+    // otherwise he go down one position
     auto unit_below =
         chunk->at(player.second.get_y() + 1).at(player.second.get_x()).value();
     if (can_stand(unit_below) && !player.second.move_down())
+      // check the underlying unit is empty and check if the player can't move
+      // down
       die();
   }
 }
@@ -46,6 +49,7 @@ void GameplayManager::gravity() {
 void GameplayManager::move_left() {
   auto &player = menu_manager.get_world().player;
   if (player.second.move_left()) {
+    // The player has moved successfully, now check if he is in a wall
     auto &chunk = player.second.get_fragment()->map_chunk;
     auto unit =
         chunk->at(player.second.get_y()).at(player.second.get_x()).value();
@@ -64,6 +68,7 @@ void GameplayManager::move_right() {
       player.second.move_left();
     else if (std::next(player.second.get_fragment()) ==
              menu_manager.get_world().environment.end()) {
+      // when moving right check if there is need to widen the world
       menu_manager.get_world().add_chunk(1);
       const size_t world_length = menu_manager.get_world().environment.size(),
                    music_duration =
@@ -86,16 +91,18 @@ void GameplayManager::move_right() {
 void GameplayManager::move_up() {
   auto &player = menu_manager.get_world().player;
   auto &chunk = player.second.get_fragment()->map_chunk;
+  // Check if the player has a unit below him
   if (player.second.get_y() + 1 < chunk->height) {
     auto unit_below =
         chunk->at(player.second.get_y() + 1).at(player.second.get_x()).value();
+    // Prevent the player from escaping the map or jumping while falling
     if (player.second.get_y() != 0 && !can_stand(unit_below)) {
       auto unit_above = chunk->at(player.second.get_y() - 1)
                             .at(player.second.get_x())
                             .value();
       if (unit_above == Data::MapUnit::platform) { // dig platform
-        menu_manager.get_world().player.second.move_up();
-        menu_manager.get_world().player.second.move_up();
+        player.second.move_up();
+        player.second.move_up();
       } else { // attempt traditional jump
         int i = 2;
         while (player.second.get_y() > 0 && i > 0) {
@@ -104,7 +111,7 @@ void GameplayManager::move_up() {
                            .value();
           if (!can_stand(unit_above))
             break;
-          menu_manager.get_world().player.second.move_up();
+          player.second.move_up();
           i--;
         }
       }
@@ -122,7 +129,7 @@ void GameplayManager::move_down() {
     auto unit_below =
         chunk->at(player.second.get_y() + 1).at(player.second.get_x()).value();
     if (can_stand(unit_below))
-      menu_manager.get_world().player.second.move_down();
+      player.second.move_down();
   }
 }
 
@@ -133,8 +140,7 @@ void GameplayManager::move_dig() {
       chunk->at(player.second.get_y() + 1).at(player.second.get_x()).value();
   if (!can_dig(unit_below))
     return;
-
-  menu_manager.get_world().player.second.move_down();
+  player.second.move_down();
 }
 
 void GameplayManager::die() {

@@ -19,6 +19,7 @@ class GameplayManager {
 public:
   GameplayManager(Data::Database &, Engine::Screen &);
 
+  // Returns a reference to the menu manager
   MenuManager &get_menu_manager();
 
   // Returns whether the player can stand/dig on the given MapUnit
@@ -30,6 +31,7 @@ public:
   void move_right();
   void move_up();
   void move_down();
+  // Brings down the player from a platoform
   void move_dig();
   void die();
 

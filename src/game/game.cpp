@@ -63,6 +63,7 @@ bool Game::Game::loop() {
   } else if (gameplay_manager.get_menu_manager().is_in_game()) {
     if ((frame / (fps / 10)) % 3 == 0)
       gameplay_manager.gravity();
+    // refresh the screen
     screen.send_event(Engine::Drawable::Event::redraw);
   }
 

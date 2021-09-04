@@ -23,6 +23,7 @@ bool SettingsManager::is_sound_on() { return sound; }
 
 int SettingsManager::play_soundtrack(const char fn[]) {
   if (sound) {
+    // absolute file path for the given file name.
     auto fp = db.to_audio_filepath(fn);
     switch (Audio::play(fp.c_str())) {
     case Audio::Error::none:
@@ -45,6 +46,7 @@ int SettingsManager::play_soundtrack(const char fn[]) {
 int SettingsManager::get_fps() { return fps; }
 
 void SettingsManager::apply_settings() {
+  // Iterates over each setting pair.
   for (auto x : db.settings()) {
     if (x.label() == "Sounds") {
       sound = *x.current_value();
