@@ -57,7 +57,7 @@ bool MenuManager::change_content() {
     update_scoreboard();
     delete world;
     world = nullptr;
-    in_game = true;
+    in_game = false;
     db.save_results();
     screen.set_content<Results, const Nostd::List<Data::Pawns::Result> &>(
         db.results());
