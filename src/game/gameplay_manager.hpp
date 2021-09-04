@@ -16,28 +16,30 @@
 namespace Game {
 
 class GameplayManager {
-private:
-  Engine::Screen &screen;
-  MenuManager menu_manager;
-
 public:
   GameplayManager(Data::Database &, Engine::Screen &);
+
+  // Returns a reference to the menu manager
   MenuManager &get_menu_manager();
 
+  // Returns whether the player can stand/dig on the given MapUnit
   static bool can_stand(Data::MapUnit);
   static bool can_dig(Data::MapUnit);
+
   void gravity();
   void move_left();
   void move_right();
   void move_up();
   void move_down();
-  void die();
+  // Brings down the player from a platoform
   void move_dig();
+  void die();
 
-  Nostd::Matrix<Data::Pawns::Item *>::iterator get_item();
-  void manage_items();
+private:
+  Engine::Screen &screen;
+
+  MenuManager menu_manager;
 };
-
 } // namespace Game
 
 #endif

@@ -19,21 +19,11 @@ using std::cout;
 
 SettingsManager::SettingsManager(const Data::Database &datab) : db(datab) {}
 
-void SettingsManager::apply_settings() {
-  for (auto x : db.settings()) {
-    if (x.label() == "Sounds") {
-      sound = *x.current_value();
-      if (!sound)
-        Audio::stop();
-      else if (Audio::status() == Audio::State::stopped)
-        play_soundtrack("main_menu");
-    } else if (x.label() == "Frames per second")
-      fps = *x.current_value();
-  }
-}
+bool SettingsManager::is_sound_on() { return sound; }
 
 int SettingsManager::play_soundtrack(const char fn[]) {
   if (sound) {
+    // absolute file path for the given file name.
     auto fp = db.to_audio_filepath(fn);
     switch (Audio::play(fp.c_str())) {
     case Audio::Error::none:
@@ -55,4 +45,16 @@ int SettingsManager::play_soundtrack(const char fn[]) {
 
 int SettingsManager::get_fps() { return fps; }
 
-bool SettingsManager::get_sound() { return sound; }
+void SettingsManager::apply_settings() {
+  // Iterates over each setting pair.
+  for (auto x : db.settings()) {
+    if (x.label() == "Sounds") {
+      sound = *x.current_value();
+      if (!sound)
+        Audio::stop();
+      else if (Audio::status() == Audio::State::stopped)
+        play_soundtrack("main_menu");
+    } else if (x.label() == "Frames per second")
+      fps = *x.current_value();
+  }
+}

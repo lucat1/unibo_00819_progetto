@@ -19,19 +19,28 @@
 namespace Game {
 
 class SettingsManager {
-private:
-  const Data::Database &db;
-  int fps = 60;
-  bool sound = true;
-
 public:
   SettingsManager(const Data::Database &);
-  int play_soundtrack(const char[]);
-  void apply_settings();
-  int get_fps();
-  bool get_sound();
-};
 
+  // Returns true if the sound is on.
+  bool is_sound_on();
+
+  // Plays the track identified in the input string,
+  // returns value 0 if it was successful, a positive integer otherwise
+  int play_soundtrack(const char[]);
+  // Returns the current fps value.
+  int get_fps();
+
+  // Updates the local fields based on the settings values.
+  void apply_settings();
+
+private:
+  const Data::Database &db;
+
+  bool sound = true;
+
+  int fps = 60;
+};
 } // namespace Game
 
 #endif

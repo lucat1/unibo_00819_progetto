@@ -6,11 +6,12 @@
   Andreea Scrob #989372
   03/27/2021
 
-  list.test.hpp: tests for Nostd::List
+  list.test.cpp: tests for Nostd::List
 */
 
 #include "list.hpp"
 #include "test.hpp"
+
 #include <cassert>
 
 using namespace Nostd;
@@ -61,6 +62,17 @@ int main() {
     assert(l.front() == 7);
   });
 
+  it("changes the length of the list", [] {
+    List<int> l;
+    l.push_back(278);
+    l.push_back(490);
+    l.push_back(89);
+    l.resize(2, 8);
+    assert(l.front() == 278);
+    assert(l.back() == 490);
+    assert(l.size() == 2);
+  });
+
   it("inserts new elements", [] {
     List<int> l;
     l.insert(l.begin(), 3);
@@ -85,17 +97,6 @@ int main() {
     l.remove(9);
     assert(l.front() == 8);
     assert(l.back() == 89);
-    assert(l.size() == 2);
-  });
-
-  it("changes the length of the list", [] {
-    List<int> l;
-    l.push_back(278);
-    l.push_back(490);
-    l.push_back(89);
-    l.resize(2, 8);
-    assert(l.front() == 278);
-    assert(l.back() == 490);
     assert(l.size() == 2);
   });
 

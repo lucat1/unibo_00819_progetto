@@ -26,6 +26,14 @@ using Game::MenuManager;
 MenuManager::MenuManager(Data::Database &datab, Engine::Screen &scr)
     : db(datab), screen(scr), settings_manager(datab) {}
 
+Game::SettingsManager &MenuManager::get_settings_manager() {
+  return settings_manager;
+}
+
+World::World &MenuManager::get_world() { return *world; }
+
+Nostd::String Game::MenuManager::get_message() const { return message; }
+
 bool MenuManager::change_content() {
   if (screen.is_content<Main>()) {
     // do something when the main menu is exited
@@ -49,7 +57,7 @@ bool MenuManager::change_content() {
     update_scoreboard();
     delete world;
     world = nullptr;
-    in_game = true;
+    in_game = false;
     db.save_results();
     screen.set_content<Results, const Nostd::List<Data::Pawns::Result> &>(
         db.results());
@@ -76,27 +84,23 @@ bool MenuManager::change_content() {
   return true;
 }
 
+bool MenuManager::is_in_game() { return in_game && world != nullptr; }
+
 void MenuManager::update_scoreboard() {
   auto &scoreboard = db.results();
   if (scoreboard.size() == 0)
+    // there are no other scores
     scoreboard.push_front(world->player.first);
   else {
     Nostd::List<Data::Pawns::Result>::iterator p;
     for (p = scoreboard.begin();
          p != scoreboard.end() && *p >= world->player.first.score(); p++)
-      ;
+      ; // comparison between the new score and the old ones to put it
+    // it in the right position
     scoreboard.insert(p, world->player.first);
   }
 }
 
-Game::SettingsManager &MenuManager::get_settings_manager() {
-  return settings_manager;
-}
-
-bool MenuManager::is_in_game() { return in_game && world != nullptr; }
 void MenuManager::set_in_game(bool g) { in_game = g; }
-World::World &MenuManager::get_world() { return *world; }
-
-const Nostd::String Game::MenuManager::get_message() const { return message; }
 
 void Game::MenuManager::set_message(const Nostd::String &str) { message = str; }

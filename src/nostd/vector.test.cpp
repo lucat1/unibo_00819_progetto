@@ -6,11 +6,12 @@
   Andreea Scrob #989372
   03/24/2021
 
-  vector.test.hpp: tests for Nostd::Vector
+  vector.test.cpp: tests for Nostd::Vector
 */
 #include "vector.hpp"
 #include "pair.hpp"
 #include "test.hpp"
+
 #include <cassert>
 
 using namespace Nostd;

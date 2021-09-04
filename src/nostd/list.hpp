@@ -222,7 +222,7 @@ public:
     sz++;
   }
 
-  // Removes from the list container either a single element (position) or a
+  // Removes from the list container either  a
   // range of elements ([first,last)).
   // This effectively reduces the container size by the number of elements
   // removed, which are destroyed.
